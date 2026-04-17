@@ -197,11 +197,11 @@ The core never knows any external schema.
 
 **Sprint 0 — Foundations.** This commit lays the scaffolding:
 
-- `deps.edn` with `:dev`, `:test`, `:lint`, `:fmt` aliases
+- `deps.edn` with `:dev`, `:test`, `:lint`, `:fmt`, `:sandbox` aliases
 - Namespace skeleton under `src/metalisp/`
 - Smoke test ensuring all namespaces load
 - CI (GitHub Actions) running clj-kondo, cljfmt check, and the test suite
-- Five foundational ADRs in `docs/adr/`
+- Six foundational ADRs in `docs/adr/`
 - This README
 
 No business logic is implemented yet. The next sprint (Sprint 1) lands the
@@ -237,6 +237,20 @@ clojure -M:dev
 ```
 
 CI runs the first three on every push and pull request.
+
+### Restricted networks (Clojars unreachable)
+
+Some environments — notably the Claude Code web sandbox — block Clojars but
+allow Maven Central and GitHub. The `:sandbox` alias rewrites Clojars-hosted
+dependencies (Malli and its transitive deps) to git coordinates so that local
+testing works there. Chain it with `:test`:
+
+```bash
+clojure -M:sandbox:test
+```
+
+Normal local development and CI use the unaliased path. See
+[ADR 0006](./docs/adr/0006-deps-resolution-and-sandbox.md).
 
 ---
 
