@@ -1,0 +1,51 @@
+{:paths ["src" "resources"]
+
+ :deps
+ {org.clojure/clojure       {:mvn/version "1.12.0"}
+  metosin/malli             {:mvn/version "0.17.0"}}
+
+ :aliases
+ {:dev
+  {:extra-paths ["dev" "test"]
+   :extra-deps  {org.clojure/test.check {:mvn/version "1.1.1"}}}
+
+  :test
+  {:extra-paths ["test"]
+   :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
+                 io.github.cognitect-labs/test-runner
+                 {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+   :main-opts   ["-m" "cognitect.test-runner"]}
+
+  :lint
+  {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2024.11.14"}}
+   :main-opts    ["-m" "clj-kondo.main" "--lint" "src" "test"]}
+
+  :fmt
+  {:replace-deps {dev.weavejester/cljfmt {:mvn/version "0.13.0"}}
+   :main-opts    ["-m" "cljfmt.main" "check" "src" "test"]}
+
+  :fmt/fix
+  {:replace-deps {dev.weavejester/cljfmt {:mvn/version "0.13.0"}}
+   :main-opts    ["-m" "cljfmt.main" "fix" "src" "test"]}
+
+  ;; Sandbox-only override. Some restricted environments (e.g. the Claude Code
+  ;; web sandbox) cannot reach Clojars but can reach GitHub and Maven Central.
+  ;; This alias rewrites Clojars-only coordinates to git coordinates so that
+  ;; `clojure -M:sandbox:test` works in such environments. CI and normal local
+  ;; development use the standard Maven coordinates above. See ADR 0006.
+  :sandbox
+  {:override-deps
+   {;; Malli's runtime tree includes fipp and arrangement (Leiningen-only
+    ;; projects with neither deps.edn nor pom.xml at root, so unreachable as
+    ;; git coords). They are used solely for pretty error printing in Malli;
+    ;; excluding them is safe for everything except colorized error output.
+    metosin/malli       {:git/url    "https://github.com/metosin/malli"
+                         :git/tag    "0.17.0"
+                         :git/sha    "59470f974d64c7971ec3a3300819d7f5b8155749"
+                         :exclusions [fipp/fipp mvxcvi/arrangement]}
+    borkdude/dynaload   {:git/url "https://github.com/borkdude/dynaload"
+                         :git/tag "v0.3.5"
+                         :git/sha "ad11c760fc5b9c7d8d7817f1433eecf09115b2d0"}
+    borkdude/edamame    {:git/url "https://github.com/borkdude/edamame"
+                         :git/tag "v1.5.37"
+                         :git/sha "1838650361ac5cbebbe24cf2b73318a232bdc43f"}}}}}

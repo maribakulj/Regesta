@@ -1,0 +1,14 @@
+.cpcache/
+.clj-kondo/.cache/
+target/
+out/
+pom.xml
+pom.xml.asc
+*.jar
+.nrepl-port
+.lsp/.cache/
+.calva/
+.rebel_readline_history
+.idea/
+*.iml
+.DS_Store

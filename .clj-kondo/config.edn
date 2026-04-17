@@ -1,0 +1,7 @@
+{:linters
+ {:unused-namespace {:level :warning}
+  :unused-referred-var {:level :warning}
+  :unresolved-symbol {:level :error}
+  :missing-docstring {:level :off}}
+
+ :output {:format :text}}
