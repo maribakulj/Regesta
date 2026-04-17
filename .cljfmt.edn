@@ -2,5 +2,9 @@
  :remove-trailing-whitespace?     true
  :remove-consecutive-blank-lines? true
  :insert-missing-whitespace?      true
- :indents {defprotocol [[:block 1]]
-           with-open   [[:block 1]]}}
+ ;; Use :extra-indents (not :indents) so that cljfmt's built-in indent map
+ ;; for ns, defn, deftest, testing, let, etc. is preserved and our entries
+ ;; are merged on top. :indents would REPLACE the defaults entirely, which
+ ;; is what caused CI to demand re-alignment of every docstring and body.
+ :extra-indents {defprotocol [[:block 1]]
+                 with-open   [[:block 1]]}}
