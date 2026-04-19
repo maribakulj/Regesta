@@ -73,13 +73,12 @@ expressed as **EDN data**. A rule:
 ```clojure
 {:id      :dc/title-required
  :phase   :validate
- :match   [[?r :record/kind :book]
+ :match   [[?r :meta/kind :book]
            (absent? ?r :canon/title)]
  :produce {:diagnostic {:severity :error
                         :code     :missing-title
                         :subject  ?r
-                        :repairs  [{:op :suggest-from
-                                    :predicate :dc/alternative}]}}}
+                        :message  "Record has no title."}}}
 ```
 
 Rules are data — inspectable, serializable, composable. The compiler
