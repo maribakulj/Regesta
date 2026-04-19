@@ -219,11 +219,18 @@
     rule-id (assoc :rule rule-id)
     phase   (assoc :pass phase)))
 
+(defn- default-status-for-phase
+  "Per ADR 0005: assertions produced in :infer or :repair phases are
+   proposals until confirmed; assertions from other phases are in force."
+  [phase]
+  (if (contains? #{:infer :repair} phase) :proposed :asserted))
+
 (defn- run-assert
   [template bindings rule-id phase]
   (let [base (substitute bindings template)]
     {:kind :assertion
-     :value (model/assertion (merge {:status :asserted :confidence 1.0}
+     :value (model/assertion (merge {:status (default-status-for-phase phase)
+                                     :confidence 1.0}
                                     base
                                     {:provenance (provenance-for rule-id phase)}))}))
 
