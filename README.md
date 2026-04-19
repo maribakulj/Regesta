@@ -42,7 +42,7 @@ the IR. MetaLisp does this for metadata rather than for code.
 Records in MetaLisp are **assertion sets**, not field maps. An assertion is:
 
 ```clojure
-{:subject    :record/42
+{:subject    :record/r42
  :predicate  :canon/title
  :value      "Les Misérables"
  :provenance {:source :xml/sample.xml
