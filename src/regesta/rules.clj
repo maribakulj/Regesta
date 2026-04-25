@@ -52,6 +52,33 @@
      form)
     @acc))
 
+(defn- triple-pattern? [clause]
+  (and (vector? clause) (= 3 (count clause))))
+
+(defn- guard-form? [clause]
+  (and (sequential? clause) (not (vector? clause))))
+
+(defn- variables-bound-by-match
+  "Variables introduced by triple-patterns in a `:match` vector. Guards
+   cannot introduce bindings; they only consume them."
+  [match]
+  (reduce (fn [acc clause]
+            (if (triple-pattern? clause)
+              (into acc (collect-variables clause))
+              acc))
+          #{}
+          match))
+
+(defn- variables-used-in-guards
+  "Variables referenced as arguments to guard-forms in `:match`."
+  [match]
+  (reduce (fn [acc clause]
+            (if (guard-form? clause)
+              (into acc (collect-variables clause))
+              acc))
+          #{}
+          match))
+
 ;; ---------------------------------------------------------------------------
 ;; Triple view of a record
 ;;
@@ -316,14 +343,25 @@
   rule)
 
 (defn- check-bound-variables!
-  "Ensure every variable used in :produce is bound by some :match clause."
+  "Compile-time check that every variable referenced by a guard or by the
+   :produce template is bound by some triple-pattern in :match.
+
+   Guards cannot introduce bindings — only triple-patterns can. Walking
+   :match wholesale (the previous implementation) silently treated guard
+   variables as bound, so `(matches? ?unbound \"re\")` would compile and
+   only fail at execution time."
   [rule]
-  (let [bound   (collect-variables (:match rule))
-        used    (collect-variables (:produce rule))
-        unbound (set/difference used bound)]
-    (when (seq unbound)
+  (let [bound          (variables-bound-by-match (:match rule))
+        guard-used     (variables-used-in-guards (:match rule))
+        produce-used   (collect-variables (:produce rule))
+        unbound-guards (set/difference guard-used bound)
+        unbound-prod   (set/difference produce-used bound)]
+    (when (seq unbound-guards)
+      (throw (ex-info "Rule references unbound variables in a guard"
+                      {:rule-id (:id rule) :unbound unbound-guards})))
+    (when (seq unbound-prod)
       (throw (ex-info "Rule references unbound variables in :produce"
-                      {:rule-id (:id rule) :unbound unbound}))))
+                      {:rule-id (:id rule) :unbound unbound-prod}))))
   rule)
 
 (defn compile-rule
