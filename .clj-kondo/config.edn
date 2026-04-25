@@ -4,4 +4,8 @@
   :unresolved-symbol {:level :error}
   :missing-docstring {:level :off}}
 
+ ;; defspec from clojure.test.check is a top-level form analogous to deftest;
+ ;; clj-kondo handles it correctly when told to lint it like clojure.test/deftest.
+ :lint-as {clojure.test.check.clojure-test/defspec clojure.test/deftest}
+
  :output {:format :text}}
