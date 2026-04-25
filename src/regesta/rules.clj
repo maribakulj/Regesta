@@ -63,16 +63,41 @@
 (defn record-triples
   "Return a vector of [subject predicate value] triples representing the
    record, combining struct fields (via the structural vocabulary) and
-   explicit assertions."
+   explicit assertions.
+
+   Struct triples cover the full structural vocabulary (`:meta/id`,
+   `:meta/kind`, `:meta/source`, `:meta/fragment`, `:meta/diagnostic`,
+   `:meta/provenance`). Multi-valued struct fields produce one triple per
+   item:
+
+   - `:meta/fragment` → one triple per fragment, value = fragment id
+   - `:meta/diagnostic` → one triple per diagnostic, value = diagnostic code
+
+   This unified view is the single source of truth for both pattern
+   matching and the `absent?` / `present?` guards (see ADR 0001)."
   [record]
   (let [id (:id record)
-        struct-triples (cond-> []
-                         id                   (conj [id model/meta-id id])
-                         (:kind record)       (conj [id model/meta-kind (:kind record)])
-                         (:source record)     (conj [id model/meta-source (:source record)]))
-        assertion-triples (mapv (fn [a] [(:subject a) (:predicate a) (:value a)])
-                                (:assertions record))]
-    (into struct-triples assertion-triples)))
+        struct-triples
+        (cond-> []
+          id                   (conj [id model/meta-id id])
+          (:kind record)       (conj [id model/meta-kind (:kind record)])
+          (some? (:source record))
+          (conj [id model/meta-source (:source record)])
+          (some? (:provenance record))
+          (conj [id model/meta-provenance (:provenance record)]))
+        fragment-triples
+        (mapv (fn [f] [id model/meta-fragment (:id f)])
+              (:fragments record))
+        diagnostic-triples
+        (mapv (fn [d] [id model/meta-diagnostic (:code d)])
+              (:diagnostics record))
+        assertion-triples
+        (mapv (fn [a] [(:subject a) (:predicate a) (:value a)])
+              (:assertions record))]
+    (-> struct-triples
+        (into fragment-triples)
+        (into diagnostic-triples)
+        (into assertion-triples))))
 
 ;; ---------------------------------------------------------------------------
 ;; Predicate stdlib for guard forms
@@ -90,20 +115,28 @@
     (get bindings arg ::unbound)
     arg))
 
+(defn- triple-matches-subject-pred?
+  "True if `triples` contain at least one [s p _] with s = subject and
+   p = predicate."
+  [triples subject predicate]
+  (boolean (some (fn [[s p _]] (and (= subject s) (= predicate p))) triples)))
+
 (def predicate-stdlib
   "The closed set of predicates that may appear as the head of a guard-form
    in a rule's :match. Each entry maps a symbol to a function of
-   `[bindings record & resolved-args] -> boolean`."
+   `[bindings record & resolved-args] -> boolean`.
+
+   `absent?` and `present?` query the unified triple-view of the record
+   (struct fields + assertions), so they correctly observe both
+   `(absent? ?r :meta/kind)` and `(absent? ?r :canon/title)`."
   {'=        (fn [_ _ a b] (= a b))
    'not=     (fn [_ _ a b] (not= a b))
    'absent?  (fn [_ record subject pred]
-               (empty? (filterv #(and (= subject (:subject %))
-                                      (= pred (:predicate %)))
-                                (:assertions record))))
+               (not (triple-matches-subject-pred? (record-triples record)
+                                                  subject pred)))
    'present? (fn [_ record subject pred]
-               (boolean (some #(and (= subject (:subject %))
-                                    (= pred (:predicate %)))
-                              (:assertions record))))
+               (triple-matches-subject-pred? (record-triples record)
+                                             subject pred))
    'matches? (fn [_ _ value re]
                (and (string? value)
                     (boolean (re-find (re-pattern re) value))))
