@@ -127,6 +127,44 @@
                                         :code :missing-thing
                                         :subject '?missing}}}))))
 
+(deftest compile-rejects-unbound-variable-in-guard
+  ;; Regression: guards consume bindings, they do not introduce them.
+  ;; A variable referenced only by a guard must fail at compile-time.
+  (is (thrown-with-msg?
+       clojure.lang.ExceptionInfo
+       #"unbound variables in a guard"
+       (rules/compile-rule
+        {:id :rule/g
+         :phase :validate
+         :match '[[?r :meta/kind :book]
+                  (matches? ?unbound "^Le")]
+         :produce {:diagnostic {:severity :info :code :x :subject '?r}}}))))
+
+(deftest compile-rejects-guard-only-binding-leaking-to-produce
+  ;; Even more subtle: a variable that appears *only* in a guard should
+  ;; not be considered bound for the purpose of :produce either.
+  (is (thrown? clojure.lang.ExceptionInfo
+               (rules/compile-rule
+                {:id :rule/h
+                 :phase :validate
+                 :match '[[?r :canon/title ?t]
+                          (= ?t ?ghost)]
+                 :produce {:diagnostic {:severity :info
+                                        :code :x
+                                        :subject '?ghost}}}))))
+
+(deftest compile-accepts-guard-using-pattern-bound-variable
+  ;; Sanity: when the guard variable IS bound by a triple-pattern, the
+  ;; rule must still compile without complaint.
+  (is (some? (rules/compile-rule
+              {:id :rule/ok
+               :phase :validate
+               :match '[[?r :canon/title ?t]
+                        (matches? ?t "^Le")]
+               :produce {:diagnostic {:severity :info
+                                      :code :starts-with-le
+                                      :subject '?r}}}))))
+
 (deftest compile-rejects-malformed-rule
   (is (thrown? clojure.lang.ExceptionInfo
                (rules/compile-rule {:id :rule/t
