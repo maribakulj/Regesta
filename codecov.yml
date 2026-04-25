@@ -1,0 +1,56 @@
+# Codecov configuration for Regesta.
+#
+# Reference: https://docs.codecov.com/docs/codecov-yaml
+
+codecov:
+  require_ci_to_pass: true
+  notify:
+    # Wait until the JUnit + coverage CI jobs have both reported before
+    # commenting on a PR. Avoids a half-rendered status check.
+    after_n_builds: 1
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+
+  status:
+    project:
+      default:
+        # `auto` compares to the base branch's coverage. The first run
+        # establishes the baseline. Allow a 1% drop without failing —
+        # legitimate refactors and test reorgs occasionally regress
+        # coverage by a fraction of a percent.
+        target: auto
+        threshold: 1%
+        if_ci_failed: error
+        informational: false
+
+    patch:
+      default:
+        # New code added in a PR should be at least 80% covered. Higher
+        # bar for new code than for the project as a whole, since adding
+        # untested code is a deliberate choice the reviewer can flag.
+        target: 80%
+        threshold: 1%
+        if_ci_failed: error
+        informational: false
+
+# Paths Codecov should never count toward coverage.
+ignore:
+  - "test"          # all test code (unit, property, integration, junit runner)
+  - "dev"           # REPL / dev helpers
+  - "docs"          # ADRs and other markdown
+  - ".github"       # workflows and templates
+  - ".clj-kondo"    # linter cache
+  - "target"        # build output
+
+comment:
+  # Layout of the per-PR comment Codecov posts. `reach` shows project /
+  # patch coverage, `diff` lists files with changed coverage, `tree`
+  # gives a directory rollup, `footer` is the legal blurb.
+  layout: "reach, diff, flags, tree, footer"
+  behavior: default
+  require_changes: false
+  require_base: false
+  require_head: true

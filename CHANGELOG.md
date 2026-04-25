@@ -31,6 +31,10 @@ The pre-1.0 development line. Sprints 0 through 4 are landed; Sprint 5
 - JUnit XML output via a custom `:test/junit` runner, published to the
   GitHub check panel through `EnricoMi/publish-unit-test-result-action`.
 - README badges (CI status, license, Clojure / Java version).
+- Codecov integration: cloverage reports are uploaded to Codecov on
+  every CI run via `codecov/codecov-action`. PRs receive a per-file
+  diff coverage comment. Thresholds configured in `codecov.yml`:
+  project = `auto` with 1% noise floor, patch (new code) = 80%.
 
 ### Changed
 

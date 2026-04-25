@@ -1,6 +1,7 @@
 # Regesta
 
 [![CI](https://github.com/maribakulj/regesta/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/maribakulj/regesta/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/maribakulj/regesta/branch/main/graph/badge.svg)](https://codecov.io/gh/maribakulj/regesta)
 [![License](https://img.shields.io/github/license/maribakulj/regesta?color=blue)](./LICENSE)
 [![Clojure](https://img.shields.io/badge/Clojure-1.12-5881D8?logo=clojure&logoColor=white)](https://clojure.org)
 [![Java](https://img.shields.io/badge/Java-21%2B-007396?logo=openjdk&logoColor=white)](https://adoptium.net/)
@@ -287,12 +288,15 @@ slice:
   `EnricoMi/publish-unit-test-result-action` to render the per-test
   results in GitHub's check panel. The publish step uses
   `if: always()` so failing runs still surface their breakdown.
-- **Coverage** — runs `cloverage` and publishes the resulting HTML
-  report (and cobertura XML) as a workflow artifact named
-  `coverage-report`. A per-namespace text summary is also written to
-  the run summary. No threshold is enforced in V1 — coverage is
-  reported, not gated; once a baseline stabilizes, a minimum can be
-  added.
+- **Coverage** — runs `cloverage`, uploads the report to Codecov via
+  `codecov/codecov-action`, and also publishes it as the workflow
+  artifact `coverage-report` (HTML + cobertura XML) for offline
+  inspection. A per-namespace text summary is mirrored to the run
+  summary. The Codecov dashboard surfaces per-PR diff coverage and the
+  status check; thresholds are configured in
+  [`codecov.yml`](./codecov.yml) — currently `auto` for the project
+  (no regression vs the base branch, with a 1% noise floor) and 80%
+  for new code added in a PR.
 
 Local equivalents:
 

@@ -159,6 +159,17 @@ jobs:
       - name: Run cloverage
         run: clojure -M:coverage
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # cloverage's `--codecov` flag emits target/coverage/codecov.json;
+          # the cobertura XML is also produced. Pointing at the directory
+          # lets the action pick whichever it prefers.
+          directory: target/coverage
+          fail_ci_if_error: false
+          verbose: false
+
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
