@@ -1,0 +1,18 @@
+# CODEOWNERS — automatic review requests.
+# Patterns are evaluated in order; the LAST matching pattern wins.
+# Customize the GitHub usernames / teams below for your project.
+# Reference: https://docs.github.com/en/repositories/managing-your-repositories-settings-and-security/customizing-your-repository/about-code-owners
+
+# Default owner for everything in the repo.
+*                       @maribakulj
+
+# Architecture decisions: any change here should be reviewed against ADR
+# discipline. Consider expanding to a dedicated team once the project
+# has multiple maintainers.
+/docs/adr/              @maribakulj
+
+# Build, CI, and tooling.
+/.github/               @maribakulj
+/deps.edn               @maribakulj
+/.clj-kondo/            @maribakulj
+/.cljfmt.edn            @maribakulj

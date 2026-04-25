@@ -5,10 +5,26 @@ on:
     branches: [main]
   pull_request:
 
+# Cancel in-flight runs on the same ref when a new commit lands. Saves CI
+# time on rapid pushes; main is excluded so release-relevant runs always
+# complete.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+# Default least-privilege token. Individual jobs raise as needed.
+permissions:
+  contents: read
+
 jobs:
   test:
-    name: Test, lint, format
+    name: Test, lint, format (Java ${{ matrix.java }})
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ["21", "24"]
 
     steps:
       - name: Checkout
@@ -18,7 +34,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: ${{ matrix.java }}
 
       - name: Setup Clojure
         uses: DeLaGuardo/setup-clojure@13.0
@@ -34,8 +50,8 @@ jobs:
             ~/.m2/repository
             ~/.gitlibs
             ~/.deps.clj
-          key: cljdeps-${{ hashFiles('deps.edn') }}
-          restore-keys: cljdeps-
+          key: cljdeps-${{ matrix.java }}-${{ hashFiles('deps.edn') }}
+          restore-keys: cljdeps-${{ matrix.java }}-
 
       - name: Lint (clj-kondo)
         run: clj-kondo --lint src test

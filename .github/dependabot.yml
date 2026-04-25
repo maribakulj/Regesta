@@ -1,0 +1,21 @@
+# Dependabot configuration.
+#
+# Note: Dependabot does not natively understand `deps.edn`. Maven and Clojars
+# coordinates inside it are NOT scanned. Bumps for Malli and friends must be
+# done manually (or via a future custom workflow). What we get out of the box
+# is GitHub Actions hygiene, which is the highest-impact piece anyway:
+# stale `actions/checkout@v3` references and similar drift get caught here.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: ci
+      include: scope

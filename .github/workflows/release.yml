@@ -1,0 +1,81 @@
+name: Release
+
+# Triggered when a version tag is pushed (e.g. `v1.0.0`).
+# Re-runs the full CI gate, then drafts a GitHub Release with auto-generated
+# notes. Tagging is the act of releasing — there is no separate manual step.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify build and tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@13.0
+        with:
+          cli: "latest"
+          clj-kondo: "latest"
+          cljfmt: "latest"
+
+      - name: Cache Clojure deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+            ~/.deps.clj
+          key: cljdeps-21-${{ hashFiles('deps.edn') }}
+          restore-keys: cljdeps-21-
+
+      - name: Lint
+        run: clj-kondo --lint src test
+
+      - name: Format check
+        run: cljfmt check src test
+
+      - name: Tests
+        run: clojure -M:test
+
+  draft-release:
+    name: Draft GitHub Release
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Auto-generated release notes from commit history between the previous
+      # tag and the current one. Edit and publish manually after review.
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" \
+            --draft \
+            --generate-notes \
+            --title "$TAG"

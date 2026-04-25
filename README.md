@@ -254,6 +254,43 @@ clojure -M:sandbox:test
 Normal local development and CI use the unaliased path. See
 [ADR 0006](./docs/adr/0006-deps-resolution-and-sandbox.md).
 
+### Continuous integration
+
+Every push and pull request triggers `.github/workflows/ci.yml`:
+
+- `clj-kondo --lint src test`
+- `cljfmt check src test`
+- `clojure -M:test`
+
+Runs are parallelized across a Java matrix (Temurin 21 and 24). Concurrent
+runs on the same branch (other than `main`) cancel each other to keep CI
+turnaround tight. Dependabot tracks GitHub Actions versions weekly.
+
+A separate `release.yml` workflow runs on `v*` tag pushes: it re-executes
+the full CI gate, then drafts a GitHub Release with auto-generated notes
+that a maintainer publishes manually.
+
+### Branch protection (manual setup)
+
+The "tests must pass before merge" guarantee is enforced server-side, not
+in YAML. After cloning the repository on GitHub, enable a branch
+protection rule for `main` under **Settings → Branches → Add rule** with:
+
+- *Require a pull request before merging* — yes
+  - *Require approvals*: 1 (or more if the team grows)
+  - *Dismiss stale approvals on new commits*
+  - *Require review from Code Owners* (uses `.github/CODEOWNERS`)
+- *Require status checks to pass before merging* — yes
+  - Required checks: `Test, lint, format (Java 21)` and
+    `Test, lint, format (Java 24)`
+  - *Require branches to be up to date before merging*
+- *Require conversation resolution before merging* — yes
+- *Require linear history* — yes (rebase / squash only, no merge commits
+  in `main` history)
+- *Do not allow bypassing the above settings*
+
+Force pushes and branch deletion on `main` should be disabled.
+
 ---
 
 ## Roadmap
