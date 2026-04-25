@@ -42,8 +42,20 @@
 
 (deftest severity-rank-orders-info-warning-error
   (is (< (diag/severity-rank :info) (diag/severity-rank :warning)))
-  (is (< (diag/severity-rank :warning) (diag/severity-rank :error)))
-  (is (= -1 (diag/severity-rank :unknown))))
+  (is (< (diag/severity-rank :warning) (diag/severity-rank :error))))
+
+(deftest severity-rank-rejects-unknown
+  (is (thrown-with-msg?
+       clojure.lang.ExceptionInfo #"Unknown severity"
+       (diag/severity-rank :catastrophic))))
+
+(deftest count-by-severity-rejects-unknown
+  ;; Schema-bypass defense: even if a diagnostic skips Malli validation,
+  ;; the counter throws rather than silently extending the result map.
+  (let [bogus {:severity :catastrophic :code :x :subject :s/one}]
+    (is (thrown-with-msg?
+         clojure.lang.ExceptionInfo #"Unknown severity"
+         (diag/count-by-severity [bogus])))))
 
 (deftest severity>=-is-reflexive-and-monotonic
   (is (diag/severity>= :error :error))

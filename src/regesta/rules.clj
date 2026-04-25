@@ -414,15 +414,19 @@
 
 (defn compile-rule
   "Validate `rule` and return a compiled rule: a map with the original
-   fields plus `::run`, a function `(fn [record] [productions...])`.
+   fields plus `:regesta.rules/runner`, a function
+   `(fn [record] [productions...])`.
 
-   Throws ex-info at compile time if the rule is malformed or references
-   unbound variables."
+   The runner value is opaque — callers should not inspect or
+   serialize a compiled rule. Use `apply-rule` to invoke it.
+
+   Throws ex-info at compile time if the rule is malformed or
+   references unbound variables."
   [rule]
   (-> rule
       validate-or-throw!
       check-bound-variables!
-      (assoc ::run
+      (assoc ::runner
              (fn run [record]
                (let [rows (match-clauses (:match rule) record)]
                  (vec (run-produce (:produce rule) rows (:id rule) (:phase rule))))))))
@@ -430,9 +434,9 @@
 (defn apply-rule
   "Run a compiled rule against a record, returning a vector of productions."
   [compiled-rule record]
-  (let [runner (::run compiled-rule)]
+  (let [runner (::runner compiled-rule)]
     (when-not runner
-      (throw (ex-info "Rule was not compiled (missing ::run)"
+      (throw (ex-info "Rule was not compiled (missing ::runner)"
                       {:rule-id (:id compiled-rule)})))
     (runner record)))
 

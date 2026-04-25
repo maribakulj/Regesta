@@ -25,10 +25,24 @@
   "Numeric rank for each severity. Higher means more serious."
   {:info 0 :warning 1 :error 2})
 
-(defn severity-rank [sev] (get severity-order sev -1))
+(defn- ensure-known-severity! [sev]
+  (when-not (contains? severity-order sev)
+    (throw (ex-info "Unknown severity"
+                    {:severity sev
+                     :supported (set (keys severity-order))})))
+  sev)
+
+(defn severity-rank
+  "Numeric rank of `sev`. Throws on any value outside the closed enum
+   defined by `regesta.model/Severity`. The schema already rejects
+   unknown severities; this defensive throw catches the case where a
+   caller bypassed schema validation."
+  [sev]
+  (ensure-known-severity! sev)
+  (get severity-order sev))
 
 (defn severity>=
-  "True if `a` is at least as severe as `b`."
+  "True if `a` is at least as severe as `b`. Throws on unknown severities."
   [a b]
   (>= (severity-rank a) (severity-rank b)))
 
@@ -109,10 +123,14 @@
 ;; ---------------------------------------------------------------------------
 
 (defn count-by-severity
-  "Map severity → count, including zeros for severities not present."
+  "Map severity → count, including zeros for severities not present.
+   Throws if any diagnostic carries an unknown severity (schema-bypass
+   defense; see `severity-rank`)."
   [diagnostics]
   (let [base (zipmap (keys severity-order) (repeat 0))]
-    (reduce (fn [acc d] (update acc (:severity d) (fnil inc 0)))
+    (reduce (fn [acc d]
+              (ensure-known-severity! (:severity d))
+              (update acc (:severity d) (fnil inc 0)))
             base
             diagnostics)))
 
@@ -157,7 +175,8 @@
     :error   "ERROR"
     :warning "WARN"
     :info    "INFO"
-    (str/upper-case (name (or sev :unknown)))))
+    (throw (ex-info "Unknown severity in formatter"
+                    {:severity sev}))))
 
 (defn format-diagnostic
   "One-line representation of a single diagnostic. Repairs and provenance
@@ -167,7 +186,7 @@
   ([d {:keys [expand-repairs?] :or {expand-repairs? false}}]
    (let [head (format "[%s] %s on %s%s"
                       (severity-tag (:severity d))
-                      (str (:code d))
+                      (pr-str (:code d))
                       (pr-str (:subject d))
                       (if-let [m (:message d)] (str " - " m) ""))
          reps (:repairs d)]
