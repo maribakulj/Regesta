@@ -274,22 +274,33 @@ Runs are parallelized across a Java matrix (Temurin 21 and 24). Concurrent
 runs on the same branch (other than `main`) cancel each other to keep CI
 turnaround tight. Dependabot tracks GitHub Actions versions weekly.
 
-After the test matrix passes, a `coverage` job runs `cloverage` on a
-single Java slice and publishes the resulting HTML report (and the
-cobertura XML) as a workflow artifact named `coverage-report`. A
-per-namespace text summary is also written to the run summary. No
-threshold is enforced in V1 — coverage is reported, not gated; once a
-baseline stabilizes, a minimum can be added.
+After the test matrix passes, two follow-up jobs run on a single Java
+slice:
+
+- **JUnit XML** — runs `clojure -M:test/junit`, uploads
+  `target/junit/junit.xml` as an artifact, and uses
+  `EnricoMi/publish-unit-test-result-action` to render the per-test
+  results in GitHub's check panel. The publish step uses
+  `if: always()` so failing runs still surface their breakdown.
+- **Coverage** — runs `cloverage` and publishes the resulting HTML
+  report (and cobertura XML) as a workflow artifact named
+  `coverage-report`. A per-namespace text summary is also written to
+  the run summary. No threshold is enforced in V1 — coverage is
+  reported, not gated; once a baseline stabilizes, a minimum can be
+  added.
+
+Local equivalents:
+
+```bash
+clojure -M:test/junit  # produces target/junit/junit.xml
+clojure -M:coverage    # produces target/coverage/index.html
+```
 
 Local coverage:
 
-```bash
-clojure -M:coverage
-# report at target/coverage/index.html
-```
-
 Note that cloverage is hosted on Clojars, so the `:sandbox` alias does
-not proxy it. Local coverage runs require Clojars access.
+not proxy it. Local coverage runs require Clojars access; the JUnit
+runner uses only Maven Central and works under sandbox.
 
 A separate `release.yml` workflow runs on `v*` tag pushes: it re-executes
 the full CI gate, then drafts a GitHub Release with auto-generated notes
