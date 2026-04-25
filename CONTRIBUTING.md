@@ -23,6 +23,7 @@ clojure -M:test              # full suite (unit + property + integration)
 clojure -M:test/unit         # fast iteration on a unit test
 clojure -M:test/property     # generative invariants only
 clojure -M:test/integration  # end-to-end scenarios only
+clojure -M:test/junit        # full suite + write JUnit XML to target/junit/
 clojure -M:lint              # clj-kondo
 clojure -M:fmt               # cljfmt check (read-only)
 clojure -M:fmt/fix           # cljfmt rewrite (write)

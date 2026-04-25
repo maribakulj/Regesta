@@ -45,6 +45,15 @@
                  {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
    :main-opts   ["-m" "cognitect.test-runner" "--dir" "test/integration"]}
 
+  ;; Run the full suite and emit JUnit XML at target/junit/junit.xml.
+  ;; Used by CI to populate GitHub's test summary panel — see
+  ;; test/junit/regesta/junit_runner.clj for rationale.
+  :test/junit
+  {:extra-paths ["test/junit" "test/unit" "test/property" "test/integration"]
+   :extra-deps  {org.clojure/test.check         {:mvn/version "1.1.1"}
+                 org.clojure/tools.namespace    {:mvn/version "1.5.0"}}
+   :main-opts   ["-m" "regesta.junit-runner"]}
+
   :lint
   {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2024.11.14"}}
    :main-opts    ["-m" "clj-kondo.main" "--lint" "src" "test"]}

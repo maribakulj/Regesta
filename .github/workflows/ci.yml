@@ -62,6 +62,67 @@ jobs:
       - name: Run tests
         run: clojure -M:test
 
+  junit:
+    name: JUnit XML report
+    runs-on: ubuntu-latest
+    # Runs alongside the test matrix on a single Java slice and produces a
+    # JUnit XML that GitHub's check panel can render. We always publish,
+    # even on test failure, so the results stay visible — that's the whole
+    # point of the JUnit panel.
+    needs: test
+
+    permissions:
+      contents: read
+      checks: write          # required to publish the test result check run
+      pull-requests: write   # so the action can comment failing PRs
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@13.5
+        with:
+          cli: "latest"
+
+      - name: Cache Clojure deps
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+            ~/.deps.clj
+          key: cljdeps-junit-${{ hashFiles('deps.edn') }}
+          restore-keys: cljdeps-junit-
+
+      - name: Run tests with JUnit XML output
+        # Exits non-zero on any test failure or error, which marks the
+        # job as failed. The publish steps below use if: always() so the
+        # XML still surfaces in the run summary.
+        run: clojure -M:test/junit
+
+      - name: Upload JUnit XML artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-xml
+          path: target/junit/junit.xml
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Publish test results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: target/junit/junit.xml
+          comment_mode: changes in failures
+
   coverage:
     name: Coverage report
     runs-on: ubuntu-latest
