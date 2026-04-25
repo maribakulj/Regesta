@@ -93,6 +93,53 @@
     (is (= 2 (count (:assertions out))))
     (is (= [0 1] (mapv :value (:assertions out))))))
 
+(deftest merge-deduplicates-identical-assertions
+  ;; ADR 0008: assertions are deduplicated by [subject predicate value status].
+  (let [a1  (model/assertion {:subject :r/d :predicate :canon/p :value 1
+                              :provenance {:rule :rule/a}})
+        a2  (model/assertion {:subject :r/d :predicate :canon/p :value 1
+                              :provenance {:rule :rule/b}})
+        out (rt/merge-productions (book :r/d)
+                                  [{:kind :assertion :value a1}
+                                   {:kind :assertion :value a2}])]
+    (is (= 1 (count (:assertions out)))
+        "second assertion with identical [subject predicate value status] is suppressed")
+    (is (= :rule/a (get-in (first (:assertions out)) [:provenance :rule]))
+        "the first occurrence wins; provenance is preserved")))
+
+(deftest merge-distinguishes-assertions-by-status
+  ;; Same fact at different statuses are distinct identities (ADR 0008).
+  (let [asserted (model/assertion {:subject :r/s :predicate :canon/p :value 1
+                                   :status :asserted})
+        proposed (model/assertion {:subject :r/s :predicate :canon/p :value 1
+                                   :status :proposed})
+        out (rt/merge-productions (book :r/s)
+                                  [{:kind :assertion :value asserted}
+                                   {:kind :assertion :value proposed}])]
+    (is (= 2 (count (:assertions out))))))
+
+(deftest merge-deduplicates-identical-diagnostics
+  ;; ADR 0008: diagnostics are deduplicated by [subject code severity message].
+  (let [d1  (model/diagnostic {:severity :error :code :missing-title
+                               :subject :r/d :message "no title"})
+        d2  (model/diagnostic {:severity :error :code :missing-title
+                               :subject :r/d :message "no title"})
+        out (rt/merge-productions (book :r/d)
+                                  [{:kind :diagnostic :value d1}
+                                   {:kind :diagnostic :value d2}])]
+    (is (= 1 (count (:diagnostics out))))))
+
+(deftest merge-distinguishes-diagnostics-by-message
+  ;; Same code + severity + subject but different messages: distinct.
+  (let [d1  (model/diagnostic {:severity :error :code :bad-date
+                               :subject :r/x :message "year out of range"})
+        d2  (model/diagnostic {:severity :error :code :bad-date
+                               :subject :r/x :message "format unparseable"})
+        out (rt/merge-productions (book :r/x)
+                                  [{:kind :diagnostic :value d1}
+                                   {:kind :diagnostic :value d2}])]
+    (is (= 2 (count (:diagnostics out))))))
+
 ;; ---------------------------------------------------------------------------
 ;; run-phase-once
 ;; ---------------------------------------------------------------------------
@@ -147,25 +194,27 @@
     (is (= r record))
     (is (empty? productions))))
 
-(deftest run-phase-three-cycles-iterates
-  ;; tag-rule has no guard, so every cycle produces another assertion.
-  ;; This is a deliberate non-idempotent rule to exercise cycling.
+(deftest run-phase-cycles-trace-vs-merged
+  ;; Under ADR 0008, identical productions deduplicate at merge. tag-rule
+  ;; has no guard, so it fires once per cycle and produces three trace
+  ;; entries; the record retains a single deduplicated assertion.
   (let [r   (book :r/g)
         rs  (compile-many [tag-rule])
         {:keys [record productions]} (rt/run-phase r rs :normalize {:cycles 3})]
-    (is (= 3 (count productions)))
-    (is (= 3 (count (:assertions record))))))
+    (is (= 3 (count productions))
+        "production trace records every firing")
+    (is (= 1 (count (:assertions record)))
+        "merge dedups identical assertions (ADR 0008)")))
 
-(deftest run-phase-idempotent-rule-does-not-grow-unboundedly-without-guard
-  ;; title-required + a title-absent record: first cycle produces the
-  ;; diagnostic. But we don't *suppress* duplicates in V1, so running
-  ;; additional cycles produces the same diagnostic again.
+(deftest run-phase-multi-cycle-validation-is-idempotent
+  ;; title-required on a title-absent record: regardless of cycle count,
+  ;; the diagnostic appears exactly once on the merged record. Pre-ADR-0008
+  ;; this test asserted the opposite (one duplicate per cycle).
   (let [r   (book :r/h)
         rs  (compile-many [title-required-rule])
-        {:keys [record]} (rt/run-phase r rs :validate {:cycles 2})]
-    ;; Documenting the current (no-dedup) behaviour: 2 diagnostics from
-    ;; 2 cycles. Dedup is explicitly out of scope for Sprint 3.
-    (is (= 2 (count (:diagnostics record))))))
+        {:keys [record]} (rt/run-phase r rs :validate {:cycles 3})]
+    (is (= 1 (count (:diagnostics record)))
+        "identical diagnostics dedup at merge (ADR 0008)")))
 
 (deftest run-phase-sees-new-productions-from-previous-cycle
   ;; An infer rule that reacts to an assertion produced by a normalize
@@ -213,11 +262,15 @@
     (is (some #(= :canon/normalized-title  (:predicate %)) (:assertions record)))))
 
 (deftest run-pipeline-honors-cycles
+  ;; tag-rule fires once per cycle but the merged record carries a single
+  ;; deduplicated assertion (ADR 0008). The cycle count is observable via
+  ;; the production trace, not by counting assertions.
   (let [r        (book :r/q)
         rs       (compile-many [tag-rule])
         pipeline [{:phase :normalize :cycles 3}]
-        {:keys [record]} (rt/run-pipeline r rs pipeline)]
-    (is (= 3 (count (:assertions record))))))
+        {:keys [record productions]} (rt/run-pipeline r rs pipeline)]
+    (is (= 3 (count productions)))
+    (is (= 1 (count (:assertions record))))))
 
 (deftest run-pipeline-validates-shape
   (is (thrown? clojure.lang.ExceptionInfo

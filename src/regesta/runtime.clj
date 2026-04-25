@@ -46,20 +46,44 @@
 
 ;; ---------------------------------------------------------------------------
 ;; Merging productions into a record
+;;
+;; Productions are deduplicated at merge time by structural identity
+;; (ADR 0008). The first occurrence wins; subsequent identical productions
+;; are no-ops on the record but remain visible in the run's production
+;; trace.
 ;; ---------------------------------------------------------------------------
 
-(defn- append [record k item]
-  (update record k (fnil conj []) item))
+(defn assertion-identity
+  "Identity key for assertion deduplication: subject + predicate + value
+   + status. Provenance and confidence are intentionally excluded — they
+   describe who/how, not what (ADR 0008)."
+  [a]
+  [(:subject a) (:predicate a) (:value a) (:status a)])
+
+(defn diagnostic-identity
+  "Identity key for diagnostic deduplication: subject + code + severity
+   + message. Repairs and provenance are excluded (ADR 0008)."
+  [d]
+  [(:subject d) (:code d) (:severity d) (:message d)])
+
+(defn- dedup-append [record k item identity-fn]
+  (let [existing      (get record k [])
+        existing-keys (into #{} (map identity-fn) existing)]
+    (if (contains? existing-keys (identity-fn item))
+      record
+      (update record k (fnil conj []) item))))
 
 (defn- merge-production [record production]
   (case (:kind production)
-    :assertion  (append record :assertions  (:value production))
-    :diagnostic (append record :diagnostics (:value production))
+    :assertion  (dedup-append record :assertions  (:value production) assertion-identity)
+    :diagnostic (dedup-append record :diagnostics (:value production) diagnostic-identity)
     :repair     record  ;; standalone repairs not merged in V1
     record))
 
 (defn merge-productions
-  "Apply each production to `record` in order. Returns the enriched record."
+  "Apply each production to `record` in order. Identical productions
+   collapse: the first occurrence is kept, subsequent ones are no-ops on
+   the record. Returns the enriched record."
   [record productions]
   (reduce merge-production record productions))
 
