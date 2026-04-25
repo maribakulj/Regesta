@@ -337,13 +337,15 @@ V1 core is stable; not before.
 
 ## Contributing
 
-This is an early-stage project. The architecture is tracked explicitly in
-`docs/adr/`. Any structural change requires a new ADR; silent edits to
-accepted decisions are not accepted.
+The full contributor workflow lives in [CONTRIBUTING.md](./CONTRIBUTING.md):
+branch naming, PR review checklist, ADR discipline, code-quality bar,
+and the predicate-stdlib growth rule.
 
-Before proposing an extension to the rule DSL, check the curated predicate
-stdlib — the growth of that stdlib is the main way the DSL could sprawl, and
-every addition must be justified by a concrete use case.
+Suspected vulnerabilities go through [SECURITY.md](./SECURITY.md), not
+public issues.
+
+User-visible changes are tracked in [CHANGELOG.md](./CHANGELOG.md), in
+the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
 ---
 
