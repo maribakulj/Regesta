@@ -272,12 +272,23 @@
 ;; Production actions
 ;; ---------------------------------------------------------------------------
 
-(defn- provenance-for
-  "Build a Provenance map attributing a production to this rule and phase."
+(defn- engine-provenance
+  "Provenance fields the engine guarantees regardless of the rule
+   template: which rule produced the item, and in which phase. These
+   fields are authoritative — if a rule template tries to override them,
+   the engine wins (otherwise the trace would lie)."
   [rule-id phase]
   (cond-> {}
     rule-id (assoc :rule rule-id)
     phase   (assoc :pass phase)))
+
+(defn- merge-provenance
+  "Combine the engine's authoritative fields with whatever the rule
+   template supplied. Template fields like `:source`, `:derivation` and
+   `:timestamp` are preserved; engine fields (`:rule`, `:pass`) always
+   win to keep the trace honest."
+  [template-prov rule-id phase]
+  (merge (or template-prov {}) (engine-provenance rule-id phase)))
 
 (defn- default-status-for-phase
   "Per ADR 0005: assertions produced in :infer or :repair phases are
@@ -289,16 +300,20 @@
   [template bindings rule-id phase]
   (let [base (substitute bindings template)]
     {:kind :assertion
-     :value (model/assertion (merge {:status (default-status-for-phase phase)
-                                     :confidence 1.0}
-                                    base
-                                    {:provenance (provenance-for rule-id phase)}))}))
+     :value (model/assertion
+             (merge {:status (default-status-for-phase phase)
+                     :confidence 1.0}
+                    base
+                    {:provenance (merge-provenance (:provenance base)
+                                                   rule-id phase)}))}))
 
 (defn- run-diagnostic
   [template bindings rule-id phase]
   (let [base (substitute bindings template)]
     {:kind :diagnostic
-     :value (model/diagnostic (assoc base :provenance (provenance-for rule-id phase)))}))
+     :value (model/diagnostic
+             (assoc base :provenance (merge-provenance (:provenance base)
+                                                       rule-id phase)))}))
 
 (defn- run-repair
   [template bindings _rule-id _phase]

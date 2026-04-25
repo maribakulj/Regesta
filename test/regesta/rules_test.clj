@@ -359,6 +359,53 @@
     (is (= :validate (get-in out [:value :provenance :pass])))
     (is (= "No title." (get-in out [:value :message])))))
 
+(deftest assert-template-provenance-fields-are-preserved
+  ;; Engine fields (:rule, :pass) win, but template-supplied fields like
+  ;; :source and :derivation must survive.
+  (let [rule {:id :rule/derive
+              :phase :infer
+              :match '[[?r :meta/kind :book]]
+              :produce {:assert {:subject '?r
+                                 :predicate :canon/derived
+                                 :value true
+                                 :provenance {:source :compute/heuristic-x
+                                              :derivation [:rule/upstream]}}}}
+        out  (first (run rule (book-record :id :r/dp)))
+        prov (get-in out [:value :provenance])]
+    (is (= :rule/derive (:rule prov))             "engine-supplied :rule wins")
+    (is (= :infer       (:pass prov))             "engine-supplied :pass wins")
+    (is (= :compute/heuristic-x (:source prov))   "template :source preserved")
+    (is (= [:rule/upstream] (:derivation prov))   "template :derivation preserved")))
+
+(deftest assert-template-cannot-override-engine-rule-or-pass
+  ;; Even if a malicious or buggy template tries to set :rule/:pass, the
+  ;; engine's values must win — otherwise the trace is a lie.
+  (let [rule {:id :rule/honest
+              :phase :validate
+              :match '[[?r :meta/kind :book]]
+              :produce {:assert {:subject '?r
+                                 :predicate :canon/x
+                                 :value 1
+                                 :provenance {:rule :rule/imposter
+                                              :pass :ingest}}}}
+        out  (first (run rule (book-record :id :r/lie)))
+        prov (get-in out [:value :provenance])]
+    (is (= :rule/honest (:rule prov)))
+    (is (= :validate    (:pass prov)))))
+
+(deftest diagnostic-template-provenance-is-also-deep-merged
+  (let [rule {:id :rule/d-prov
+              :phase :validate
+              :match '[[?r :meta/kind :book]]
+              :produce {:diagnostic {:severity :info :code :note
+                                     :subject '?r
+                                     :provenance {:source :hand/curated}}}}
+        out  (first (run rule (book-record :id :r/dp2)))
+        prov (get-in out [:value :provenance])]
+    (is (= :rule/d-prov (:rule prov)))
+    (is (= :validate    (:pass prov)))
+    (is (= :hand/curated (:source prov)))))
+
 (deftest repair-production
   (let [rule {:id :rule/fix
               :phase :repair

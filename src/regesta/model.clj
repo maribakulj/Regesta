@@ -110,16 +110,29 @@
 ;; values, so we use Malli's local registry + :ref mechanism.
 ;; ---------------------------------------------------------------------------
 
+(defn finite-double?
+  "True if `x` is a double that is neither NaN nor an infinity. Used by the
+   Primitive schema to forbid non-finite doubles at validate time. Public
+   so tests and importers can guard inputs before constructing assertions."
+  [x]
+  (and (double? x)
+       (not (Double/isNaN x))
+       (not (Double/isInfinite x))))
+
 (def Primitive
-  "Bare primitive values. Doubles are clamped through :gen/fmap to reject
-   NaN and Infinity during generation; the validator itself accepts any
-   `:double`. This asymmetry preserves generator-based round-trip testability
-   without tightening runtime validation."
-  (let [finite-double [:double {:gen/fmap (fn [d]
-                                            (if (or (Double/isNaN d)
-                                                    (Double/isInfinite d))
-                                              0.0
-                                              d))}]]
+  "Bare primitive values. Doubles are constrained to finite values: NaN
+   and the infinities are rejected at validate time *and* at generation
+   time. A NaN-valued assertion would be a silent foot-gun (NaN ≠ NaN
+   breaks dedup, equality, and EDN round-trip), so it is forbidden by
+   the schema rather than left as an importer concern."
+  (let [finite-double [:and
+                       [:double {:gen/fmap (fn [d]
+                                             (if (or (Double/isNaN d)
+                                                     (Double/isInfinite d))
+                                               0.0
+                                               d))}]
+                       [:fn {:error/message "must be finite (not NaN, not Infinity)"}
+                        finite-double?]]]
     [:or :string :int finite-double :boolean :keyword :uuid inst?]))
 
 (def Value
@@ -351,3 +364,46 @@
   "True if the record contains at least one assertion with predicate `p`."
   [record p]
   (boolean (some #(= p (:predicate %)) (:assertions record))))
+
+;; ---------------------------------------------------------------------------
+;; Cross-field consistency
+;;
+;; Shape validity (Malli) and consistency are different things. A record can
+;; be shape-valid but logically incoherent — most commonly when assertion
+;; subjects refer to ids that don't exist on the record. The matcher will
+;; silently fail to bind those, which is one of the most frustrating bugs
+;; for plugin authors. `record-consistent?` makes that contract explicit.
+;; ---------------------------------------------------------------------------
+
+(defn known-subjects
+  "Set of identifiers a record's assertions may legitimately address: the
+   record itself plus every fragment id it carries."
+  [record]
+  (into #{(:id record)} (map :id (:fragments record))))
+
+(defn record-consistent?
+  "True if every assertion's `:subject` is either the record's `:id` or
+   one of its fragment ids. Diagnostics' `:subject` is checked the same
+   way. This is the contract every importer must guarantee — silently
+   inconsistent records fail to match any rule and produce no
+   diagnostic, which is the worst possible failure mode."
+  [record]
+  (let [allowed (known-subjects record)]
+    (and (every? #(contains? allowed (:subject %)) (:assertions record))
+         (every? #(contains? allowed (:subject %)) (:diagnostics record)))))
+
+(defn explain-consistency
+  "Return a map describing every assertion or diagnostic whose subject is
+   not in `known-subjects`, or nil if the record is consistent. Intended
+   for importer test suites and CLI diagnostics — *not* for hot-path use."
+  [record]
+  (let [allowed   (known-subjects record)
+        bad-asrt  (filterv #(not (contains? allowed (:subject %)))
+                           (:assertions record))
+        bad-diag  (filterv #(not (contains? allowed (:subject %)))
+                           (:diagnostics record))]
+    (when (or (seq bad-asrt) (seq bad-diag))
+      {:record-id     (:id record)
+       :known-subjects allowed
+       :bad-assertions  bad-asrt
+       :bad-diagnostics bad-diag})))

@@ -268,3 +268,68 @@
       (is (not (model/valid-assertion? bad)))))
   (testing "reference value without :value/target is invalid"
     (is (not (model/valid-value? {:value/kind :reference})))))
+
+;; ---------------------------------------------------------------------------
+;; Finite-double constraint on Primitive values
+;; ---------------------------------------------------------------------------
+
+(deftest finite-double-rejected-by-validator
+  (let [mk-assert (fn [v] {:subject :r/id1 :predicate :p :value v
+                           :confidence 1.0 :status :asserted})]
+    (testing "regular doubles validate"
+      (is (model/valid-assertion? (mk-assert 3.14))))
+    (testing "NaN is rejected at validate time"
+      (is (not (model/valid-assertion? (mk-assert ##NaN)))))
+    (testing "positive infinity is rejected"
+      (is (not (model/valid-assertion? (mk-assert ##Inf)))))
+    (testing "negative infinity is rejected"
+      (is (not (model/valid-assertion? (mk-assert ##-Inf)))))))
+
+(deftest finite-double-predicate
+  (is (model/finite-double? 0.0))
+  (is (model/finite-double? -1.5))
+  (is (not (model/finite-double? ##NaN)))
+  (is (not (model/finite-double? ##Inf)))
+  (is (not (model/finite-double? ##-Inf)))
+  (is (not (model/finite-double? 42)))
+  (is (not (model/finite-double? "x"))))
+
+;; ---------------------------------------------------------------------------
+;; Cross-field consistency
+;; ---------------------------------------------------------------------------
+
+(deftest record-consistent-on-record-id
+  (let [a (model/assertion {:subject :r/r1 :predicate :p :value 1})
+        r (model/record {:id :r/r1 :kind :book :assertions [a]})]
+    (is (model/record-consistent? r))
+    (is (nil? (model/explain-consistency r)))))
+
+(deftest record-inconsistent-when-subject-mismatches-id
+  (let [a (model/assertion {:subject :r/wrong :predicate :p :value 1})
+        r (model/record {:id :r/right :kind :book :assertions [a]})]
+    (is (not (model/record-consistent? r)))
+    (let [explain (model/explain-consistency r)]
+      (is (some? explain))
+      (is (= :r/right (:record-id explain)))
+      (is (= 1 (count (:bad-assertions explain)))))))
+
+(deftest record-consistent-with-fragment-subjects
+  (let [frag (model/fragment {:id :frag/a :source :xml})
+        a    (model/assertion {:subject :frag/a :predicate :canon/note
+                               :value "fragment-level"})
+        r    (model/record {:id :r/main :kind :book
+                            :fragments [frag]
+                            :assertions [a]})]
+    (is (model/record-consistent? r)
+        "subject = fragment id is allowed because fragments are addressable")))
+
+(deftest record-inconsistent-with-foreign-diagnostic-subject
+  (let [d (model/diagnostic {:severity :error :code :x :subject :r/foreign})
+        r (model/record {:id :r/local :kind :book :diagnostics [d]})]
+    (is (not (model/record-consistent? r)))
+    (is (= 1 (count (:bad-diagnostics (model/explain-consistency r)))))))
+
+(deftest known-subjects-includes-id-and-fragments
+  (let [frag (model/fragment {:id :frag/x :source :xml})
+        r    (model/record {:id :r/m :kind :book :fragments [frag]})]
+    (is (= #{:r/m :frag/x} (model/known-subjects r)))))
