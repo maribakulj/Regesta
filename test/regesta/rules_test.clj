@@ -49,6 +49,45 @@
     (is (contains? (set triples) [:r/r1 :meta/kind :book]))
     (is (contains? (set triples) [:r/r1 :canon/title "Les Misérables"]))))
 
+(deftest record-triples-exposes-source-and-provenance
+  (let [prov (model/provenance {:source :xml/sample :pass :ingest})
+        r    (model/record {:id :r/s :kind :book
+                            :source :xml/sample
+                            :provenance prov})
+        ts   (set (rules/record-triples r))]
+    (is (contains? ts [:r/s :meta/source :xml/sample]))
+    (is (contains? ts [:r/s :meta/provenance prov]))))
+
+(deftest record-triples-emits-one-triple-per-fragment
+  (let [r  (model/record {:id :r/f :kind :book
+                          :fragments [(model/fragment {:id :frag/a :source :xml})
+                                      (model/fragment {:id :frag/b :source :xml})]})
+        ts (set (rules/record-triples r))]
+    (is (contains? ts [:r/f :meta/fragment :frag/a]))
+    (is (contains? ts [:r/f :meta/fragment :frag/b]))))
+
+(deftest record-triples-emits-one-triple-per-diagnostic
+  (let [r  (model/record {:id :r/d :kind :book
+                          :diagnostics [(model/diagnostic {:severity :error
+                                                           :code :missing-title
+                                                           :subject :r/d})
+                                        (model/diagnostic {:severity :warning
+                                                           :code :weak-id
+                                                           :subject :r/d})]})
+        ts (set (rules/record-triples r))]
+    (is (contains? ts [:r/d :meta/diagnostic :missing-title]))
+    (is (contains? ts [:r/d :meta/diagnostic :weak-id]))))
+
+(deftest record-triples-omits-nil-struct-fields
+  (let [r  (model/record {:id :r/n :kind :book})
+        ts (set (rules/record-triples r))]
+    (is (contains? ts [:r/n :meta/id :r/n]))
+    (is (contains? ts [:r/n :meta/kind :book]))
+    (is (not (some (fn [[_ p _]] (= :meta/source p)) ts)))
+    (is (not (some (fn [[_ p _]] (= :meta/provenance p)) ts)))
+    (is (not (some (fn [[_ p _]] (= :meta/fragment p)) ts)))
+    (is (not (some (fn [[_ p _]] (= :meta/diagnostic p)) ts)))))
+
 ;; ---------------------------------------------------------------------------
 ;; Schema validation
 ;; ---------------------------------------------------------------------------
@@ -184,6 +223,44 @@
               :produce {:diagnostic {:severity :info :code :has-title :subject '?r}}}]
     (is (= 1 (count (run rule (book-record :title "X")))))
     (is (empty? (run rule (book-record))))))
+
+(deftest absent-and-present-see-struct-fields
+  ;; Regression: absent?/present? used to query :assertions only, missing
+  ;; struct fields like :meta/kind, :meta/source. They now query the
+  ;; unified triple-view and observe the full structural vocabulary.
+  (testing "present? on :meta/kind is true for any well-formed record"
+    (let [rule {:id :rule/has-kind
+                :phase :validate
+                :match '[[?r :meta/id ?_id]
+                         (present? ?r :meta/kind)]
+                :produce {:diagnostic {:severity :info :code :has-kind
+                                       :subject '?r}}}]
+      (is (= 1 (count (run rule (book-record :id :r/k)))))))
+  (testing "absent? on :meta/source distinguishes records with and without source"
+    (let [rule {:id :rule/no-source
+                :phase :validate
+                :match '[[?r :meta/id ?_id]
+                         (absent? ?r :meta/source)]
+                :produce {:diagnostic {:severity :info :code :no-source
+                                       :subject '?r}}}
+          with    (model/record {:id :r/with :kind :book :source :xml/x})
+          without (model/record {:id :r/wo   :kind :book})]
+      (is (empty? (run rule with)))
+      (is (= 1 (count (run rule without)))))))
+
+(deftest absent-on-meta-fragment-distinguishes-fragmented-records
+  (let [rule {:id :rule/no-fragments
+              :phase :validate
+              :match '[[?r :meta/id ?_id]
+                       (absent? ?r :meta/fragment)]
+              :produce {:diagnostic {:severity :info :code :no-fragments
+                                     :subject '?r}}}
+        with    (model/record {:id :r/wf :kind :book
+                               :fragments [(model/fragment {:id :frag/x
+                                                            :source :xml})]})
+        without (model/record {:id :r/wof :kind :book})]
+    (is (empty? (run rule with)))
+    (is (= 1 (count (run rule without))))))
 
 (deftest matches-guard
   (let [rule {:id :rule/t7
