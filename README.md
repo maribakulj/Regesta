@@ -1,5 +1,10 @@
 # Regesta
 
+[![CI](https://github.com/maribakulj/regesta/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/maribakulj/regesta/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/maribakulj/regesta?color=blue)](./LICENSE)
+[![Clojure](https://img.shields.io/badge/Clojure-1.12-5881D8?logo=clojure&logoColor=white)](https://clojure.org)
+[![Java](https://img.shields.io/badge/Java-21%2B-007396?logo=openjdk&logoColor=white)](https://adoptium.net/)
+
 A documentary compiler for cultural metadata.
 
 Regesta ingests heterogeneous metadata records, normalizes them into a stable

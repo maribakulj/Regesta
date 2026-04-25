@@ -23,6 +23,14 @@ The pre-1.0 development line. Sprints 0 through 4 are landed; Sprint 5
   a per-namespace plaintext summary in the run summary panel.
 - `CONTRIBUTING.md`, `SECURITY.md`, GitHub issue templates and this
   changelog.
+- End-to-end integration test scenario covering all four V1 phases
+  (test/integration/regesta/integration_test.clj).
+- Test layout reorganized into `test/unit/`, `test/property/`,
+  `test/integration/` with matching `:test/unit`, `:test/property`,
+  `:test/integration` aliases for category-scoped runs.
+- JUnit XML output via a custom `:test/junit` runner, published to the
+  GitHub check panel through `EnricoMi/publish-unit-test-result-action`.
+- README badges (CI status, license, Clojure / Java version).
 
 ### Changed
 
