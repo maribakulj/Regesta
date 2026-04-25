@@ -61,3 +61,62 @@ jobs:
 
       - name: Run tests
         run: clojure -M:test
+
+  coverage:
+    name: Coverage report
+    runs-on: ubuntu-latest
+    # Coverage runs after the test matrix passes, on a single Java version.
+    # Running it on every matrix slice would either upload the same artifact
+    # twice or require artifact-name suffixing for no useful gain.
+    needs: test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Clojure
+        uses: DeLaGuardo/setup-clojure@13.0
+        with:
+          cli: "latest"
+
+      - name: Cache Clojure deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            ~/.gitlibs
+            ~/.deps.clj
+          key: cljdeps-coverage-${{ hashFiles('deps.edn') }}
+          restore-keys: cljdeps-coverage-
+
+      - name: Run cloverage
+        run: clojure -M:coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: target/coverage/
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Print coverage summary
+        # cloverage prints a per-namespace table to stdout. Mirror it into
+        # the run summary so reviewers can see the numbers without
+        # downloading the artifact.
+        run: |
+          if [ -f target/coverage/coverage.txt ]; then
+            {
+              echo '## Coverage summary'
+              echo
+              echo '```'
+              cat target/coverage/coverage.txt
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

@@ -266,6 +266,23 @@ Runs are parallelized across a Java matrix (Temurin 21 and 24). Concurrent
 runs on the same branch (other than `main`) cancel each other to keep CI
 turnaround tight. Dependabot tracks GitHub Actions versions weekly.
 
+After the test matrix passes, a `coverage` job runs `cloverage` on a
+single Java slice and publishes the resulting HTML report (and the
+cobertura XML) as a workflow artifact named `coverage-report`. A
+per-namespace text summary is also written to the run summary. No
+threshold is enforced in V1 — coverage is reported, not gated; once a
+baseline stabilizes, a minimum can be added.
+
+Local coverage:
+
+```bash
+clojure -M:coverage
+# report at target/coverage/index.html
+```
+
+Note that cloverage is hosted on Clojars, so the `:sandbox` alias does
+not proxy it. Local coverage runs require Clojars access.
+
 A separate `release.yml` workflow runs on `v*` tag pushes: it re-executes
 the full CI gate, then drafts a GitHub Release with auto-generated notes
 that a maintainer publishes manually.

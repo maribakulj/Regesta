@@ -28,6 +28,26 @@
   {:replace-deps {dev.weavejester/cljfmt {:mvn/version "0.13.0"}}
    :main-opts    ["-m" "cljfmt.main" "fix" "src" "test"]}
 
+  ;; Test coverage. Runs every test namespace under cloverage's
+  ;; instrumentation and emits an HTML report under target/coverage/
+  ;; plus a cobertura XML for downstream tooling. CI publishes the
+  ;; report as a workflow artifact.
+  ;;
+  ;; Local invocation:
+  ;;   clojure -M:coverage
+  ;;
+  ;; Note: cloverage is hosted on Clojars, which the :sandbox alias
+  ;; cannot proxy. Local coverage runs require Clojars access.
+  :coverage
+  {:extra-paths ["test"]
+   :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
+                 cloverage/cloverage           {:mvn/version "1.2.4"}}
+   :main-opts   ["-m" "cloverage.coverage"
+                 "--src-ns-path" "src"
+                 "--test-ns-path" "test"
+                 "--output" "target/coverage"
+                 "--codecov"]}
+
   ;; Sandbox-only override. Some restricted environments (e.g. the Claude Code
   ;; web sandbox) cannot reach Clojars but can reach GitHub and Maven Central.
   ;; This alias rewrites Clojars-only coordinates to git coordinates so that
