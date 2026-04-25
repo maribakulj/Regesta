@@ -181,7 +181,10 @@ The core never knows any external schema.
 │   ├── plugins.clj          # Plugin protocol (Sprint 5+)
 │   ├── app.clj              # CLI and application shell (Sprint 10)
 │   └── dev.clj              # REPL / dev helpers
-├── test/                    # Test suites, mirrored to src/
+├── test/
+│   ├── unit/regesta/        # Fast, hermetic, mirrored to src/
+│   ├── property/regesta/    # Generative invariants (test.check + malli.generator)
+│   └── integration/regesta/ # Multi-layer end-to-end scenarios
 ├── docs/
 │   └── adr/                 # Architecture Decision Records
 ├── .github/workflows/ci.yml # Lint, format, test on every push
@@ -222,8 +225,13 @@ shape adapter for JSON and XML.
 ### Common tasks
 
 ```bash
-# Run the test suite
+# Run the full test suite (unit + property + integration)
 clojure -M:test
+
+# Run only one category — useful for fast iteration
+clojure -M:test/unit
+clojure -M:test/property
+clojure -M:test/integration
 
 # Lint
 clojure -M:lint

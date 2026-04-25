@@ -16,18 +16,43 @@ Requirements:
 - `clj-kondo` and `cljfmt` — installed via the `:lint` and `:fmt` aliases,
   or as native binaries on `PATH`
 
-The four commands you'll use most:
+The commands you'll use most:
 
 ```bash
-clojure -M:test     # full test suite
-clojure -M:lint     # clj-kondo
-clojure -M:fmt      # cljfmt check (read-only)
-clojure -M:fmt/fix  # cljfmt rewrite (write)
+clojure -M:test              # full suite (unit + property + integration)
+clojure -M:test/unit         # fast iteration on a unit test
+clojure -M:test/property     # generative invariants only
+clojure -M:test/integration  # end-to-end scenarios only
+clojure -M:lint              # clj-kondo
+clojure -M:fmt               # cljfmt check (read-only)
+clojure -M:fmt/fix           # cljfmt rewrite (write)
 ```
 
-CI runs the first three on every push and pull request, plus a coverage
-report. See [README.md](./README.md) for the full CI description and
-the manual branch-protection settings.
+CI runs `:test`, `:lint` and `:fmt` on every push and pull request,
+plus a coverage report. See [README.md](./README.md) for the full CI
+description and the manual branch-protection settings.
+
+### Test layout
+
+The test tree is split into three categories at the path level:
+
+| Path                    | What lives here                                                |
+|-------------------------|----------------------------------------------------------------|
+| `test/unit/regesta/`    | Fast, hermetic, isolated to one namespace's behavior           |
+| `test/property/regesta/`| Generative invariants via `test.check` and `malli.generator`   |
+| `test/integration/regesta/` | Multi-layer scenarios that exercise the full pipeline      |
+
+Namespaces stay flat (e.g. `regesta.model-test`, not
+`regesta.unit.model-test`). The split is at the *path* level so the
+test runner can scope to one category at a time without renaming.
+
+When you write a new test:
+
+- A bug-fix or single-feature test usually belongs in `unit/`.
+- An invariant that should hold over a class of inputs (rather than
+  one example) belongs in `property/`.
+- A scenario that exercises three or more layers — model, rules,
+  runtime, diagnostics — belongs in `integration/`.
 
 ## Workflow
 

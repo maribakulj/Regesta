@@ -4,17 +4,46 @@
  {org.clojure/clojure       {:mvn/version "1.12.0"}
   metosin/malli             {:mvn/version "0.17.0"}}
 
+ ;; Test layout (see CONTRIBUTING.md for rationale):
+ ;;   test/unit/        — fast, hermetic, isolated to one namespace
+ ;;   test/property/    — generative invariants via test.check / malli.generator
+ ;;   test/integration/ — multi-layer end-to-end scenarios
+ ;;
+ ;; The :test alias runs every category. The :test/unit, :test/property and
+ ;; :test/integration aliases run a single category for fast iteration.
+
  :aliases
  {:dev
-  {:extra-paths ["test"]
+  {:extra-paths ["test/unit" "test/property" "test/integration"]
    :extra-deps  {org.clojure/test.check {:mvn/version "1.1.1"}}}
 
   :test
-  {:extra-paths ["test"]
+  {:extra-paths ["test/unit" "test/property" "test/integration"]
    :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
                  io.github.cognitect-labs/test-runner
                  {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
    :main-opts   ["-m" "cognitect.test-runner"]}
+
+  :test/unit
+  {:extra-paths ["test/unit"]
+   :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
+                 io.github.cognitect-labs/test-runner
+                 {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+   :main-opts   ["-m" "cognitect.test-runner" "--dir" "test/unit"]}
+
+  :test/property
+  {:extra-paths ["test/property"]
+   :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
+                 io.github.cognitect-labs/test-runner
+                 {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+   :main-opts   ["-m" "cognitect.test-runner" "--dir" "test/property"]}
+
+  :test/integration
+  {:extra-paths ["test/integration"]
+   :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
+                 io.github.cognitect-labs/test-runner
+                 {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+   :main-opts   ["-m" "cognitect.test-runner" "--dir" "test/integration"]}
 
   :lint
   {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2024.11.14"}}
@@ -39,12 +68,14 @@
   ;; Note: cloverage is hosted on Clojars, which the :sandbox alias
   ;; cannot proxy. Local coverage runs require Clojars access.
   :coverage
-  {:extra-paths ["test"]
+  {:extra-paths ["test/unit" "test/property" "test/integration"]
    :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
                  cloverage/cloverage           {:mvn/version "1.2.4"}}
    :main-opts   ["-m" "cloverage.coverage"
                  "--src-ns-path" "src"
-                 "--test-ns-path" "test"
+                 "--test-ns-path" "test/unit"
+                 "--test-ns-path" "test/property"
+                 "--test-ns-path" "test/integration"
                  "--output" "target/coverage"
                  "--codecov"]}
 
