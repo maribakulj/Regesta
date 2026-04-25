@@ -14,6 +14,7 @@ ADR; supersessions are explicit, not silent edits.
 | [0004](./0004-fixed-passes-over-fixpoint.md) | Fixed passes in V1, fixpoint deferred | Accepted |
 | [0005](./0005-status-model.md) | Dual status model: machine truth and human workflow | Accepted |
 | [0006](./0006-deps-resolution-and-sandbox.md) | Maven coordinates by default, git override alias for restricted networks | Accepted |
+| [0007](./0007-plugins-as-data.md) | Plugins as data, not protocols | Accepted |
 
 ## Template
 
