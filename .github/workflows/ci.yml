@@ -109,7 +109,7 @@ jobs:
 
       - name: Upload JUnit XML artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: junit-xml
           path: target/junit/junit.xml
@@ -171,7 +171,7 @@ jobs:
           verbose: false
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: target/coverage/
