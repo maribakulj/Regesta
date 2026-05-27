@@ -167,3 +167,17 @@ If no, a structured value is acceptable.
   the present ADR specifies their second, equally first-class role as
   the home for qualified values. Both roles are served by the same
   schema.
+- **Rule layer cannot mint new fragments in V1.** The `:produce` map in
+  the rule DSL (ADR 0002) supports `:assert`, `:diagnostic`, `:repair`
+  — not `:fragment`. Fragments are born at **ingest**, inside the
+  importer (typically the shape adapter), driven by `:mapping/qualifier`
+  declarations from the plugin's mapping. A `:normalize`, `:infer`, or
+  `:repair` phase rule cannot retroactively promote a flat value into a
+  qualified fragment (e.g. "detect this title's language by heuristic
+  and wrap it into a `(text, lang)` fragment"). This is acceptable for
+  V1: ingest-time minting covers every V1 plugin use case, including
+  Sprint 7 Dublin Core multilingual. The limitation can be lifted later
+  by adding a `:fragment` production action to the rule DSL; until a
+  concrete rule needs it, the DSL stays unchanged. This ADR explicitly
+  forecloses the alternative — runtime production of fragments by
+  rules — as out-of-scope V1.
