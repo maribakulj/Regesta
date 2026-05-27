@@ -143,11 +143,12 @@ If no, a structured value is acceptable.
   (a) reproducible across re-runs, otherwise idempotency at merge
   (ADR 0008) breaks; (b) distinct from each other when the source
   occurrences are distinct, otherwise legitimately different values
-  collapse; (c) cheap to compute. A canonical scheme — record id +
-  source-path locator + occurrence index, with content hash as a
-  tie-breaker — will be specified by Sprint 6 before any plugin starts
-  minting fragments. Until then, `regesta.model` already provides the
-  `Fragment` schema; only the id-minting convention needs locking down.
+  collapse; (c) cheap to compute. The canonical scheme — record id +
+  source-path locator + occurrence index — is specified in
+  [ADR 0012](./0012-fragment-identity-scheme.md), landed before Sprint 5
+  so the shape adapter has a complete spec. `regesta.model` exposes a
+  `mint-fragment-id` helper; plugins go through it rather than rolling
+  their own.
 - **Event-centric formats become representable without a model change.**
   CIDOC CRM, Linked Art, and IIIF remain V2 deliverables, but the V1 IR
   no longer forecloses them. The README scope is updated to make this

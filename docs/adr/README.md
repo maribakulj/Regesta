@@ -19,6 +19,7 @@ ADR; supersessions are explicit, not silent edits.
 | [0009](./0009-mapping-schema.md) | Mapping schema: data-shaped sugar over rules | Accepted |
 | [0010](./0010-stdlib-extensibility.md) | Stdlib extensibility: predicates and transforms via plugins | Accepted |
 | [0011](./0011-fragments-for-qualified-values.md) | Fragments as the canonical home for qualified values | Accepted |
+| [0012](./0012-fragment-identity-scheme.md) | Fragment identity scheme | Accepted |
 
 ## Template
 
