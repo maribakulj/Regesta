@@ -68,8 +68,8 @@ jobs:
     # Runs alongside the test matrix on a single Java slice and produces a
     # JUnit XML that GitHub's check panel can render. We always publish,
     # even on test failure, so the results stay visible — that's the whole
-    # point of the JUnit panel.
-    needs: test
+    # point of the JUnit panel. No `needs:` here on purpose: gating on the
+    # test job would hide JUnit output exactly when it matters most.
 
     permissions:
       contents: read
@@ -133,7 +133,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Java
         uses: actions/setup-java@v5
