@@ -16,7 +16,8 @@
 | M2.A — Plugin schema, registry, queries, effective stdlib | ✅ | `d9808b2` |
 | M2.B — `:requires` topo-sort + `:input-format` dispatch | ✅ | `3cfba92` |
 | M3 — Core transform stdlib + core/plugin union | ✅ | `73d5bd0` |
-| **M4 — Mapping schema + compiler** | ⏳ next | — |
+| M4.A — MappingRule schema + flat compiler + transforms + on-empty | ✅ | _pending commit_ |
+| **M4.B — Qualified-mapping compiler** | ⏳ next | — |
 | M5 — Generic shape adapter | ⏳ | — |
 | M6 — Reference plugin + integration | ⏳ | — |
 
@@ -32,12 +33,19 @@ Read this file first, then:
    for M4.
 2. ADR 0012 — fragment id scheme and `regesta.model/mint-fragment-id`,
    already in code.
-3. ADR 0009 §Decision and §Qualifier (revised) — the mapping schema
-   and the qualifier semantics M4 must implement.
-4. `src/regesta/plugins.clj` — namespace docstring explains the design
+3. ADR 0009 §Decision, §Qualifier (revised), and §Schema (revised) —
+   the mapping schema, the qualifier semantics M4 must implement, and
+   the clarification that "compiled rule-DSL rules" means
+   runtime-shaped compiled rules with bespoke runners, not data-form
+   `Rule` maps. M4.A's design choice (Piste 2) lives there.
+4. `src/regesta/plugins/mapping.clj` — namespace docstring covers the
+   compiler shape and the M4.A/M4.B split. `regesta.rules/compiled-rule`
+   is the small constructor used to bridge mapping-compilation output
+   into the runtime's compiled-rule contract.
+5. `src/regesta/plugins.clj` — namespace docstring explains the design
    choices made during M2 (registration is order-insensitive,
    `:rules` / `:mapping` are shallow-validated, etc.).
-5. The git log on `claude/epic-wozniak-osQSK` for the sequence of
+6. The git log on `claude/epic-wozniak-osQSK` for the sequence of
    decisions; commit messages cover the why of each landing.
 
 ## Goal

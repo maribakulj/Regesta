@@ -8,6 +8,10 @@
   here, was reopened and adopted by ADR 0011 once concrete plugin needs
   (Sprint 7 DC multilingual, CIDOC/Linked Art/IIIF architectural
   compatibility) emerged.
+- Revised: 2026-05-27 — §Schema clarified to spell out what "compiled
+  rule-DSL rules" means in the compiler's output: runtime-shaped
+  compiled rules, not necessarily `Rule` data-form maps. §Consequences
+  rule-id example corrected to a syntactically valid Clojure keyword.
 
 ## Context
 
@@ -170,6 +174,21 @@ the stdlib `:transforms`, not through new top-level mapping keys.
 This is the same growth discipline as ADR 0002 for the predicate
 stdlib.
 
+The compiler's output target is the **runtime-shaped compiled rule**,
+not necessarily a `Rule` data-form map. A compiled rule, as produced
+by `regesta.rules/compile-rule`, is a map carrying enough metadata for
+the trace (`:id`, `:phase`, optionally `:doc`) plus an opaque runner
+function the runtime invokes via `regesta.rules/apply-rule`. The
+mapping compiler emits the same shape directly: its runner does
+match-against-triples → transform-application → assertion-emission in
+one step. This keeps the rule DSL free of a transform primitive (no
+data-form rule needs to invoke a Clojure function on a value), while
+preserving the spirit of "sugar over rules" — what the runtime
+executes is, from its perspective, indistinguishable from a regular
+compiled rule. Transforms are resolved against the effective stdlib
+at compile time, so transform-name lookup is a register-time concern,
+not a runtime one.
+
 ## Alternatives considered
 
 - **Mapping as a separate execution substrate.** A bespoke "mapping
@@ -213,7 +232,9 @@ stdlib.
   time produce a vector of ten to fifty maps, not custom code.
 - Mappings are inspectable, diff-able, generatable. The same trace
   logic that names rules in provenance names the *mapping* by its
-  expanded rule id (e.g. `:rule/from-mapping/dc-title`).
+  expanded rule id, derived from `:mapping/id` (e.g. a mapping with
+  `:mapping/id :map/dc-title` compiles to a rule with id
+  `:rule.from-mapping/dc-title`).
 - The transform stdlib is a hot growth zone. ADR 0010 documents the
   extensibility model and the conflict-rejection discipline.
 - Plugins that need composition write a rule, not a mapping. This
