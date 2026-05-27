@@ -267,3 +267,209 @@
 (deftest effective-stdlib-empty-when-no-plugins-contribute
   (is (= {:predicates {} :transforms {}}
          (plug/effective-stdlib plug/empty-registry))))
+
+;; ---------------------------------------------------------------------------
+;; :requires graph (M2.B)
+;; ---------------------------------------------------------------------------
+
+(defn- p
+  "Build a minimal plugin with the given id and optional :requires set."
+  ([id]        {:plugin/spec-version 1 :id id})
+  ([id deps]   {:plugin/spec-version 1 :id id :requires deps}))
+
+(deftest requires-graph-returns-deps-map
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/a))
+              (plug/register (p :plugin/b #{:plugin/a}))
+              (plug/register (p :plugin/c #{:plugin/a :plugin/b})))]
+    (is (= {:plugin/a #{}
+            :plugin/b #{:plugin/a}
+            :plugin/c #{:plugin/a :plugin/b}}
+           (plug/requires-graph r)))))
+
+(deftest validate-requires-passes-on-acyclic-complete-graph
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/a))
+              (plug/register (p :plugin/b #{:plugin/a})))]
+    (is (= r (plug/validate-requires! r)))))
+
+(deftest validate-requires-rejects-missing-dep
+  (let [r (plug/register plug/empty-registry
+                         (p :plugin/orphan #{:plugin/ghost}))]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"missing plugins"
+                          (plug/validate-requires! r)))))
+
+(deftest validate-requires-rejects-self-cycle
+  (let [r (plug/register plug/empty-registry
+                         (p :plugin/a #{:plugin/a}))]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"Cycle"
+                          (plug/validate-requires! r)))))
+
+(deftest validate-requires-rejects-direct-cycle
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/a #{:plugin/b}))
+              (plug/register (p :plugin/b #{:plugin/a})))]
+    (try
+      (plug/validate-requires! r)
+      (is false "should have thrown")
+      (catch clojure.lang.ExceptionInfo ex
+        (is (re-find #"Cycle" (ex-message ex)))
+        (is (= #{:plugin/a :plugin/b} (:cycle (ex-data ex))))))))
+
+(deftest validate-requires-rejects-indirect-cycle
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/a #{:plugin/b}))
+              (plug/register (p :plugin/b #{:plugin/c}))
+              (plug/register (p :plugin/c #{:plugin/a})))]
+    (try
+      (plug/validate-requires! r)
+      (is false "should have thrown")
+      (catch clojure.lang.ExceptionInfo ex
+        (is (re-find #"Cycle" (ex-message ex)))
+        (is (= #{:plugin/a :plugin/b :plugin/c} (:cycle (ex-data ex))))))))
+
+(deftest validate-requires-accepts-out-of-order-registration
+  (testing "registration order does not matter; only the final graph"
+    (let [r (-> plug/empty-registry
+                (plug/register (p :plugin/b #{:plugin/a}))   ; registered first
+                (plug/register (p :plugin/a)))]              ; dep registered later
+      (is (= r (plug/validate-requires! r))))))
+
+(deftest topo-order-empty
+  (is (= [] (plug/topo-order plug/empty-registry))))
+
+(deftest topo-order-no-requires-returns-sorted-ids
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/b))
+              (plug/register (p :plugin/a))
+              (plug/register (p :plugin/c)))]
+    (is (= [:plugin/a :plugin/b :plugin/c] (plug/topo-order r))
+        "ties break by id sort for determinism")))
+
+(deftest topo-order-respects-linear-chain
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/c #{:plugin/b}))
+              (plug/register (p :plugin/b #{:plugin/a}))
+              (plug/register (p :plugin/a)))]
+    (is (= [:plugin/a :plugin/b :plugin/c] (plug/topo-order r)))))
+
+(deftest topo-order-respects-diamond
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/d #{:plugin/b :plugin/c}))
+              (plug/register (p :plugin/b #{:plugin/a}))
+              (plug/register (p :plugin/c #{:plugin/a}))
+              (plug/register (p :plugin/a)))]
+    (let [order (plug/topo-order r)]
+      (is (= 4 (count order)))
+      (is (= :plugin/a (first order)))
+      (is (= :plugin/d (last order)))
+      (is (< (.indexOf order :plugin/b) (.indexOf order :plugin/d)))
+      (is (< (.indexOf order :plugin/c) (.indexOf order :plugin/d))))))
+
+(deftest topo-order-fails-on-cycle
+  (let [r (-> plug/empty-registry
+              (plug/register (p :plugin/a #{:plugin/b}))
+              (plug/register (p :plugin/b #{:plugin/a})))]
+    (is (thrown? clojure.lang.ExceptionInfo (plug/topo-order r)))))
+
+;; ---------------------------------------------------------------------------
+;; :input-format dispatch (M2.B)
+;; ---------------------------------------------------------------------------
+
+(defn- importer-plugin
+  "Build an importer plugin with the given id, format, and optional
+   :matches? function."
+  ([id format]
+   (importer-plugin id format nil))
+  ([id format matches-fn]
+   (cond-> {:plugin/spec-version 1
+            :id                  id
+            :input-format        format
+            :importer            (fn [_opts _src] {:records [] :diagnostics []})}
+     matches-fn (assoc :matches? matches-fn))))
+
+(def ^:private dummy-source {:source/kind :string :source/value "x"})
+
+(deftest select-importer-using-plugin-bypasses-dispatch
+  (let [r (-> plug/empty-registry
+              (plug/register (importer-plugin :plugin/xml-a :xml))
+              (plug/register (importer-plugin :plugin/xml-b :xml)))]
+    (is (= :plugin/xml-a
+           (:id (plug/select-importer r {:format       :xml
+                                         :source       dummy-source
+                                         :using-plugin :plugin/xml-a}))))))
+
+(deftest select-importer-using-plugin-rejects-unknown
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"not in registry"
+                        (plug/select-importer plug/empty-registry
+                                              {:format :xml
+                                               :using-plugin :plugin/ghost}))))
+
+(deftest select-importer-using-plugin-rejects-without-importer
+  (let [exporter-only {:plugin/spec-version 1
+                       :id :plugin/exp-only
+                       :exporter (fn [_ _] nil)}
+        r             (plug/register plug/empty-registry exporter-only)]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"no importer"
+                          (plug/select-importer r {:format :xml
+                                                   :using-plugin :plugin/exp-only})))))
+
+(deftest select-importer-zero-candidates
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"No importer plugin matched"
+                        (plug/select-importer plug/empty-registry
+                                              {:format :xml :source dummy-source}))))
+
+(deftest select-importer-single-candidate
+  (let [r (plug/register plug/empty-registry
+                         (importer-plugin :plugin/only :xml))]
+    (is (= :plugin/only
+           (:id (plug/select-importer r {:format :xml :source dummy-source}))))))
+
+(deftest select-importer-multiple-candidates-without-matches-is-error
+  (let [r (-> plug/empty-registry
+              (plug/register (importer-plugin :plugin/xml-a :xml))
+              (plug/register (importer-plugin :plugin/xml-b :xml)))]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"ambiguous"
+                          (plug/select-importer r {:format :xml :source dummy-source})))))
+
+(deftest select-importer-matches-filter-narrows-to-one
+  (let [r (-> plug/empty-registry
+              (plug/register (importer-plugin :plugin/specific :xml
+                                              (fn [_ _] true)))
+              (plug/register (importer-plugin :plugin/generic :xml
+                                              (fn [_ _] false))))]
+    (is (= :plugin/specific
+           (:id (plug/select-importer r {:format :xml :source dummy-source}))))))
+
+(deftest select-importer-matches-all-false-is-zero-candidates
+  (let [r (-> plug/empty-registry
+              (plug/register (importer-plugin :plugin/a :xml (fn [_ _] false)))
+              (plug/register (importer-plugin :plugin/b :xml (fn [_ _] false))))]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"No importer plugin matched"
+                          (plug/select-importer r {:format :xml :source dummy-source})))))
+
+(deftest select-importer-matches-multiple-true-still-ambiguous
+  (let [r (-> plug/empty-registry
+              (plug/register (importer-plugin :plugin/a :xml (fn [_ _] true)))
+              (plug/register (importer-plugin :plugin/b :xml (fn [_ _] true))))]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"ambiguous"
+                          (plug/select-importer r {:format :xml :source dummy-source})))))
+
+(deftest select-importer-mixes-matches-and-no-matches
+  (testing "plugin without :matches? stays eligible; one with :matches? returning true also stays"
+    (let [r (-> plug/empty-registry
+                (plug/register (importer-plugin :plugin/specific :xml
+                                                (fn [_ _] true)))
+                (plug/register (importer-plugin :plugin/fallback :xml)))]
+      (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                            #"ambiguous"
+                            (plug/select-importer r {:format :xml :source dummy-source}))
+          "two eligible plugins is an error per ADR 0007"))))
