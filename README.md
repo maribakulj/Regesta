@@ -362,6 +362,14 @@ persistent storage, cross-record queries, deduplication, IIIF, CIDOC CRM,
 Linked Art, TEI, and EAD plugins. Each of those becomes meaningful once the
 V1 core is stable; not before.
 
+**Architectural compatibility constraint, even so.** Although CIDOC CRM,
+Linked Art, and IIIF do not ship as V1 plugins, the V1 IR, vocabulary
+layering, and mapping schema are required to accommodate event-centric
+and nested-resource models without rework once those plugins start. That
+constraint is what shapes the qualified-value design in
+[ADR 0011](./docs/adr/0011-fragments-for-qualified-values.md); it is a
+design boundary on V1, not a deliverable.
+
 ---
 
 ## Design principles
