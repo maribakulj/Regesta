@@ -194,6 +194,10 @@ stdlib.
   some predicates onto fragments rather than onto the record itself.
   V1 mappings target the record `:id`; fragment-level targeting waits
   for a concrete plugin need.
+  *Update (ADR 0011):* the concrete need has arrived — Sprint 7
+  multilingual Dublin Core requires fragment-targeted mappings — so
+  this question is reopened and its schema extension is Sprint 6/7's
+  to land. See [ADR 0011](./0011-fragments-for-qualified-values.md).
 - **Inverse mappings for export.** ADR 0007 lists `:exporter` but the
   mapping schema is import-shaped. An export-time inverse (canonical
   → native) is V2 work; the schema does not pre-empt it.
