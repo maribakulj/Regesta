@@ -19,7 +19,9 @@
 | M4.A — MappingRule schema + flat compiler + transforms + on-empty | ✅ | `2ff3b42` |
 | M4.B — Qualified-mapping compiler | ✅ | `5991c4f` |
 | M4.C — Audit follow-up: schema tightening + doc hygiene | ✅ | `81416bd` |
-| **M5 — Generic shape adapter** | ⏳ next | — |
+| PW.2 — Verify and land XML/JSON deps under :sandbox | ✅ | `e298ad5` |
+| M5.A — JSON walker + shared mapping inspection helpers | ✅ | _pending commit_ |
+| **M5.B — XML walker + cross-format equivalence test** | ⏳ next | — |
 | M6 — Reference plugin + integration | ⏳ | — |
 
 ### Resuming work in a new session
