@@ -25,7 +25,9 @@
    `:requires` resolution graph and the `:input-format` dispatch logic
    live in their own namespaces (Sprint 5 M2.B)."
   (:require [clojure.set :as set]
-            [malli.core :as m]))
+            [malli.core :as m]
+            [regesta.plugins.transforms :as tx]
+            [regesta.rules :as rules]))
 
 ;; ---------------------------------------------------------------------------
 ;; Plugin schema
@@ -180,38 +182,48 @@
 ;; ---------------------------------------------------------------------------
 ;; Effective stdlib (ADR 0010)
 ;;
-;; Plugin-contributed predicates and transforms pool into a single
-;; effective stdlib. Cross-plugin name collisions are rejected here:
-;; silent first-wins resolution would make the visible stdlib depend on
+;; The effective stdlib is the union of the core stdlib (shipped by the
+;; runtime) and every registered plugin's `:predicates` / `:transforms`
+;; contribution. Name collisions across any pair of contributors —
+;; core/plugin or plugin/plugin — are rejected at this point: silent
+;; first-wins resolution would make the visible stdlib depend on
 ;; registration order, which is the worst kind of bug.
+;;
+;; The core stdlib lives in `regesta.rules/predicate-stdlib` and
+;; `regesta.plugins.transforms/core-transforms`. It participates in the
+;; merge as a synthetic contributor with id `:core` — that name shows up
+;; in collision diagnostics, telling a plugin author exactly which
+;; symbol or keyword they cannot redefine.
 ;; ---------------------------------------------------------------------------
 
+(def ^:private core-source :core)
+
 (defn- merge-no-conflicts
-  "Merge a sequence of `[plugin-id contribution-map]` pairs into one map.
-   Throws ex-info naming the conflicting keys and the plugins responsible
-   if any key appears in more than one contribution. `kind` is the
-   human-readable noun used in the error message (\"Predicate\" /
-   \"Transform\")."
+  "Merge a sequence of `[source-id contribution-map]` pairs into one map.
+   Throws ex-info naming the conflicting keys and the contributors
+   responsible if any key appears in more than one contribution. `kind`
+   is the human-readable noun used in the error message (\"Predicate\"
+   / \"Transform\")."
   [pairs kind]
-  (reduce (fn [acc [plugin-id contribution]]
+  (reduce (fn [acc [source-id contribution]]
             (let [conflicts (set/intersection (set (keys acc))
                                               (set (keys contribution)))]
               (when (seq conflicts)
-                (throw (ex-info (str kind " name collision across plugins")
+                (throw (ex-info (str kind " name collision")
                                 {:kind         kind
                                  :names        conflicts
-                                 :incoming     plugin-id
+                                 :incoming     source-id
                                  :already-from (into {}
                                                      (for [n conflicts]
                                                        [n (-> acc meta ::source-by-name (get n))]))})))
               (with-meta (into acc contribution)
                 {::source-by-name
                  (into (or (-> acc meta ::source-by-name) {})
-                       (for [k (keys contribution)] [k plugin-id]))})))
+                       (for [k (keys contribution)] [k source-id]))})))
           (with-meta {} {::source-by-name {}})
           pairs))
 
-(defn- contributions
+(defn- plugin-contributions
   "Sequence of `[plugin-id contribution-map]` for the given top-level
    plugin key (`:predicates` or `:transforms`)."
   [registry plugin-key]
@@ -221,21 +233,69 @@
         (vals registry)))
 
 (defn effective-stdlib
-  "Return `{:predicates ... :transforms ...}` pooling the stdlib
-   extensions contributed by every plugin in `registry`. Cross-plugin
-   name collisions are rejected with an explanatory ex-info — registries
-   that compute their effective stdlib at startup catch the conflict
-   before the first rule runs.
+  "Return `{:predicates ... :transforms ...}` — the union of core
+   stdlibs and every plugin's contribution. Collisions across any pair
+   of contributors (core/plugin, plugin/plugin) throw an explanatory
+   ex-info naming the contributors involved.
 
    The maps returned are plain (no metadata). The merge bookkeeping is
-   internal."
+   internal; use `predicate-source` / `transform-source` to ask which
+   contributor owns a given entry."
   [registry]
-  {:predicates (-> (merge-no-conflicts (contributions registry :predicates)
-                                       "Predicate")
-                   (with-meta nil))
-   :transforms (-> (merge-no-conflicts (contributions registry :transforms)
-                                       "Transform")
-                   (with-meta nil))})
+  (let [pred-contribs (cons [core-source rules/predicate-stdlib]
+                            (plugin-contributions registry :predicates))
+        tx-contribs   (cons [core-source tx/core-transforms]
+                            (plugin-contributions registry :transforms))]
+    {:predicates (with-meta (merge-no-conflicts pred-contribs "Predicate") nil)
+     :transforms (with-meta (merge-no-conflicts tx-contribs "Transform")  nil)}))
+
+(defn effective-predicates
+  "Return the effective predicate stdlib as a `{symbol → fn}` map.
+   Convenience accessor over `effective-stdlib`."
+  [registry]
+  (:predicates (effective-stdlib registry)))
+
+(defn effective-transforms
+  "Return the effective transform stdlib as a `{keyword → fn}` map.
+   Convenience accessor over `effective-stdlib`."
+  [registry]
+  (:transforms (effective-stdlib registry)))
+
+(defn predicate-source
+  "Return the contributor of the predicate `sym` in the registry's
+   effective stdlib: `:core` for a built-in, the plugin id for a
+   plugin contribution, or `nil` if `sym` is not defined.
+
+   For registries that contain colliding contributions, the answer
+   reflects scan order and should not be trusted — call
+   `effective-stdlib` first to surface conflicts."
+  [registry sym]
+  (cond
+    (contains? rules/predicate-stdlib sym)
+    core-source
+
+    :else
+    (some (fn [plugin]
+            (when (contains? (:predicates plugin) sym)
+              (:id plugin)))
+          (vals registry))))
+
+(defn transform-source
+  "Return the contributor of the transform `kw` in the registry's
+   effective stdlib: `:core` for a built-in, the plugin id for a
+   plugin contribution, or `nil` if `kw` is not defined.
+
+   Same trust caveat as `predicate-source`."
+  [registry kw]
+  (cond
+    (contains? tx/core-transforms kw)
+    core-source
+
+    :else
+    (some (fn [plugin]
+            (when (contains? (:transforms plugin) kw)
+              (:id plugin)))
+          (vals registry))))
 
 ;; ---------------------------------------------------------------------------
 ;; :requires graph (ADR 0007)

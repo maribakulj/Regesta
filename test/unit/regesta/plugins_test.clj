@@ -210,7 +210,7 @@
 ;; Effective stdlib (ADR 0010)
 ;; ---------------------------------------------------------------------------
 
-(deftest effective-stdlib-merges-predicates
+(deftest effective-stdlib-merges-predicates-across-plugins
   (let [r (-> plug/empty-registry
               (plug/register (assoc minimal-plugin
                                     :predicates {'foo? (fn [_ _] true)}))
@@ -218,11 +218,12 @@
                                     :id :plugin/b
                                     :predicates {'bar? (fn [_ _] false)})))]
     (let [{:keys [predicates]} (plug/effective-stdlib r)]
-      (is (= #{'foo? 'bar?} (set (keys predicates))))
+      (is (contains? predicates 'foo?))
+      (is (contains? predicates 'bar?))
       (is (fn? (get predicates 'foo?)))
       (is (fn? (get predicates 'bar?))))))
 
-(deftest effective-stdlib-merges-transforms
+(deftest effective-stdlib-merges-transforms-across-plugins
   (let [r (-> plug/empty-registry
               (plug/register (assoc minimal-plugin
                                     :transforms {:tx-a (fn [v] v)}))
@@ -230,7 +231,8 @@
                                     :id :plugin/b
                                     :transforms {:tx-b (fn [v] v)})))]
     (let [{:keys [transforms]} (plug/effective-stdlib r)]
-      (is (= #{:tx-a :tx-b} (set (keys transforms)))))))
+      (is (contains? transforms :tx-a))
+      (is (contains? transforms :tx-b)))))
 
 (deftest effective-stdlib-rejects-predicate-collision
   (let [r (-> plug/empty-registry
@@ -264,9 +266,82 @@
       (is (nil? (meta predicates)))
       (is (nil? (meta transforms))))))
 
-(deftest effective-stdlib-empty-when-no-plugins-contribute
-  (is (= {:predicates {} :transforms {}}
-         (plug/effective-stdlib plug/empty-registry))))
+(deftest effective-stdlib-empty-registry-still-has-core
+  (testing "core predicate stdlib is always present"
+    (let [{:keys [predicates]} (plug/effective-stdlib plug/empty-registry)]
+      (is (contains? predicates 'absent?))
+      (is (contains? predicates 'present?))
+      (is (contains? predicates '=))))
+  (testing "core transform stdlib is always present"
+    (let [{:keys [transforms]} (plug/effective-stdlib plug/empty-registry)]
+      (is (= #{:trim :lowercase :uppercase
+               :parse-int :parse-double :parse-iso-date}
+             (set (keys transforms)))))))
+
+(deftest effective-stdlib-merges-core-and-plugins
+  (let [r (plug/register plug/empty-registry
+                         (assoc minimal-plugin
+                                :predicates {'plugin-pred? (fn [_ _] true)}
+                                :transforms {:plugin-tx (fn [v] v)}))
+        {:keys [predicates transforms]} (plug/effective-stdlib r)]
+    (is (contains? predicates 'absent?)
+        "core predicates still present")
+    (is (contains? predicates 'plugin-pred?)
+        "plugin predicates merged in")
+    (is (contains? transforms :trim)
+        "core transforms still present")
+    (is (contains? transforms :plugin-tx)
+        "plugin transforms merged in")))
+
+(deftest effective-stdlib-rejects-plugin-overriding-core-predicate
+  (let [r (plug/register plug/empty-registry
+                         (assoc minimal-plugin
+                                :predicates {'absent? (fn [_ _] true)}))]
+    (try
+      (plug/effective-stdlib r)
+      (is false "should have thrown on core/plugin predicate collision")
+      (catch clojure.lang.ExceptionInfo ex
+        (is (re-find #"Predicate name collision" (ex-message ex)))
+        (is (= {'absent? :core} (:already-from (ex-data ex))))))))
+
+(deftest effective-stdlib-rejects-plugin-overriding-core-transform
+  (let [r (plug/register plug/empty-registry
+                         (assoc minimal-plugin
+                                :transforms {:trim (fn [v] v)}))]
+    (try
+      (plug/effective-stdlib r)
+      (is false "should have thrown on core/plugin transform collision")
+      (catch clojure.lang.ExceptionInfo ex
+        (is (re-find #"Transform name collision" (ex-message ex)))
+        (is (= {:trim :core} (:already-from (ex-data ex))))))))
+
+(deftest effective-predicates-and-transforms-accessors
+  (let [r (plug/register plug/empty-registry
+                         (assoc minimal-plugin
+                                :predicates {'p1 (fn [_ _] true)}
+                                :transforms {:tx (fn [v] v)}))]
+    (is (contains? (plug/effective-predicates r) 'p1))
+    (is (contains? (plug/effective-predicates r) 'absent?))
+    (is (contains? (plug/effective-transforms r) :tx))
+    (is (contains? (plug/effective-transforms r) :trim))))
+
+(deftest predicate-source-identifies-contributor
+  (let [r (plug/register plug/empty-registry
+                         (assoc minimal-plugin
+                                :id :plugin/p1
+                                :predicates {'plugin-pred? (fn [_ _] true)}))]
+    (is (= :core           (plug/predicate-source r 'absent?)))
+    (is (= :plugin/p1      (plug/predicate-source r 'plugin-pred?)))
+    (is (nil?              (plug/predicate-source r 'unknown?)))))
+
+(deftest transform-source-identifies-contributor
+  (let [r (plug/register plug/empty-registry
+                         (assoc minimal-plugin
+                                :id :plugin/p1
+                                :transforms {:plugin-tx (fn [v] v)}))]
+    (is (= :core      (plug/transform-source r :trim)))
+    (is (= :plugin/p1 (plug/transform-source r :plugin-tx)))
+    (is (nil?         (plug/transform-source r :unknown)))))
 
 ;; ---------------------------------------------------------------------------
 ;; :requires graph (M2.B)
