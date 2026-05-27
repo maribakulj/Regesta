@@ -11,8 +11,8 @@
    and the diagnostics query API.
 
    Importer / exporter / mapping integration is deliberately out of scope
-   here — those land with Sprint 5+. When they do, this test grows a
-   sibling that begins with `(plugins/import ...)` and ends with
+   here — those will land with the plugin layer. When they do, this test
+   grows a sibling that begins with `(plugins/import ...)` and ends with
    `(plugins/export ...)`."
   (:require [clojure.test :refer [deftest is testing]]
             [regesta.diagnostics :as diag]
@@ -96,7 +96,7 @@
 (def ^:private propose-title-repair
   "Repair: a book with no title gets an info diagnostic carrying a repair
    proposal. Repairs stay :proposed in V1 — the apply-repairs CLI workflow
-   (Sprint 9) is what would surface them for human acceptance."
+   is what would surface them for human acceptance."
   {:id :rule/propose-title-repair
    :phase :repair
    :match '[[?r :meta/kind :book]

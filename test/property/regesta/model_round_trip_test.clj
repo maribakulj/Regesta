@@ -2,8 +2,8 @@
   "Generative EDN round-trip test for the canonical model.
 
    For every major schema we generate N samples and assert that
-   `(edn/read-string (pr-str sample))` equals `sample`. This is the
-   load-bearing property of Sprint 1: the IR is pure data and serializes
+   `(edn/read-string (pr-str sample))` equals `sample`. This is a
+   load-bearing property of the IR: it is pure data and serializes
    without loss.
 
    The :double leaf of `Primitive` uses `:gen/fmap` in the model to clamp
@@ -15,7 +15,7 @@
             [regesta.model :as model]))
 
 (def ^:private sample-count
-  "Kept modest so the suite stays fast. Sprint 1's contract is structural,
+  "Kept modest so the suite stays fast. The contract here is structural,
    not statistical: a few hundred samples per schema is ample to catch
    serialization bugs."
   200)
