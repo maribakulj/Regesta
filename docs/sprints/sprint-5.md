@@ -17,7 +17,8 @@
 | M2.B — `:requires` topo-sort + `:input-format` dispatch | ✅ | `3cfba92` |
 | M3 — Core transform stdlib + core/plugin union | ✅ | `73d5bd0` |
 | M4.A — MappingRule schema + flat compiler + transforms + on-empty | ✅ | `2ff3b42` |
-| M4.B — Qualified-mapping compiler | ✅ | _pending commit_ |
+| M4.B — Qualified-mapping compiler | ✅ | `5991c4f` |
+| M4.C — Audit follow-up: schema tightening + doc hygiene | ✅ | `81416bd` |
 | **M5 — Generic shape adapter** | ⏳ next | — |
 | M6 — Reference plugin + integration | ⏳ | — |
 
@@ -255,11 +256,11 @@ path is about eight days; M1/M2/M3 fit alongside without extending it.
 
 ## Risks
 
-1. **Dependencies for XML/JSON.** `clojure.data.xml` and a JSON
-   library need to resolve under the `:sandbox` alias too (ADR 0006).
-   `:sandbox` rewrites Clojars-hosted deps to git coordinates; if
-   either of these is Clojars-only, the alias needs an addition.
-   Verify at the start of M5.
+1. **Dependencies for XML/JSON.** *Resolved by PW.2.* Both
+   `org.clojure/data.xml` and `org.clojure/data.json` live on Maven
+   Central, not Clojars, so the `:sandbox` alias (ADR 0006) needs no
+   amendment — they resolve in both standard and sandbox modes. Deps
+   landed in PW.2 before M5.A consumes them.
 2. **Cross-format equivalence definition.** The property test in M5
    requires a precise notion of "equivalent XML and JSON records". A
    fixture-driven definition needs to land early in M5 (a single
