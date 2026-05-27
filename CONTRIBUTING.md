@@ -115,8 +115,8 @@ Soft requirements (a reviewer will catch them):
   the contract rather than the implementation.
 - Surprising decisions get a comment that explains *why*, not *what*.
 - New tests cover the happy path *and* at least one boundary case.
-- Property-based tests (`test/regesta/property_test.clj`) for any
-  invariant that should hold over a class of inputs, not just the
+- Property-based tests (`test/property/regesta/property_test.clj`) for
+  any invariant that should hold over a class of inputs, not just the
   hand-picked ones.
 
 ### Predicate stdlib growth discipline

@@ -166,8 +166,8 @@
 ;; ---------------------------------------------------------------------------
 ;; Reporting
 ;;
-;; Plain text, no colors, no terminal control. The CLI (Sprint 10) is free
-;; to add presentation on top.
+;; Plain text, no colors, no terminal control. The CLI is free to add
+;; presentation on top.
 ;; ---------------------------------------------------------------------------
 
 (defn- severity-tag [sev]

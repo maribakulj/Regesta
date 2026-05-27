@@ -11,4 +11,4 @@
    core and never reach into its internals: they interact only through the
    rule DSL and the model API.
 
-   Implementation arrives in Sprint 5.")
+   Not yet implemented.")

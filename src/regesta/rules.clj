@@ -9,7 +9,7 @@
    never accepts arbitrary Clojure functions inside a rule; logic must pass
    through the compiler (ADR 0002).
 
-   Match semantics (Sprint 2 scope):
+   Match semantics:
    - Records are presented to the matcher as a set of triples derived from
      their struct fields (`:id`, `:kind`, `:source` → `:meta/*` predicates)
      combined with their explicit assertions.
@@ -20,8 +20,8 @@
    - Guards are pure predicates drawn from a curated stdlib. Rules cannot
      call arbitrary Clojure functions.
 
-   Production actions supported in Sprint 2: `:assert`, `:diagnostic`,
-   `:repair`. `:retract` and `:project-intent` land in later sprints."
+   Production actions: `:assert`, `:diagnostic`, `:repair`. `:retract`
+   and `:project-intent` are planned future additions."
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [clojure.walk :as walk]

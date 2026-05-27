@@ -14,4 +14,4 @@
      regesta apply-repairs INPUT [--dry-run|--auto-safe|--interactive]
      regesta plugins list
 
-   Implementation arrives in Sprint 10.")
+   Not yet implemented.")

@@ -24,9 +24,9 @@ the IR. Regesta does this for metadata rather than for code.
 - A **metadata transformation engine** with a stable, schema-independent core.
 - A **declarative rule system**: validation, inference, normalization, repair,
   and projection logic are expressed as data (EDN), not as code.
-- A **plugin platform**: IIIF, Dublin Core, MARC, CIDOC CRM, Linked Art, or a
-  local institutional model are loaded as plugins; none is privileged, none
-  lives in the core.
+- A **plugin platform**: format-specific support (importers, exporters,
+  rules, mappings) is loaded as plugins; none is privileged, none lives
+  in the core.
 - A **diagnostic-first system**: ambiguity, contradiction, intermediate states,
   and proposed repairs are first-class citizens of the internal representation,
   not side channels.
@@ -163,9 +163,8 @@ them for human acceptance or rejection. See
          └─────────┬────────┘   └────────▲─────────┘
                    │                     │
          ┌─────────▼─────────────────────┴─────────┐
-         │             regesta.plugins            │
-         │  shape-json · shape-xml · dublin-core   │
-         │  csv · marc-xml-lite · canonical · ...  │
+         │             regesta.plugins             │
+         │      format-specific plugins live here  │
          └─────────────────────────────────────────┘
 ```
 
