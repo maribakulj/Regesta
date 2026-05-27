@@ -2,10 +2,43 @@
 
 - Theme: Plugin protocol implementation + generic JSON/XML shape adapter
 - Sprint length: 2 weeks
-- Status: Planned
+- Status: In progress
 - Architectural anchors: ADR 0007 (plugins as data), ADR 0009 (mapping
   schema), ADR 0010 (stdlib extensibility), ADR 0011 (fragments for
   qualified values), ADR 0012 (fragment identity scheme).
+
+## Progress
+
+| Step | Status | Commit |
+|---|---|---|
+| PW.1 — ADR 0009 §Qualifier reconciled with ADR 0011 | ✅ | `d71e0ca` |
+| M1 — Fragment minting (`mint-fragment-id`, `parse-fragment-id`) | ✅ | `d71e0ca` |
+| M2.A — Plugin schema, registry, queries, effective stdlib | ✅ | `d9808b2` |
+| M2.B — `:requires` topo-sort + `:input-format` dispatch | ✅ | `3cfba92` |
+| M3 — Core transform stdlib + core/plugin union | ✅ | `73d5bd0` |
+| **M4 — Mapping schema + compiler** | ⏳ next | — |
+| M5 — Generic shape adapter | ⏳ | — |
+| M6 — Reference plugin + integration | ⏳ | — |
+
+### Resuming work in a new session
+
+Read this file first, then:
+
+1. ADR 0011 §Limitation and §Decision — the qualified-mapping
+   compilation strategy depends on the rule layer **not** minting
+   fragments. The shape adapter (M5) mints them at ingest; M4's
+   compiler emits ordinary assertions whose subjects happen to be
+   fragment ids. This is the single most important design constraint
+   for M4.
+2. ADR 0012 — fragment id scheme and `regesta.model/mint-fragment-id`,
+   already in code.
+3. ADR 0009 §Decision and §Qualifier (revised) — the mapping schema
+   and the qualifier semantics M4 must implement.
+4. `src/regesta/plugins.clj` — namespace docstring explains the design
+   choices made during M2 (registration is order-insensitive,
+   `:rules` / `:mapping` are shallow-validated, etc.).
+5. The git log on `claude/epic-wozniak-osQSK` for the sequence of
+   decisions; commit messages cover the why of each landing.
 
 ## Goal
 
