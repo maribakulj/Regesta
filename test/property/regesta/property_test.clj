@@ -7,7 +7,8 @@
    Generators are sourced from `malli.generator` so they stay in lock-step
    with the schemas; if the model schema gains a new shape, the property
    tests start exploring it for free."
-  (:require [clojure.test :refer [deftest is]]
+  (:require [clojure.string :as str]
+            [clojure.test :refer [deftest is]]
             [clojure.test.check.clojure-test :refer [defspec]]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop]
@@ -168,3 +169,45 @@
   (doseq [d (mg/sample model/Diagnostic {:size 4 :seed 42})]
     (is (model/valid-diagnostic? d)
         (str "Generator produced an invalid Diagnostic: " (pr-str d)))))
+
+;; ---------------------------------------------------------------------------
+;; Fragment identity round-trip (ADR 0012)
+;;
+;; mint-fragment-id and parse-fragment-id must be inverses on inputs that
+;; meet the scheme's stated preconditions: hyphen-free namespaces on both
+;; the record-id and every locator predicate. The generators below are
+;; constrained to that safe input space; outside it the parse is documented
+;; as best-effort.
+;; ---------------------------------------------------------------------------
+
+(def ^:private hyphen-free-name-gen
+  (gen/such-that #(and (seq %) (not (str/includes? % "-")))
+                 (gen/fmap str/join
+                           (gen/vector
+                            (gen/elements (vec "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"))
+                            1 8))))
+
+(def ^:private safe-namespaced-keyword-gen
+  (gen/fmap (fn [[ns nm]] (keyword ns nm))
+            (gen/tuple hyphen-free-name-gen hyphen-free-name-gen)))
+
+(def ^:private safe-locator-gen
+  (gen/fmap (fn [pairs] (vec (mapcat identity pairs)))
+            (gen/vector (gen/tuple safe-namespaced-keyword-gen
+                                   gen/nat)
+                        1 4)))
+
+(defspec mint-parse-round-trip prop-runs
+  (prop/for-all [record-id safe-namespaced-keyword-gen
+                 locator   safe-locator-gen]
+                (let [frag-id (model/mint-fragment-id record-id locator)
+                      parsed  (model/parse-fragment-id frag-id)]
+                  (and (= record-id (:record-id parsed))
+                       (= locator   (:locator parsed))))))
+
+(defspec mint-fragment-id-always-returns-frag-keyword prop-runs
+  (prop/for-all [record-id safe-namespaced-keyword-gen
+                 locator   safe-locator-gen]
+                (let [id (model/mint-fragment-id record-id locator)]
+                  (and (keyword? id)
+                       (= "frag" (namespace id))))))

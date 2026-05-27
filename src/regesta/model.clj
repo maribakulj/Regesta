@@ -11,7 +11,8 @@
 
    See ADR 0001 (assertion-based IR), ADR 0003 (vocabulary layering) and
    ADR 0005 (status model)."
-  (:require [malli.core :as m]))
+  (:require [clojure.string :as str]
+            [malli.core :as m]))
 
 ;; ---------------------------------------------------------------------------
 ;; Structural vocabulary
@@ -98,6 +99,123 @@
    [:source :any]
    [:locator {:optional true} :any]
    [:raw {:optional true} :string]])
+
+;; ---------------------------------------------------------------------------
+;; Fragment identity (ADR 0012)
+;;
+;; Fragments minted by importers need stable, distinct, reproducible ids.
+;; The canonical scheme encodes the owning record id and a locator path
+;; into a `:frag`-namespaced keyword. The single sanctioned constructor
+;; is `mint-fragment-id`; plugins do not roll their own.
+;; ---------------------------------------------------------------------------
+
+(defn- encode-locator-segment
+  "Encode one locator segment as a string. Predicate segments are
+   namespaced keywords (`:ns/name` → `\"ns-name\"`); index segments are
+   non-negative integers (decimal string)."
+  [seg]
+  (cond
+    (and (keyword? seg) (namespace seg))
+    (str (namespace seg) "-" (name seg))
+
+    (and (int? seg) (not (neg? seg)))
+    (str seg)
+
+    (keyword? seg)
+    (throw (ex-info "Locator predicate segments must be namespaced keywords (ADR 0001)"
+                    {:segment seg}))
+
+    :else
+    (throw (ex-info "Locator segments must be namespaced keywords or non-negative integers"
+                    {:segment seg}))))
+
+(defn- validate-locator!
+  "Reject locators that do not match the ADR 0012 schema: a non-empty
+   sequence alternating namespaced predicate keywords and non-negative
+   integer occurrence indices, with even total length."
+  [locator]
+  (when-not (sequential? locator)
+    (throw (ex-info "Locator must be a sequential collection" {:locator locator})))
+  (when (empty? locator)
+    (throw (ex-info "Locator must be non-empty" {:locator locator})))
+  (when (odd? (count locator))
+    (throw (ex-info "Locator must alternate predicate keywords and integer indices (even length)"
+                    {:locator locator})))
+  (doseq [[i seg] (map-indexed vector locator)]
+    (if (even? i)
+      (when-not (and (keyword? seg) (namespace seg))
+        (throw (ex-info "Locator predicate position must be a namespaced keyword"
+                        {:locator locator :position i :segment seg})))
+      (when-not (and (int? seg) (not (neg? seg)))
+        (throw (ex-info "Locator index position must be a non-negative integer"
+                        {:locator locator :position i :segment seg})))))
+  locator)
+
+(defn mint-fragment-id
+  "Construct a fragment id from a record id and a locator path. Returns
+   a keyword in the `:frag` namespace whose name encodes the record id
+   followed by the locator segments — see ADR 0012 for the scheme.
+
+   The record-id must be a namespaced keyword; the locator must be a
+   non-empty vector alternating namespaced predicate keywords with
+   non-negative integer occurrence indices.
+
+   Examples:
+
+     (mint-fragment-id :record/r42 [:dc/title 0])
+     ;; => :frag/record.r42.dc-title.0
+
+     (mint-fragment-id :record/r42 [:crm/P108 0 :crm/P14 0])
+     ;; => :frag/record.r42.crm-P108.0.crm-P14.0
+
+   Throws ex-info if the record-id is not a namespaced keyword or the
+   locator does not match the schema."
+  [record-id locator]
+  (when-not (and (keyword? record-id) (namespace record-id))
+    (throw (ex-info "mint-fragment-id requires a namespaced keyword record-id"
+                    {:record-id record-id})))
+  (validate-locator! locator)
+  (let [record-prefix (str (namespace record-id) "." (name record-id))
+        segments      (mapv encode-locator-segment locator)]
+    (keyword "frag" (str/join "." (cons record-prefix segments)))))
+
+(defn parse-fragment-id
+  "Inverse of `mint-fragment-id`. Parses a fragment id into
+   `{:record-id ... :locator [...]}` per ADR 0012.
+
+   The parse is unambiguous when the record-id namespace, the record-id
+   name, and every locator predicate namespace contain no hyphens. The
+   structural and canonical vocabularies meet this constraint; the
+   encoding does not enforce it. A locator predicate whose namespace
+   itself contains a hyphen cannot be reliably round-tripped, and
+   parsing such an id returns an approximation that should not be
+   treated as authoritative.
+
+   Throws ex-info if `frag-id` is not a `:frag`-namespaced keyword or
+   is structurally malformed."
+  [frag-id]
+  (when-not (and (keyword? frag-id) (= "frag" (namespace frag-id)))
+    (throw (ex-info "Not a fragment id (must be a :frag-namespaced keyword)"
+                    {:frag-id frag-id})))
+  (let [parts (str/split (name frag-id) #"\.")]
+    (when (< (count parts) 4)
+      (throw (ex-info "Malformed fragment id (need record-ns, record-name, predicate, index)"
+                      {:frag-id frag-id :parts parts})))
+    (let [[record-ns record-name & locator-parts] parts]
+      (when (odd? (count locator-parts))
+        (throw (ex-info "Malformed fragment id (locator has odd length)"
+                        {:frag-id frag-id})))
+      (let [locator (into []
+                          (mapcat (fn [[pred-str idx-str]]
+                                    (let [[pred-ns pred-name] (str/split pred-str #"-" 2)]
+                                      (when-not pred-name
+                                        (throw (ex-info "Malformed predicate segment in fragment id"
+                                                        {:frag-id frag-id :segment pred-str})))
+                                      [(keyword pred-ns pred-name)
+                                       (Long/parseLong idx-str)])))
+                          (partition 2 locator-parts))]
+        {:record-id (keyword record-ns record-name)
+         :locator   locator}))))
 
 ;; ---------------------------------------------------------------------------
 ;; Value

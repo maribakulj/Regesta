@@ -333,3 +333,115 @@
   (let [frag (model/fragment {:id :frag/x :source :xml})
         r    (model/record {:id :r/m :kind :book :fragments [frag]})]
     (is (= #{:r/m :frag/x} (model/known-subjects r)))))
+
+;; ---------------------------------------------------------------------------
+;; Fragment identity (ADR 0012)
+;; ---------------------------------------------------------------------------
+
+(deftest mint-fragment-id-worked-examples
+  (testing "single-level locator from ADR 0012"
+    (is (= :frag/record.r42.dc-title.0
+           (model/mint-fragment-id :record/r42 [:dc/title 0])))
+    (is (= :frag/record.r42.dc-title.1
+           (model/mint-fragment-id :record/r42 [:dc/title 1]))))
+  (testing "nested locator (CIDOC-style)"
+    (is (= :frag/record.obj1.crm-P108.0.crm-P14.0
+           (model/mint-fragment-id :record/obj1
+                                   [:crm/P108 0 :crm/P14 0]))))
+  (testing "predicate names with hyphens round-trip safely when namespace is hyphen-free"
+    (is (= :frag/record.r1.foo-bar-baz.0
+           (model/mint-fragment-id :record/r1 [:foo/bar-baz 0])))))
+
+(deftest mint-fragment-id-returns-frag-namespaced-keyword
+  (let [id (model/mint-fragment-id :record/r [:p/q 0])]
+    (is (keyword? id))
+    (is (= "frag" (namespace id)))))
+
+(deftest mint-fragment-id-is-deterministic
+  (testing "same inputs produce same output across calls"
+    (is (= (model/mint-fragment-id :record/r42 [:dc/title 0])
+           (model/mint-fragment-id :record/r42 [:dc/title 0]))))
+  (testing "distinct occurrence indices produce distinct ids"
+    (is (not= (model/mint-fragment-id :record/r [:p/q 0])
+              (model/mint-fragment-id :record/r [:p/q 1])))))
+
+(deftest mint-fragment-id-rejects-bad-record-id
+  (testing "string record-id rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"namespaced keyword record-id"
+                          (model/mint-fragment-id "r42" [:dc/title 0]))))
+  (testing "bare keyword record-id rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"namespaced keyword record-id"
+                          (model/mint-fragment-id :r42 [:dc/title 0]))))
+  (testing "uuid record-id rejected"
+    (is (thrown? clojure.lang.ExceptionInfo
+                 (model/mint-fragment-id (random-uuid) [:dc/title 0])))))
+
+(deftest mint-fragment-id-rejects-bad-locator
+  (testing "empty locator rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"non-empty"
+                          (model/mint-fragment-id :record/r []))))
+  (testing "non-sequential locator rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"sequential"
+                          (model/mint-fragment-id :record/r {:dc/title 0}))))
+  (testing "odd-length locator rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"alternate"
+                          (model/mint-fragment-id :record/r [:dc/title]))))
+  (testing "bare keyword in predicate position rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"namespaced keyword"
+                          (model/mint-fragment-id :record/r [:title 0]))))
+  (testing "non-keyword in predicate position rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"namespaced keyword"
+                          (model/mint-fragment-id :record/r ["dc/title" 0]))))
+  (testing "negative integer in index position rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"non-negative integer"
+                          (model/mint-fragment-id :record/r [:dc/title -1]))))
+  (testing "non-integer in index position rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"non-negative integer"
+                          (model/mint-fragment-id :record/r [:dc/title "0"])))))
+
+(deftest parse-fragment-id-worked-examples
+  (testing "single-level"
+    (is (= {:record-id :record/r42 :locator [:dc/title 0]}
+           (model/parse-fragment-id :frag/record.r42.dc-title.0))))
+  (testing "nested"
+    (is (= {:record-id :record/obj1 :locator [:crm/P108 0 :crm/P14 0]}
+           (model/parse-fragment-id :frag/record.obj1.crm-P108.0.crm-P14.0))))
+  (testing "predicate name with hyphen (namespace hyphen-free)"
+    (is (= {:record-id :record/r1 :locator [:foo/bar-baz 0]}
+           (model/parse-fragment-id :frag/record.r1.foo-bar-baz.0)))))
+
+(deftest parse-fragment-id-rejects-non-frag-keywords
+  (testing "non-keyword input rejected"
+    (is (thrown? clojure.lang.ExceptionInfo
+                 (model/parse-fragment-id "frag/record.r.dc-title.0"))))
+  (testing "non-:frag namespace rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #":frag-namespaced"
+                          (model/parse-fragment-id :record/r42))))
+  (testing "structurally too short rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"Malformed fragment id"
+                          (model/parse-fragment-id :frag/record.r42.dc-title)))))
+
+(deftest mint-parse-roundtrip
+  (testing "mint then parse recovers the original record-id and locator (hyphen-free namespaces)"
+    (doseq [[record-id locator] [[:record/r42        [:dc/title 0]]
+                                 [:record/r42        [:dc/title 1]]
+                                 [:record/obj1       [:crm/P108 0 :crm/P14 0]]
+                                 [:my-plugin/abc-123 [:ns/pred 7]]
+                                 [:record/r1         [:foo/bar-baz 0]]]]
+      (let [frag-id (model/mint-fragment-id record-id locator)
+            parsed  (model/parse-fragment-id frag-id)]
+        (is (= record-id (:record-id parsed))
+            (str "record-id round-trips for " frag-id))
+        (is (= locator (:locator parsed))
+            (str "locator round-trips for " frag-id))))))

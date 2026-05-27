@@ -1,7 +1,13 @@
 # 0009 — Mapping schema: data-shaped sugar over rules
 
-- Status: Accepted
+- Status: Accepted (partially superseded by ADR 0011 on qualifier mechanism)
 - Date: 2026-04-25
+- Revised: 2026-05-27 — §Qualifier rewritten to use fragments per
+  ADR 0011; §Alternatives considered amended to record that the
+  "Qualifier as separate sub-assertion" option, originally rejected
+  here, was reopened and adopted by ADR 0011 once concrete plugin needs
+  (Sprint 7 DC multilingual, CIDOC/Linked Art/IIIF architectural
+  compatibility) emerged.
 
 ## Context
 
@@ -74,19 +80,48 @@ assertions. Collapsing, deduplication, or "first wins" are
 
 ### Qualifier
 
-When `:mapping/qualifier` is present, the canonical value becomes a
-**structured value** (per `regesta.model`):
+When `:mapping/qualifier` is present, the source value is treated as
+**qualified** and lifted to a **fragment** per ADR 0011. The importer
+(typically the generic shape adapter) mints a fragment id via
+`regesta.model/mint-fragment-id` (ADR 0012), attaches one assertion
+per coordinate to the fragment id (the value and the qualifier), and
+emits a reference assertion on the record:
 
 ```clojure
-{:value/kind   :structured
- :value/fields {:value    "Hugo, Victor"
-                :language "fr"}}
+;; one source <dc:title xml:lang="fr">Les Misérables</dc:title>
+;; under the mapping rule
+;;   {:mapping/from :dc/title
+;;    :mapping/to   :canon/title
+;;    :mapping/qualifier {:from :xml/lang :as :canon/lang}}
+
+(fragment {:id :frag/record.r42.dc-title.0 :source [:xml :dc:title 0]})
+
+(assertion {:subject   :frag/record.r42.dc-title.0
+            :predicate :canon/title
+            :value     "Les Misérables"})
+
+(assertion {:subject   :frag/record.r42.dc-title.0
+            :predicate :canon/lang
+            :value     "fr"})
+
+(assertion {:subject   :record/r42
+            :predicate :canon/title
+            :value     {:value/kind   :reference
+                        :value/target :frag/record.r42.dc-title.0}})
 ```
 
 The `:from` key names the source attribute or sub-field that carries
-the qualifier; the `:as` key names the field in the structured value.
+the qualifier; the `:as` key names the predicate the qualifier coord
+takes on the fragment.
+
 Plugins that don't use qualifiers omit the key entirely; the canonical
-value is the bare primitive.
+value is the bare primitive on the record, no fragment minted.
+
+This applies to **mapping-driven** qualifiers (the typical case). For
+atomic compound values where neither coordinate would ever sensibly
+become the subject of further assertions on its own (monetary amounts,
+geographic coordinates, date ranges), use `:value/kind :structured`
+directly — see ADR 0011 §Decision for the discriminating test.
 
 ### Transform
 
@@ -157,9 +192,16 @@ stdlib.
   normalize-phase collapse rule.
 - **Qualifier as a separate sub-assertion.** E.g. produce
   `[?r :canon/title "Hugo"]` plus
-  `[<assertion-id> :canon/language "fr"]`. Rejected: requires
-  reifying the assertion identity and sharply complicates the IR.
-  Structured values already exist (ADR 0001) for exactly this case.
+  `[<assertion-id> :canon/language "fr"]`. Originally rejected as
+  "requires reifying the assertion identity and sharply complicates
+  the IR; structured values already exist (ADR 0001) for exactly this
+  case." **Reopened and adopted by ADR 0011** once concrete plugin
+  needs (Sprint 7 DC multilingual, CIDOC/Linked Art/IIIF
+  compatibility) forced the choice. The mechanism is not assertion
+  reification but fragments: the qualifier coord lives on a fragment
+  whose id, not an assertion's, carries the identity. See ADR 0011
+  for the reasoning that flipped this option from rejected to
+  adopted.
 - **`:on-empty` as silent skip with no `:diagnostic` option.**
   Rejected: plugin authors and users need a discovery tool. The
   diagnostic is informational, not an error.
@@ -180,10 +222,11 @@ stdlib.
 - A future GUI for "browse all mappings" or "explain how `:canon/title`
   is populated" is straightforward: it reads the registered mappings
   by `:mapping/to`.
-- Multilingual values become structured values. Reports and
-  projections that target a single-language output have to flatten,
-  which is the projection plugin's responsibility — not a hidden
-  default in the mapping.
+- Multilingual values become fragments (ADR 0011). Reports and
+  projections that target a single-language output have to flatten
+  the fragment-referencing assertion back to a primitive, which is
+  the projection plugin's responsibility — not a hidden default in
+  the mapping.
 - The compile step from mapping to rules is a pure function; it is
   testable in isolation and produces the same shape of provenance as
   hand-authored rules. The runtime sees only rules.
