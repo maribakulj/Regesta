@@ -12,6 +12,9 @@
   rule-DSL rules" means in the compiler's output: runtime-shaped
   compiled rules, not necessarily `Rule` data-form maps. §Consequences
   rule-id example corrected to a syntactically valid Clojure keyword.
+- Revised: 2026-05-27 — §Open V2 questions extended with
+  source-provenance carry-forward at `:normalize` and cross-plugin
+  `:mapping/id` uniqueness, both surfaced by the M4 audit follow-up.
 
 ## Context
 
@@ -272,3 +275,26 @@ not a runtime one.
 - **Cross-mapping ordering.** Two mappings whose effects depend on
   each other must declare order via `:requires` between plugins (ADR
   0007), not within the mapping schema.
+- **Source-provenance carry-forward at `:normalize`.** When a mapping
+  rule renames `[?r :native/x ?v]` to `[?r :canon/x ?v]`, the source
+  assertion's `:provenance` — notably `:source`, the original source
+  location set by the importer — is not carried into the renamed
+  assertion. The renamed assertion has only the mapping rule's
+  provenance (`:rule`, `:pass`). This is a limitation of the rule
+  engine's matcher (`record-triples` projects assertions to bare
+  triples without their provenance), not a mapping-specific decision,
+  but it manifests most clearly here because mappings are semantically
+  rename-in-place. A V2 enhancement would let the engine optionally
+  carry forward source provenance into derived assertions, possibly
+  via a `:derivation` chain entry; until a concrete consumer needs it,
+  rule-level provenance is treated as sufficient.
+- **Cross-plugin `:mapping/id` uniqueness.** `regesta.plugins.mapping`
+  derives the compiled-rule id from the `name` portion of
+  `:mapping/id` only: `:plugin-a/dc-title` and `:plugin-b/dc-title`
+  both compile to `:rule.from-mapping/dc-title`. The mapping schema
+  enforces uniqueness only within a single plugin's `:mapping` vector;
+  two plugins shipping the same mapping name conflate in provenance
+  traces with no compile- or register-time error. Future work: either
+  embed the plugin id in the derived rule id, or add a registry-level
+  uniqueness check at `register` time. V1 leaves this as a plugin-
+  authoring discipline.

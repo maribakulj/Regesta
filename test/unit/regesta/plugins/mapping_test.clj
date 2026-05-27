@@ -1,11 +1,11 @@
 (ns regesta.plugins.mapping-test
-  "Unit tests for the mapping schema and compiler (Sprint 5 M4.A).
+  "Unit tests for the mapping schema and compiler (Sprint 5 M4).
 
-   Covers the MappingRule schema, the flat-mapping compiler, transform
-   application and failure handling, all three `:on-empty` branches, the
-   compiler's input validation, and the integration of compiled mapping
-   rules with the runtime. Qualified-mapping compilation is M4.B; the
-   only test of that case here is that M4.A explicitly refuses it."
+   Covers the MappingRule schema (including cross-field invariants),
+   the flat- and qualified-mapping compilers, transform application
+   and failure handling, all three `:on-empty` branches, non-primitive
+   passthrough, the compiler's input validation, and the integration
+   of compiled mapping rules with the runtime."
   (:require [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [regesta.model :as model]
@@ -117,11 +117,11 @@
   (testing ":mapping/default without :on-empty :default fails (biconditional)"
     (is (not (mapping/valid-mapping?
               (assoc minimal-mapping :mapping/default "fallback")))))
-  (testing "default of nil counts as present"
-    (is (mapping/valid-mapping?
-         (assoc minimal-mapping
-                :mapping/on-empty :default
-                :mapping/default  nil)))))
+  (testing "nil default rejected — would emit a shape-invalid assertion (M4.C tightening)"
+    (is (not (mapping/valid-mapping?
+              (assoc minimal-mapping
+                     :mapping/on-empty :default
+                     :mapping/default  nil))))))
 
 ;; ---------------------------------------------------------------------------
 ;; Rule-id derivation
@@ -553,6 +553,21 @@
                 asrts))
     (is (every? #(= :normalize (get-in % [:provenance :pass]))
                 asrts))))
+
+(deftest qualified-mapping-transform-does-not-apply-to-qualifier-value
+  (testing "transforms target the fragment's value coord, not the qualifier coord"
+    (let [m      (assoc qualified-mapping :mapping/transform [:uppercase])
+          cr     (mapping/compile-mapping m stdlib)
+          record (multilingual-record :dc/title :xml/lang [["hello" "fr"]])
+          prods  (rules/apply-rule cr record)
+          lang   (first (filterv #(= :canon/lang  (-> % :value :predicate)) prods))
+          title  (first (filterv #(and (= :frag/f0  (-> % :value :subject))
+                                       (= :canon/title (-> % :value :predicate)))
+                                 prods))]
+      (testing "qualifier value passes through unchanged"
+        (is (= "fr" (-> lang :value :value))))
+      (testing "fragment value IS transformed (sanity check that the chain ran)"
+        (is (= "HELLO" (-> title :value :value)))))))
 
 (deftest qualified-mapping-transform-on-fragment-value-failure-emits-diagnostic
   (testing "a transform failure on the fragment's value coord produces a diagnostic; the record-level reference rename is unaffected"

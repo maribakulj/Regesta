@@ -66,7 +66,9 @@
     [:mapping/transform  {:optional true} [:vector :keyword]]
     [:mapping/qualifier  {:optional true} Qualifier]
     [:mapping/on-empty   {:optional true} [:enum :skip :diagnostic :default]]
-    [:mapping/default    {:optional true} :any]
+    [:mapping/default    {:optional true}
+     [:fn {:error/message ":mapping/default cannot be nil — it would emit a shape-invalid assertion"}
+      some?]]
     [:mapping/confidence {:optional true} model/Confidence]
     [:mapping/doc        {:optional true} :string]]
    [:fn {:error/message
@@ -111,7 +113,14 @@
 
 (defn mapping-rule-id
   "Derive the compiled-rule id from a `:mapping/id` keyword. See the
-   namespace doc and ADR 0009 §Consequences for the convention."
+   namespace doc and ADR 0009 §Consequences for the convention.
+
+   Cross-plugin collisions are not detected here: two mapping rules
+   sharing the same `:mapping/id` name portion (across different
+   plugins) produce identical compiled rule ids, which would conflate
+   in provenance traces. Plugin authors should pick distinctive
+   `:mapping/id` names; uniqueness is not enforced by this layer. See
+   ADR 0009 §Open V2 questions."
   [mapping-id]
   (when-not (keyword? mapping-id)
     (throw (ex-info "mapping-rule-id requires a keyword mapping id"
@@ -292,7 +301,16 @@
    (on every triple it appears in, primitive values transformed,
    non-primitive values passed through) and renames the qualifier
    predicate on every fragment that carries it. Throws ex-info on
-   schema violations or unknown transform names."
+   schema violations or unknown transform names.
+
+   Non-primitive values (reference, structured, uncertain — per
+   `regesta.model/primitive-value?`) bypass the transform chain
+   entirely and pass through unchanged. This is essential for
+   qualified mappings, where the source predicate carries both
+   record-level reference values and fragment-level primitives;
+   without the early skip, string transforms would short-circuit on
+   the reference map and emit a spurious `:transform-failed`
+   diagnostic."
   [mapping-rule transforms-stdlib]
   (validate-or-throw! mapping-rule)
   (compile-mapping-rule mapping-rule transforms-stdlib))
