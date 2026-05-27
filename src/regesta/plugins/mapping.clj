@@ -20,12 +20,16 @@
    compilation goes straight to a runner rather than to a data-form
    rule.
 
-   Qualified mappings (those with `:mapping/qualifier`) are rejected by
-   `compile-mapping` in M4.A; their three-rule expansion lands in M4.B.
-   The shape adapter (M5) is the only V1 source of fragments —
-   ADR 0011 §Limitation forbids the rule layer from minting them, so a
-   qualified mapping compiler must assume the fragments already exist
-   on the record at `:normalize` time."
+   Qualified mappings rename the same source predicate that appears on
+   both the record (as a reference value) and on the fragment (as the
+   primitive value coord), plus a second predicate carrying the
+   qualifier (e.g. `:xml/lang`). All three renames happen inside a
+   single compiled rule's runner — one mapping = one rule entry in the
+   trace, regardless of qualifier presence. The shape adapter (M5) is
+   the only V1 source of fragments (ADR 0011 §Limitation forbids the
+   rule layer from minting them), so the qualified-mapping compiler
+   assumes the fragments already exist on the record at `:normalize`
+   time."
   (:require [malli.core :as m]
             [regesta.model :as model]
             [regesta.plugins.transforms :as tx]
@@ -160,26 +164,48 @@
        " yielded nil for value " (truncate (pr-str original-value) 80)))
 
 ;; ---------------------------------------------------------------------------
-;; Flat-mapping compilation
+;; Compilation
 ;;
-;; The runner filters the record's triples by source predicate, applies
-;; the transform chain to each match's value, and emits one production
-;; per match. Transform short-circuit (some? input, nil output) becomes
-;; a `:transform-failed` info diagnostic; ADR 0009 §"Open V2 questions"
-;; §"Confidence inheritance" pins this behaviour ("failure surfaces as
-;; a diagnostic"). When no triple matches, `:on-empty` decides: skip,
-;; emit a `:missing-source-predicate` info diagnostic, or emit the
-;; default-valued canonical assertion on the record id.
+;; The runner filters the record's triples by source predicate and emits
+;; productions per match. The transform chain applies to primitive values
+;; only; non-primitive values (reference, structured, uncertain — see
+;; `regesta.model/primitive-value?`) pass through unchanged. This split
+;; matters for qualified mappings: the same source predicate appears on
+;; the record carrying a reference value (which must rename through
+;; untouched) and on the fragment carrying the primitive value (which the
+;; transform may target). A blanket "always apply the chain" policy would
+;; mis-fire on the reference value, since string transforms short-circuit
+;; on maps; the early-skip avoids spurious `:transform-failed` diagnostics
+;; in that case.
+;;
+;; When the chain is non-empty and the value is primitive but the chain
+;; yields nil, the rule emits a `:transform-failed` info diagnostic per
+;; ADR 0009 §"Open V2 questions" §"Confidence inheritance" ("failure
+;; surfaces as a diagnostic"). When no triple matches the source
+;; predicate at all, `:on-empty` decides: skip, emit a
+;; `:missing-source-predicate` info diagnostic, or emit the default-valued
+;; canonical assertion on the record id.
 ;;
 ;; The default value bypasses the transform chain — `:mapping/default`
 ;; is the canonical-side fallback, not source-side. ADR 0009 doesn't
 ;; spell this out explicitly but it is the only coherent reading: the
 ;; mapping author wrote the default in the canonical vocabulary.
+;;
+;; The qualifier-rename block is independent of the on-empty branch: it
+;; runs whenever any triple matches `:qualifier/from`, regardless of
+;; whether the main predicate is present. In a well-formed record, the
+;; qualifier triples live on fragments minted via the main predicate, so
+;; the two presence sets agree — but the runner doesn't enforce that
+;; correlation, and a stray qualifier triple still gets renamed.
+;; Qualifier values are not transformed (transforms target the value
+;; coord, not the qualifier).
 ;; ---------------------------------------------------------------------------
 
-(defn- compile-flat-mapping
-  "Compile a flat (no-qualifier) mapping rule into a compiled rule.
-   Assumes `mapping-rule` is already schema-validated."
+(defn- compile-mapping-rule
+  "Compile one mapping rule into a single compiled rule whose runner
+   handles both the flat-rename case and, when `:mapping/qualifier` is
+   present, the additional qualifier rename on fragments. Assumes
+   `mapping-rule` is already schema-validated."
   [mapping-rule transforms-stdlib]
   (let [from       (:mapping/from mapping-rule)
         to         (:mapping/to mapping-rule)
@@ -190,24 +216,38 @@
         default    (:mapping/default mapping-rule)
         rule-id    (mapping-rule-id (:mapping/id mapping-rule))
         doc        (:mapping/doc mapping-rule)
+        qualifier  (:mapping/qualifier mapping-rule)
+        q-from     (:from qualifier)
+        q-as       (:as qualifier)
 
-        emit-from-match
+        emit-rename-match
         (fn [[s _p v]]
-          (let [v' (transform v)]
-            (cond
-              (some? v')
-              (assertion-production
-               {:subject s :predicate to :value v'
-                :confidence confidence :rule-id rule-id})
+          (cond
+            (nil? v)
+            nil
 
-              (nil? v)
-              nil
+            (or (empty? chain) (not (model/primitive-value? v)))
+            (assertion-production
+             {:subject s :predicate to :value v
+              :confidence confidence :rule-id rule-id})
 
-              :else
-              (diagnostic-production
-               {:severity :info :code :transform-failed
-                :subject s :rule-id rule-id
-                :message (transform-failed-message chain v)}))))
+            :else
+            (let [v' (transform v)]
+              (if (some? v')
+                (assertion-production
+                 {:subject s :predicate to :value v'
+                  :confidence confidence :rule-id rule-id})
+                (diagnostic-production
+                 {:severity :info :code :transform-failed
+                  :subject s :rule-id rule-id
+                  :message (transform-failed-message chain v)})))))
+
+        emit-qualifier-match
+        (fn [[s _p v]]
+          (when (some? v)
+            (assertion-production
+             {:subject s :predicate q-as :value v
+              :confidence confidence :rule-id rule-id})))
 
         emit-on-empty
         (fn [record-id]
@@ -224,11 +264,15 @@
 
         runner
         (fn run [record]
-          (let [matches (filterv (fn [[_s p _v]] (= p from))
-                                 (rules/record-triples record))]
-            (if (seq matches)
-              (into [] (keep emit-from-match) matches)
-              (emit-on-empty (:id record)))))]
+          (let [triples      (rules/record-triples record)
+                from-matches (filterv (fn [[_ p _]] (= p from)) triples)
+                base-prods   (if (seq from-matches)
+                               (into [] (keep emit-rename-match) from-matches)
+                               (emit-on-empty (:id record)))]
+            (if qualifier
+              (let [qual-matches (filterv (fn [[_ p _]] (= p q-from)) triples)]
+                (into base-prods (keep emit-qualifier-match) qual-matches))
+              base-prods)))]
     (rules/compiled-rule {:id rule-id :phase :normalize :doc doc :runner runner})))
 
 ;; ---------------------------------------------------------------------------
@@ -243,16 +287,15 @@
    Transform-name resolution happens once at compile time; unknown
    names throw immediately rather than at first-record-time.
 
-   Throws ex-info on schema violations. Qualified mappings (those
-   carrying a `:mapping/qualifier`) are rejected with an explicit
-   message — their compilation lands in Sprint 5 M4.B."
+   Handles both flat and qualified mapping rules. A qualified mapping
+   compiles to a single rule whose runner renames the source predicate
+   (on every triple it appears in, primitive values transformed,
+   non-primitive values passed through) and renames the qualifier
+   predicate on every fragment that carries it. Throws ex-info on
+   schema violations or unknown transform names."
   [mapping-rule transforms-stdlib]
   (validate-or-throw! mapping-rule)
-  (when (:mapping/qualifier mapping-rule)
-    (throw (ex-info "Qualified mappings are not yet compiled — lands in Sprint 5 M4.B"
-                    {:mapping-id (:mapping/id mapping-rule)
-                     :qualifier  (:mapping/qualifier mapping-rule)})))
-  (compile-flat-mapping mapping-rule transforms-stdlib))
+  (compile-mapping-rule mapping-rule transforms-stdlib))
 
 (defn compile-mappings
   "Compile a vector of mapping rules, in order. Fails fast on the first

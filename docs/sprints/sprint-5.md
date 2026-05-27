@@ -16,9 +16,9 @@
 | M2.A — Plugin schema, registry, queries, effective stdlib | ✅ | `d9808b2` |
 | M2.B — `:requires` topo-sort + `:input-format` dispatch | ✅ | `3cfba92` |
 | M3 — Core transform stdlib + core/plugin union | ✅ | `73d5bd0` |
-| M4.A — MappingRule schema + flat compiler + transforms + on-empty | ✅ | _pending commit_ |
-| **M4.B — Qualified-mapping compiler** | ⏳ next | — |
-| M5 — Generic shape adapter | ⏳ | — |
+| M4.A — MappingRule schema + flat compiler + transforms + on-empty | ✅ | `2ff3b42` |
+| M4.B — Qualified-mapping compiler | ✅ | _pending commit_ |
+| **M5 — Generic shape adapter** | ⏳ next | — |
 | M6 — Reference plugin + integration | ⏳ | — |
 
 ### Resuming work in a new session

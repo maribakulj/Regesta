@@ -319,12 +319,27 @@
                           (mapping/compile-mapping m stdlib))
         "unknown transforms fail at compile time, not at first record")))
 
-(deftest compile-mapping-rejects-qualified-mapping-explicitly
-  (let [m (assoc minimal-mapping
-                 :mapping/qualifier {:from :native/lang :as :canon/lang})]
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                          #"Qualified mappings"
-                          (mapping/compile-mapping m stdlib)))))
+;; ---------------------------------------------------------------------------
+;; Flat compilation — non-primitive passthrough
+;; ---------------------------------------------------------------------------
+
+(deftest flat-mapping-passes-non-primitive-values-through-without-transform
+  (testing "a transform chain skips non-primitive values rather than firing a false :transform-failed"
+    (let [ref-val (model/reference :frag/some)
+          m       (assoc minimal-mapping :mapping/transform [:trim])
+          cr      (mapping/compile-mapping m stdlib)
+          record  (model/record
+                   {:id         :record/r1
+                    :kind       :test
+                    :assertions [(model/assertion
+                                  {:subject :record/r1
+                                   :predicate :native/x
+                                   :value ref-val})]})
+          prods   (rules/apply-rule cr record)]
+      (is (= 1 (count prods)))
+      (is (= :assertion (-> prods first :kind)))
+      (is (= :canon/x (-> prods first :value :predicate)))
+      (is (= ref-val  (-> prods first :value :value))))))
 
 ;; ---------------------------------------------------------------------------
 ;; Compiler purity
@@ -378,6 +393,186 @@
           record   (record-with :native/x ["hello"])
           prod     (first (rules/apply-rule cr record))]
       (is (= "HELLO!" (:value (:value prod)))))))
+
+;; ---------------------------------------------------------------------------
+;; Qualified compilation
+;;
+;; The shape adapter (M5) is what mints fragments at ingest; these tests
+;; simulate that pre-state — a record with native-vocabulary triples on
+;; both the record (a reference value pointing at the fragment) and the
+;; fragment (the value coord plus the qualifier coord). The mapping
+;; compiler's job at :normalize is to rename the native predicates to
+;; canonical ones.
+;; ---------------------------------------------------------------------------
+
+(defn- multilingual-record
+  "Build a record matching the shape an importer would produce for a
+   qualified mapping: one fragment per `(value, qualifier)` pair, each
+   referenced from the record by `predicate`, with the value coord on
+   the fragment under `predicate` and the qualifier coord under
+   `qualifier-predicate`."
+  [predicate qualifier-predicate value-qualifier-pairs]
+  (let [pairs (vec value-qualifier-pairs)
+        frags (mapv (fn [i] (keyword "frag" (str "f" i)))
+                    (range (count pairs)))
+        record-id :record/r1]
+    (model/record
+     {:id         record-id
+      :kind       :test
+      :fragments  (mapv (fn [f] (model/fragment {:id f :source [:test]})) frags)
+      :assertions (vec
+                   (concat
+                    ;; record-level references
+                    (mapv (fn [f]
+                            (model/assertion {:subject   record-id
+                                              :predicate predicate
+                                              :value     (model/reference f)}))
+                          frags)
+                    ;; fragment value coords
+                    (mapv (fn [f [v _q]]
+                            (model/assertion {:subject f :predicate predicate :value v}))
+                          frags pairs)
+                    ;; fragment qualifier coords (skipped when q is nil)
+                    (keep (fn [[f [_v q]]]
+                            (when q
+                              (model/assertion {:subject f
+                                                :predicate qualifier-predicate
+                                                :value q})))
+                          (map vector frags pairs))))})))
+
+(def qualified-mapping
+  {:mapping/id        :map/dc-title
+   :mapping/from      :dc/title
+   :mapping/to        :canon/title
+   :mapping/qualifier {:from :xml/lang :as :canon/lang}})
+
+(deftest qualified-mapping-compiles-cleanly
+  (let [cr (mapping/compile-mapping qualified-mapping stdlib)]
+    (is (= :rule.from-mapping/dc-title (:id cr)))
+    (is (= :normalize (:phase cr)))))
+
+(deftest qualified-mapping-renames-record-level-reference-without-transform
+  (testing "the record-level :dc/title (ref ?frag) becomes :canon/title (ref ?frag), unchanged"
+    (let [m      (assoc qualified-mapping :mapping/transform [:trim])
+          cr     (mapping/compile-mapping m stdlib)
+          record (multilingual-record :dc/title :xml/lang [["Les Misérables" "fr"]])
+          prods  (rules/apply-rule cr record)
+          record-prods (filterv #(= :record/r1 (-> % :value :subject)) prods)]
+      (is (= 1 (count record-prods)))
+      (let [a (-> record-prods first :value)]
+        (is (= :canon/title (:predicate a)))
+        (is (= {:value/kind :reference :value/target :frag/f0}
+               (:value a)))))))
+
+(deftest qualified-mapping-renames-fragment-value-with-transform
+  (testing "the fragment's value coord goes through the transform chain"
+    (let [m      (assoc qualified-mapping :mapping/transform [:trim :lowercase])
+          cr     (mapping/compile-mapping m stdlib)
+          record (multilingual-record :dc/title :xml/lang [["  Les Misérables  " "fr"]])
+          prods  (rules/apply-rule cr record)
+          frag-title-prods
+          (filterv #(and (= :frag/f0 (-> % :value :subject))
+                         (= :canon/title (-> % :value :predicate)))
+                   prods)]
+      (is (= 1 (count frag-title-prods)))
+      (is (= "les misérables" (-> frag-title-prods first :value :value))))))
+
+(deftest qualified-mapping-renames-qualifier-on-fragment
+  (testing "the fragment's :xml/lang becomes :canon/lang, value unchanged"
+    (let [cr     (mapping/compile-mapping qualified-mapping stdlib)
+          record (multilingual-record :dc/title :xml/lang [["Les Misérables" "fr"]])
+          prods  (rules/apply-rule cr record)
+          lang-prods (filterv #(= :canon/lang (-> % :value :predicate)) prods)]
+      (is (= 1 (count lang-prods)))
+      (let [a (-> lang-prods first :value)]
+        (is (= :frag/f0 (:subject a)))
+        (is (= "fr" (:value a)))))))
+
+(deftest qualified-mapping-full-round-trip-matches-adr-0009-example
+  (testing "the three-rename pattern matches the canonical ADR 0009 §Qualifier example"
+    (let [cr     (mapping/compile-mapping qualified-mapping stdlib)
+          record (multilingual-record :dc/title :xml/lang [["Les Misérables" "fr"]
+                                                            ["The Wretched"   "en"]])
+          {enr :record} (runtime/run-phase record [cr] :normalize)
+          asrts  (:assertions enr)
+          select (fn [s p] (filterv #(and (= s (:subject %)) (= p (:predicate %))) asrts))]
+      (testing "record carries two :canon/title reference assertions"
+        (let [refs (select :record/r1 :canon/title)]
+          (is (= 2 (count refs)))
+          (is (= #{(model/reference :frag/f0) (model/reference :frag/f1)}
+                 (set (mapv :value refs))))))
+      (testing "each fragment carries its :canon/title value coord"
+        (is (= "Les Misérables" (-> (select :frag/f0 :canon/title) first :value)))
+        (is (= "The Wretched"   (-> (select :frag/f1 :canon/title) first :value))))
+      (testing "each fragment carries its :canon/lang qualifier coord"
+        (is (= "fr" (-> (select :frag/f0 :canon/lang) first :value)))
+        (is (= "en" (-> (select :frag/f1 :canon/lang) first :value)))))))
+
+(deftest qualified-mapping-handles-fragment-without-qualifier
+  (testing "a fragment lacking the qualifier triple still gets the value rename"
+    (let [cr     (mapping/compile-mapping qualified-mapping stdlib)
+          record (multilingual-record :dc/title :xml/lang [["Les Misérables" "fr"]
+                                                            ["The Wretched"   nil]])
+          {enr :record} (runtime/run-phase record [cr] :normalize)
+          asrts  (:assertions enr)]
+      (testing "both fragments get their :canon/title coord"
+        (is (some #(and (= :frag/f0 (:subject %)) (= :canon/title (:predicate %))) asrts))
+        (is (some #(and (= :frag/f1 (:subject %)) (= :canon/title (:predicate %))) asrts)))
+      (testing "only the fragment with a qualifier gets a :canon/lang coord"
+        (is (= 1 (count (filterv #(= :canon/lang (:predicate %)) asrts))))
+        (is (some #(and (= :frag/f0 (:subject %)) (= :canon/lang (:predicate %))) asrts))))))
+
+(deftest qualified-mapping-multiplicity-preserved-across-renames
+  (let [cr     (mapping/compile-mapping qualified-mapping stdlib)
+        record (multilingual-record :dc/title :xml/lang
+                                    [["v0" "fr"] ["v1" "en"] ["v2" "de"]])
+        prods  (rules/apply-rule cr record)]
+    (testing "3 references on the record, 3 value coords, 3 qualifier coords = 9 assertions"
+      (is (= 9 (count (filterv #(= :assertion (:kind %)) prods)))))))
+
+(deftest qualified-mapping-on-empty-skip-when-source-absent
+  (let [m  (assoc qualified-mapping :mapping/on-empty :skip)
+        cr (mapping/compile-mapping m stdlib)
+        prods (rules/apply-rule cr (empty-record))]
+    (is (= [] prods))))
+
+(deftest qualified-mapping-on-empty-diagnostic
+  (let [m  (assoc qualified-mapping :mapping/on-empty :diagnostic)
+        cr (mapping/compile-mapping m stdlib)
+        prods (rules/apply-rule cr (empty-record))]
+    (is (= 1 (count prods)))
+    (is (= :diagnostic (-> prods first :kind)))
+    (is (= :missing-source-predicate (-> prods first :value :code)))))
+
+(deftest qualified-mapping-provenance-attributes-everything-to-the-mapping-rule
+  (let [cr     (mapping/compile-mapping qualified-mapping stdlib)
+        record (multilingual-record :dc/title :xml/lang [["Les Misérables" "fr"]])
+        prods  (rules/apply-rule cr record)
+        asrts  (mapv :value prods)]
+    (is (every? #(= :rule.from-mapping/dc-title (get-in % [:provenance :rule]))
+                asrts))
+    (is (every? #(= :normalize (get-in % [:provenance :pass]))
+                asrts))))
+
+(deftest qualified-mapping-transform-on-fragment-value-failure-emits-diagnostic
+  (testing "a transform failure on the fragment's value coord produces a diagnostic; the record-level reference rename is unaffected"
+    (let [m      (assoc qualified-mapping :mapping/transform [:parse-int])
+          cr     (mapping/compile-mapping m stdlib)
+          record (multilingual-record :dc/title :xml/lang [["garbage" "fr"]])
+          prods  (rules/apply-rule cr record)
+          diags  (filterv #(= :diagnostic (:kind %)) prods)]
+      (testing "exactly one transform-failed diagnostic, on the fragment"
+        (is (= 1 (count diags)))
+        (is (= :transform-failed (-> diags first :value :code)))
+        (is (= :frag/f0 (-> diags first :value :subject))))
+      (testing "the record-level reference rename still happens"
+        (is (some #(and (= :record/r1 (-> % :value :subject))
+                        (= :canon/title (-> % :value :predicate)))
+                  prods)))
+      (testing "the qualifier rename still happens"
+        (is (some #(and (= :frag/f0 (-> % :value :subject))
+                        (= :canon/lang (-> % :value :predicate)))
+                  prods))))))
 
 ;; ---------------------------------------------------------------------------
 ;; Runtime integration
