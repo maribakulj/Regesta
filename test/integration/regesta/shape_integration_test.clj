@@ -10,7 +10,8 @@
    cross-format equivalence promise. It also exercises the plugin
    protocol (M2) end-to-end: register, validate, dispatch via
    `:input-format`, invoke the importer."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.string :as str]
+            [clojure.test :refer [deftest is testing]]
             [regesta.model :as model]
             [regesta.plugins :as plug]
             [regesta.plugins.mapping :as mapping]
@@ -59,6 +60,30 @@
 
 (def ^:private opts
   {:record-id :record/r1 :kind :document})
+
+;; A pretty-printed variant of `xml-source`: same logical content, but
+;; the title elements are wrapped across lines with indentation. The
+;; XML parser preserves the whitespace verbatim, so the ingest-level
+;; values carry leading/trailing `\n`s. The mapping below pairs this
+;; fixture with a `[:trim]` transform so the canonical layer still
+;; converges with the JSON sibling — the documented cross-format
+;; recipe for indented XML in `regesta.plugins.shape`'s ns docstring.
+(def ^:private indented-xml-source
+  (str "<record xmlns:dc=\"" dc-uri "\">\n"
+       "  <dc:title xml:lang=\"fr\">\n"
+       "    Les Misérables\n"
+       "  </dc:title>\n"
+       "  <dc:title xml:lang=\"en\">\n"
+       "    The Wretched\n"
+       "  </dc:title>\n"
+       "</record>"))
+
+(def ^:private xml-mapping-with-trim
+  [{:mapping/id        :map/dc-title-xml-trim
+    :mapping/from      :dc/title
+    :mapping/to        :canon/title
+    :mapping/transform [:trim]
+    :mapping/qualifier {:from :xml/lang :as :canon/lang}}])
 
 ;; ---------------------------------------------------------------------------
 ;; Helpers
@@ -172,6 +197,77 @@
                          [:canon/title "The Wretched"]))
           (is (contains? (get jn-frags :frag/record.r1.dc-title.1)
                          [:canon/lang "en"])))))))
+
+(deftest indented-xml-converges-on-canonical-when-mapping-declares-trim
+  (testing "ingest is faithful to XML whitespace; :normalize [:trim] is what reconciles with JSON"
+    ;; Compile each plugin's mappings in isolation, mirroring production:
+    ;; a JSON record runs through the JSON plugin's normalize rules, an
+    ;; XML record runs through the XML plugin's rules. Pooling them in a
+    ;; single registry would cross-fire (the JSON rule, which has no
+    ;; transform, would also rename `:dc/title` to `:canon/title` on
+    ;; the XML record, defeating the point of this test).
+    (let [jp           (shape/shape-json-plugin {:id :plugin/dc-json :mapping json-mapping})
+          xp           (shape/shape-xml-plugin  {:id :plugin/dc-xml-trim
+                                                 :mapping xml-mapping-with-trim
+                                                 :aliases xml-aliases})
+          json-reg     (plug/register plug/empty-registry jp)
+          xml-reg      (plug/register plug/empty-registry xp)
+          json-stdlib  (plug/effective-transforms json-reg)
+          xml-stdlib   (plug/effective-transforms xml-reg)
+          json-compiled (mapping/compile-mappings (plug/all-mappings json-reg) json-stdlib)
+          xml-compiled  (mapping/compile-mappings (plug/all-mappings xml-reg)  xml-stdlib)
+
+          json-rec  (-> ((:importer jp) opts json-source)          :records first)
+          xml-rec   (-> ((:importer xp) opts indented-xml-source)  :records first)
+
+          ingest-xml-frag-values
+          (filterv (fn [a]
+                     (and (contains? #{:frag/record.r1.dc-title.0
+                                       :frag/record.r1.dc-title.1}
+                                     (:subject a))
+                          (= :dc/title (:predicate a))))
+                   (:assertions xml-rec))]
+
+      (testing "at ingest, XML fragment values carry indentation whitespace verbatim"
+        (is (= 2 (count ingest-xml-frag-values)))
+        (is (every? (fn [a]
+                      (let [v (:value a)]
+                        (and (string? v)
+                             (re-find #"\n" v)
+                             (not= v (str/trim v)))))
+                    ingest-xml-frag-values)
+            "shape adapter preserved the surrounding `\\n  ` from pretty-printing"))
+
+      (let [jn (:record (runtime/run-phase json-rec json-compiled :normalize))
+            xn (:record (runtime/run-phase xml-rec  xml-compiled  :normalize))]
+
+        (testing "after :normalize, both formats agree on the canonical record-level titles"
+          (is (= (set (canonical-record-titles jn))
+                 (set (canonical-record-titles xn)))))
+
+        (testing "after :normalize, fragment-level :canon/title and :canon/lang match across formats"
+          (let [pick-canon (fn [pairs]
+                             (set (filter (fn [[p _]]
+                                            (#{:canon/title :canon/lang} p))
+                                          pairs)))
+                jn-frags   (fragment-canonical-pairs jn)
+                xn-frags   (fragment-canonical-pairs xn)]
+            (is (= (set (keys jn-frags)) (set (keys xn-frags))))
+            (doseq [frag-id (keys jn-frags)]
+              (is (= (pick-canon (get jn-frags frag-id))
+                     (pick-canon (get xn-frags frag-id)))
+                  (str "canonical assertions diverge on " frag-id)))))
+
+        (testing "specifically: the trimmed XML titles equal the JSON titles"
+          (let [xn-frags (fragment-canonical-pairs xn)]
+            (is (contains? (get xn-frags :frag/record.r1.dc-title.0)
+                           [:canon/title "Les Misérables"]))
+            (is (contains? (get xn-frags :frag/record.r1.dc-title.0)
+                           [:canon/lang "fr"]))
+            (is (contains? (get xn-frags :frag/record.r1.dc-title.1)
+                           [:canon/title "The Wretched"]))
+            (is (contains? (get xn-frags :frag/record.r1.dc-title.1)
+                           [:canon/lang "en"]))))))))
 
 (deftest trace-attributes-canonical-assertions-to-the-mapping-rule
   (testing "provenance correctly identifies which mapping fired each canonical assertion"

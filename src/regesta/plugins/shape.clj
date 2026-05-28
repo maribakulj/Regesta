@@ -59,6 +59,20 @@
      without qualifier coord; missing text → fragment without value
      coord. Mixed content (text interleaved with nested elements) is
      V1-lossy: only the string children of `:content` are kept.
+   - Whitespace preservation: text content is returned verbatim,
+     including leading/trailing whitespace from XML indentation.
+     `<dc:title>\\n  Les Misérables\\n</dc:title>` ingests as the
+     literal `\"\\n  Les Misérables\\n\"`. The JSON parser strips
+     whitespace between tokens, so `{\"dc:title\":\"Les Misérables\"}`
+     ingests as `\"Les Misérables\"` regardless of source formatting.
+     To converge XML and JSON at the canonical layer, declare
+     `:mapping/transform [:trim]` on every XML mapping whose source
+     can be pretty-printed (which is most of them in practice). The
+     shape adapter never trims at ingest: XML carries whitespace as
+     data (`xml:space=\"preserve\"` is part of the spec), so the
+     ingest layer stays faithful and the `:normalize` phase is the
+     correct home for format-normalizing transforms (ADR 0004 phase
+     separation).
 
    ## Fragment minting (M1, ADR 0012)
 
@@ -286,7 +300,14 @@
 (defn- xml-text-content
   "Concatenated string content of an XML element. Returns nil if the
    element has no string children — distinguishes empty from missing
-   so empty elements (`<dc:title/>`) don't fabricate a value coord."
+   so empty elements (`<dc:title/>`) don't fabricate a value coord.
+
+   Whitespace is preserved verbatim: an indented `<dc:title>↵
+   Les Misérables↵</dc:title>` yields `\"\\n Les Misérables\\n\"`,
+   not `\"Les Misérables\"`. Cross-format equivalence with JSON
+   (which strips inter-token whitespace at parse) requires the
+   mapping to declare `:mapping/transform [:trim]`; see this
+   namespace's docstring `## XML convention` for rationale."
   [elem]
   (let [strings (filterv string? (:content elem))]
     (when (seq strings)
@@ -530,7 +551,14 @@
    keyword/symbol to URI string — used by `rewrite-tags` to clean up
    `clojure.data.xml`'s URI-encoded namespaces before the walker
    sees them). Optional `:requires` and `:matches?` are passed
-   through unchanged."
+   through unchanged.
+
+   For cross-format equivalence with a JSON sibling plugin, declare
+   `:mapping/transform [:trim]` on each rule whose source XML may be
+   pretty-printed — XML text content preserves whitespace verbatim
+   at ingest, while JSON strips it at parse, and the `:trim`
+   transform at `:normalize` is what makes the two converge. See
+   this namespace's `## XML convention` for the rationale."
   [{:keys [id mapping aliases requires matches?]}]
   (cond-> {:plugin/spec-version 1
            :id                  id
