@@ -2,7 +2,7 @@
 
 - Theme: Plugin protocol implementation + generic JSON/XML shape adapter
 - Sprint length: 2 weeks
-- Status: In progress
+- Status: Landed
 - Architectural anchors: ADR 0007 (plugins as data), ADR 0009 (mapping
   schema), ADR 0010 (stdlib extensibility), ADR 0011 (fragments for
   qualified values), ADR 0012 (fragment identity scheme).
@@ -21,8 +21,8 @@
 | M4.C — Audit follow-up: schema tightening + doc hygiene | ✅ | `81416bd` |
 | PW.2 — Verify and land XML/JSON deps under :sandbox | ✅ | `e298ad5` |
 | M5.A — JSON walker + shared mapping inspection helpers | ✅ | `e58c5fe` |
-| M5.B — XML walker + cross-format equivalence test | ✅ | _pending commit_ |
-| **M6 — Reference plugin + integration** | ⏳ next | — |
+| M5.B — XML walker + cross-format equivalence test | ✅ | `47caddf` |
+| M6 — Reference plugin + integration | ✅ | _pending commit_ |
 
 ### Resuming work in a new session
 

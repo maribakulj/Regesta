@@ -83,7 +83,9 @@
      a sub-object, or a qualified mapping seeing a string with no
      attribute, etc.). Silent skip in V1; revisit if a plugin author
      reports confusion."
-  (:require [regesta.model :as model]))
+  (:require [clojure.data.json :as json]
+            [clojure.data.xml :as data-xml]
+            [regesta.model :as model]))
 
 ;; ---------------------------------------------------------------------------
 ;; Mapping inspection
@@ -433,3 +435,114 @@
          {:fragments [] :assertions []}
          by-tag)]
     (assemble-record record-id kind source fragments assertions)))
+
+;; ---------------------------------------------------------------------------
+;; XML tag rewriting
+;;
+;; `clojure.data.xml/parse-str` produces tags whose namespace is the
+;; URI-encoded source URI (e.g. `:xmlns.http%3A%2F%2F.../title`). For
+;; cross-format equivalence with JSON and for inspectable fragment ids,
+;; callers want short prefixes like `:dc/title`. This helper walks a
+;; parsed tree and substitutes a `{short-prefix → URI}` alias map for
+;; the URI-encoded form. Namespaces not in the map pass through
+;; unchanged — partial aliasing is fine.
+;; ---------------------------------------------------------------------------
+
+(defn rewrite-tags
+  "Rewrite the namespaces of every tag and attribute keyword in a
+   parsed XML tree, mapping `clojure.data.xml`'s URI-encoded form
+   back to short prefixes.
+
+   `aliases` is `{prefix-keyword-or-symbol → URI-string}` (same shape
+   as `clojure.data.xml/alias-uri` takes). Tags and attribute keys
+   whose namespace does not match any alias pass through unchanged.
+
+   Example:
+
+     (rewrite-tags parsed
+                   {:dc  \"http://purl.org/dc/elements/1.1/\"
+                    :xml \"http://www.w3.org/XML/1998/namespace\"})
+     ;; tags like :xmlns.http%3A%2F%2F.../title become :dc/title,
+     ;; attrs like :xmlns.http%3A%2F%2F.../lang become :xml/lang"
+  [xml-element aliases]
+  (let [encoded-ns->prefix
+        (into {}
+              (for [[prefix uri] aliases]
+                [(str "xmlns." (java.net.URLEncoder/encode (str uri) "UTF-8"))
+                 (name prefix)]))
+        rewrite-kw
+        (fn [k]
+          (if-let [short (and (keyword? k) (get encoded-ns->prefix (namespace k)))]
+            (keyword short (name k))
+            k))
+        rewrite-attrs
+        (fn [attrs]
+          (into {} (map (fn [[k v]] [(rewrite-kw k) v])) attrs))
+        rewrite
+        (fn rewrite [node]
+          (if (and (map? node) (contains? node :tag))
+            (-> node
+                (update :tag rewrite-kw)
+                (update :attrs rewrite-attrs)
+                (update :content (fn [c] (mapv rewrite c))))
+            node))]
+    (rewrite xml-element)))
+
+;; ---------------------------------------------------------------------------
+;; Plugin factories (M6)
+;;
+;; Each factory builds a `regesta.plugins/Plugin`-conforming map that
+;; wraps a parser + the walker. The plugin map exposes `:mapping` as
+;; data so `regesta.plugins.mapping/compile-mappings` can turn it into
+;; normalize-phase rules, and `:importer` as a closure over the same
+;; mapping so the runtime can ingest source documents through the
+;; selected plugin.
+;;
+;; The importer signature is `(fn [opts src] {:records [...] :diagnostics [...]})`.
+;; `opts` must carry `:record-id` and `:kind`; `:source` is optional.
+;; `src` is the raw input — a JSON string for the JSON plugin, an XML
+;; string for the XML plugin. Parsing happens inside the importer.
+;; ---------------------------------------------------------------------------
+
+(defn shape-json-plugin
+  "Build a plugin map that ingests JSON via `ingest-json`. Required
+   keys: `:id` (plugin id) and `:mapping` (vector of MappingRule).
+   Optional `:requires` and `:matches?` are passed through unchanged
+   for callers that need them."
+  [{:keys [id mapping requires matches?]}]
+  (cond-> {:plugin/spec-version 1
+           :id                  id
+           :input-format        :json
+           :mapping             mapping
+           :importer            (fn [{:keys [record-id kind source] :as _opts} src]
+                                  (let [parsed (json/read-str src)
+                                        record (ingest-json parsed mapping
+                                                            {:record-id record-id
+                                                             :kind      kind
+                                                             :source    source})]
+                                    {:records [record] :diagnostics []}))}
+    requires (assoc :requires requires)
+    matches? (assoc :matches? matches?)))
+
+(defn shape-xml-plugin
+  "Build a plugin map that ingests XML via `ingest-xml`. Required
+   keys: `:id`, `:mapping`, and `:aliases` (map of short prefix
+   keyword/symbol to URI string — used by `rewrite-tags` to clean up
+   `clojure.data.xml`'s URI-encoded namespaces before the walker
+   sees them). Optional `:requires` and `:matches?` are passed
+   through unchanged."
+  [{:keys [id mapping aliases requires matches?]}]
+  (cond-> {:plugin/spec-version 1
+           :id                  id
+           :input-format        :xml
+           :mapping             mapping
+           :importer            (fn [{:keys [record-id kind source] :as _opts} src]
+                                  (let [parsed     (data-xml/parse-str src)
+                                        rewritten  (rewrite-tags parsed (or aliases {}))
+                                        record     (ingest-xml rewritten mapping
+                                                               {:record-id record-id
+                                                                :kind      kind
+                                                                :source    source})]
+                                    {:records [record] :diagnostics []}))}
+    requires (assoc :requires requires)
+    matches? (assoc :matches? matches?)))

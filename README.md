@@ -202,7 +202,7 @@ The core never knows any external schema.
 
 ## Current status
 
-Sprints 0 through 4 are landed:
+Sprints 0 through 5 are landed:
 
 - **Sprint 0** — scaffolding, tooling, six foundational ADRs.
 - **Sprint 1** — canonical model with Malli schemas and EDN round-trip
@@ -213,9 +213,14 @@ Sprints 0 through 4 are landed:
   (`regesta.runtime`).
 - **Sprint 4** — diagnostics API: filters, aggregations, plain-text reporting
   and a failure policy for CI/CLI integration (`regesta.diagnostics`).
+- **Sprint 5** — plugin protocol (`regesta.plugins`), transform stdlib
+  (`regesta.plugins.transforms`), mapping schema + compiler
+  (`regesta.plugins.mapping`), and the generic JSON/XML shape adapter
+  (`regesta.plugins.shape`). Fragments for qualified values (ADR 0011,
+  ADR 0012) are first-class.
 
-The next sprint (Sprint 5) introduces the plugin protocol and the generic
-shape adapter for JSON and XML.
+The next sprint (Sprint 6) introduces the canonical vocabulary plugin
+on top of these mechanisms.
 
 ---
 

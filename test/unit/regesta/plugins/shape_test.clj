@@ -548,3 +548,92 @@
       (is (= "fr" j-lang))
       (is (= "fr" x-lang))
       (is (= j-lang x-lang)))))
+
+;; ---------------------------------------------------------------------------
+;; rewrite-tags
+;;
+;; The helper bridges real `clojure.data.xml/parse-str` output (which
+;; carries URI-encoded namespaces) and `ingest-xml`'s clean-keyword
+;; contract. Tested in isolation here; the plugin factory wires it up
+;; as a closure step before calling `ingest-xml`.
+;; ---------------------------------------------------------------------------
+
+(def ^:private dc-uri  "http://purl.org/dc/elements/1.1/")
+(def ^:private xml-uri "http://www.w3.org/XML/1998/namespace")
+
+(defn- encoded-ns [uri] (str "xmlns." (java.net.URLEncoder/encode uri "UTF-8")))
+
+(deftest rewrite-tags-replaces-known-uri-namespaces-with-short-prefixes
+  (let [encoded-tag (keyword (encoded-ns dc-uri) "title")
+        tree        {:tag encoded-tag
+                     :attrs {}
+                     :content ["Hugo"]}
+        rewritten   (shape/rewrite-tags tree {:dc dc-uri})]
+    (is (= :dc/title (:tag rewritten)))
+    (is (= "Hugo"    (-> rewritten :content first)))))
+
+(deftest rewrite-tags-rewrites-attribute-keys
+  (let [encoded-attr (keyword (encoded-ns xml-uri) "lang")
+        tree         {:tag :record
+                      :attrs {encoded-attr "fr"}
+                      :content []}
+        rewritten    (shape/rewrite-tags tree {:xml xml-uri})]
+    (is (= "fr" (get-in rewritten [:attrs :xml/lang])))))
+
+(deftest rewrite-tags-leaves-unknown-namespaces-untouched
+  (let [encoded-tag (keyword (encoded-ns "http://other.example/") "thing")
+        tree        {:tag encoded-tag :attrs {} :content []}
+        rewritten   (shape/rewrite-tags tree {:dc dc-uri})]
+    (is (= encoded-tag (:tag rewritten)))))
+
+(deftest rewrite-tags-recurses-into-content
+  (let [child-tag (keyword (encoded-ns dc-uri) "title")
+        tree      {:tag :record :attrs {}
+                   :content [{:tag child-tag :attrs {} :content ["X"]}]}
+        rewritten (shape/rewrite-tags tree {:dc dc-uri})]
+    (is (= :dc/title (-> rewritten :content first :tag)))))
+
+(deftest rewrite-tags-passes-non-element-content-through
+  (let [tree     {:tag :record :attrs {} :content ["plain text"]}
+        rewritten (shape/rewrite-tags tree {:dc dc-uri})]
+    (is (= "plain text" (-> rewritten :content first)))))
+
+(deftest rewrite-tags-empty-aliases-is-identity
+  (let [tree {:tag :something :attrs {:foo "bar"} :content ["text"]}]
+    (is (= tree (shape/rewrite-tags tree {})))))
+
+;; ---------------------------------------------------------------------------
+;; Plugin factory shape
+;;
+;; The integration test exercises end-to-end behavior; these are
+;; smaller checks that the factory output validates as a plugin and
+;; carries the expected slots.
+;; ---------------------------------------------------------------------------
+
+(deftest shape-json-plugin-is-a-valid-plugin
+  (let [p (shape/shape-json-plugin {:id :plugin/test-json :mapping title-flat-mapping})]
+    (is (= 1                  (:plugin/spec-version p)))
+    (is (= :plugin/test-json  (:id p)))
+    (is (= :json              (:input-format p)))
+    (is (= title-flat-mapping (:mapping p)))
+    (is (fn? (:importer p)))))
+
+(deftest shape-xml-plugin-is-a-valid-plugin
+  (let [p (shape/shape-xml-plugin {:id :plugin/test-xml
+                                   :mapping title-flat-mapping
+                                   :aliases {:dc dc-uri}})]
+    (is (= 1                  (:plugin/spec-version p)))
+    (is (= :plugin/test-xml   (:id p)))
+    (is (= :xml               (:input-format p)))
+    (is (= title-flat-mapping (:mapping p)))
+    (is (fn? (:importer p)))))
+
+(deftest shape-plugin-factories-pass-through-optional-keys
+  (let [matches-fn (fn [_ _] true)
+        p          (shape/shape-json-plugin
+                    {:id       :plugin/test
+                     :mapping  title-flat-mapping
+                     :requires #{:plugin/other}
+                     :matches? matches-fn})]
+    (is (= #{:plugin/other} (:requires p)))
+    (is (= matches-fn       (:matches? p)))))
