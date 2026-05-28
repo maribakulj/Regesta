@@ -492,7 +492,7 @@
   (testing "the three-rename pattern matches the canonical ADR 0009 §Qualifier example"
     (let [cr     (mapping/compile-mapping qualified-mapping stdlib)
           record (multilingual-record :dc/title :xml/lang [["Les Misérables" "fr"]
-                                                            ["The Wretched"   "en"]])
+                                                           ["The Wretched"   "en"]])
           {enr :record} (runtime/run-phase record [cr] :normalize)
           asrts  (:assertions enr)
           select (fn [s p] (filterv #(and (= s (:subject %)) (= p (:predicate %))) asrts))]
@@ -512,7 +512,7 @@
   (testing "a fragment lacking the qualifier triple still gets the value rename"
     (let [cr     (mapping/compile-mapping qualified-mapping stdlib)
           record (multilingual-record :dc/title :xml/lang [["Les Misérables" "fr"]
-                                                            ["The Wretched"   nil]])
+                                                           ["The Wretched"   nil]])
           {enr :record} (runtime/run-phase record [cr] :normalize)
           asrts  (:assertions enr)]
       (testing "both fragments get their :canon/title coord"
