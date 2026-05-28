@@ -20,9 +20,9 @@
 | M4.B — Qualified-mapping compiler | ✅ | `5991c4f` |
 | M4.C — Audit follow-up: schema tightening + doc hygiene | ✅ | `81416bd` |
 | PW.2 — Verify and land XML/JSON deps under :sandbox | ✅ | `e298ad5` |
-| M5.A — JSON walker + shared mapping inspection helpers | ✅ | _pending commit_ |
-| **M5.B — XML walker + cross-format equivalence test** | ⏳ next | — |
-| M6 — Reference plugin + integration | ⏳ | — |
+| M5.A — JSON walker + shared mapping inspection helpers | ✅ | `e58c5fe` |
+| M5.B — XML walker + cross-format equivalence test | ✅ | _pending commit_ |
+| **M6 — Reference plugin + integration** | ⏳ next | — |
 
 ### Resuming work in a new session
 
@@ -263,10 +263,16 @@ path is about eight days; M1/M2/M3 fit alongside without extending it.
    Central, not Clojars, so the `:sandbox` alias (ADR 0006) needs no
    amendment — they resolve in both standard and sandbox modes. Deps
    landed in PW.2 before M5.A consumes them.
-2. **Cross-format equivalence definition.** The property test in M5
-   requires a precise notion of "equivalent XML and JSON records". A
-   fixture-driven definition needs to land early in M5 (a single
-   shared logical record, two serializations).
+2. **Cross-format equivalence definition.** *Resolved by M5.B.* The
+   pair fixture (one logical record, two serializations) lives in
+   `regesta.plugins.shape-test/cross-format-record-pairs`, and the
+   equivalence claim is split into four assertions: fragment ids
+   match, record references match, fragment value coords match, and
+   qualifier values match (under format-specific predicate names —
+   M4 :normalize canonicalizes both). Real XML parsing produces
+   URI-encoded namespaces; the walker is format-neutral on identity
+   so plugin-layer tag rewriting (M6) is what aligns parsed XML with
+   JSON's clean predicate form.
 3. **M4 and M5 volume.** Estimates are conservative but tight. If M4
    slips, splitting flat-mapping and qualified-mapping compilers into
    two PRs is a clean fallback. If M5 slips, deferring M6 to a
