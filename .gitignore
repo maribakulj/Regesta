@@ -12,3 +12,8 @@ pom.xml.asc
 .idea/
 *.iml
 .DS_Store
+
+# Binaries downloaded by the SessionStart hook for the Claude Code web
+# sandbox. The hook script and settings.json are tracked; the binaries are
+# reproducible from the pinned versions in .claude/hooks/session-start.sh.
+.claude/bin/
