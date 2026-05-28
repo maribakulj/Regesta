@@ -445,3 +445,92 @@
             (str "record-id round-trips for " frag-id))
         (is (= locator (:locator parsed))
             (str "locator round-trips for " frag-id))))))
+
+(deftest parse-fragment-id-rejects-odd-locator-length
+  ;; A well-formed locator has even length: alternating predicate and
+  ;; index. Five-part ids like `:frag/r.r1.dc-title.0.extra` leave the
+  ;; locator-parts at length 3 and must be rejected — not silently
+  ;; truncated.
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"odd length"
+                        (model/parse-fragment-id :frag/record.r1.dc-title.0.dangling))))
+
+(deftest parse-fragment-id-rejects-predicate-segment-without-hyphen
+  ;; A predicate segment is `ns-name`; if the hyphen is missing, the
+  ;; encoded predicate cannot be split into namespace/name. Must throw
+  ;; rather than yield a half-formed keyword.
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"predicate segment"
+                        (model/parse-fragment-id :frag/record.r1.bareword.0))))
+
+;; ---------------------------------------------------------------------------
+;; Provenance and Fragment constructors
+;;
+;; Direct unit tests for the two constructors that are otherwise only
+;; exercised indirectly through Record/Assertion construction. Each
+;; cond-> branch is hit, so a regression in defaulting shows up here.
+;; ---------------------------------------------------------------------------
+
+(deftest provenance-constructor-empty
+  (let [p (model/provenance {})]
+    (is (= {} p))
+    (is (model/valid-provenance? p))))
+
+(deftest provenance-constructor-full
+  (let [ts #inst "2026-01-01"
+        p  (model/provenance {:source :xml/sample
+                              :pass :ingest
+                              :rule :rule/x
+                              :derivation [:r/a :r/b]
+                              :timestamp ts})]
+    (is (= :xml/sample (:source p)))
+    (is (= :ingest (:pass p)))
+    (is (= :rule/x (:rule p)))
+    (is (= [:r/a :r/b] (:derivation p)))
+    (is (= ts (:timestamp p)))
+    (is (model/valid-provenance? p))))
+
+(deftest provenance-constructor-coerces-derivation-to-vector
+  ;; derivation may be passed as a list; the constructor must vectorize.
+  (let [p (model/provenance {:derivation (list :r/a :r/b)})]
+    (is (vector? (:derivation p)))
+    (is (= [:r/a :r/b] (:derivation p)))))
+
+(deftest fragment-constructor-minimum-and-full
+  (testing "minimum: id + source only"
+    (let [f (model/fragment {:id :frag/x :source :xml/sample})]
+      (is (= :frag/x (:id f)))
+      (is (= :xml/sample (:source f)))
+      (is (not (contains? f :locator)))
+      (is (not (contains? f :raw)))
+      (is (model/valid-fragment? f))))
+  (testing "with locator and raw"
+    (let [f (model/fragment {:id :frag/y :source :xml/sample
+                             :locator [:dc/title 0]
+                             :raw "<title>Hi</title>"})]
+      (is (= [:dc/title 0] (:locator f)))
+      (is (= "<title>Hi</title>" (:raw f)))
+      (is (model/valid-fragment? f)))))
+
+;; ---------------------------------------------------------------------------
+;; Explain helpers
+;;
+;; The `explain-*` family is the user-facing complement to `valid-*?`.
+;; A smoke test per shape is enough — Malli's explanation format is
+;; tested upstream.
+;; ---------------------------------------------------------------------------
+
+(deftest explain-helpers-return-nil-for-valid-inputs
+  (let [a (model/assertion {:subject :r/x :predicate :p :value 1})
+        d (model/diagnostic {:severity :info :code :c :subject :r/x})
+        r (model/record {:id :r/x :kind :book})]
+    (is (nil? (model/explain-assertion a)))
+    (is (nil? (model/explain-diagnostic d)))
+    (is (nil? (model/explain-record r)))
+    (is (nil? (model/explain-value "scalar")))))
+
+(deftest explain-helpers-return-explanation-for-invalid-inputs
+  (is (some? (model/explain-assertion {:subject :r/x})))
+  (is (some? (model/explain-diagnostic {:severity :nope :code :c :subject :r/x})))
+  (is (some? (model/explain-record {:id :r/x})))
+  (is (some? (model/explain-value {:value/kind :reference})))) ; missing :value/target
