@@ -464,3 +464,165 @@
         outs (run rule (book-record :id :r/v :title "Title"))]
     (is (every? #(model/valid-assertion? (:value %))
                 (filter #(= :assertion (:kind %)) outs)))))
+
+;; ---------------------------------------------------------------------------
+;; compiled-rule constructor
+;;
+;; The escape hatch for external compilers (currently only the mapping
+;; compiler). We test the contract directly here so the validation
+;; branches are not solely exercised through downstream callers.
+;; ---------------------------------------------------------------------------
+
+(deftest compiled-rule-without-doc-omits-doc-key
+  (let [cr (rules/compiled-rule {:id :rule/cr1
+                                 :phase :normalize
+                                 :runner (fn [_record] [])})]
+    (is (= :rule/cr1 (:id cr)))
+    (is (= :normalize (:phase cr)))
+    (is (not (contains? cr :doc)))))
+
+(deftest compiled-rule-with-doc-carries-it-through
+  (let [cr (rules/compiled-rule {:id :rule/cr2
+                                 :phase :infer
+                                 :doc "Hand-rolled rule."
+                                 :runner (fn [_record] [])})]
+    (is (= "Hand-rolled rule." (:doc cr)))))
+
+(deftest compiled-rule-output-is-runnable-via-apply-rule
+  ;; The whole point of compiled-rule is that it produces something
+  ;; apply-rule accepts. If this round-trip ever breaks, the mapping
+  ;; compiler breaks with it.
+  (let [productions [{:kind :diagnostic
+                      :value (model/diagnostic {:severity :info
+                                                :code :hand-rolled
+                                                :subject :r/x})}]
+        cr (rules/compiled-rule {:id :rule/cr3
+                                 :phase :validate
+                                 :runner (fn [_record] productions)})]
+    (is (= productions (rules/apply-rule cr (model/record {:id :r/x :kind :book}))))))
+
+(deftest compiled-rule-rejects-non-keyword-id
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"keyword :id"
+                        (rules/compiled-rule {:id "rule/oops"
+                                              :phase :normalize
+                                              :runner (fn [_] [])})))
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"keyword :id"
+                        (rules/compiled-rule {:id nil
+                                              :phase :normalize
+                                              :runner (fn [_] [])}))))
+
+(deftest compiled-rule-rejects-missing-phase
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #":phase"
+                        (rules/compiled-rule {:id :rule/cr
+                                              :phase nil
+                                              :runner (fn [_] [])}))))
+
+(deftest compiled-rule-rejects-non-callable-runner
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"callable :runner"
+                        (rules/compiled-rule {:id :rule/cr
+                                              :phase :normalize
+                                              :runner nil})))
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"callable :runner"
+                        (rules/compiled-rule {:id :rule/cr
+                                              :phase :normalize
+                                              :runner :not-a-fn}))))
+
+;; ---------------------------------------------------------------------------
+;; compile-rules and apply-rule error paths
+;; ---------------------------------------------------------------------------
+
+(deftest compile-rules-returns-vector-of-runnable-rules
+  (let [rs   [{:id :rule/a :phase :validate
+               :match '[[?r :meta/kind :book]]
+               :produce {:diagnostic {:severity :info :code :a :subject '?r}}}
+              {:id :rule/b :phase :validate
+               :match '[[?r :meta/kind :journal]]
+               :produce {:diagnostic {:severity :info :code :b :subject '?r}}}]
+        crs  (rules/compile-rules rs)
+        outs (mapcat #(rules/apply-rule % (book-record :id :r/k :kind :book)) crs)]
+    (is (vector? crs))
+    (is (= 2 (count crs)))
+    (is (= [:a] (map #(get-in % [:value :code]) outs)))))
+
+(deftest compile-rules-fails-fast-on-first-invalid
+  (is (thrown? clojure.lang.ExceptionInfo
+               (rules/compile-rules
+                [{:id :rule/ok :phase :validate
+                  :match '[[?r :meta/kind :book]]
+                  :produce {:diagnostic {:severity :info :code :ok :subject '?r}}}
+                 {:id :rule/bad :phase :gibberish
+                  :match '[[?r :meta/kind :book]]
+                  :produce {}}]))))
+
+(deftest apply-rule-rejects-uncompiled-rule
+  ;; Calling apply-rule on a raw rule (without ::runner) must fail with
+  ;; a clear error rather than silently returning nothing.
+  (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                        #"not compiled"
+                        (rules/apply-rule {:id :rule/raw :phase :validate}
+                                          (book-record)))))
+
+;; ---------------------------------------------------------------------------
+;; not= guard
+;; ---------------------------------------------------------------------------
+
+(deftest not-equal-guard-filters
+  ;; The `not=` stdlib predicate is the natural pair of `=`; tested here
+  ;; so the symmetry isn't latently broken by a refactor.
+  (let [rule {:id :rule/ne
+              :phase :validate
+              :match '[[?r :meta/kind ?k]
+                       (not= ?k :journal)]
+              :produce {:diagnostic {:severity :info :code :not-journal :subject '?r}}}]
+    (is (= 1 (count (run rule (book-record :kind :book)))))
+    (is (empty? (run rule (book-record :kind :journal))))))
+
+;; ---------------------------------------------------------------------------
+;; supported-actions
+;; ---------------------------------------------------------------------------
+
+(deftest supported-actions-enumerates-the-stdlib
+  (is (= #{:assert :diagnostic :repair} (rules/supported-actions))))
+
+;; ---------------------------------------------------------------------------
+;; Validate-rule explanation surface
+;; ---------------------------------------------------------------------------
+
+(deftest validate-rule-returns-nil-for-valid-and-explains-otherwise
+  (let [ok {:id :rule/ok :phase :validate
+            :match '[[?r :meta/kind :book]]
+            :produce {:diagnostic {:severity :info :code :seen :subject '?r}}}
+        ko {:id :rule/ko :phase :gibberish
+            :match '[[?r :meta/kind :book]]
+            :produce {}}]
+    (is (nil? (rules/validate-rule ok)))
+    (is (some? (rules/validate-rule ko)))))
+
+;; ---------------------------------------------------------------------------
+;; Phase-dependent default status (ADR 0005)
+;; ---------------------------------------------------------------------------
+
+(deftest infer-phase-defaults-to-proposed
+  (let [rule {:id :rule/inf
+              :phase :infer
+              :match '[[?r :meta/kind :book]]
+              :produce {:assert {:subject '?r
+                                 :predicate :canon/guess
+                                 :value true}}}
+        out  (first (run rule (book-record :id :r/i)))]
+    (is (= :proposed (get-in out [:value :status])))))
+
+(deftest repair-phase-defaults-to-proposed
+  (let [rule {:id :rule/rp
+              :phase :repair
+              :match '[[?r :meta/kind :book]]
+              :produce {:assert {:subject '?r
+                                 :predicate :canon/guess
+                                 :value true}}}
+        out  (first (run rule (book-record :id :r/q)))]
+    (is (= :proposed (get-in out [:value :status])))))
