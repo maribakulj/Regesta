@@ -216,12 +216,12 @@
                                     :predicates {'foo? (fn [_ _] true)}))
               (plug/register (assoc minimal-plugin
                                     :id :plugin/b
-                                    :predicates {'bar? (fn [_ _] false)})))]
-    (let [{:keys [predicates]} (plug/effective-stdlib r)]
-      (is (contains? predicates 'foo?))
-      (is (contains? predicates 'bar?))
-      (is (fn? (get predicates 'foo?)))
-      (is (fn? (get predicates 'bar?))))))
+                                    :predicates {'bar? (fn [_ _] false)})))
+        {:keys [predicates]} (plug/effective-stdlib r)]
+    (is (contains? predicates 'foo?))
+    (is (contains? predicates 'bar?))
+    (is (fn? (get predicates 'foo?)))
+    (is (fn? (get predicates 'bar?)))))
 
 (deftest effective-stdlib-merges-transforms-across-plugins
   (let [r (-> plug/empty-registry
@@ -229,10 +229,10 @@
                                     :transforms {:tx-a (fn [v] v)}))
               (plug/register (assoc minimal-plugin
                                     :id :plugin/b
-                                    :transforms {:tx-b (fn [v] v)})))]
-    (let [{:keys [transforms]} (plug/effective-stdlib r)]
-      (is (contains? transforms :tx-a))
-      (is (contains? transforms :tx-b)))))
+                                    :transforms {:tx-b (fn [v] v)})))
+        {:keys [transforms]} (plug/effective-stdlib r)]
+    (is (contains? transforms :tx-a))
+    (is (contains? transforms :tx-b))))
 
 (deftest effective-stdlib-rejects-predicate-collision
   (let [r (-> plug/empty-registry
@@ -435,13 +435,13 @@
               (plug/register (p :plugin/d #{:plugin/b :plugin/c}))
               (plug/register (p :plugin/b #{:plugin/a}))
               (plug/register (p :plugin/c #{:plugin/a}))
-              (plug/register (p :plugin/a)))]
-    (let [order (plug/topo-order r)]
-      (is (= 4 (count order)))
-      (is (= :plugin/a (first order)))
-      (is (= :plugin/d (last order)))
-      (is (< (.indexOf order :plugin/b) (.indexOf order :plugin/d)))
-      (is (< (.indexOf order :plugin/c) (.indexOf order :plugin/d))))))
+              (plug/register (p :plugin/a)))
+        order (plug/topo-order r)]
+    (is (= 4 (count order)))
+    (is (= :plugin/a (first order)))
+    (is (= :plugin/d (last order)))
+    (is (< (.indexOf order :plugin/b) (.indexOf order :plugin/d)))
+    (is (< (.indexOf order :plugin/c) (.indexOf order :plugin/d)))))
 
 (deftest topo-order-fails-on-cycle
   (let [r (-> plug/empty-registry
