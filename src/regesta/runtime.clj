@@ -21,9 +21,9 @@
      the diagnostic template's `:repairs` vector. Standalone repairs
      stay accessible via the returned `:productions` trace.
 
-   Out of scope for this sprint (deferred to later):
-   - Cross-record execution, dedup, retract semantics, convergence
-     detection, projection."
+   Out of scope in this engine:
+   - Cross-record execution, retract semantics, convergence detection,
+     projection."
   (:require [malli.core :as m]
             [regesta.rules :as rules]))
 

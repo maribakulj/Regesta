@@ -1,7 +1,20 @@
 # 0009 — Mapping schema: data-shaped sugar over rules
 
-- Status: Accepted
+- Status: Accepted (partially superseded by ADR 0011 on qualifier mechanism)
 - Date: 2026-04-25
+- Revised: 2026-05-27 — §Qualifier rewritten to use fragments per
+  ADR 0011; §Alternatives considered amended to record that the
+  "Qualifier as separate sub-assertion" option, originally rejected
+  here, was reopened and adopted by ADR 0011 once concrete plugin needs
+  (Sprint 7 DC multilingual, CIDOC/Linked Art/IIIF architectural
+  compatibility) emerged.
+- Revised: 2026-05-27 — §Schema clarified to spell out what "compiled
+  rule-DSL rules" means in the compiler's output: runtime-shaped
+  compiled rules, not necessarily `Rule` data-form maps. §Consequences
+  rule-id example corrected to a syntactically valid Clojure keyword.
+- Revised: 2026-05-27 — §Open V2 questions extended with
+  source-provenance carry-forward at `:normalize` and cross-plugin
+  `:mapping/id` uniqueness, both surfaced by the M4 audit follow-up.
 
 ## Context
 
@@ -74,19 +87,48 @@ assertions. Collapsing, deduplication, or "first wins" are
 
 ### Qualifier
 
-When `:mapping/qualifier` is present, the canonical value becomes a
-**structured value** (per `regesta.model`):
+When `:mapping/qualifier` is present, the source value is treated as
+**qualified** and lifted to a **fragment** per ADR 0011. The importer
+(typically the generic shape adapter) mints a fragment id via
+`regesta.model/mint-fragment-id` (ADR 0012), attaches one assertion
+per coordinate to the fragment id (the value and the qualifier), and
+emits a reference assertion on the record:
 
 ```clojure
-{:value/kind   :structured
- :value/fields {:value    "Hugo, Victor"
-                :language "fr"}}
+;; one source <dc:title xml:lang="fr">Les Misérables</dc:title>
+;; under the mapping rule
+;;   {:mapping/from :dc/title
+;;    :mapping/to   :canon/title
+;;    :mapping/qualifier {:from :xml/lang :as :canon/lang}}
+
+(fragment {:id :frag/record.r42.dc-title.0 :source [:xml :dc:title 0]})
+
+(assertion {:subject   :frag/record.r42.dc-title.0
+            :predicate :canon/title
+            :value     "Les Misérables"})
+
+(assertion {:subject   :frag/record.r42.dc-title.0
+            :predicate :canon/lang
+            :value     "fr"})
+
+(assertion {:subject   :record/r42
+            :predicate :canon/title
+            :value     {:value/kind   :reference
+                        :value/target :frag/record.r42.dc-title.0}})
 ```
 
 The `:from` key names the source attribute or sub-field that carries
-the qualifier; the `:as` key names the field in the structured value.
+the qualifier; the `:as` key names the predicate the qualifier coord
+takes on the fragment.
+
 Plugins that don't use qualifiers omit the key entirely; the canonical
-value is the bare primitive.
+value is the bare primitive on the record, no fragment minted.
+
+This applies to **mapping-driven** qualifiers (the typical case). For
+atomic compound values where neither coordinate would ever sensibly
+become the subject of further assertions on its own (monetary amounts,
+geographic coordinates, date ranges), use `:value/kind :structured`
+directly — see ADR 0011 §Decision for the discriminating test.
 
 ### Transform
 
@@ -135,6 +177,21 @@ the stdlib `:transforms`, not through new top-level mapping keys.
 This is the same growth discipline as ADR 0002 for the predicate
 stdlib.
 
+The compiler's output target is the **runtime-shaped compiled rule**,
+not necessarily a `Rule` data-form map. A compiled rule, as produced
+by `regesta.rules/compile-rule`, is a map carrying enough metadata for
+the trace (`:id`, `:phase`, optionally `:doc`) plus an opaque runner
+function the runtime invokes via `regesta.rules/apply-rule`. The
+mapping compiler emits the same shape directly: its runner does
+match-against-triples → transform-application → assertion-emission in
+one step. This keeps the rule DSL free of a transform primitive (no
+data-form rule needs to invoke a Clojure function on a value), while
+preserving the spirit of "sugar over rules" — what the runtime
+executes is, from its perspective, indistinguishable from a regular
+compiled rule. Transforms are resolved against the effective stdlib
+at compile time, so transform-name lookup is a register-time concern,
+not a runtime one.
+
 ## Alternatives considered
 
 - **Mapping as a separate execution substrate.** A bespoke "mapping
@@ -157,9 +214,16 @@ stdlib.
   normalize-phase collapse rule.
 - **Qualifier as a separate sub-assertion.** E.g. produce
   `[?r :canon/title "Hugo"]` plus
-  `[<assertion-id> :canon/language "fr"]`. Rejected: requires
-  reifying the assertion identity and sharply complicates the IR.
-  Structured values already exist (ADR 0001) for exactly this case.
+  `[<assertion-id> :canon/language "fr"]`. Originally rejected as
+  "requires reifying the assertion identity and sharply complicates
+  the IR; structured values already exist (ADR 0001) for exactly this
+  case." **Reopened and adopted by ADR 0011** once concrete plugin
+  needs (Sprint 7 DC multilingual, CIDOC/Linked Art/IIIF
+  compatibility) forced the choice. The mechanism is not assertion
+  reification but fragments: the qualifier coord lives on a fragment
+  whose id, not an assertion's, carries the identity. See ADR 0011
+  for the reasoning that flipped this option from rejected to
+  adopted.
 - **`:on-empty` as silent skip with no `:diagnostic` option.**
   Rejected: plugin authors and users need a discovery tool. The
   diagnostic is informational, not an error.
@@ -171,7 +235,9 @@ stdlib.
   time produce a vector of ten to fifty maps, not custom code.
 - Mappings are inspectable, diff-able, generatable. The same trace
   logic that names rules in provenance names the *mapping* by its
-  expanded rule id (e.g. `:rule/from-mapping/dc-title`).
+  expanded rule id, derived from `:mapping/id` (e.g. a mapping with
+  `:mapping/id :map/dc-title` compiles to a rule with id
+  `:rule.from-mapping/dc-title`).
 - The transform stdlib is a hot growth zone. ADR 0010 documents the
   extensibility model and the conflict-rejection discipline.
 - Plugins that need composition write a rule, not a mapping. This
@@ -180,10 +246,11 @@ stdlib.
 - A future GUI for "browse all mappings" or "explain how `:canon/title`
   is populated" is straightforward: it reads the registered mappings
   by `:mapping/to`.
-- Multilingual values become structured values. Reports and
-  projections that target a single-language output have to flatten,
-  which is the projection plugin's responsibility — not a hidden
-  default in the mapping.
+- Multilingual values become fragments (ADR 0011). Reports and
+  projections that target a single-language output have to flatten
+  the fragment-referencing assertion back to a primitive, which is
+  the projection plugin's responsibility — not a hidden default in
+  the mapping.
 - The compile step from mapping to rules is a pure function; it is
   testable in isolation and produces the same shape of provenance as
   hand-authored rules. The runtime sees only rules.
@@ -194,6 +261,10 @@ stdlib.
   some predicates onto fragments rather than onto the record itself.
   V1 mappings target the record `:id`; fragment-level targeting waits
   for a concrete plugin need.
+  *Update (ADR 0011):* the concrete need has arrived — Sprint 7
+  multilingual Dublin Core requires fragment-targeted mappings — so
+  this question is reopened and its schema extension is Sprint 6/7's
+  to land. See [ADR 0011](./0011-fragments-for-qualified-values.md).
 - **Inverse mappings for export.** ADR 0007 lists `:exporter` but the
   mapping schema is import-shaped. An export-time inverse (canonical
   → native) is V2 work; the schema does not pre-empt it.
@@ -204,3 +275,26 @@ stdlib.
 - **Cross-mapping ordering.** Two mappings whose effects depend on
   each other must declare order via `:requires` between plugins (ADR
   0007), not within the mapping schema.
+- **Source-provenance carry-forward at `:normalize`.** When a mapping
+  rule renames `[?r :native/x ?v]` to `[?r :canon/x ?v]`, the source
+  assertion's `:provenance` — notably `:source`, the original source
+  location set by the importer — is not carried into the renamed
+  assertion. The renamed assertion has only the mapping rule's
+  provenance (`:rule`, `:pass`). This is a limitation of the rule
+  engine's matcher (`record-triples` projects assertions to bare
+  triples without their provenance), not a mapping-specific decision,
+  but it manifests most clearly here because mappings are semantically
+  rename-in-place. A V2 enhancement would let the engine optionally
+  carry forward source provenance into derived assertions, possibly
+  via a `:derivation` chain entry; until a concrete consumer needs it,
+  rule-level provenance is treated as sufficient.
+- **Cross-plugin `:mapping/id` uniqueness.** `regesta.plugins.mapping`
+  derives the compiled-rule id from the `name` portion of
+  `:mapping/id` only: `:plugin-a/dc-title` and `:plugin-b/dc-title`
+  both compile to `:rule.from-mapping/dc-title`. The mapping schema
+  enforces uniqueness only within a single plugin's `:mapping` vector;
+  two plugins shipping the same mapping name conflate in provenance
+  traces with no compile- or register-time error. Future work: either
+  embed the plugin id in the derived rule id, or add a registry-level
+  uniqueness check at `register` time. V1 leaves this as a plugin-
+  authoring discipline.

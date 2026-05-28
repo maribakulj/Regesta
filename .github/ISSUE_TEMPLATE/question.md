@@ -13,7 +13,7 @@ labels: ["question"]
 
 <!--
 - The README and the relevant ADRs?
-- The relevant test file? (test/regesta/...)
+- The relevant test file? (test/unit/, test/property/, test/integration/)
 - The CONTRIBUTING.md workflow?
 
 If a doc is unclear or contradicts itself, name it — that's a docs bug
@@ -23,6 +23,7 @@ in itself.
 ## Context
 
 <!--
-Anything that helps frame the question: what you're trying to build, the
-sprint you're in, the plugin you're authoring. Optional but useful.
+Anything that helps frame the question: what you're trying to build,
+the plugin you're authoring, the milestone you're targeting. Optional
+but useful.
 -->

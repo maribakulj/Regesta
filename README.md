@@ -24,9 +24,9 @@ the IR. Regesta does this for metadata rather than for code.
 - A **metadata transformation engine** with a stable, schema-independent core.
 - A **declarative rule system**: validation, inference, normalization, repair,
   and projection logic are expressed as data (EDN), not as code.
-- A **plugin platform**: IIIF, Dublin Core, MARC, CIDOC CRM, Linked Art, or a
-  local institutional model are loaded as plugins; none is privileged, none
-  lives in the core.
+- A **plugin platform**: format-specific support (importers, exporters,
+  rules, mappings) is loaded as plugins; none is privileged, none lives
+  in the core.
 - A **diagnostic-first system**: ambiguity, contradiction, intermediate states,
   and proposed repairs are first-class citizens of the internal representation,
   not side channels.
@@ -163,9 +163,8 @@ them for human acceptance or rejection. See
          └─────────┬────────┘   └────────▲─────────┘
                    │                     │
          ┌─────────▼─────────────────────┴─────────┐
-         │             regesta.plugins            │
-         │  shape-json · shape-xml · dublin-core   │
-         │  csv · marc-xml-lite · canonical · ...  │
+         │             regesta.plugins             │
+         │      format-specific plugins live here  │
          └─────────────────────────────────────────┘
 ```
 
@@ -203,7 +202,7 @@ The core never knows any external schema.
 
 ## Current status
 
-Sprints 0 through 4 are landed:
+Sprints 0 through 5 are landed:
 
 - **Sprint 0** — scaffolding, tooling, six foundational ADRs.
 - **Sprint 1** — canonical model with Malli schemas and EDN round-trip
@@ -214,9 +213,14 @@ Sprints 0 through 4 are landed:
   (`regesta.runtime`).
 - **Sprint 4** — diagnostics API: filters, aggregations, plain-text reporting
   and a failure policy for CI/CLI integration (`regesta.diagnostics`).
+- **Sprint 5** — plugin protocol (`regesta.plugins`), transform stdlib
+  (`regesta.plugins.transforms`), mapping schema + compiler
+  (`regesta.plugins.mapping`), and the generic JSON/XML shape adapter
+  (`regesta.plugins.shape`). Fragments for qualified values (ADR 0011,
+  ADR 0012) are first-class.
 
-The next sprint (Sprint 5) introduces the plugin protocol and the generic
-shape adapter for JSON and XML.
+The next sprint (Sprint 6) introduces the canonical vocabulary plugin
+on top of these mechanisms.
 
 ---
 
@@ -362,6 +366,14 @@ The V1 is planned across twelve two-week sprints.
 persistent storage, cross-record queries, deduplication, IIIF, CIDOC CRM,
 Linked Art, TEI, and EAD plugins. Each of those becomes meaningful once the
 V1 core is stable; not before.
+
+**Architectural compatibility constraint, even so.** Although CIDOC CRM,
+Linked Art, and IIIF do not ship as V1 plugins, the V1 IR, vocabulary
+layering, and mapping schema are required to accommodate event-centric
+and nested-resource models without rework once those plugins start. That
+constraint is what shapes the qualified-value design in
+[ADR 0011](./docs/adr/0011-fragments-for-qualified-values.md); it is a
+design boundary on V1, not a deliverable.
 
 ---
 

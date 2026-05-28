@@ -11,10 +11,27 @@ release is cut, that section is renamed to the version and date and a fresh
 
 ## [Unreleased]
 
-The pre-1.0 development line. Sprints 0 through 4 are landed; Sprint 5
-(plugin protocol and generic shape adapter) is the next milestone.
+The pre-1.0 development line. Sprints 0 through 5 are landed; Sprint 6
+(canonical vocabulary plugin) is the next milestone.
 
 ### Added
+
+- Sprint 5: plugin protocol (`regesta.plugins`) with closed schema,
+  registry with `:requires` topological resolution and `:input-format`
+  dispatch, transform stdlib (`regesta.plugins.transforms`), mapping
+  schema and compiler (`regesta.plugins.mapping`), and the generic
+  JSON/XML shape adapter (`regesta.plugins.shape`) wired as
+  registrable plugins. Fragments for qualified values per ADR 0011 +
+  ADR 0012 (single-place `mint-fragment-id` minted at ingest).
+- End-to-end shape-adapter integration test in
+  `test/integration/regesta/shape_integration_test.clj`: ingest a DC
+  record in both JSON-LD and XML, run through the V1 :normalize
+  phase, assert canonical convergence.
+- `org.clojure/data.xml` 0.2.0-alpha9 and `org.clojure/data.json` 2.5.1
+  in `:deps`. Both resolve from Maven Central and do not require
+  `:sandbox` rewiring (ADR 0006).
+
+### Earlier in this line
 
 - Property-based tests covering rule-engine determinism, triple-view
   losslessness, provenance, merge accumulation and severity ordering

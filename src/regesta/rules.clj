@@ -9,7 +9,7 @@
    never accepts arbitrary Clojure functions inside a rule; logic must pass
    through the compiler (ADR 0002).
 
-   Match semantics (Sprint 2 scope):
+   Match semantics:
    - Records are presented to the matcher as a set of triples derived from
      their struct fields (`:id`, `:kind`, `:source` → `:meta/*` predicates)
      combined with their explicit assertions.
@@ -20,8 +20,8 @@
    - Guards are pure predicates drawn from a curated stdlib. Rules cannot
      call arbitrary Clojure functions.
 
-   Production actions supported in Sprint 2: `:assert`, `:diagnostic`,
-   `:repair`. `:retract` and `:project-intent` land in later sprints."
+   Production actions: `:assert`, `:diagnostic`, `:repair`. `:retract`
+   and `:project-intent` are planned future additions."
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [clojure.walk :as walk]
@@ -444,3 +444,38 @@
   "Compile a collection of rules. Fails fast on the first invalid rule."
   [rules]
   (mapv compile-rule rules))
+
+;; ---------------------------------------------------------------------------
+;; Compiled-rule constructor (used by external compilers)
+;;
+;; A compiled rule is, from the runtime's perspective, anything with `:id`,
+;; `:phase`, and a `::runner` function that takes a record and returns a
+;; vector of productions. `compile-rule` produces these from data-form
+;; rules; other compilers (notably the mapping compiler in
+;; `regesta.plugins.mapping`) need to emit the same shape without going
+;; through the data-form Rule schema, because they apply Clojure functions
+;; (transforms) to bound values — something the data-form DSL deliberately
+;; does not express. This constructor centralizes the contract so the
+;; `::runner` key stays a `regesta.rules`-internal detail.
+;; ---------------------------------------------------------------------------
+
+(defn compiled-rule
+  "Construct a compiled rule from an explicit runner function and trace
+   metadata. The result is interchangeable with `compile-rule`'s output
+   as far as `apply-rule` and the runtime are concerned: it carries an
+   `:id`, a `:phase`, optionally a `:doc`, and a `::runner` function of
+   one argument that returns a vector of production maps.
+
+   Intended for compilers that emit runnable rules without expressible
+   data-form templates — the mapping compiler is the only V1 user. Plain
+   rule authors should keep using `compile-rule`."
+  [{:keys [id phase doc runner]}]
+  (when-not (keyword? id)
+    (throw (ex-info "compiled-rule requires a keyword :id" {:id id})))
+  (when-not (some? phase)
+    (throw (ex-info "compiled-rule requires a :phase" {:id id :phase phase})))
+  (when-not (fn? runner)
+    (throw (ex-info "compiled-rule requires a callable :runner"
+                    {:id id :runner runner})))
+  (cond-> {:id id :phase phase ::runner runner}
+    doc (assoc :doc doc)))

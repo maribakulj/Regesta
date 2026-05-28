@@ -16,6 +16,10 @@ ADR; supersessions are explicit, not silent edits.
 | [0006](./0006-deps-resolution-and-sandbox.md) | Maven coordinates by default, git override alias for restricted networks | Accepted |
 | [0007](./0007-plugins-as-data.md) | Plugins as data, not protocols | Accepted |
 | [0008](./0008-idempotency-at-merge.md) | Idempotency at merge: productions deduplicate by structural identity | Accepted |
+| [0009](./0009-mapping-schema.md) | Mapping schema: data-shaped sugar over rules | Accepted (partially superseded by 0011) |
+| [0010](./0010-stdlib-extensibility.md) | Stdlib extensibility: predicates and transforms via plugins | Accepted |
+| [0011](./0011-fragments-for-qualified-values.md) | Fragments as the canonical home for qualified values | Accepted |
+| [0012](./0012-fragment-identity-scheme.md) | Fragment identity scheme | Accepted |
 
 ## Template
 
