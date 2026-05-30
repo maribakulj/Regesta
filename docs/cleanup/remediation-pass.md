@@ -76,16 +76,15 @@
 ### Session 5 — Speculative-API policy (Decision 4 — C) — done
 - Kept the product API (`diagnostics`, `model` constructors/queries) and
   the register-time guards (`validate-requires!` / `requires-graph`).
-- Marked `^:no-doc` (not `defn-`) the orphans with no internal caller:
-  `parse-fragment-id` (model), `productions-by-phase` (runtime), `topo-order`
-  (plugins). `^:no-doc` removes them from the *advertised* public surface
-  while keeping them callable — so no test needed `#'` rewrites, the diff is
-  three tokens, and it is reversible. Nothing deleted.
-- Open nuance (for 1.0): `parse-fragment-id` is the inverse of the public
-  `mint-fragment-id`, and `productions-by-phase` is part of the trace-query
-  family — either could graduate to advertised API once a consumer (the CLI)
-  fixes its shape. `topo-order` stays provisional until plugin load-ordering
-  (a V2 concern) actually consumes it.
+- Mechanism: `^:no-doc` (not `defn-`) — it drops a var from the *advertised*
+  public surface while keeping it callable, so no test needs `#'` rewrites
+  and the change reverts in one token. Nothing deleted.
+- Final scope (after review): only `topo-order` (plugins) stays `^:no-doc`
+  — it has no consumer and serves a V2-only plugin load-ordering concern.
+  `parse-fragment-id` (inverse of the public `mint-fragment-id`) and
+  `productions-by-phase` (a trace-query-family member) were restored to the
+  public API: both are legitimate product surface awaiting the CLI, not
+  speculative orphans.
 
 ### Session 6 — Final reconciliation
 - `CHANGELOG.md` (Unreleased): note the cleanup pass.

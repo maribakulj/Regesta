@@ -183,7 +183,7 @@
   (filterv #(= rule-id (get-in % [:provenance :rule]))
            (:diagnostics record)))
 
-(defn ^:no-doc productions-by-phase
+(defn productions-by-phase
   "Return every assertion and diagnostic in `record` whose provenance
    attributes it to the given phase."
   [record phase]
