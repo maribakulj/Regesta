@@ -379,6 +379,26 @@
     (is (thrown? clojure.lang.ExceptionInfo
                  (mapping/compile-mappings ms stdlib)))))
 
+(deftest compile-mappings-rejects-colliding-derived-rule-ids
+  ;; mapping-rule-id keeps only the *name* portion of :mapping/id, so two
+  ;; mappings from different plugins that share a name (here both "dc-title")
+  ;; derive the same compiled rule id and would silently conflate in the
+  ;; provenance trace. The batch compiler must reject this (ADR 0009 §Open V2
+  ;; — cross-plugin :mapping/id uniqueness).
+  (let [m1 {:mapping/id :plugin-a/dc-title :mapping/from :a/title :mapping/to :canon/title}
+        m2 {:mapping/id :plugin-b/dc-title :mapping/from :b/title :mapping/to :canon/title}]
+    (testing "both mappings derive the same compiled rule id"
+      (is (= (mapping/mapping-rule-id (:mapping/id m1))
+             (mapping/mapping-rule-id (:mapping/id m2)))))
+    (testing "compiling them together is rejected loudly"
+      (is (thrown-with-msg? clojure.lang.ExceptionInfo #"colliding"
+                            (mapping/compile-mappings [m1 m2] stdlib))))
+    (testing "the error names the colliding mapping ids"
+      (let [data (try (mapping/compile-mappings [m1 m2] stdlib)
+                      (catch clojure.lang.ExceptionInfo e (ex-data e)))]
+        (is (= #{:plugin-a/dc-title :plugin-b/dc-title}
+               (set (get-in data [:collisions :rule.from-mapping/dc-title]))))))))
+
 ;; ---------------------------------------------------------------------------
 ;; Plugin extension transforms compose
 ;; ---------------------------------------------------------------------------
