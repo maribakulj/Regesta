@@ -195,7 +195,7 @@
         segments      (mapv encode-locator-segment locator)]
     (keyword "frag" (str/join "." (cons record-prefix segments)))))
 
-(defn parse-fragment-id
+(defn ^:no-doc parse-fragment-id
   "Inverse of `mint-fragment-id`. Parses a fragment id into
    `{:record-id ... :locator [...]}` per ADR 0012.
 

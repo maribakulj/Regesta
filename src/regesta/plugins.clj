@@ -382,7 +382,7 @@
                       {:cycle remaining}))))
   registry)
 
-(defn topo-order
+(defn ^:no-doc topo-order
   "Validate `registry` and return its plugin ids in dependency order:
    every plugin's `:requires` appear before it. Ties break by id sort
    for determinism. Throws on missing deps or cycles."

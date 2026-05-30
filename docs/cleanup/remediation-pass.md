@@ -36,8 +36,8 @@
 | 1 | Doc/config hygiene (phantoms) + this tracker | ✅ done | `ea859ae` |
 | 2 | Dependency-boundary guard (`core ⇏ plugins`) | ✅ done | `b601372` |
 | 3 | Fix `:mapping/id` collision (test-first) | ✅ done | `68ea584` |
-| 4 | Close fragment-identity trap (test-first) | ✅ done | _this commit_ |
-| 5 | Speculative-API policy (privatize orphans) | ⬜ | — |
+| 4 | Close fragment-identity trap (test-first) | ✅ done | `5d70b50` |
+| 5 | Speculative-API policy (privatize orphans) | ✅ done | _this commit_ |
 | 6 | Final reconciliation + close tracker | ⬜ | — |
 
 ## Per-session detail
@@ -73,12 +73,19 @@
 - Document the "predicate namespaces are hyphen/dot-free" convention
   (candidate: ADR 0012 §Consequences).
 
-### Session 5 — Speculative-API policy (Decision 4 — C)
-- Keep the product API (`diagnostics`, `model` constructors/queries).
-- Demote to private (or `^:no-doc`) the orphans with no internal caller:
-  `parse-fragment-id`, `productions-by-phase`, `topo-order`. Keep
-  `validate-requires!` / `requires-graph` public (real register-time value).
-- Tests reach privatised fns via `#'`; nothing is deleted.
+### Session 5 — Speculative-API policy (Decision 4 — C) — done
+- Kept the product API (`diagnostics`, `model` constructors/queries) and
+  the register-time guards (`validate-requires!` / `requires-graph`).
+- Marked `^:no-doc` (not `defn-`) the orphans with no internal caller:
+  `parse-fragment-id` (model), `productions-by-phase` (runtime), `topo-order`
+  (plugins). `^:no-doc` removes them from the *advertised* public surface
+  while keeping them callable — so no test needed `#'` rewrites, the diff is
+  three tokens, and it is reversible. Nothing deleted.
+- Open nuance (for 1.0): `parse-fragment-id` is the inverse of the public
+  `mint-fragment-id`, and `productions-by-phase` is part of the trace-query
+  family — either could graduate to advertised API once a consumer (the CLI)
+  fixes its shape. `topo-order` stays provisional until plugin load-ordering
+  (a V2 concern) actually consumes it.
 
 ### Session 6 — Final reconciliation
 - `CHANGELOG.md` (Unreleased): note the cleanup pass.
