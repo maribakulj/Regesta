@@ -31,6 +31,27 @@ The pre-1.0 development line. Sprints 0 through 5 are landed; Sprint 6
   in `:deps`. Both resolve from Maven Central and do not require
   `:sandbox` rewiring (ADR 0006).
 
+### Fixed
+
+- `regesta.plugins.mapping/compile-mappings` now rejects a batch whose
+  mapping rules derive the same compiled rule id (a cross-plugin
+  `:mapping/id` name collision), instead of silently conflating their
+  provenance in the trace (ADR 0009 §Open V2).
+- `regesta.model/mint-fragment-id` now rejects inputs that could collapse
+  two distinct fragments onto one id: a `-` in a locator predicate's
+  namespace, or a `.` in any record-id or predicate segment. Predicate
+  *names* may still contain hyphens. This enforces ADR 0012's injectivity
+  preconditions at construction, so a minted id always round-trips.
+
+### Changed
+
+- Post-Sprint-5 audit cleanup (no feature change): documentation and config
+  reconciled with the tree (removed the phantom `dev.clj` / `resources`
+  references); a test now guards that the core never depends on
+  `regesta.plugins.*`; `regesta.plugins/topo-order` is marked `^:no-doc`
+  (provisional — no consumer yet, still callable). Tracked in
+  `docs/cleanup/remediation-pass.md`.
+
 ### Earlier in this line
 
 - Property-based tests covering rule-engine determinism, triple-view

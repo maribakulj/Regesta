@@ -116,7 +116,15 @@
   [seg]
   (cond
     (and (keyword? seg) (namespace seg))
-    (str (namespace seg) "-" (name seg))
+    (let [seg-ns (namespace seg)
+          seg-nm (name seg)]
+      (when (str/includes? seg-ns "-")
+        (throw (ex-info "Locator predicate namespace must not contain '-' — it is the ns/name separator in fragment ids, so a hyphen there breaks injectivity (ADR 0012)"
+                        {:segment seg})))
+      (when (or (str/includes? seg-ns ".") (str/includes? seg-nm "."))
+        (throw (ex-info "Locator predicate must not contain '.' — it is the path separator in fragment ids (ADR 0012)"
+                        {:segment seg})))
+      (str seg-ns "-" seg-nm))
 
     (and (int? seg) (not (neg? seg)))
     (str seg)
@@ -168,11 +176,19 @@
      (mint-fragment-id :record/r42 [:crm/P108 0 :crm/P14 0])
      ;; => :frag/record.r42.crm-P108.0.crm-P14.0
 
-   Throws ex-info if the record-id is not a namespaced keyword or the
-   locator does not match the schema."
+   The record-id and every predicate must be free of '.', and predicate
+   namespaces must be free of '-' (these are the fragment-id path and
+   ns/name separators; a stray one would break injectivity or round-trip).
+   Predicate *names* may contain hyphens. Throws ex-info if the record-id
+   is not a namespaced keyword, if it or a predicate violates the separator
+   rule, or if the locator does not match the schema."
   [record-id locator]
   (when-not (and (keyword? record-id) (namespace record-id))
     (throw (ex-info "mint-fragment-id requires a namespaced keyword record-id"
+                    {:record-id record-id})))
+  (when (or (str/includes? (namespace record-id) ".")
+            (str/includes? (name record-id) "."))
+    (throw (ex-info "Record-id must not contain '.' — it is the path separator in fragment ids (ADR 0012)"
                     {:record-id record-id})))
   (validate-locator! locator)
   (let [record-prefix (str (namespace record-id) "." (name record-id))
@@ -183,13 +199,12 @@
   "Inverse of `mint-fragment-id`. Parses a fragment id into
    `{:record-id ... :locator [...]}` per ADR 0012.
 
-   The parse is unambiguous when the record-id namespace, the record-id
-   name, and every locator predicate namespace contain no hyphens. The
-   structural and canonical vocabularies meet this constraint; the
-   encoding does not enforce it. A locator predicate whose namespace
-   itself contains a hyphen cannot be reliably round-tripped, and
-   parsing such an id returns an approximation that should not be
-   treated as authoritative.
+   The parse is exact for every id produced by `mint-fragment-id`: that
+   constructor rejects the inputs that would make decoding ambiguous (a
+   '-' in a predicate namespace, a '.' anywhere), so a minted id always
+   round-trips. Hand-built `:frag` keywords that bypass the constructor
+   and violate those rules may decode to an approximation that should
+   not be treated as authoritative.
 
    Throws ex-info if `frag-id` is not a `:frag`-namespaced keyword or
    is structurally malformed."

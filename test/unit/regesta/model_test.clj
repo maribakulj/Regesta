@@ -408,6 +408,46 @@
                           #"non-negative integer"
                           (model/mint-fragment-id :record/r [:dc/title "0"])))))
 
+(deftest mint-fragment-id-rejects-hyphen-in-predicate-namespace
+  ;; '-' glues a predicate's namespace to its name (:dc/title -> "dc-title").
+  ;; A hyphen in the *namespace* is ambiguous and breaks injectivity:
+  ;; :marc-xml/title would encode to "marc-xml-title", the same string as the
+  ;; legal :marc/xml-title — two distinct predicates collapsing onto one
+  ;; fragment id (silent data loss). Reject the ambiguous case at mint.
+  (testing "hyphen in a predicate namespace is rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo
+                          #"namespace must not contain"
+                          (model/mint-fragment-id :record/r1 [:marc-xml/title 0])))))
+
+(deftest mint-fragment-id-rejects-dot-in-segments
+  ;; '.' separates segments in the fragment-id path, so a dot in any component
+  ;; injects a fake boundary and breaks both injectivity and round-trip parse.
+  (testing "dot in the record-id namespace is rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Record-id must not contain"
+                          (model/mint-fragment-id :rec.ns/r1 [:dc/title 0]))))
+  (testing "dot in the record-id name is rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Record-id must not contain"
+                          (model/mint-fragment-id :record/r.1 [:dc/title 0]))))
+  (testing "dot in a predicate namespace is rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"predicate must not contain"
+                          (model/mint-fragment-id :record/r1 [:my.ns/title 0]))))
+  (testing "dot in a predicate name is rejected"
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"predicate must not contain"
+                          (model/mint-fragment-id :record/r1 [:dc/title.x 0])))))
+
+(deftest mint-fragment-id-allows-hyphen-in-names
+  ;; Hyphens are ambiguous only in *namespaces*. Names may carry them — parse
+  ;; splits a predicate on its first hyphen, so the ns/name boundary stays
+  ;; unambiguous and the id round-trips. Guards against over-restricting.
+  (testing "hyphen in a predicate name is accepted and round-trips"
+    (let [frag (model/mint-fragment-id :record/r1 [:dc/alternative-title 0])]
+      (is (= {:record-id :record/r1 :locator [:dc/alternative-title 0]}
+             (model/parse-fragment-id frag)))))
+  (testing "hyphens in the record-id are accepted and round-trip"
+    (let [frag (model/mint-fragment-id :my-rec/r-1 [:dc/title 0])]
+      (is (= {:record-id :my-rec/r-1 :locator [:dc/title 0]}
+             (model/parse-fragment-id frag))))))
+
 (deftest parse-fragment-id-worked-examples
   (testing "single-level"
     (is (= {:record-id :record/r42 :locator [:dc/title 0]}

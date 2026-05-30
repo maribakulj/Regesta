@@ -115,12 +115,12 @@
   "Derive the compiled-rule id from a `:mapping/id` keyword. See the
    namespace doc and ADR 0009 §Consequences for the convention.
 
-   Cross-plugin collisions are not detected here: two mapping rules
-   sharing the same `:mapping/id` name portion (across different
-   plugins) produce identical compiled rule ids, which would conflate
-   in provenance traces. Plugin authors should pick distinctive
-   `:mapping/id` names; uniqueness is not enforced by this layer. See
-   ADR 0009 §Open V2 questions."
+   Cross-plugin collisions are not detected by *this* function: two
+   mapping rules sharing the same `:mapping/id` name portion (across
+   different plugins) produce identical compiled rule ids, which would
+   conflate in provenance traces. `compile-mappings` rejects such a
+   batch at compile time; plugin authors should still pick distinctive
+   `:mapping/id` names. See ADR 0009 §Open V2 questions."
   [mapping-id]
   (when-not (keyword? mapping-id)
     (throw (ex-info "mapping-rule-id requires a keyword mapping id"
@@ -315,8 +315,34 @@
   (validate-or-throw! mapping-rule)
   (compile-mapping-rule mapping-rule transforms-stdlib))
 
+(defn- check-distinct-rule-ids!
+  "Reject a batch in which two mapping rules derive the same compiled rule
+   id. `mapping-rule-id` keeps only the *name* portion of `:mapping/id`, so
+   `:plugin-a/dc-title` and `:plugin-b/dc-title` both derive
+   `:rule.from-mapping/dc-title` and would conflate silently in the
+   provenance trace. The ex-data maps each colliding rule id to the source
+   `:mapping/id`s responsible. Non-keyword / absent ids are ignored here:
+   per-rule schema validation in `compile-mapping` reports those with a full
+   explanation."
+  [mapping-rules]
+  (let [ids        (filter keyword? (map :mapping/id mapping-rules))
+        collisions (into {}
+                         (keep (fn [[derived src-ids]]
+                                 (when (> (count src-ids) 1)
+                                   [derived (vec src-ids)])))
+                         (group-by mapping-rule-id ids))]
+    (when (seq collisions)
+      (throw (ex-info (str "Mapping rules derive colliding compiled rule ids; "
+                           "their provenance would conflate. Pick distinct "
+                           ":mapping/id name portions.")
+                      {:collisions collisions}))))
+  mapping-rules)
+
 (defn compile-mappings
   "Compile a vector of mapping rules, in order. Fails fast on the first
-   invalid or unsupported mapping rule."
+   invalid or unsupported mapping rule. Rejects the whole batch if two
+   rules derive the same compiled rule id — their provenance would
+   otherwise conflate silently in the trace (ADR 0009 §Open V2)."
   [mapping-rules transforms-stdlib]
+  (check-distinct-rule-ids! mapping-rules)
   (mapv #(compile-mapping % transforms-stdlib) mapping-rules))

@@ -39,7 +39,6 @@ coverage:
 # Paths Codecov should never count toward coverage.
 ignore:
   - "test"          # all test code (unit, property, integration, junit runner)
-  - "dev"           # REPL / dev helpers
   - "docs"          # ADRs and other markdown
   - ".github"       # workflows and templates
   - ".clj-kondo"    # linter cache
