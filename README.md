@@ -184,8 +184,7 @@ The core never knows any external schema.
 │   ├── runtime.clj          # Execution engine (Sprint 3)
 │   ├── diagnostics.clj      # Diagnostic API (Sprint 4)
 │   ├── plugins.clj          # Plugin protocol (Sprint 5+)
-│   ├── app.clj              # CLI and application shell (Sprint 10)
-│   └── dev.clj              # REPL / dev helpers
+│   └── app.clj              # CLI and application shell (stub; Sprint 10)
 ├── test/
 │   ├── unit/regesta/        # Fast, hermetic, mirrored to src/
 │   ├── property/regesta/    # Generative invariants (test.check + malli.generator)
@@ -252,7 +251,7 @@ clojure -M:fmt
 # Format fix
 clojure -M:fmt/fix
 
-# REPL with dev tools loaded
+# REPL with the test paths and test.check on the classpath
 clojure -M:dev
 ```
 
