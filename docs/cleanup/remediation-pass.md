@@ -35,8 +35,8 @@
 |---|---|---|---|
 | 1 | Doc/config hygiene (phantoms) + this tracker | ✅ done | `ea859ae` |
 | 2 | Dependency-boundary guard (`core ⇏ plugins`) | ✅ done | `b601372` |
-| 3 | Fix `:mapping/id` collision (test-first) | ✅ done | _this commit_ |
-| 4 | Close fragment-identity trap (test-first) | ⬜ | — |
+| 3 | Fix `:mapping/id` collision (test-first) | ✅ done | `68ea584` |
+| 4 | Close fragment-identity trap (test-first) | ✅ done | _this commit_ |
 | 5 | Speculative-API policy (privatize orphans) | ⬜ | — |
 | 6 | Final reconciliation + close tracker | ⬜ | — |
 
