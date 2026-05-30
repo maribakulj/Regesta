@@ -2,6 +2,10 @@
 
 - Status: Accepted
 - Date: 2026-05-27
+- Revised: 2026-05-30 — recorded that `mint-fragment-id` now *enforces* the
+  encoding's injectivity preconditions (rejects a `-` in a predicate
+  namespace and a `.` in any segment) rather than leaving them implicit;
+  see §Consequences (post-Sprint-5 audit cleanup).
 
 ## Context
 
@@ -144,6 +148,14 @@ exercises.
 - A future plugin that cannot preserve document order has a documented
   escape hatch (optional hash segment), deferred until it has a name
   and a concrete failure mode.
+- **The encoding's injectivity preconditions are enforced, not assumed.**
+  `-` separates a predicate's namespace from its name and `.` separates
+  path segments, so a `-` inside a predicate namespace, or a `.` inside any
+  record-id or predicate segment, would let two distinct predicates collapse
+  onto one id. `mint-fragment-id` rejects both at construction (predicate
+  *names* may still contain hyphens — they round-trip, since the decoder
+  splits on the first hyphen). A minted id therefore always parses back
+  exactly; only a hand-built `:frag` keyword can violate the scheme.
 - Encoding lives in one function. `regesta.model/mint-fragment-id` is
   the only thing that knows the on-the-wire format; everything else
   treats fragment ids as opaque keywords.

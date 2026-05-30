@@ -15,6 +15,9 @@
 - Revised: 2026-05-27 — §Open V2 questions extended with
   source-provenance carry-forward at `:normalize` and cross-plugin
   `:mapping/id` uniqueness, both surfaced by the M4 audit follow-up.
+- Revised: 2026-05-30 — §Open V2 "cross-plugin `:mapping/id` uniqueness"
+  resolved in code: `compile-mappings` rejects a batch whose rules derive
+  the same compiled rule id (post-Sprint-5 audit cleanup).
 
 ## Context
 
@@ -294,7 +297,9 @@ not a runtime one.
   both compile to `:rule.from-mapping/dc-title`. The mapping schema
   enforces uniqueness only within a single plugin's `:mapping` vector;
   two plugins shipping the same mapping name conflate in provenance
-  traces with no compile- or register-time error. Future work: either
-  embed the plugin id in the derived rule id, or add a registry-level
-  uniqueness check at `register` time. V1 leaves this as a plugin-
-  authoring discipline.
+  traces with no compile- or register-time error. **Resolved
+  (post-Sprint-5 cleanup):** `compile-mappings` now rejects a batch whose
+  rules derive the same compiled rule id, with an `ex-info` naming the
+  colliding `:mapping/id`s — the registry-level uniqueness-check option.
+  Embedding the plugin id in the derived rule id remains available if
+  same-named mappings across plugins ever become a legitimate need.

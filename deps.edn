@@ -2,6 +2,10 @@
 
  :deps
  {org.clojure/clojure       {:mvn/version "1.12.0"}
+  ;; data.xml 0.2.0-alpha* is the de-facto standard release: the 0.1.0
+  ;; "stable" line predates the XML-namespace handling the shape adapter
+  ;; relies on, so the "alpha" label is historical, not a maturity warning.
+  ;; Pinned exact for reproducibility — do not "downgrade" to 0.1.0.
   org.clojure/data.xml      {:mvn/version "0.2.0-alpha9"}
   org.clojure/data.json     {:mvn/version "2.5.1"}
   metosin/malli             {:mvn/version "0.17.0"}}

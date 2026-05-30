@@ -1,7 +1,7 @@
 # Cleanup / Remediation Pass — post-Sprint-5 audit follow-up
 
 - Theme: doc/config hygiene + latent-bug fixes surfaced by the architecture audit
-- Status: In progress
+- Status: Complete — all 6 sessions landed
 - Branch: `claude/dazzling-planck-LHfT2`
 - Basis: read-only architecture audit (2026-05-30). No feature work; this pass
   only reconciles documentation with reality and closes documented latent
@@ -37,8 +37,8 @@
 | 2 | Dependency-boundary guard (`core ⇏ plugins`) | ✅ done | `b601372` |
 | 3 | Fix `:mapping/id` collision (test-first) | ✅ done | `68ea584` |
 | 4 | Close fragment-identity trap (test-first) | ✅ done | `5d70b50` |
-| 5 | Speculative-API policy (privatize orphans) | ✅ done | _this commit_ |
-| 6 | Final reconciliation + close tracker | ⬜ | — |
+| 5 | Speculative-API policy (mark `^:no-doc`) | ✅ done | `1382588`, `86f226a` |
+| 6 | Final reconciliation + close tracker | ✅ done | _this commit_ |
 
 ## Per-session detail
 
