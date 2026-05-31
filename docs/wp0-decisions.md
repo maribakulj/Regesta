@@ -1,7 +1,9 @@
 # WP-0 — Decisions to settle before any code
 
-- Status: **Draft** — every decision below is *open*; recommendations are
-  defaults pending sign-off.
+- Status: **Decided by recommendation (2026-05-31)** — all decisions below are
+  accepted per their recommendations, by maintainer delegation; the maintainer
+  keeps a veto on any. Residual tuning (key composition, exact vocab lists) is
+  noted per decision and resolved during the WP-0 spike/build.
 - Date: 2026-05-31
 - Feeds: the WP-0 ADRs (Pivot, Loss-model, FRBRisation, the ADR 0011 minting
   amendment, the ADR 0008/0004 reconciliations) defined in
@@ -21,6 +23,22 @@ for at least one WP-0 ADR, so each must be settled before that ADR is written.
 > we populate it minimally; defer only features that slot behind an existing
 > seam as a new plugin/provider. Never defer anything whose later arrival forces
 > a deep refactor. This rule reshapes D5 and the deferred list below.
+
+## Status at a glance (2026-05-31)
+
+| # | Decision | Status |
+|---|----------|--------|
+| D1 | Single LRMoo hub | ✅ accepted |
+| D2 | V1 profile = WEMI core + museum CRM core | ✅ accepted (list grows by justification) |
+| D3 | Typed view = in-IR minted assertions + traversal API | ✅ accepted |
+| D4 | Mint in `infer`; `repair` proposes | ✅ accepted |
+| D5 | Identity = resolver seam + hash + dump-based authority (V1) | ✅ accepted (key/snapshot tuned in spike) |
+| D6 | Batch-local clustering + authority IRIs | ✅ accepted |
+| D7 | Confidence-gated hybrid FRBRisation | ✅ accepted |
+| D8 | Bounded fixed passes | ✅ accepted (revisit only if spike forces) |
+| D9 | Loss = source-native unit, both edges, categorised | ✅ accepted |
+| D10 | Universal / dialect-agnostic MARC (MARC21 + UNIMARC) | ✅ accepted (first target with partner) |
+| D11 | Reconcile Tier 1+2, precision-first wide net | ✅ accepted |
 
 ---
 
@@ -45,7 +63,7 @@ bibliographic WEMI is in play?
 **Recommendation: single LRMoo hub for V1.** LRMoo *is* CRM-plus-WEMI, so one
 hub subsumes both worlds and keeps loss visible in a single model. Keep two-tier
 documented as the fallback if LRMoo tooling proves too thin (risk R6).
-**Decision: _open_.**
+**Decision: accepted — single LRMoo hub (by recommendation, 2026-05-31); two-tier kept as the documented fallback.**
 
 ### D2 — LRMoo V1 profile (how much of LRMoo/CRM ships)
 LRMoo + CRM are large. "All of it" is unbounded scope.
@@ -62,7 +80,7 @@ LRMoo + CRM are large. "All of it" is unbounded scope.
 
 **Recommendation: minimal WEMI core + only the CRM classes a shipped spoke
 demands,** growing by ADR 0003's "justify every addition" rule. Gaps become
-honest loss markers, not silent omissions. **Decision: _open_.**
+honest loss markers, not silent omissions. **Decision: accepted — V1 profile = the WEMI core *plus* the CRM object core that the shipped IIIF/museum spokes demand (by recommendation, 2026-05-31); the precise class/predicate list grows by justification.**
 
 ### D3 — How the typed view is realised (the concrete shape of strategy C)
 "Derived typed view" must be made concrete: minted typed assertions *inside*
@@ -84,7 +102,7 @@ the IR, or a separate projected structure *outside* it?
 **Recommendation: in-IR minted typed assertions + a typed traversal API in the
 LRMoo plugin.** It is the truest form of C — ground truth stays assertions, the
 view is *derived assertions* plus a reading lens — and the existing diagnostic
-machinery carries over for free. **Decision: _open_.**
+machinery carries over for free. **Decision: accepted — in-IR minted typed assertions + a typed traversal API (by recommendation, 2026-05-31).**
 
 ---
 
@@ -107,7 +125,7 @@ Lifting the ingest-only restriction precisely.
 
 **Recommendation: mint entities in `infer` (machine truth); `repair` only
 proposes** (`:proposed`, per ADR 0005). Entity-minting is the new capability;
-fragment minting keeps today's rules. **Decision: _open_.**
+fragment minting keeps today's rules. **Decision: accepted — mint in `infer`; `repair` only proposes (by recommendation, 2026-05-31).**
 
 ### D5 — Synthesized-entity identity scheme (the crux; ADR 0008/0012)
 A minted Work needs an id that is deterministic from content (idempotency) and
@@ -143,8 +161,7 @@ identity **in V1** — it materially improves clustering and emits real IRIs for
 the RDF / Linked Art spokes — while staying deterministic and reproducible.
 Only *live online* authority lookup is deferred, and it is purely additive
 behind the same seam. The per-WEMI key material (Work / Expression /
-Manifestation / Item) is itself a sub-decision. **Decision: _open_ — the seam
-is mandatory; resolver set + key composition pending sign-off.**
+Manifestation / Item) is itself a sub-decision. **Decision: accepted — resolver seam + work-key hash + dump-based authority resolver, all in V1 (by recommendation, 2026-05-31); the per-WEMI key composition and the first pinned authority snapshot are tuned in the WP-0 spike.**
 
 ### D6 — Clustering scope: batch-local vs external authority vs persistent store
 Across what set do we cluster Works?
@@ -165,7 +182,7 @@ deterministic key (D5).** Two runs that see the same Work mint the *same id*
 because the id is a function of content, not of a shared store — so we keep the
 no-storage principle and still get cross-run consistency. Persistent store is
 out of V1; authority lookup is V2. State the limit honestly: clustering quality
-is bounded by what's in a batch + key stability. **Decision: _open_.**
+is bounded by what's in a batch + key stability. **Decision: accepted — batch-local clustering, made cross-run/cross-institution stable by the deterministic key *and* the D5 authority IRIs (by recommendation, 2026-05-31); persistent store stays out of V1.**
 
 > D5 and D6 are linked: the deterministic key (D5) is exactly what makes
 > batch-local clustering (D6) sufficient without storage.
@@ -204,7 +221,7 @@ differ wildly in tractability.
   all entity types). Maximise *candidates*, never *asserted* merges — recall is
   preserved as proposals without polluting the asserted graph.
 
-**Decision: _open_.**
+**Decision: accepted — Tier 1 (agents + works) + Tier 2 (places) if budget; precision-first "wide net, conservative commit" (by recommendation, 2026-05-31); subjects/events additive later.**
 
 ---
 
@@ -248,7 +265,7 @@ WEMI inference can cascade (mint a Work, then link sibling Expressions).
 **Recommendation: keep bounded fixed passes; design FRBRisation to converge in a
 small declared number,** and escalate to scoped-fixpoint-with-cap *only if the
 WP-0 spike proves fixed passes can't express WEMI linking.* Decide empirically
-from the spike, not a priori. **Decision: _open_ (pending spike).**
+from the spike, not a priori. **Decision: accepted — bounded fixed passes (by recommendation, 2026-05-31); escalate to scoped-fixpoint-with-cap only if the WP-0 spike proves it necessary.**
 
 ---
 
@@ -271,7 +288,7 @@ from the spike, not a priori. **Decision: _open_ (pending spike).**
 
 **Recommendation (summary): unit = source-native field; measure both edges +
 round-trip; categorise; report a breakdown.** Built on diagnostics +
-`:canon/loss-marker`. **Decision: _open_.**
+`:canon/loss-marker`. **Decision: accepted — unit = source-native field; both edges + round-trip; categorised breakdown (by recommendation, 2026-05-31).**
 
 ### D10 — MARC dialect for V1 (MARC21 vs UNIMARC vs INTERMARC)
 A catch worth surfacing: "MARC21 réel" was the phrase, but **BnF does not
@@ -294,7 +311,7 @@ core (record/field/subfield model) + pluggable dialect *profiles* as data
 (MARC21 / UNIMARC / INTERMARC mappings). Ship **MARC21 + UNIMARC** in V1 if BnF
 is the target; add INTERMARC as a profile when specs are available. This bets
 the spoke on no single dialect and matches plugins-as-data (a dialect is mapping
-data). **Decision: _open_ — settle jointly with the data partner.**
+data). **Decision: accepted — universal / dialect-agnostic: shared MARC core + dialect profiles; MARC21 + UNIMARC in V1, INTERMARC profile when specs allow (by recommendation, 2026-05-31); exact first target confirmed with the data partner.**
 
 ---
 
