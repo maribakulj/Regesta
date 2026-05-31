@@ -15,6 +15,13 @@ The decisions below are grouped: **A. Pivot shape · B. Identity & minting ·
 C. FRBRisation control · D. Loss & institutional scope.** Each is load-bearing
 for at least one WP-0 ADR, so each must be settled before that ADR is written.
 
+> **Design rule (added 2026-05-31, per maintainer).** The test for deferring
+> anything to a later version is *not* "is it valuable?" but "is its later
+> addition *purely additive*?" Build the architectural **seam** in V1 even when
+> we populate it minimally; defer only features that slot behind an existing
+> seam as a new plugin/provider. Never defer anything whose later arrival forces
+> a deep refactor. This rule reshapes D5 and the deferred list below.
+
 ---
 
 ## A. Pivot shape
@@ -122,12 +129,22 @@ equal across records describing the same Work (clustering).
   - *Pro:* simplest minting; no premature identity commitment.
   - *Con:* no clustering → every record gets its own Work → defeats FRBRisation.
 
-**Recommendation: deterministic work-key hash for V1,** with the *key
-definition* treated as an explicit, tunable sub-decision, and authority
-reconciliation **designed-for but deferred to V2** (the key can later absorb an
-authority id). Over/under-merge then becomes a *measured* quality metric
-surfaced as loss/diagnostics, not a silent failure. **Decision: _open_
-(including: what exactly goes in the key?).**
+**Recommendation (revised per the design rule above): build an *identity-
+resolver seam* in V1 — `resolve-identity(key-material) -> stable-id [+ authority
+IRI]` — and ship two resolvers behind it:**
+1. a deterministic **work-key hash** (always-available fallback), and
+2. an **authority-anchored** resolver that reconciles creators/works against an
+   *authority dataset snapshot* (e.g. the open data.bnf.fr export, or an
+   IdRef / VIAF subset) — deterministic and offline because it reads a dump,
+   not a live API.
+
+The hash is the fallback when the authority misses. This keeps authority-grade
+identity **in V1** — it materially improves clustering and emits real IRIs for
+the RDF / Linked Art spokes — while staying deterministic and reproducible.
+Only *live online* authority lookup is deferred, and it is purely additive
+behind the same seam. The per-WEMI key material (Work / Expression /
+Manifestation / Item) is itself a sub-decision. **Decision: _open_ — the seam
+is mandatory; resolver set + key composition pending sign-off.**
 
 ### D6 — Clustering scope: batch-local vs external authority vs persistent store
 Across what set do we cluster Works?
@@ -177,7 +194,7 @@ accepts/rejects (ADR 0005)?
 **Recommendation: confidence-gated hybrid.** It is the only option that both
 scales *and* earns institutional trust; it reuses the existing repair workflow
 for the low-confidence tail. The threshold is a documented, tunable policy.
-**Decision: _open_.**
+**Decision: confidence-gated hybrid — accepted 2026-05-31.**
 
 ### D8 — Fixpoint vs bounded passes for `infer` (ADR 0004)
 WEMI inference can cascade (mint a Work, then link sibling Expressions).
@@ -249,10 +266,14 @@ data). **Decision: _open_ — settle jointly with the data partner.**
 
 - **RDF / JSON-LD serialization library** (hand-rolled vs Jena interop vs a
   Clojure RDF lib) — decide at WP-4; watch the ADR 0006 sandbox constraint.
-- **External agent/authority reconciliation** (VIAF / ISNI / IdRef) — V2;
-  designed-for in D5.
+- **Live online authority lookup** (querying VIAF / ISNI / IdRef APIs at
+  runtime) — V2, purely additive behind the D5 resolver seam. *Dump-based*
+  reconciliation is **promoted into V1** (see D5), so this defers only the live
+  network path, not authority-grade identity itself.
 - **Museum / IIIF import direction** — export-only is acceptable for V1; decide
   per spoke at WP-4 (open question already in the roadmap).
 - **Plugin sandboxing** (ADR 0010 trust-on-require) — V2 unless institutional IT
   mandates it sooner.
-- **Persistent identity store** — V2; D6 keeps V1 storage-free.
+- **Persistent identity store** — V2, additive *because* identity is content-
+  deterministic (D5): a store becomes a lookup cache/index behind the resolver
+  seam, not a change to identity semantics. D6 keeps V1 storage-free.
