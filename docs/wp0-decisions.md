@@ -170,6 +170,42 @@ is bounded by what's in a batch + key stability. **Decision: _open_.**
 > D5 and D6 are linked: the deterministic key (D5) is exactly what makes
 > batch-local clustering (D6) sufficient without storage.
 
+### D11 — Named-entity reconciliation scope (added 2026-05-31, per maintainer)
+The D4/D5 machinery is, by construction, an **entity-reconciliation engine that
+runs during conversion**: lifting a flat record into the typed pivot *is*
+reconciling its named entities. Two dials must be set.
+
+**Breadth — which entity types.** The resolver seam is generic, so every type is
+the same mechanism; but each needs its own key + authority + tuning, and types
+differ wildly in tractability.
+- Tier 1 (V1 core): **agents** (persons/orgs) and **works** — high value, strong
+  authorities (VIAF / ISNI / data.bnf.fr), tractable.
+- Tier 2 (V1 if budget): **places** — Geonames is solid.
+- Tier 3 (careful/partial, or defer): **subjects/concepts** — valuable but messy
+  (RAMEAU / LCSH / local thesauri, polysemy, granularity mismatch).
+- Tier 4 (defer): **events** — weak authorities.
+- *Maximising breadth* buys more in one pass, but the hard types have low
+  precision and would erode trust + burn timeline — and breadth is **additive
+  behind the seam**, so "more later" is cheap (the seams-not-deferrals rule).
+
+**Aggressiveness — how much to commit.** Precision vs recall.
+- "Merge as much as possible" raises recall, **but a false merge costs far more
+  than a miss**: it fabricates a false identity (fusing Dumas *père* et *fils*,
+  or two distinct "Jean Martin"), is hard to detect/undo, and corrupts the very
+  integrity institutions trust us for. Authority data is precision-first.
+
+**Recommendation.**
+- Breadth: ship **Tier 1 (agents + works)**, add **Tier 2 (places)** if budget
+  allows; subjects/events are additive on the same rail. Prioritise by
+  value × tractability — do *not* maximise.
+- Aggressiveness: **cast a wide net, commit conservatively.** *Attempt*
+  reconciliation broadly, but only **assert** a merge when confident; route the
+  uncertain tail to **proposed / diagnostics** (the D7 hybrid, generalised to
+  all entity types). Maximise *candidates*, never *asserted* merges — recall is
+  preserved as proposals without polluting the asserted graph.
+
+**Decision: _open_.**
+
 ---
 
 ## C. FRBRisation control
