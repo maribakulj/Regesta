@@ -1,0 +1,258 @@
+# WP-0 — Decisions to settle before any code
+
+- Status: **Draft** — every decision below is *open*; recommendations are
+  defaults pending sign-off.
+- Date: 2026-05-31
+- Feeds: the WP-0 ADRs (Pivot, Loss-model, FRBRisation, the ADR 0011 minting
+  amendment, the ADR 0008/0004 reconciliations) defined in
+  [`roadmap-v1.md`](./roadmap-v1.md).
+
+Already locked (context, not open): IR **strategy C** (assertions as ground
+truth + derived typed view in a plugin) and **LRMoo** as the pivot vocabulary.
+C stays valid as long as ADR 0003 (agnostic core) stands.
+
+The decisions below are grouped: **A. Pivot shape · B. Identity & minting ·
+C. FRBRisation control · D. Loss & institutional scope.** Each is load-bearing
+for at least one WP-0 ADR, so each must be settled before that ADR is written.
+
+---
+
+## A. Pivot shape
+
+### D1 — Single LRMoo hub vs two-tier (CRM base + LRMoo overlay)
+Is the pivot one LRMoo model, or a CIDOC-CRM base with LRMoo engaged only when
+bibliographic WEMI is in play?
+
+- **Single LRMoo hub.**
+  - *Pro:* one model; WEMI native; CRM still reachable downward (F-classes are
+    CRM subclasses); maximises loss-visibility (everything commensurable in one
+    model).
+  - *Con:* museum-only objects pass through a bibliographic lens they don't
+    need; ties the hub to LRMoo's (younger) maturity.
+- **Two-tier (CRM + LRMoo overlay).**
+  - *Pro:* clean separation; museum objects stay pure CRM; isolates LRMoo
+    maturity risk.
+  - *Con:* "when do we engage the overlay?" boundary logic; splits the hub —
+    displaces the WEMI-derivation complexity rather than removing it.
+
+**Recommendation: single LRMoo hub for V1.** LRMoo *is* CRM-plus-WEMI, so one
+hub subsumes both worlds and keeps loss visible in a single model. Keep two-tier
+documented as the fallback if LRMoo tooling proves too thin (risk R6).
+**Decision: _open_.**
+
+### D2 — LRMoo V1 profile (how much of LRMoo/CRM ships)
+LRMoo + CRM are large. "All of it" is unbounded scope.
+
+- **Minimal WEMI core** (F1 Work, F2 Expression, F3 Manifestation, F5 Item +
+  the R-properties linking them + only the CRM classes the V1 spokes need:
+  actors, appellations, time-spans, the relevant creation events).
+  - *Pro:* bounded, deliverable; matches ADR 0003 growth discipline; covers
+    MARC + basic museum.
+  - *Con:* some records won't fully map → loss (but that loss is *reported*).
+- **Broad LRMoo + large CRM swath up front.**
+  - *Pro:* fewer "can't express" gaps.
+  - *Con:* unbounded scope; timeline killer; much untested vocabulary.
+
+**Recommendation: minimal WEMI core + only the CRM classes a shipped spoke
+demands,** growing by ADR 0003's "justify every addition" rule. Gaps become
+honest loss markers, not silent omissions. **Decision: _open_.**
+
+### D3 — How the typed view is realised (the concrete shape of strategy C)
+"Derived typed view" must be made concrete: minted typed assertions *inside*
+the IR, or a separate projected structure *outside* it?
+
+- **In-IR minted typed assertions + a typed traversal API.** LRMoo entities are
+  subjects bearing `:lrmoo/*` / `:crm/*` assertions; "the view" is a typed
+  reading lens over them.
+  - *Pro:* one representation; honours ADR 0001; provenance/confidence/
+    diagnostics ride on typed entities unchanged; "derived" = projection rules
+    emit assertions; re-projection is idempotent.
+  - *Con:* the IR grows; need discipline to mark derived vs source (status/
+    provenance already do this).
+- **Out-of-IR projected graph structure (built on demand).**
+  - *Pro:* leaner IR; a "real" graph object for traversal/export.
+  - *Con:* two representations to keep coherent; provenance/diagnostics must be
+    mirrored; reintroduces the drift risk C exists to avoid.
+
+**Recommendation: in-IR minted typed assertions + a typed traversal API in the
+LRMoo plugin.** It is the truest form of C — ground truth stays assertions, the
+view is *derived assertions* plus a reading lens — and the existing diagnostic
+machinery carries over for free. **Decision: _open_.**
+
+---
+
+## B. Identity & minting
+
+### D4 — Minting semantics (the ADR 0011 amendment): what, and in which phases
+Lifting the ingest-only restriction precisely.
+
+- **Mint entities in `infer` only; `repair` may only *propose*.** Minted
+  assertions are `:inferred`, confidence < 1, provenance lists the source
+  records; fragment rules unchanged.
+  - *Pro:* tight blast radius; clear provenance; aligns with the status model
+    (ADR 0005).
+  - *Con:* a repair that needs a new entity must route through the proposal path
+    (which is what D7 wants anyway).
+- **Mint freely across normalize/infer/repair.**
+  - *Pro:* maximal flexibility.
+  - *Con:* entities can appear anywhere; larger idempotency surface; harder to
+    reason about.
+
+**Recommendation: mint entities in `infer` (machine truth); `repair` only
+proposes** (`:proposed`, per ADR 0005). Entity-minting is the new capability;
+fragment minting keeps today's rules. **Decision: _open_.**
+
+### D5 — Synthesized-entity identity scheme (the crux; ADR 0008/0012)
+A minted Work needs an id that is deterministic from content (idempotency) and
+equal across records describing the same Work (clustering).
+
+- **Deterministic work-key hash.** Canonicalise a key (normalised creator +
+  uniform/preferred title [+ original language]) → UUIDv5 over the canonical
+  string.
+  - *Pro:* deterministic, stateless, idempotent; clustering falls out (same key
+    → same id); extends ADR 0012 cleanly.
+  - *Con:* key choice is semantically fraught — too loose over-merges distinct
+    works, too tight splits one work; sensitive to normalisation quality.
+- **Match-or-mint against an external authority** (VIAF / ISNI / IdRef for
+  agents; existing work ids).
+  - *Pro:* higher-quality, interoperable identity; better clustering.
+  - *Con:* network dependency, coverage gaps, non-determinism without caching;
+    heavier; partly V2.
+- **Local blank-node identity, reconcile later.**
+  - *Pro:* simplest minting; no premature identity commitment.
+  - *Con:* no clustering → every record gets its own Work → defeats FRBRisation.
+
+**Recommendation: deterministic work-key hash for V1,** with the *key
+definition* treated as an explicit, tunable sub-decision, and authority
+reconciliation **designed-for but deferred to V2** (the key can later absorb an
+authority id). Over/under-merge then becomes a *measured* quality metric
+surfaced as loss/diagnostics, not a silent failure. **Decision: _open_
+(including: what exactly goes in the key?).**
+
+### D6 — Clustering scope: batch-local vs external authority vs persistent store
+Across what set do we cluster Works?
+
+- **Batch-local only** (within one run; no persistence).
+  - *Pro:* honours "Regesta is not a storage system"; deterministic per run.
+  - *Con:* can't cluster against unloaded records; cross-run consistency relies
+    entirely on key stability (D5).
+- **External authority lookup** (online reconciliation, no local store).
+  - *Pro:* better cross-institution identity.
+  - *Con:* network / coverage / non-determinism; V2-ish.
+- **Persistent identity store** maintained by Regesta.
+  - *Pro:* true incremental cross-run clustering.
+  - *Con:* violates the no-storage principle; large architectural addition.
+
+**Recommendation: batch-local clustering, made cross-run-stable purely by the
+deterministic key (D5).** Two runs that see the same Work mint the *same id*
+because the id is a function of content, not of a shared store — so we keep the
+no-storage principle and still get cross-run consistency. Persistent store is
+out of V1; authority lookup is V2. State the limit honestly: clustering quality
+is bounded by what's in a batch + key stability. **Decision: _open_.**
+
+> D5 and D6 are linked: the deterministic key (D5) is exactly what makes
+> batch-local clustering (D6) sufficient without storage.
+
+---
+
+## C. FRBRisation control
+
+### D7 — Automatic vs human-in-the-loop FRBRisation
+When Regesta synthesizes WEMI, is it machine truth, or proposals a cataloguer
+accepts/rejects (ADR 0005)?
+
+- **Automatic in `infer`** (minted = `:inferred`, exported directly).
+  - *Pro:* scales to millions; fits batch conversion; confidence + loss convey
+    uncertainty.
+  - *Con:* wrong FRBRisation ships unattended; institutions may distrust it.
+- **Human-in-the-loop** (FRBRisation emits `:proposed` repairs; `apply-repairs`
+  surfaces them).
+  - *Pro:* control, auditability; matches cataloguer trust.
+  - *Con:* doesn't scale to millions; turns conversion into a review project.
+- **Confidence-gated hybrid** (high-confidence auto in `infer`; low-confidence /
+  ambiguous as `:proposed`).
+  - *Pro:* scales where safe, asks humans only on hard cases.
+  - *Con:* needs a threshold policy + tuning; two paths.
+
+**Recommendation: confidence-gated hybrid.** It is the only option that both
+scales *and* earns institutional trust; it reuses the existing repair workflow
+for the low-confidence tail. The threshold is a documented, tunable policy.
+**Decision: _open_.**
+
+### D8 — Fixpoint vs bounded passes for `infer` (ADR 0004)
+WEMI inference can cascade (mint a Work, then link sibling Expressions).
+
+- **Keep fixed/bounded passes,** designing FRBRisation to converge in a small
+  declared number (e.g. synthesize, then link).
+  - *Pro:* preserves ADR 0004 + "explicit over implicit"; predictable cost; no
+    termination risk.
+  - *Con:* constrains rule authors to converge in budget.
+- **Scoped fixpoint for `infer`,** with a hard iteration cap + non-convergence
+  diagnostic.
+  - *Pro:* expressive; natural for graph inference.
+  - *Con:* reopens ADR 0004; less predictable; oscillation risk (capped).
+
+**Recommendation: keep bounded fixed passes; design FRBRisation to converge in a
+small declared number,** and escalate to scoped-fixpoint-with-cap *only if the
+WP-0 spike proves fixed passes can't express WEMI linking.* Decide empirically
+from the spike, not a priori. **Decision: _open_ (pending spike).**
+
+---
+
+## D. Loss & institutional scope
+
+### D9 — Loss model: unit, edges, metric
+"Loss-aware" needs a precise definition.
+
+- **Unit of loss** — *source-native field* vs *pivot assertion*.
+  *Recommendation: source-native field* — the institution reasons in its own
+  format's terms ("which of my subfields survived?"). Fragments/provenance
+  already let us map loss back to source fields.
+- **Edges measured** — import (source→pivot), export (pivot→target), or both.
+  *Recommendation: both, plus a round-trip report for a format pair.*
+- **Categories** — dropped · coerced (lossy transform) · under-specified (target
+  coarser) · ambiguity-collapsed (chose 1 of N).
+- **Metric** — single coverage % vs per-category breakdown.
+  *Recommendation: per-category breakdown, not one number* — a single % hides
+  which losses matter.
+
+**Recommendation (summary): unit = source-native field; measure both edges +
+round-trip; categorise; report a breakdown.** Built on diagnostics +
+`:canon/loss-marker`. **Decision: _open_.**
+
+### D10 — MARC dialect for V1 (MARC21 vs UNIMARC vs INTERMARC)
+A catch worth surfacing: "MARC21 réel" was the phrase, but **BnF does not
+primarily use MARC21** — historically UNIMARC, internally INTERMARC. If BnF is a
+flagship target, MARC21-only may miss the actual data. Coupled to the data-
+partner decision (roadmap § 7).
+
+- **MARC21 first** (LoC / anglo-american).
+  - *Pro:* best-documented, most tooling, broadest applicability.
+  - *Con:* not BnF's native dialect.
+- **UNIMARC first** (IFLA; closer to BnF's public data).
+  - *Pro:* aligns with the French ecosystem; FRBR-friendly heritage.
+  - *Con:* less anglophone tooling.
+- **INTERMARC** (BnF internal).
+  - *Pro:* exactly BnF's data.
+  - *Con:* niche, limited public spec.
+
+**Recommendation: build the MARC importer dialect-parametrised** — a shared MARC
+core (record/field/subfield model) + pluggable dialect *profiles* as data
+(MARC21 / UNIMARC / INTERMARC mappings). Ship **MARC21 + UNIMARC** in V1 if BnF
+is the target; add INTERMARC as a profile when specs are available. This bets
+the spoke on no single dialect and matches plugins-as-data (a dialect is mapping
+data). **Decision: _open_ — settle jointly with the data partner.**
+
+---
+
+## Can be deferred (consciously — not blocking the start)
+
+- **RDF / JSON-LD serialization library** (hand-rolled vs Jena interop vs a
+  Clojure RDF lib) — decide at WP-4; watch the ADR 0006 sandbox constraint.
+- **External agent/authority reconciliation** (VIAF / ISNI / IdRef) — V2;
+  designed-for in D5.
+- **Museum / IIIF import direction** — export-only is acceptable for V1; decide
+  per spoke at WP-4 (open question already in the roadmap).
+- **Plugin sandboxing** (ADR 0010 trust-on-require) — V2 unless institutional IT
+  mandates it sooner.
+- **Persistent identity store** — V2; D6 keeps V1 storage-free.
