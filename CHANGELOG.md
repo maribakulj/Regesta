@@ -11,11 +11,25 @@ release is cut, that section is renamed to the version and date and a fresh
 
 ## [Unreleased]
 
-The pre-1.0 development line. Sprints 0 through 5 are landed; Sprint 6
-(canonical vocabulary plugin) is the next milestone.
+The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
+(Dublin Core plugin) is the next milestone.
 
 ### Added
 
+- Sprint 6: canonical vocabulary plugin (`regesta.plugins.canonical`).
+  Ships the eight `:canon/*` documentary predicates from ADR 0003
+  §Decision as data, with a `documentary?` membership predicate, plus
+  the first validation rule over the canonical layer — `title-required`,
+  a `:validate`-phase rule that emits a `:missing-title` warning when a
+  record carries no `:canon/title`. `:canon/lang` stays a fragment-borne
+  qualifier coord (ADR 0011), not a ninth documentary predicate; no ADR
+  amendment.
+- End-to-end canonical integration test in
+  `test/integration/regesta/canonical_integration_test.clj`: a
+  registry-driven ingest → normalize → validate → diagnostics-report
+  pipeline over a titled and an untitled record, exercising
+  `regesta.diagnostics/format-report` and the `should-fail?`
+  failure-policy surface.
 - Sprint 5: plugin protocol (`regesta.plugins`) with closed schema,
   registry with `:requires` topological resolution and `:input-format`
   dispatch, transform stdlib (`regesta.plugins.transforms`), mapping
