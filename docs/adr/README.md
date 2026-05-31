@@ -18,9 +18,10 @@ ADR; supersessions are explicit, not silent edits.
 | [0008](./0008-idempotency-at-merge.md) | Idempotency at merge: productions deduplicate by structural identity | Accepted |
 | [0009](./0009-mapping-schema.md) | Mapping schema: data-shaped sugar over rules | Accepted (partially superseded by 0011) |
 | [0010](./0010-stdlib-extensibility.md) | Stdlib extensibility: predicates and transforms via plugins | Accepted |
-| [0011](./0011-fragments-for-qualified-values.md) | Fragments as the canonical home for qualified values | Accepted |
+| [0011](./0011-fragments-for-qualified-values.md) | Fragments as the canonical home for qualified values | Accepted (entity-minting added by 0014) |
 | [0012](./0012-fragment-identity-scheme.md) | Fragment identity scheme | Accepted |
 | [0013](./0013-lrmoo-rich-pivot.md) | LRMoo as the rich pivot vocabulary, via a derived typed view | Accepted |
+| [0014](./0014-runtime-entity-minting.md) | Runtime entity minting (amends 0011) | Accepted |
 
 ## Template
 
