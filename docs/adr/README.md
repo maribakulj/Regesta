@@ -19,9 +19,11 @@ ADR; supersessions are explicit, not silent edits.
 | [0009](./0009-mapping-schema.md) | Mapping schema: data-shaped sugar over rules | Accepted (partially superseded by 0011) |
 | [0010](./0010-stdlib-extensibility.md) | Stdlib extensibility: predicates and transforms via plugins | Accepted |
 | [0011](./0011-fragments-for-qualified-values.md) | Fragments as the canonical home for qualified values | Accepted (entity-minting added by 0014) |
-| [0012](./0012-fragment-identity-scheme.md) | Fragment identity scheme | Accepted |
+| [0012](./0012-fragment-identity-scheme.md) | Fragment identity scheme | Accepted (extended by 0016) |
 | [0013](./0013-lrmoo-rich-pivot.md) | LRMoo as the rich pivot vocabulary, via a derived typed view | Accepted |
 | [0014](./0014-runtime-entity-minting.md) | Runtime entity minting (amends 0011) | Accepted |
+| [0015](./0015-loss-model.md) | Loss model: unit, edges, categories, metric | Accepted |
+| [0016](./0016-frbrisation.md) | FRBRisation: synthesizing WEMI, identity, and reconciliation | Accepted |
 
 ## Template
 
