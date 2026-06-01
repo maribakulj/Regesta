@@ -387,6 +387,10 @@
    [:code :keyword]
    [:subject Id]
    [:message {:optional true} :string]
+   ;; Generic structured payload for diagnostics that need more than a
+   ;; message — e.g. loss diagnostics carry their edge and source field here
+   ;; (ADR 0015). Opaque to the core; keys are namespaced by the producer.
+   [:detail {:optional true} [:map-of :keyword :any]]
    [:repairs {:optional true} [:vector Repair]]
    [:provenance {:optional true} Provenance]])
 
@@ -496,10 +500,12 @@
     (some? safe?)       (assoc :safe? safe?)))
 
 (defn diagnostic
-  "Construct a Diagnostic. Required: :severity, :code, :subject."
-  [{:keys [severity code subject message repairs provenance]}]
+  "Construct a Diagnostic. Required: :severity, :code, :subject.
+   :message, :detail, :repairs and :provenance are optional."
+  [{:keys [severity code subject message detail repairs provenance]}]
   (cond-> {:severity severity :code code :subject subject}
     message    (assoc :message message)
+    detail     (assoc :detail detail)
     repairs    (assoc :repairs (vec repairs))
     provenance (assoc :provenance provenance)))
 
