@@ -105,10 +105,42 @@ Implications:
 - **ISNI (`$1`) ≈ 97%** → interoperable `sameAs` IRIs in the RDF / Linked Art
   output essentially for free (D5).
 
+## Fallback-bridging iteration (2026-06-01)
+
+Third spike (`dev/spike/bridge_fallback.py`) on the same *Madame Bovary* set:
+rebuild the Work from the 28 linked records, then bridge the 2 unlinked records.
+
+- **Conservative bridge (exact normalized author + title):** bridges the
+  publisher-feed **ebook** into Work `11938746` (correct) and **keeps the study
+  guide** "Le Réalisme. Madame Bovary…" separate (correct). **0 false merges.**
+- **Greedy bridge (title substring):** also merges the ebook, but
+  **false-merges the study guide** — its title *contains* "Madame Bovary".
+  **1 false merge.**
+
+D11 made concrete: the conservative commit is right on both; the greedy net
+fabricates a false identity. Design rule confirmed:
+
+- **auto-commit only on exact / high-confidence** match;
+- route **near-misses** (high but inexact similarity — e.g. subtitle variants
+  the exact rule would *miss*) to **proposals** (D7), never to a greedy
+  auto-merge. A miss is recoverable; a false merge is not.
+
+**WP-1 requirement surfaced.** Bridging is *match-or-mint*: the `infer` phase
+must maintain and expose a **batch-level index of Works seen/minted so far**
+(keyed by work-id *and* by normalized author+title) so the resolver can match
+against it. Minting is therefore not purely per-record — the runtime must
+accumulate and expose batch Work-state during `infer`. Captured now so the WP-1
+identity seam is built for it, not retrofitted.
+
+Caveat: only 2 unlinked records — this demonstrates the *mechanism and the
+precision principle*, not a fidelity statistic.
+
 ## Net
 
 The architecture holds. The spike **sharpens D5 decisively** (embedded `$3` is
 the reconciliation key — reconciliation is a lookup, not ML), **confirms D11**
 precision-first on real over-merge, **surfaces multiscript** as a first-class
 work-key concern, and **resolves D8** (WEMI linking is a lookup → bounded passes
-suffice; no fixpoint). What remains is implementation, not decision.
+suffice; no fixpoint), and the bridging iteration shows the **conservative match
+is precise** (0 false merges vs the greedy net's 1). What remains is
+implementation, not decision.

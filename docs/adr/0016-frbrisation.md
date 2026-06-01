@@ -91,7 +91,10 @@ The same machinery reconciles named entities during conversion. Two dials:
   broadly, but only *assert* a merge when confident; route the uncertain tail to
   proposals. A false merge costs far more than a miss (it fabricates a false
   identity), so the asserted graph is precision-first; recall survives as
-  proposals.
+  proposals. **Spike (2026-06-01):** bridging the unlinked *Madame Bovary*
+  records, an exact author+title match scored **0 false merges** (ebook merged,
+  study guide kept apart) while a greedy substring match produced **1 false
+  merge** — so auto-commit on exact only; near-misses go to proposals.
 
 ### 6. Convergence: bounded passes, fixpoint only if forced (D8; notes ADR 0004)
 FRBRisation cascades (mint a Work, then link its Expressions). V1 keeps
