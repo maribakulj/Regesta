@@ -57,6 +57,15 @@ Behind the seam, V1 ships:
 Live online lookup is deferred (additive behind the same seam). The run records
 *which snapshot* it used (reproducibility).
 
+**Spike outcome (2026-06-01, [`../wp0-spike-findings.md`](../wp0-spike-findings.md)).**
+On real BnF INTERMARC, every access point carries an embedded authority id
+(`$3`) — **100% coverage** (346/346 fields) — while fuzzy name matching scored
+**4%**. The resolver order is therefore refined to: (1) **embedded authority id**
+(`$3` / `$0` / `$1`) → authority IRI [primary, deterministic]; (2) the work-key
+hash [fallback when no embedded id]; (3) fuzzy name matching [last resort]. The
+work-key must also canonicalise **multiscript** parallel fields, and
+Manifestation identity is read from `001` / `003` (ARK), not synthesized.
+
 ### 3. Clustering is batch-local, stabilised by deterministic identity (D6)
 Works / agents are clustered **within a run**; Regesta keeps no persistent
 store. Cross-run and cross-institution consistency comes *for free* from the
