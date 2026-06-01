@@ -201,25 +201,24 @@ The core never knows any external schema.
 
 ## Current status
 
-Sprints 0 through 5 are landed:
+Sprints 0 through 6 are landed — the **substrate**: assertion IR
+(`regesta.model`), rule DSL (`regesta.rules`), runtime (`regesta.runtime`),
+diagnostics (`regesta.diagnostics`), the plugin layer + mapping schema + shape
+adapter (`regesta.plugins.*`), fragments for qualified values (ADR 0011,
+ADR 0012), and the canonical vocabulary plugin (`regesta.plugins.canonical`).
 
-- **Sprint 0** — scaffolding, tooling, six foundational ADRs.
-- **Sprint 1** — canonical model with Malli schemas and EDN round-trip
-  (`regesta.model`).
-- **Sprint 2** — rule DSL with compiler, pattern matcher and predicate stdlib
-  (`regesta.rules`).
-- **Sprint 3** — execution engine, phase pipeline and trace queries
-  (`regesta.runtime`).
-- **Sprint 4** — diagnostics API: filters, aggregations, plain-text reporting
-  and a failure policy for CI/CLI integration (`regesta.diagnostics`).
-- **Sprint 5** — plugin protocol (`regesta.plugins`), transform stdlib
-  (`regesta.plugins.transforms`), mapping schema + compiler
-  (`regesta.plugins.mapping`), and the generic JSON/XML shape adapter
-  (`regesta.plugins.shape`). Fragments for qualified values (ADR 0011,
-  ADR 0012) are first-class.
+**V1 has since been redefined** (2026) around a rich, **loss-aware** pivot
+grounded in **LRMoo** (the object-oriented IFLA LRM, a CIDOC-CRM extension), for
+production use across the full IIIF ↔ MARC family ↔ museum range. The Sprint 0–6
+substrate is preserved; the redefinition reopens what comes next — see the
+Roadmap below and [`docs/roadmap-v1.md`](./docs/roadmap-v1.md).
 
-The next sprint (Sprint 6) introduces the canonical vocabulary plugin
-on top of these mechanisms.
+**WP-0 (design lock) is complete:** the load-bearing decisions are settled
+([`docs/wp0-decisions.md`](./docs/wp0-decisions.md)), four foundational ADRs are
+written ([0013](./docs/adr/0013-lrmoo-rich-pivot.md)–[0016](./docs/adr/0016-frbrisation.md)),
+and throwaway spikes on **real BnF INTERMARC** data validated the hardest piece,
+FRBRisation, end to end
+([`docs/wp0-spike-findings.md`](./docs/wp0-spike-findings.md)).
 
 ---
 
@@ -343,11 +342,36 @@ Force pushes and branch deletion on `main` should be disabled.
 
 ## Roadmap
 
-The V1 is planned across twelve two-week sprints.
+**V1 was redefined in 2026** around a rich, **loss-aware** pivot grounded in
+**LRMoo** (the object-oriented IFLA LRM, a CIDOC-CRM extension), for production
+use at flagship institutions. The detailed plan lives in
+[`docs/roadmap-v1.md`](./docs/roadmap-v1.md): dependency-ordered work packages
+(WP-0…WP-9) over an honest ~18–24-month horizon. The decisions behind it are in
+[`docs/wp0-decisions.md`](./docs/wp0-decisions.md); the architecture is fixed by
+ADRs [0013](./docs/adr/0013-lrmoo-rich-pivot.md)–[0016](./docs/adr/0016-frbrisation.md).
+
+The hub-and-spoke shape: spoke importers / exporters (MARC21 · UNIMARC ·
+INTERMARC · Dublin Core · IIIF · CIDOC-CRM / Linked Art) ↔ the **assertion IR
+(ground truth)** ↔ a **derived, typed LRMoo view** (a plugin, never the core).
+Every conversion emits a measurable loss report.
+
+**Scope reversal.** The original plan (below) deliberately deferred IIIF,
+CIDOC CRM, Linked Art, and **deduplication**. The redefinition pulls them in:
+cross-record Work clustering (FRBRisation) is core to the rich pivot, and the
+museum / presentation formats are first-class spokes. The forward compatibility
+the original IR reserved — the qualified-value design,
+[ADR 0011](./docs/adr/0011-fragments-for-qualified-values.md) — is what makes
+this an **extension, not a rewrite**: the Sprint 0–6 substrate stands.
+
+Still out of V1 scope: LLM integration, a web UI, persistent storage, and a live
+query engine.
+
+<details>
+<summary>Superseded original twelve-sprint plan</summary>
 
 | # | Theme |
 |---|---|
-| 0 | Foundations (this commit) |
+| 0 | Foundations |
 | 1 | Canonical model (Malli schemas, EDN round-trip) |
 | 2 | Rule DSL (schema, compiler, pattern matcher) |
 | 3 | Runtime (rule execution, provenance merging) |
@@ -361,18 +385,9 @@ The V1 is planned across twelve two-week sprints.
 | 11 | Hardening and performance baseline |
 | 12 | Documentation and v1.0.0 release |
 
-**Out of scope for V1**, by deliberate choice: LLM integration, web UI,
-persistent storage, cross-record queries, deduplication, IIIF, CIDOC CRM,
-Linked Art, TEI, and EAD plugins. Each of those becomes meaningful once the
-V1 core is stable; not before.
-
-**Architectural compatibility constraint, even so.** Although CIDOC CRM,
-Linked Art, and IIIF do not ship as V1 plugins, the V1 IR, vocabulary
-layering, and mapping schema are required to accommodate event-centric
-and nested-resource models without rework once those plugins start. That
-constraint is what shapes the qualified-value design in
-[ADR 0011](./docs/adr/0011-fragments-for-qualified-values.md); it is a
-design boundary on V1, not a deliverable.
+Sprints 0–6 landed and form the substrate; 7–12 are superseded by the
+work-package plan above.
+</details>
 
 ---
 
