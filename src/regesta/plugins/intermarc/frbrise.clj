@@ -19,7 +19,8 @@
 
    A `compiled-rule` (not a data rule): it computes content-derived ids, which
    the data DSL deliberately cannot express (the mapping compiler does the same)."
-  (:require [regesta.model :as model]
+  (:require [regesta.diagnostics :as dx]
+            [regesta.model :as model]
             [regesta.rules :as rules]
             [regesta.runtime :as runtime]))
 
@@ -28,8 +29,8 @@
   [record pred]
   (->> (:assertions record) (filter #(= pred (:predicate %))) first :value))
 
-(defn runner
-  "FRBRisation productions for one INTERMARC record (see namespace doc)."
+(defn- wemi-productions
+  "WEMI entity and link productions for one INTERMARC record (see ns doc)."
   [record]
   (let [rid   (:id record)
         prov  (model/provenance {:pass :infer :derivation [rid]})
@@ -54,6 +55,45 @@
                                                     :predicate :lrmoo/R33_has_string
                                                     :value ttl :status :proposed
                                                     :provenance prov})})))))))
+
+(def mapped-source-fields
+  "INTERMARC fields the current LRMoo projection represents. Every other
+   `:intermarc/*` field a record carries is reported as loss (ADR 0015); as
+   FRBRisation grows (Work level, agents, …) this set grows and loss shrinks."
+  #{:intermarc/f145_3 :intermarc/f145_a})
+
+(defn- source-fields [record]
+  (->> (:assertions record)
+       (map :predicate)
+       (filter #(= "intermarc" (namespace %)))
+       distinct))
+
+(defn- loss-productions
+  "A loss diagnostic (ADR 0015) for each source field the projection drops."
+  [record]
+  (for [p (source-fields record)
+        :when (not (contains? mapped-source-fields p))]
+    {:kind  :diagnostic
+     :value (dx/loss {:category     :dropped
+                      :subject      (:id record)
+                      :edge         :import
+                      :source-field p
+                      :message      (str (name p) " not represented in the LRMoo view")})}))
+
+(defn coverage
+  "How much of a record's INTERMARC fields the LRMoo projection represents:
+   `{:mapped M :total T :pct P}`."
+  [record]
+  (let [fs (source-fields record)
+        m  (count (filter mapped-source-fields fs))
+        t  (count fs)]
+    {:mapped m :total t :pct (if (pos? t) (quot (* 100 m) t) 0)}))
+
+(defn runner
+  "FRBRisation productions for one record: the WEMI projection plus a loss
+   diagnostic per dropped source field (ADR 0015 / 0016)."
+  [record]
+  (into (wemi-productions record) (loss-productions record)))
 
 (def rule
   "Compiled `:infer` FRBRisation rule (ADR 0016)."

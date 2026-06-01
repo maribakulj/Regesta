@@ -3,6 +3,7 @@
    → typed view → RDF export, plus lookup-based clustering and idempotency."
   (:require [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
+            [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.plugins.intermarc :as intermarc]
             [regesta.plugins.intermarc.frbrise :as frbrise]
@@ -49,7 +50,8 @@
     (let [r1 (frbrise/frbrise (by-id records :bnf/cb304403926))
           r2 (frbrise/frbrise r1)]
       (is (= (:entities r1) (:entities r2)))
-      (is (= (:assertions r1) (:assertions r2))))))
+      (is (= (:assertions r1) (:assertions r2)))
+      (is (= (:diagnostics r1) (:diagnostics r2))))))
 
 (deftest exports-to-rdf
   (testing "the FRBRised manifestation exports as N-Triples (F3 type, F2 type, R4 link)"
@@ -57,3 +59,28 @@
       (is (str/includes? nt "lrmoo/F3_Manifestation"))
       (is (str/includes? nt "lrmoo/F2_Expression"))
       (is (str/includes? nt "lrmoo/R4_embodies")))))
+
+(deftest frbrisation-reports-loss
+  (let [r  (frbrise/frbrise (by-id records :bnf/cb304403926))
+        ls (dx/losses (:diagnostics r))]
+    (is (seq ls))
+    (is (every? #(= :loss/dropped (:code %)) ls))
+    (is (every? #(= :import (get-in % [:detail :loss/edge])) ls))
+    (testing "mapped fields are NOT reported as loss, dropped ones are"
+      (let [fields (set (map #(get-in % [:detail :loss/source-field]) ls))]
+        (is (not (contains? fields :intermarc/f145_3)))   ; projected -> Expression id
+        (is (not (contains? fields :intermarc/f145_a)))   ; projected -> R33 title
+        (is (contains? fields :intermarc/f100_a))))       ; author name -> dropped (for now)
+    (testing "loss-summary is a per-category / per-edge breakdown"
+      (let [s (dx/loss-summary (:diagnostics r))]
+        (is (pos? (:total s)))
+        (is (= (:total s) (get-in s [:by-category :dropped])))
+        (is (pos? (get-in s [:by-edge :import])))))
+    (testing "loss diagnostics keep the record consistent (subject = record id)"
+      (is (model/record-consistent? r)))))
+
+(deftest coverage-is-honest-about-the-partial-projection
+  (let [c (frbrise/coverage (by-id records :bnf/cb304403926))]
+    (is (= 2 (:mapped c)))     ; f145_3 + f145_a
+    (is (> (:total c) 10))     ; many INTERMARC fields are present
+    (is (< (:pct c) 50))))     ; the projection is deliberately partial (for now)
