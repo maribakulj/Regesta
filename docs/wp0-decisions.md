@@ -111,10 +111,11 @@ machinery carries over for free. **Decision: accepted — in-IR minted typed ass
 ### D4 — Minting semantics (the ADR 0011 amendment): what, and in which phases
 Lifting the ingest-only restriction precisely.
 
-- **Mint entities in `infer` only; `repair` may only *propose*.** Minted
-  assertions are `:asserted` (machine truth) with `:pass :infer` provenance,
-  confidence < 1, derivation lists the source records; fragment rules unchanged.
-  (No `:inferred` status — ADR 0005.)
+- **Mint entities in `infer` only; `repair` may only *propose*.** Minted claims
+  carry `:pass :infer` provenance + confidence; status defaults to `:proposed`
+  (engine phase policy — precision-first), with D7 high-confidence promotion to
+  `:asserted` as a future gating step; fragment rules unchanged. (No `:inferred`
+  status — ADR 0005.)
   - *Pro:* tight blast radius; clear provenance; aligns with the status model
     (ADR 0005).
   - *Con:* a repair that needs a new entity must route through the proposal path

@@ -20,8 +20,9 @@
    - Guards are pure predicates drawn from a curated stdlib. Rules cannot
      call arbitrary Clojure functions.
 
-   Production actions: `:assert`, `:diagnostic`, `:repair`. `:retract`
-   and `:project-intent` are planned future additions."
+   Production actions: `:assert`, `:diagnostic`, `:repair`, `:entity` (mint a
+   synthesized subject — ADR 0014/0017). `:retract` and `:project-intent` are
+   planned future additions."
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [clojure.walk :as walk]
@@ -320,10 +321,23 @@
   {:kind :repair
    :value (model/repair (substitute bindings template))})
 
+(defn- run-entity
+  "Synthesize an entity (ADR 0014/0017). The entity *declaration* is
+   structural — it carries engine provenance (:rule, :pass) but no status
+   (entities are subjects, not claims). Claims about the entity are separate
+   `:assert` productions and follow the phase status policy."
+  [template bindings rule-id phase]
+  (let [base (substitute bindings template)]
+    {:kind :entity
+     :value (model/entity
+             (assoc base :provenance (merge-provenance (:provenance base)
+                                                       rule-id phase)))}))
+
 (def ^:private action-runners
   {:assert     run-assert
    :diagnostic run-diagnostic
-   :repair     run-repair})
+   :repair     run-repair
+   :entity     run-entity})
 
 (defn supported-actions [] (set (keys action-runners)))
 
@@ -360,7 +374,7 @@
 
 (def Produce
   [:map-of
-   [:enum :assert :diagnostic :repair]
+   [:enum :assert :diagnostic :repair :entity]
    :map])
 
 (def Rule

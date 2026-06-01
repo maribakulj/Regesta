@@ -33,14 +33,18 @@ Three constraints bound the decision:
    mint entities (new subjects with their own assertions). `normalize` does not
    mint; `repair` may only **propose** minting (§3).
 
-2. **Minted entities are machine truth, distinguished by provenance.** Their
-   assertions are `:status :asserted` with `:provenance` carrying `:pass :infer`
-   and a `:derivation` of the source records, plus a `:confidence` set by the
-   minting rule (`< 1.0`) — so a Work points back to the manifestations that
-   implied it. There is **no** `:inferred` status: ADR 0005 keeps "inferred vs
-   ingested" in *provenance*, not *status*, which also preserves dedup
-   (assertion identity excludes provenance — ADR 0008). The uncertain tail is
-   `:proposed` (§3, D7).
+2. **Minted assertions are machine-produced; status follows the engine's phase
+   policy.** A minting rule's claims carry `:provenance {:pass :infer …}` (the
+   inferred-vs-ingested distinction lives in *provenance*, not status — ADR 0005;
+   this also preserves dedup, since assertion identity excludes provenance,
+   ADR 0008) plus a `:confidence`. By the engine default
+   (`regesta.rules/default-status-for-phase`), `:infer` / `:repair` productions
+   are **`:proposed`** — proposals until confirmed (the conservative,
+   precision-first default). The D7 hybrid's *high-confidence auto-commit*
+   (promotion to `:asserted` machine truth) is a confidence-gating refinement,
+   **not yet implemented** (WP-3); a rule may already set `:status` explicitly to
+   opt in. There is **no** `:inferred` status (ADR 0005). The entity
+   *declaration* itself is structural — it goes into `:entities`, statusless.
 
 3. **`repair` proposes, never commits, entities.** Per the dual status model and
    the confidence-gated FRBRisation decision (D7), entity creation in `repair`
