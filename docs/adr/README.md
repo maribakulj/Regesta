@@ -24,6 +24,7 @@ ADR; supersessions are explicit, not silent edits.
 | [0014](./0014-runtime-entity-minting.md) | Runtime entity minting (amends 0011) | Accepted |
 | [0015](./0015-loss-model.md) | Loss model: unit, edges, categories, metric | Accepted |
 | [0016](./0016-frbrisation.md) | FRBRisation: synthesizing WEMI, identity, and reconciliation | Accepted |
+| [0017](./0017-entity-representation.md) | Synthesized entity representation (entities on records) | Accepted |
 
 ## Template
 

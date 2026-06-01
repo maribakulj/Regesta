@@ -101,6 +101,24 @@
    [:raw {:optional true} :string]])
 
 ;; ---------------------------------------------------------------------------
+;; Entity (synthesized subject — ADR 0014 / 0016 / 0017)
+;;
+;; A minted entity is a subject the pipeline *synthesizes* (a Work, an
+;; Expression…) that exists in no single source — unlike a Fragment, which
+;; points into raw source. Entities are first-class subjects (see
+;; `known-subjects`); their identity is content-based (`mint-entity-id`), so the
+;; same entity minted independently from two records collapses by id at merge
+;; (ADR 0008). The `:kind` is an opaque keyword supplied by a plugin (e.g.
+;; `:lrmoo/work`); the core never interprets it.
+;; ---------------------------------------------------------------------------
+
+(def Entity
+  [:map
+   [:id Id]
+   [:kind :keyword]
+   [:provenance {:optional true} Provenance]])
+
+;; ---------------------------------------------------------------------------
 ;; Fragment identity (ADR 0012)
 ;;
 ;; Fragments minted by importers need stable, distinct, reproducible ids.
@@ -232,6 +250,35 @@
         {:record-id (keyword record-ns record-name)
          :locator   locator}))))
 
+(defn mint-entity-id
+  "Construct a content-based identifier for a synthesized entity. Returns a
+   keyword in the `:ent` namespace whose name is the entity `kind` followed by a
+   stable 64-bit hash of the canonical key — see ADR 0016 / 0017.
+
+   Unlike `mint-fragment-id` (which encodes a source locator), an entity id is a
+   pure function of *content*: `kind` plus an opaque, plugin-supplied canonical
+   `key` string. Two records that imply the same entity therefore mint the same
+   id independently — no shared state — and collapse by id at merge (ADR 0008).
+   The core does not interpret `kind` or `key`; it only hashes them.
+
+   Example:
+
+     (mint-entity-id :lrmoo/work \"flaubert|madame bovary\")
+     ;; => :ent/work.<16 hex chars>
+
+   `kind` must be a keyword; `key` must be a non-empty string."
+  [kind key]
+  (when-not (keyword? kind)
+    (throw (ex-info "mint-entity-id requires a keyword kind" {:kind kind})))
+  (when-not (and (string? key) (seq key))
+    (throw (ex-info "mint-entity-id requires a non-empty string key" {:key key})))
+  (let [canonical (pr-str [kind key])
+        digest    (.digest (java.security.MessageDigest/getInstance "SHA-256")
+                           (.getBytes canonical "UTF-8"))
+        hex       (apply str (map #(format "%02x" (bit-and (int %) 0xff))
+                                  (take 8 digest)))]
+    (keyword "ent" (str (name kind) "." hex))))
+
 ;; ---------------------------------------------------------------------------
 ;; Value
 ;;
@@ -353,6 +400,7 @@
    [:kind :keyword]
    [:source {:optional true} :any]
    [:fragments {:optional true} [:vector Fragment]]
+   [:entities {:optional true} [:vector Entity]]
    [:assertions {:optional true} [:vector Assertion]]
    [:diagnostics {:optional true} [:vector Diagnostic]]
    [:provenance {:optional true} Provenance]])
@@ -367,6 +415,7 @@
 (defn valid-value?      [x] (m/validate Value x))
 (defn valid-repair?     [x] (m/validate Repair x))
 (defn valid-fragment?   [x] (m/validate Fragment x))
+(defn valid-entity?     [x] (m/validate Entity x))
 (defn valid-provenance? [x] (m/validate Provenance x))
 
 (defn explain-record     [x] (m/explain Record x))
@@ -418,6 +467,14 @@
     locator (assoc :locator locator)
     raw     (assoc :raw raw)))
 
+(defn entity
+  "Construct a synthesized Entity. Required: :id, :kind. :provenance optional.
+   `id` is normally produced by `mint-entity-id`; `:kind` is a plugin keyword
+   (e.g. :lrmoo/work). See ADR 0017."
+  [{:keys [id kind provenance]}]
+  (cond-> {:id id :kind kind}
+    provenance (assoc :provenance provenance)))
+
 (defn assertion
   "Construct an Assertion. Required: :subject, :predicate, :value.
    Defaults: :confidence 1.0, :status :asserted. :provenance is optional."
@@ -448,10 +505,11 @@
 
 (defn record
   "Construct a Record. Required: :id, :kind. Collections default to empty."
-  [{:keys [id kind source fragments assertions diagnostics provenance]}]
+  [{:keys [id kind source fragments entities assertions diagnostics provenance]}]
   (cond-> {:id id :kind kind}
     (some? source) (assoc :source source)
     fragments      (assoc :fragments (vec fragments))
+    entities       (assoc :entities (vec entities))
     assertions     (assoc :assertions (vec assertions))
     diagnostics    (assoc :diagnostics (vec diagnostics))
     provenance     (assoc :provenance provenance)))
@@ -510,9 +568,12 @@
 
 (defn known-subjects
   "Set of identifiers a record's assertions may legitimately address: the
-   record itself plus every fragment id it carries."
+   record itself, every fragment id, and every synthesized entity id it carries
+   (ADR 0017)."
   [record]
-  (into #{(:id record)} (map :id (:fragments record))))
+  (into #{(:id record)}
+        (concat (map :id (:fragments record))
+                (map :id (:entities record)))))
 
 (defn record-consistent?
   "True if every assertion's `:subject` is either the record's `:id` or

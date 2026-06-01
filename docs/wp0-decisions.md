@@ -112,8 +112,9 @@ machinery carries over for free. **Decision: accepted — in-IR minted typed ass
 Lifting the ingest-only restriction precisely.
 
 - **Mint entities in `infer` only; `repair` may only *propose*.** Minted
-  assertions are `:inferred`, confidence < 1, provenance lists the source
-  records; fragment rules unchanged.
+  assertions are `:asserted` (machine truth) with `:pass :infer` provenance,
+  confidence < 1, derivation lists the source records; fragment rules unchanged.
+  (No `:inferred` status — ADR 0005.)
   - *Pro:* tight blast radius; clear provenance; aligns with the status model
     (ADR 0005).
   - *Con:* a repair that needs a new entity must route through the proposal path
@@ -231,7 +232,8 @@ differ wildly in tractability.
 When Regesta synthesizes WEMI, is it machine truth, or proposals a cataloguer
 accepts/rejects (ADR 0005)?
 
-- **Automatic in `infer`** (minted = `:inferred`, exported directly).
+- **Automatic in `infer`** (minted = `:asserted` machine truth, `:pass :infer`
+  provenance, exported directly).
   - *Pro:* scales to millions; fits batch conversion; confidence + loss convey
     uncertainty.
   - *Con:* wrong FRBRisation ships unattended; institutions may distrust it.

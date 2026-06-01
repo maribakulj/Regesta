@@ -33,10 +33,14 @@ Three constraints bound the decision:
    mint entities (new subjects with their own assertions). `normalize` does not
    mint; `repair` may only **propose** minting (§3).
 
-2. **Minted entities are inferred, not asserted.** Their assertions carry
-   `:status :inferred`, a `:confidence` set by the minting rule (`< 1.0`), and
-   `:provenance` listing the source records they were synthesized from — so a
-   Work points back to the manifestations that implied it (ADR 0005).
+2. **Minted entities are machine truth, distinguished by provenance.** Their
+   assertions are `:status :asserted` with `:provenance` carrying `:pass :infer`
+   and a `:derivation` of the source records, plus a `:confidence` set by the
+   minting rule (`< 1.0`) — so a Work points back to the manifestations that
+   implied it. There is **no** `:inferred` status: ADR 0005 keeps "inferred vs
+   ingested" in *provenance*, not *status*, which also preserves dedup
+   (assertion identity excludes provenance — ADR 0008). The uncertain tail is
+   `:proposed` (§3, D7).
 
 3. **`repair` proposes, never commits, entities.** Per the dual status model and
    the confidence-gated FRBRisation decision (D7), entity creation in `repair`
