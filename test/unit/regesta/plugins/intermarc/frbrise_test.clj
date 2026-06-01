@@ -30,14 +30,22 @@
         (is (= [m] (view/manifestations-of r e)))))))
 
 (deftest clustering-by-the-embedded-expression-id
-  (testing "manifestations sharing f145_3 mint the SAME Expression id (no batch state)"
-    (let [with-145 (filter has-145? records)
-          exprs    (->> with-145
-                        (map frbrise/frbrise)
-                        (map #(:id (first (view/expressions %))))
-                        distinct)]
-      (is (<= 20 (count with-145)))   ; most of the 30 carry the embedded link
-      (is (= 1 (count exprs))))))      ; ...and all collapse to one Expression
+  (testing "manifestations sharing f145_3 collapse to ONE Expression and Work (no batch state)"
+    (let [frbrised (map frbrise/frbrise (filter has-145? records))
+          exprs    (->> frbrised (map #(:id (first (view/expressions %)))) distinct)
+          works    (->> frbrised (keep #(:id (first (view/works %)))) distinct)]
+      (is (<= 20 (count (filter has-145? records))))  ; most of the 30 carry the link
+      (is (= 1 (count exprs)))                          ; ...one Expression (by f145_3)
+      (is (= 1 (count works))))))                       ; ...one Work (by author + title)
+
+(deftest work-minted-and-realised-in-expression
+  (let [r (frbrise/frbrise (by-id records :bnf/cb304403926))]
+    (is (= 1 (count (view/works r))))
+    (testing "the Work is realised in the Expression (R3), both directions"
+      (let [w (:id (first (view/works r)))
+            e (:id (first (view/expressions r)))]
+        (is (= [e] (view/expressions-of r w)))
+        (is (= [w] (view/work-of r e)))))))
 
 (deftest fallback-record-gets-manifestation-only
   (testing "a record without f145 yields a Manifestation but no Expression (bridging is future)"
@@ -79,8 +87,8 @@
     (testing "loss diagnostics keep the record consistent (subject = record id)"
       (is (model/record-consistent? r)))))
 
-(deftest coverage-is-honest-about-the-partial-projection
+(deftest coverage-grows-with-the-projection
   (let [c (frbrise/coverage (by-id records :bnf/cb304403926))]
-    (is (= 2 (:mapped c)))     ; f145_3 + f145_a
+    (is (= 4 (:mapped c)))     ; f145_3, f145_a, f100_3, f245_a (was 2 last slice)
     (is (> (:total c) 10))     ; many INTERMARC fields are present
-    (is (< (:pct c) 50))))     ; the projection is deliberately partial (for now)
+    (is (< (:pct c) 50))))     ; still partial — the loss report tracks the gap

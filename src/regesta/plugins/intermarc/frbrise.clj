@@ -19,7 +19,8 @@
 
    A `compiled-rule` (not a data rule): it computes content-derived ids, which
    the data DSL deliberately cannot express (the mapping compiler does the same)."
-  (:require [regesta.diagnostics :as dx]
+  (:require [clojure.string :as str]
+            [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.rules :as rules]
             [regesta.runtime :as runtime]))
@@ -29,38 +30,57 @@
   [record pred]
   (->> (:assertions record) (filter #(= pred (:predicate %))) first :value))
 
+(defn- norm
+  "Diacritic- and case-insensitive normalisation for the Work key."
+  [s]
+  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
+      (str/replace #"\p{M}+" "")
+      str/lower-case
+      str/trim
+      (str/replace #"\s+" " ")))
+
+(defn- entity-prod [id kind prov]
+  {:kind :entity :value (model/entity {:id id :kind kind :provenance prov})})
+
+(defn- assert-prod [subject predicate value prov]
+  {:kind  :assertion
+   :value (model/assertion {:subject subject :predicate predicate :value value
+                            :status :proposed :provenance prov})})
+
 (defn- wemi-productions
-  "WEMI entity and link productions for one INTERMARC record (see ns doc)."
+  "WEMI entity and link productions for one INTERMARC record (see ns doc).
+   Manifestation always; Expression + Work when the embedded link is present."
   [record]
   (let [rid   (:id record)
         prov  (model/provenance {:pass :infer :derivation [rid]})
         manif (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
-        x3    (field record :intermarc/f145_3)]
-    (cond-> [{:kind  :entity
-              :value (model/entity {:id manif :kind :lrmoo/F3_Manifestation
-                                    :provenance prov})}]
-      x3
-      (into (let [expr (model/mint-entity-id :lrmoo/F2_Expression x3)
-                  ttl  (field record :intermarc/f145_a)]
-              (cond-> [{:kind  :entity
-                        :value (model/entity {:id expr :kind :lrmoo/F2_Expression
-                                              :provenance prov})}
-                       {:kind  :assertion
-                        :value (model/assertion {:subject manif
-                                                 :predicate :lrmoo/R4_embodies
-                                                 :value (model/reference expr)
-                                                 :status :proposed :provenance prov})}]
-                ttl (conj {:kind  :assertion
-                           :value (model/assertion {:subject expr
-                                                    :predicate :lrmoo/R33_has_string
-                                                    :value ttl :status :proposed
-                                                    :provenance prov})})))))))
+        x3    (field record :intermarc/f145_3)
+        m245  (field record :intermarc/f245_a)]
+    (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
+      m245 (conj (assert-prod manif :lrmoo/R33_has_string m245 prov))
+      x3   (into (let [expr (model/mint-entity-id :lrmoo/F2_Expression x3)
+                       ttl  (field record :intermarc/f145_a)
+                       auth (or (field record :intermarc/f100_3)
+                                (field record :intermarc/f100_a))
+                       work (when (and auth ttl)
+                              (model/mint-entity-id :lrmoo/F1_Work
+                                                    (str auth "|" (norm ttl))))]
+                   (cond-> [(entity-prod expr :lrmoo/F2_Expression prov)
+                            (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov)]
+                     ttl  (conj (assert-prod expr :lrmoo/R33_has_string ttl prov))
+                     work (into [(entity-prod work :lrmoo/F1_Work prov)
+                                 (assert-prod work :lrmoo/R3_is_realised_in (model/reference expr) prov)
+                                 (assert-prod work :lrmoo/R33_has_string ttl prov)])))))))
 
 (def mapped-source-fields
   "INTERMARC fields the current LRMoo projection represents. Every other
    `:intermarc/*` field a record carries is reported as loss (ADR 0015); as
-   FRBRisation grows (Work level, agents, …) this set grows and loss shrinks."
-  #{:intermarc/f145_3 :intermarc/f145_a})
+   FRBRisation grows (agents, more attributes, …) this set grows and loss
+   shrinks — the loss report tracks the improvement."
+  #{:intermarc/f145_3   ; -> F2_Expression id
+    :intermarc/f145_a   ; -> Expression / Work title
+    :intermarc/f100_3   ; -> F1_Work key (author authority)
+    :intermarc/f245_a}) ; -> Manifestation title
 
 (defn- source-fields [record]
   (->> (:assertions record)
