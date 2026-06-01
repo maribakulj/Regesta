@@ -265,7 +265,7 @@ WEMI inference can cascade (mint a Work, then link sibling Expressions).
 **Recommendation: keep bounded fixed passes; design FRBRisation to converge in a
 small declared number,** and escalate to scoped-fixpoint-with-cap *only if the
 WP-0 spike proves fixed passes can't express WEMI linking.* Decide empirically
-from the spike, not a priori. **Decision: accepted — bounded fixed passes (by recommendation, 2026-05-31); escalate to scoped-fixpoint-with-cap only if proven necessary. Spike (2026-06-01) — corrected: explicit `145 $3` Work links cover only ~7% of fixtures (93% Madame Bovary, 0% elsewhere); the inference path was not exercised, so bounded passes remain the default but D8 is *unconfirmed* pending a Work-synthesis spike.**
+from the spike, not a priori. **Decision: accepted — bounded fixed passes (by recommendation, 2026-05-31); escalate to scoped-fixpoint-with-cap only if proven necessary. Spike (2026-06-01) — corrected: explicit `145 $3` Work links are sparse in bibliographic records (essentially only the Madame Bovary showcase; the first 7% figure wrongly mixed in authority records — withdrawn); the inference path was not exercised, so bounded passes remain the default but D8 is *unconfirmed* pending a Work-synthesis spike.**
 
 ---
 

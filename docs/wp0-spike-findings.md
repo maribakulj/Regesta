@@ -149,6 +149,21 @@ WEMI / D8 claim was an artefact of a showcase example.**
   FRBR-ised example; for the **bulk of the catalogue, Works are not linked → they
   must be inferred, not looked up.**
 
+**Caveat on this figure (verified 2026-06-01) — it is contaminated; the number
+is withdrawn.** The "~7%" ran a *bibliographic* parser over the whole SRU set,
+which includes **121 `type="Authority"` records** (persons, corporate, subjects,
+and *musical works*) that structurally have no `245`/`145` — counting their "0%"
+is a category error. Among *bibliographic* records only it is ≈12%, still
+essentially just the *Madame Bovary* showcase; and even that under-counts,
+because work-link fields are **material-type-specific** (monographs `145`; music
+links to Work authorities via `7XX`/`730`). The *direction* (explicit Work links
+are sparse in bib records outside FRBR pilots) likely holds; the *rate* needs
+record-type- and material-type-aware parsing. Note too: **Works do exist as
+authorities** — `aut-oeuvres-musicales` are F1 Works (`144` heading + `100`
+composer + ISNI) — so "Works aren't catalogued" is too strong for domains like
+music. **And all of this is INTERMARC-only:** the MARC21, MODS, Dublin Core,
+IIIF, EAD, EAC-CPF, MADS and METS fixtures are not yet parsed at all.
+
 What stands, what is retracted:
 
 - ✅ **Agent reconciliation is a lookup, robustly** — `100 $3` (and `6XX`/`7XX`

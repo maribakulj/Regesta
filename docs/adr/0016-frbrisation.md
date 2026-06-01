@@ -66,8 +66,8 @@ hash [fallback when no embedded id]; (3) fuzzy name matching [last resort]. The
 work-key must also canonicalise **multiscript** parallel fields, and
 Manifestation identity is read from `001` / `003` (ARK), not synthesized. (This
 holds for **agents**; a broadened evaluation found explicit **Work** links
-`145 $3` cover only ~7% of the fixtures, so Work identity is mostly
-**inference**, not lookup — see `../wp0-spike-findings.md`.)
+`145 $3` are sparse in bibliographic records (outside FRBR pilots), so Work
+identity is mostly **inference**, not lookup — see `../wp0-spike-findings.md`.)
 
 ### 3. Clustering is batch-local, stabilised by deterministic identity (D6)
 Works / agents are clustered **within a run**; Regesta keeps no persistent
@@ -108,9 +108,10 @@ small declared number (e.g. synthesize, then link). Escalate to a **scoped
 fixpoint for `infer` with a hard iteration cap** *only if* the WP-0 spike proves
 fixed passes cannot express WEMI linking. Decided empirically, not a priori.
 **Spike (2026-06-01) — corrected:** a broadened evaluation shows explicit Work
-links (`145 $3`) cover only ~7% of the bib fixtures (93% on the *Madame Bovary*
-showcase, 0% elsewhere), so WEMI linking is a **lookup for a minority and
-inference for the bulk**. The spikes exercised the lookup path, **not** the
+links (`145 $3`) are **sparse** in bibliographic records — essentially just the
+*Madame Bovary* FRBR showcase (the first "~7%" figure mixed in authority records
+and material types and is withdrawn; see findings) — so WEMI linking is a
+**lookup for a minority and inference for the bulk**. The spikes exercised the lookup path, **not** the
 inference cascade — so bounded passes **stand as the default but are not yet
 confirmed**; they must be re-tested on Work-synthesis. See
 `../wp0-spike-findings.md`.
