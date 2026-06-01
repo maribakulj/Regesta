@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?><srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/" xmlns="http://catalogue.bnf.fr/namespaces/InterXMarc" xmlns:ixm="http://catalogue.bnf.fr/namespaces/InterXMarc" xmlns:mn="http://catalogue.bnf.fr/namespaces/motsnotices" xmlns:sd="http://www.loc.gov/zing/srw/diagnostic/">
+<srw:version>1.2</srw:version>
+<srw:echoedSearchRetrieveRequest>
+<srw:version>1.2</srw:version>
+<srw:query>(aut.type any "pep") and (aut.anywhere all "hugo")</srw:query>
+</srw:echoedSearchRetrieveRequest>
+<srw:numberOfRecords>4351</srw:numberOfRecords>
+<srw:records>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb17108070d" type="Authority">   <mxc:leader>00511n1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF171080708</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb17108070d</mxc:controlfield>   <mxc:controlfield tag="008">170215      frfref          19..                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000459969553</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20170224</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Hugo</mxc:subfield>      <mxc:subfield code="m">Laura</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Fille de : Hugo, Marie (19..-....)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Hauteville House [Texte imprimé] : Victor Hugo décorateur / peintures, Marie Hugo ; photographies, Jean Baptiste Hugo ; choix des textes, Laura Hugo. - Paris ; Guernesey : Maisons de Victor Hugo ; Paris : Paris musées, DL 2016.</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb17108070d</srw:recordIdentifier>
+<srw:recordPosition>1</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20170215</ixm:attr>
+<ixm:attr name="LastModificationDate">20170224</ixm:attr>
+<mn:score>5.898298</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb11179945j" type="Authority">   <mxc:leader>01254c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF111799453</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb11179945j</mxc:controlfield>   <mxc:controlfield tag="008">970701061213oolatm          1285    ? 1360    ?            a 010 </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000079748943</mxc:subfield>      <mxc:subfield code="2">VIAF</mxc:subfield>      <mxc:subfield code="d">20130724</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="040" ind1=" " ind2=" ">      <mxc:subfield code="b">xdhh</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Spechtshart</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1285?-1360?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Hugo von Reutlingen</mxc:subfield>      <mxc:subfield code="d">1285?-1360?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Reutlingen</mxc:subfield>      <mxc:subfield code="m">Hugo von</mxc:subfield>      <mxc:subfield code="d">1285?-1360?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Spechtshart von Reutlingen</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1285?-1360?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b lat </mxc:subfield>      <mxc:subfield code="a">Hugo Reutlingensis</mxc:subfield>      <mxc:subfield code="d">1285?-1360?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b fre </mxc:subfield>      <mxc:subfield code="a">Hugo de Reutlingen</mxc:subfield>      <mxc:subfield code="d">1285?-1360?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b eng </mxc:subfield>      <mxc:subfield code="a">Hugo of Reutlingen</mxc:subfield>      <mxc:subfield code="d">1285?-1360?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Prêtre</mxc:subfield>      <mxc:subfield code="a">Théoricien du chant grégorien</mxc:subfield>      <mxc:subfield code="a">Mort entre mai 1359 et avril 1360</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Flores musicae / Spechtshart, 2005 [fac-sim.]</mxc:subfield>      <mxc:subfield code="a">Flores musice omnis cantus Gregoriani / von Hugo von Reutligen, 1868</mxc:subfield>      <mxc:subfield code="a">Flores musicae, 1332-42 / Hugo Spechtshart von Reutlingen, 1958</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Normdaten (CD), 2005-01</mxc:subfield>      <mxc:subfield code="a">Potthast 2 : Hugo Spechtshart von Reutlingen</mxc:subfield>      <mxc:subfield code="a">PMA</mxc:subfield>      <mxc:subfield code="a">Grove music online : Spechtshart, Hugo [Hugo of Reutlingen]</mxc:subfield>      <mxc:subfield code="u">http://www.grovemusic.com</mxc:subfield>      <mxc:subfield code="d">2006-04-04</mxc:subfield>      <mxc:subfield code="a">Buchwald : Spechtshart (Hugo S. de Reutligen)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">BN Cat. gén. : Spechtshart (Hugo), dit Hugo von Reutlingen</mxc:subfield>      <mxc:subfield code="a">BN Cat. gén. suppl. : Hugo von Reutlingen</mxc:subfield>      <mxc:subfield code="a">Écorcheville : Reutligen (Hugo von)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">10720993</mxc:subfield>      <mxc:subfield code="d">20061213</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">13368999</mxc:subfield>      <mxc:subfield code="d">20061213</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb11179945j</srw:recordIdentifier>
+<srw:recordPosition>2</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19970701</ixm:attr>
+<ixm:attr name="LastModificationDate">20191213</ixm:attr>
+<mn:score>5.8638344</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb171080576" type="Authority">   <mxc:leader>00499n1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF171080576</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb171080576</mxc:controlfield>   <mxc:controlfield tag="008">170215      frfrem          19..                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000459969502</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20170224</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Hugo</mxc:subfield>      <mxc:subfield code="m">Jean Baptiste</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Photographe</mxc:subfield>      <mxc:subfield code="a">Fils du peintre : Hugo, Jean (1894-1984)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Hauteville House [Texte imprimé] : Victor Hugo décorateur / peintures, Marie Hugo ; photographies, Jean Baptiste Hugo ; choix des textes, Laura Hugo. - Paris ; Guernesey : Maisons de Victor Hugo ; Paris : Paris musées, DL 2016.</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb171080576</srw:recordIdentifier>
+<srw:recordPosition>3</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20170215</ixm:attr>
+<ixm:attr name="LastModificationDate">20170224</ixm:attr>
+<mn:score>5.8526053</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13757502k" type="Authority">   <mxc:leader>01220c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF137575028</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13757502k</mxc:controlfield>   <mxc:controlfield tag="008">011220240223atmulm          18750308  19400503             a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000079877702</mxc:subfield>      <mxc:subfield code="2">VIAF</mxc:subfield>      <mxc:subfield code="d">20130731</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="041" ind1=" " ind2=" ">      <mxc:subfield code="a">ita</mxc:subfield>      <mxc:subfield code="a">ger</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">De Rossi</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1875-1940</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Rossi</mxc:subfield>      <mxc:subfield code="m">Hugo De</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">De Rossi Di Santa Giuliana</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Di Santa Giuliana</mxc:subfield>      <mxc:subfield code="m">Hugo De Rossi</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Rossi</mxc:subfield>      <mxc:subfield code="m">Hugo von</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Von Rossi</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Rossi de Santa Juliana</mxc:subfield>      <mxc:subfield code="m">Hugo von</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Santa Juliana</mxc:subfield>      <mxc:subfield code="m">Hugo von Rossi de</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Rossi Santa Juliana</mxc:subfield>      <mxc:subfield code="m">Hugo von</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Santa Juliana</mxc:subfield>      <mxc:subfield code="m">Hugo von Rossi</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Von Rossi de Santa Juliana</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Von Rossi Santa Juliana</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Officier</mxc:subfield>      <mxc:subfield code="a">Linguiste, spécialiste du dialecte ladin</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="603" ind1=" " ind2=" ">      <mxc:subfield code="a">Pozza di Fassa (Italie)</mxc:subfield>      <mxc:subfield code="b">Innsbruck (Autriche)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Vocabolario ladino (brach) - tedesco, con trad. italiana  / Hugo von Rossi ; a cura di Ulrike Kindl e Fabio Chiocchetti = Ladinisches Wörterbuch, 1999</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Bibliothèque nationale, autorités, Allemagne</mxc:subfield>      <mxc:subfield code="u"> https://d-nb.info/gnd/122390547</mxc:subfield>      <mxc:subfield code="d">2024-02-23</mxc:subfield>      <mxc:subfield code="a">Istituto centrale per il catalogo unico</mxc:subfield>      <mxc:subfield code="u">http://opac.sbn.it</mxc:subfield>      <mxc:subfield code="d">2024-02-23</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">009794035</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">015843049</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13757502k</srw:recordIdentifier>
+<srw:recordPosition>4</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20011220</ixm:attr>
+<ixm:attr name="LastModificationDate">20240223</ixm:attr>
+<mn:score>5.609277</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb12248286n" type="Authority">   <mxc:leader>00886c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF122482867</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb12248286n</mxc:controlfield>   <mxc:controlfield tag="008">920515190517xxlatm          12..      12..                 a 010 </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000374442410</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20160215</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Hugo Matisconensis</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="202" ind1=" " ind2=" ">      <mxc:subfield code="a">Ne pas confondre avec Hugo Matisconensis Pontiniacensis (Hugo de Mâcon, abbé de Pontigny, évêque d'Auxerre ; 1082?-1151)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo de Mâcon</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo de Matiscone</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo Matisconus</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo von Mâcon</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Poète</mxc:subfield>      <mxc:subfield code="a">A porté le titre de "Magister"</mxc:subfield>      <mxc:subfield code="a">D'origine anglaise?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Die "Gesta militum" des Hugo von Mâcon / hrsg. von Ewald Könsgen, 1990</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Lexikon des Mittelalters, 1991 : Hugo von Mâcon</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="612" ind1=" " ind2=" ">      <mxc:subfield code="a">BN Cat. gén. ; BN Cat. gén. 1960-1969</mxc:subfield>      <mxc:subfield code="a">GLE ; Stammler, 1977 ; Clavis scriptorum graecorum et latinorum</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">00390802X</mxc:subfield>      <mxc:subfield code="b">AMA</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">003519598</mxc:subfield>      <mxc:subfield code="b">APP</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">008467529</mxc:subfield>      <mxc:subfield code="b">AMA</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">008160786</mxc:subfield>      <mxc:subfield code="b">APP</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb12248286n</srw:recordIdentifier>
+<srw:recordPosition>5</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19920515</ixm:attr>
+<ixm:attr name="LastModificationDate">20190517</ixm:attr>
+<mn:score>5.6011705</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb15875477k" type="Authority">   <mxc:leader>00312n1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF158754778</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb15875477k</mxc:controlfield>   <mxc:controlfield tag="008">081211      xxengm          19..                           a 1   </mxc:controlfield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Zsolt de Sousa</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">De Sousa</mxc:subfield>      <mxc:subfield code="m">Hugo Zsolt</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Sousa</mxc:subfield>      <mxc:subfield code="m">Hugo Zsolt de</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">The ECB and monetary policy / Hugo Zsolt de Sousa, cop. 2003</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb15875477k</srw:recordIdentifier>
+<srw:recordPosition>6</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20081211</ixm:attr>
+<ixm:attr name="LastModificationDate">20081211</ixm:attr>
+<mn:score>5.568497</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb12446219c" type="Authority">   <mxc:leader>01542c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF124462190</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb12446219c</mxc:controlfield>   <mxc:controlfield tag="008">950209131204xxlatm          1200    ? 1268                 a 010 </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000061756304</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20161108</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="z">0000000116552764</mxc:subfield>      <mxc:subfield code="2">VIAF</mxc:subfield>      <mxc:subfield code="d">20130726</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Hugo Ripelinus Argentoratensis</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Hughes de Strasbourg</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.lat.</mxc:subfield>      <mxc:subfield code="a">Hugo Argentinensis</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.lat.</mxc:subfield>      <mxc:subfield code="a">Hugo de Argentina</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Hugo Ripelin</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Hugo Ripelin von Strassburg</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Hugo von Strassburg</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Hugues de Strasbourg</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Ripelin</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Ripelin von Strassburg</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Ripelins von Strassburg</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1200?-1268</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Dominicain</mxc:subfield>      <mxc:subfield code="a">Théologien</mxc:subfield>      <mxc:subfield code="a">Pas de forme française  attesté̲e, 1995-02-09</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Le somme abregiet de theologie : kritische Edition der französischen Übersetzung von Hugo Ripelins von Strassburg "Compendium theologicae vertitatis" [sic] / [bearb. von] Christa Michler, 1982</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Clavis SGL</mxc:subfield>      <mxc:subfield code="a">PMA : Hugo Argentinensis</mxc:subfield>      <mxc:subfield code="a">Stammler, 1978 : Hugo Ripelin von Strassburg</mxc:subfield>      <mxc:subfield code="a">Brockhaus, 17. Aufl. : Hugo von Strassburg</mxc:subfield>      <mxc:subfield code="a">Lit. Lex. / W. Killy : Ripelin von Strassburg, Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">BN Cat. gén. : Hugues de Strasbourg</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="612" ind1=" " ind2=" ">      <mxc:subfield code="a">BN Cat. gén. 1960-1969</mxc:subfield>      <mxc:subfield code="a">Larousse 19e s.</mxc:subfield>      <mxc:subfield code="a">GDEL</mxc:subfield>      <mxc:subfield code="a">Potthast</mxc:subfield>      <mxc:subfield code="a">Van Tieghem</mxc:subfield>      <mxc:subfield code="a">Laffont-Bompiani, Auteurs</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">000824915</mxc:subfield>      <mxc:subfield code="b">AMA</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">005887481</mxc:subfield>      <mxc:subfield code="b">APP</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">001841052</mxc:subfield>      <mxc:subfield code="b">AMA</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">010918697</mxc:subfield>      <mxc:subfield code="b">APP</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">10527220</mxc:subfield>      <mxc:subfield code="d">20131204</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb12446219c</srw:recordIdentifier>
+<srw:recordPosition>7</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19950209</ixm:attr>
+<ixm:attr name="LastModificationDate">20161108</ixm:attr>
+<mn:score>5.5191307</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb150391943" type="Authority">   <mxc:leader>00614c1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF150391944</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb150391943</mxc:controlfield>   <mxc:controlfield tag="008">060202071115xxspam          1948                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000053843205</mxc:subfield>      <mxc:subfield code="2">VIAF</mxc:subfield>      <mxc:subfield code="d">20130805</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Rosati Aguerre</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1948-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Aguerre</mxc:subfield>      <mxc:subfield code="m">Hugo Rosati</mxc:subfield>      <mxc:subfield code="d">1948-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Rosati</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1948-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Rosati A.</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1948-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Historien spécialiste de l'Amérique coloniale</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Guamán Poma : testigo del mundo andino / Carlos González, Hugo Rosati, Francisco Sánchez, cop. 2002</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Biblioteca nacional de Chile : Rosati A., Hugo, 1948-</mxc:subfield>      <mxc:subfield code="u">http://www.bncatalogo.cl</mxc:subfield>      <mxc:subfield code="d">2007-11-15</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb150391943</srw:recordIdentifier>
+<srw:recordPosition>8</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20060202</ixm:attr>
+<ixm:attr name="LastModificationDate">20130806</ixm:attr>
+<mn:score>5.4711266</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb17917490g" type="Authority">   <mxc:leader>00491c1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF179174903</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb17917490g</mxc:controlfield>   <mxc:controlfield tag="008">210107210113arspam          1925      2000                 a 1   </mxc:controlfield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Amable</mxc:subfield>      <mxc:subfield code="m">Hugo Wenceslao</mxc:subfield>      <mxc:subfield code="d">1925-2000</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Amable</mxc:subfield>      <mxc:subfield code="m">Hugo Wenceslao Roque</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Amable</mxc:subfield>      <mxc:subfield code="m">Hugo W.</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Amable</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Écrivain et journaliste</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Narraciones, poemas e historietas literarias / Hugo W. Amable, 2018</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Bibliothèque nationale, autorités, Argentine</mxc:subfield>      <mxc:subfield code="u">https://catalogo.bn.gov.ar/</mxc:subfield>      <mxc:subfield code="d">2021-01-13</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb17917490g</srw:recordIdentifier>
+<srw:recordPosition>9</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20210107</ixm:attr>
+<ixm:attr name="LastModificationDate">20210113</ixm:attr>
+<mn:score>5.4681983</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb171403181" type="Authority">   <mxc:leader>00558c1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF171403182</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb171403181</mxc:controlfield>   <mxc:controlfield tag="008">170718170729mxspam          1956                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000461000573</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20170802</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Vargas</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1956-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Vargas Comsille</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1956-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Comsille</mxc:subfield>      <mxc:subfield code="m">Hugo Vargas</mxc:subfield>      <mxc:subfield code="d">1956-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Éditeur et journaliste</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">La derecha mexicana : historia y desafíos / Hugo Vargas, 2015</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">VIAF : Bibliothèque du Congrès/NACO : Vargas, Hugo </mxc:subfield>      <mxc:subfield code="u">http://viaf.org/viaf/4222691</mxc:subfield>      <mxc:subfield code="d">2017-07-29</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb171403181</srw:recordIdentifier>
+<srw:recordPosition>10</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20170718</ixm:attr>
+<ixm:attr name="LastModificationDate">20170802</ixm:attr>
+<mn:score>5.4681983</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb17818526q" type="Authority">   <mxc:leader>00635c1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF17818526X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb17818526q</mxc:controlfield>   <mxc:controlfield tag="008">190613190711ptporm          1979                           a 1   </mxc:controlfield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Pereira</mxc:subfield>      <mxc:subfield code="m">Hugo Silveira</mxc:subfield>      <mxc:subfield code="d">1979-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Silveira Pereira</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Pereira</mxc:subfield>      <mxc:subfield code="m">Hugo José Silveira da Silva</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">A Linha do Tua : (1851-2008) / Hugo Silveira Pereira (coordenador de edição), 2017</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">VIAF : Bibliothèque nationale du Portugal : Pereira, Hugo Silveira, 1979-</mxc:subfield>      <mxc:subfield code="u">http://viaf.org/viaf/388148704179236931134</mxc:subfield>      <mxc:subfield code="d">2019-07-11</mxc:subfield>      <mxc:subfield code="a">VIAF : Bibliothèque nationale du Portugal : Pereira, Hugo José Silveira da Silva, 1979-</mxc:subfield>      <mxc:subfield code="u">http://viaf.org/viaf/120659748</mxc:subfield>      <mxc:subfield code="d">2019-07-11</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb17818526q</srw:recordIdentifier>
+<srw:recordPosition>11</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20190613</ixm:attr>
+<ixm:attr name="LastModificationDate">20190711</ixm:attr>
+<mn:score>5.4258213</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb15570663q" type="Authority">   <mxc:leader>00551c1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF155706632</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb15570663q</mxc:controlfield>   <mxc:controlfield tag="008">071009071108gbengm          19..                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000357343269</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20161108</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="z">0000000081092939</mxc:subfield>      <mxc:subfield code="2">VIAF</mxc:subfield>      <mxc:subfield code="d">20130806</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">McPherson</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Mac Pherson</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">MacPherson</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Mc Pherson</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">En poste, MEC International, Londres (en 2005)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Emerging threats to energy security and stability / ed. by Hugo McPherson, 2005</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">LC Authorities</mxc:subfield>      <mxc:subfield code="u">http://authorities.loc.gov</mxc:subfield>      <mxc:subfield code="d">2007-10-09</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb15570663q</srw:recordIdentifier>
+<srw:recordPosition>12</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20071009</ixm:attr>
+<ixm:attr name="LastModificationDate">20161108</ixm:attr>
+<mn:score>5.413992</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb10641762r" type="Authority">   <mxc:leader>00903c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF106417628</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb10641762r</mxc:controlfield>   <mxc:controlfield tag="008">970701250725itlatm          1262    ? 1322                 a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000120292221</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20161107</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 1  b fre </mxc:subfield>      <mxc:subfield code="a">Hugues de Prato</mxc:subfield>      <mxc:subfield code="d">1262?-1322</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.lat.</mxc:subfield>      <mxc:subfield code="a">Hugo de Prato</mxc:subfield>      <mxc:subfield code="d">1262?-1322</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo de Prato Florido</mxc:subfield>      <mxc:subfield code="d">1262?-1322</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo de Pratoflorido</mxc:subfield>      <mxc:subfield code="d">1262?-1322</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo de Vinacensibus</mxc:subfield>      <mxc:subfield code="d">1262?-1322</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo Pratensis</mxc:subfield>      <mxc:subfield code="d">1262?-1322</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Dominicain</mxc:subfield>      <mxc:subfield code="a">Théologien</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Sermones dominicales super Evangelia et Epistolas per totum annum, auctore Hugone de Prato Florido, ca 1472</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">CALMA ; Clavis SGL : Hugo de Prato</mxc:subfield>      <mxc:subfield code="a">Dict. spiritualité : Hugues de Prato, dominicain</mxc:subfield>      <mxc:subfield code="a">Scriptores ordinis praedicatorum medii aevi, 1970-1993 : Hugo de Prato (de Vinacensibus)</mxc:subfield>      <mxc:subfield code="a">BAMA</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">BN Cat. gén. : Hugo de Prato Florido (O. P.)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">CRI</mxc:subfield>      <mxc:subfield code="a">CG014204370201R</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">10044797</mxc:subfield>      <mxc:subfield code="d">20250725</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb10641762r</srw:recordIdentifier>
+<srw:recordPosition>13</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19970701</ixm:attr>
+<ixm:attr name="LastModificationDate">20250725</ixm:attr>
+<mn:score>5.407039</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb180110341" type="Authority">   <mxc:leader>00327n1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF180110342</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb180110341</mxc:controlfield>   <mxc:controlfield tag="008">220427      frfrem          19650617                       a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000506853407</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20220504</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Attali</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">American writers / Hugo Attali. - [Chatenay-Malabry] : Hugo Attali, 2021. - [Texte noté]</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb180110341</srw:recordIdentifier>
+<srw:recordPosition>14</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20220427</ixm:attr>
+<ixm:attr name="LastModificationDate">20220504</ixm:attr>
+<mn:score>5.3672276</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb179810148" type="Authority">   <mxc:leader>00285n1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF179810148</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb179810148</mxc:controlfield>   <mxc:controlfield tag="008">211118      frfrem          1958                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000504693067</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20211124</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Hart</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1958-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Froid de loup ! / Hugo Hart. - [Paris] : Hugo Hart, 2020. - [Texte noté]</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb179810148</srw:recordIdentifier>
+<srw:recordPosition>15</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20211118</ixm:attr>
+<ixm:attr name="LastModificationDate">20211124</ixm:attr>
+<mn:score>5.3672276</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb12343063d" type="Authority">   <mxc:leader>00453n1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF123430631</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb12343063d</mxc:controlfield>   <mxc:controlfield tag="008">931021      bospa           1933                           a 1   </mxc:controlfield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Viscarra Rodríguez</mxc:subfield>      <mxc:subfield code="m">Víctor Hugo</mxc:subfield>      <mxc:subfield code="d">1933-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">Rodríguez</mxc:subfield>      <mxc:subfield code="m">Víctor Hugo Viscarra</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">Viscarra R.</mxc:subfield>      <mxc:subfield code="m">Víctor Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Sociologue</mxc:subfield>      <mxc:subfield code="a">Essayiste</mxc:subfield>      <mxc:subfield code="a">Conteur</mxc:subfield>      <mxc:subfield code="a">Poète</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Coba : lenguaje secreto del hampa boliviana / Víctor Hugo Viscarra R., 1991</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">004679239</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">009359378</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb12343063d</srw:recordIdentifier>
+<srw:recordPosition>16</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19931021</ixm:attr>
+<ixm:attr name="LastModificationDate">19931021</ixm:attr>
+<mn:score>5.363293</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13533020d" type="Authority">   <mxc:leader>00427n1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF135330208</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13533020d</mxc:controlfield>   <mxc:controlfield tag="008">991105      xxspa                                          a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000006545280</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20161107</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Rojas Mendoza</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">Mendoza</mxc:subfield>      <mxc:subfield code="m">Hugo Rojas</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Dessinateur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">La légende de Naymlap ou Ñam La / scénario, Alfredo Narváez ; dessins, Hugo Rojas Monzón, Hugo Rojas Mendoza, 1999</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">008716838</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">014655311</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13533020d</srw:recordIdentifier>
+<srw:recordPosition>17</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19991105</ixm:attr>
+<ixm:attr name="LastModificationDate">20161107</ixm:attr>
+<mn:score>5.363293</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb16716486h" type="Authority">   <mxc:leader>00457n1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF167164869</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb16716486h</mxc:controlfield>   <mxc:controlfield tag="008">131014      esspam          19..                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000365884655</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20150313</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Martínez</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Martínez Rodríguez</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.... </mxc:subfield>      <mxc:subfield code="a">Rodríguez</mxc:subfield>      <mxc:subfield code="m">Hugo Martínez</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Éditeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Conversa ultramarina / Lois Pereiro ; edición de Hugo Martínez, 2010</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Bibliothèque nationale, Espagne</mxc:subfield>      <mxc:subfield code="u">http://catalogo.bne.es</mxc:subfield>      <mxc:subfield code="d">2013-10-14</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb16716486h</srw:recordIdentifier>
+<srw:recordPosition>18</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20131014</ixm:attr>
+<ixm:attr name="LastModificationDate">20150314</ixm:attr>
+<mn:score>5.363293</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb135330196" type="Authority">   <mxc:leader>00425n1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF135330197</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb135330196</mxc:controlfield>   <mxc:controlfield tag="008">991105      xxspa                                          a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000006545272</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20161107</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Rojas Monzón</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">Monzón</mxc:subfield>      <mxc:subfield code="m">Hugo Rojas</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Dessinateur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">La légende de Naymlap ou Ñam La / scénario, Alfredo Narváez ; dessins, Hugo Rojas Monzón, Hugo Rojas Mendoza, 1999</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">008716820</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">014655304</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb135330196</srw:recordIdentifier>
+<srw:recordPosition>19</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19991105</ixm:attr>
+<ixm:attr name="LastModificationDate">20161107</ixm:attr>
+<mn:score>5.363293</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb17047827w" type="Authority">   <mxc:leader>00397c1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF170478278</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb17047827w</mxc:controlfield>   <mxc:controlfield tag="008">160523160524frfrem          19980314                       a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000459620589</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20170201</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Moley-Cirot</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1998-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Cirot</mxc:subfield>      <mxc:subfield code="m">Hugo Moley-</mxc:subfield>      <mxc:subfield code="d">1998-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Je suis un paradoxe. [Texte imprimé] : décembre 2014 - septembre 2015 / Hugo Moley-Cirot. - [Niort] : Hugo Moley-Cirot, DL 2015.</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb17047827w</srw:recordIdentifier>
+<srw:recordPosition>20</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20160523</ixm:attr>
+<ixm:attr name="LastModificationDate">20170201</ixm:attr>
+<mn:score>5.363293</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb180938300" type="Authority">   <mxc:leader>00297n1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF180938305</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb180938300</mxc:controlfield>   <mxc:controlfield tag="008">230726      frfrem          19910305                       a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000512431825</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20230802</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Drelon</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1991-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Le continent-prison / Hugo Drelon. - [Paris] : Hugo Drelon, [2017]. - [Texte noté]</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb180938300</srw:recordIdentifier>
+<srw:recordPosition>21</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20230726</ixm:attr>
+<ixm:attr name="LastModificationDate">20230802</ixm:attr>
+<mn:score>5.345396</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb17872373g" type="Authority">   <mxc:leader>00291n1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF178723733</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb17872373g</mxc:controlfield>   <mxc:controlfield tag="008">200306      frfrem          19..                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000503858181</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20211013</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Viaules</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Pour sa survie / Hugo Viaules. - [S.l.] : Hugo Viaules, copyright 2019. - [Texte noté]</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb17872373g</srw:recordIdentifier>
+<srw:recordPosition>22</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20200306</ixm:attr>
+<ixm:attr name="LastModificationDate">20211013</ixm:attr>
+<mn:score>5.345396</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb16131425g" type="Authority">   <mxc:leader>00313n1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF161314251</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb16131425g</mxc:controlfield>   <mxc:controlfield tag="008">090908      xxeng           19..                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000071049726</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20161107</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Lamdin-Whymark</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Whymark</mxc:subfield>      <mxc:subfield code="m">Hugo Lamdin-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">The residue of ritualised action / Hugo Lamdin-Whymark, 2008</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb16131425g</srw:recordIdentifier>
+<srw:recordPosition>23</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20090908</ixm:attr>
+<ixm:attr name="LastModificationDate">20161108</ixm:attr>
+<mn:score>5.345396</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb123794538" type="Authority">   <mxc:leader>00830c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF123794535</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb123794538</mxc:controlfield>   <mxc:controlfield tag="008">940321961017esspa           1948                           a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">000000010906683X</mxc:subfield>      <mxc:subfield code="2">VIAF</mxc:subfield>      <mxc:subfield code="d">20130726</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">O'Donnell</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1948-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">O'Donnell y Duque de Estrada</mxc:subfield>      <mxc:subfield code="m">Hugo José</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">Duque de Estrada</mxc:subfield>      <mxc:subfield code="m">Hugo José O'Donnell y</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">Estrada</mxc:subfield>      <mxc:subfield code="m">Hugo José O'Donnell y Duque de</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Historien</mxc:subfield>      <mxc:subfield code="a">Avocat</mxc:subfield>      <mxc:subfield code="a">Capitaine d'infanterie de marine</mxc:subfield>      <mxc:subfield code="a">Comte de Lucena</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">España en el descubrimiento, conquista y defensa del mar del sur / Hugo O'Donnell, 1992</mxc:subfield>      <mxc:subfield code="a">El viaje a Chiloé de José de Moraleda (1787-1790) / Hugo O'Donnell y Duque de Estrada, 1990</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Bibliogr., Espagne (CD), 1996-09 : O'Donnell y Duque de Estrada, Hugo José</mxc:subfield>      <mxc:subfield code="a">LCNA 1987-1994 : O'Donnell y Duque de Estrada, Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">005101327</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">010042065</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb123794538</srw:recordIdentifier>
+<srw:recordPosition>24</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19940321</ixm:attr>
+<ixm:attr name="LastModificationDate">20130727</ixm:attr>
+<mn:score>5.3410754</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13197638n" type="Authority">   <mxc:leader>00989c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF131976384</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13197638n</mxc:controlfield>   <mxc:controlfield tag="008">960822231103degerm          18670809  19490219             a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000109363471</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20170818</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Lindemann</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1867-1949</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Lindemann</mxc:subfield>      <mxc:subfield code="m">Carl Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Lindemann</mxc:subfield>      <mxc:subfield code="m">Charles Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">...2b.....</mxc:subfield>      <mxc:subfield code="a">Hugo</mxc:subfield>      <mxc:subfield code="m">C.</mxc:subfield>      <mxc:subfield code="d">1867-1949</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">...2b.....</mxc:subfield>      <mxc:subfield code="a">C. Hugo</mxc:subfield>      <mxc:subfield code="d">1867-1949</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Docteur en philosophie, Kiel (1889)</mxc:subfield>      <mxc:subfield code="a">Théoricien des doctrines socialistes</mxc:subfield>      <mxc:subfield code="a">Homme politique</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="603" ind1=" " ind2=" ">      <mxc:subfield code="a">Jaguarão (Brésil)</mxc:subfield>      <mxc:subfield code="b">Bensheim (Allemagne)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Vorläufer des neueren Sozialismus. Tome 4 / Hugo Lindemann, Morris Hillquit, 1977</mxc:subfield>      <mxc:subfield code="a">Handbuch des Sozialismus / C. Stegmann et C. Hugo, 1995 [document électronique : reprod. de l'éd. de 1976]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Bibliothèque nationale, autorités, Allemagne</mxc:subfield>      <mxc:subfield code="u">https://d-nb.info/gnd/123303990</mxc:subfield>      <mxc:subfield code="d">2023-11-03</mxc:subfield>      <mxc:subfield code="a">Larousse 20e s. : Lindemann (Charles Hugo)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">BN Cat. gén.</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="612" ind1=" " ind2=" ">      <mxc:subfield code="a">Kürschners dtsch. Gel.-Kal., 1983</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">006840004</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">012755672</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">10631755</mxc:subfield>      <mxc:subfield code="d">20231103</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13197638n</srw:recordIdentifier>
+<srw:recordPosition>25</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19960917</ixm:attr>
+<ixm:attr name="LastModificationDate">20231103</ixm:attr>
+<mn:score>5.3410754</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb14037951d" type="Authority">   <mxc:leader>00473c1 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF14037951X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb14037951d</mxc:controlfield>   <mxc:controlfield tag="008">010213010213mx   m          19540406                       a 1  1</mxc:controlfield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Najera Oliver</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1954-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Oliver</mxc:subfield>      <mxc:subfield code="m">Hugo Najera</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">    b     </mxc:subfield>      <mxc:subfield code="a">Najera</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Vétérinaire spécialiste en génétique</mxc:subfield>      <mxc:subfield code="a">Auteur de logiciel</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Les petites histoires du serpent = Los cuentos de la serpiente / Hugo Najera Oliver, 1999</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">101836440</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb14037951d</srw:recordIdentifier>
+<srw:recordPosition>26</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20010213</ixm:attr>
+<ixm:attr name="LastModificationDate">20010213</ixm:attr>
+<mn:score>5.330669</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb18216205j" type="Authority">   <mxc:leader>00458c1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF18216205X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb18216205j</mxc:controlfield>   <mxc:controlfield tag="008">250520250520frfrem          12..      1320                 a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000527294456</mxc:subfield>      <mxc:subfield code="2">ISNI</mxc:subfield>      <mxc:subfield code="d">20250528</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Hugo de Besançon</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Hugo de Bisuncio</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Magister Hugo de Bisuncio</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Chantre de Notre-Dame de Paris</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Le manuscrits Latin 5185CC comporte un obit fondé pour Maître Hugo de Besançon</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb18216205j</srw:recordIdentifier>
+<srw:recordPosition>27</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20250520</ixm:attr>
+<ixm:attr name="LastModificationDate">20250528</ixm:attr>
+<mn:score>5.330669</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb124027983" type="Authority">   <mxc:leader>00427c0 ap22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF124027989</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb124027983</mxc:controlfield>   <mxc:controlfield tag="008">940615940701beeng                                          a 1   </mxc:controlfield>   <mxc:datafield tag="031" ind1=" " ind2=" ">      <mxc:subfield code="a">0000000031971185</mxc:subfield>      <mxc:subfield code="2">VIAF</mxc:subfield>      <mxc:subfield code="d">20130726</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">De Craen</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="400" ind1=" " ind2=" ">      <mxc:subfield code="w">. . b.....</mxc:subfield>      <mxc:subfield code="a">Craen</mxc:subfield>      <mxc:subfield code="m">Hugo De</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Musicologue</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Marion Brown discography / compiled by Eddy Janssens and Hugo de Craen, 1985</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">LCNA (CD OCLC), 1994-03 : Craen, Hugo de</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">005314072</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">010333747</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb124027983</srw:recordIdentifier>
+<srw:recordPosition>28</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19940629</ixm:attr>
+<ixm:attr name="LastModificationDate">20130727</ixm:attr>
+<mn:score>5.330669</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb18205126s" type="Authority">   <mxc:leader>00481n1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF182051266</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb18205126s</mxc:controlfield>   <mxc:controlfield tag="008">250317      frfrem          1991                           a 1   </mxc:controlfield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">a</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Bardin</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1991-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Auteur, comédien, réalisateur et dragqueen</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Paloma au pluriElles / Hugo Bardin, Hugo Michalet. - Rancon : Éditions Akata, DL 2024. - [Texte noté. Image fixe]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Cours Florent, page portraits</mxc:subfield>      <mxc:subfield code="u">https://www.coursflorent.fr/portraits/hugo-bardin</mxc:subfield>      <mxc:subfield code="d">2025-03-17</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb18205126s</srw:recordIdentifier>
+<srw:recordPosition>29</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20250317</ixm:attr>
+<ixm:attr name="LastModificationDate">20250317</ixm:attr>
+<mn:score>5.330669</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb169946450" type="Authority">   <mxc:leader>00578c1 ap2200027   45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF169946452</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb169946450</mxc:controlfield>   <mxc:controlfield tag="008">151001160115fr   m          19841025                       a 1   </mxc:controlfield>   <mxc:datafield tag="045" ind1=" " ind2=" ">      <mxc:subfield code="a">i</mxc:subfield>      <mxc:subfield code="d">g</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="w">.0.2b.....</mxc:subfield>      <mxc:subfield code="a">Kepler</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1984-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="301" ind1=" " ind2=" ">      <mxc:subfield code="3">14166909</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Coulais</mxc:subfield>      <mxc:subfield code="m">Hugo</mxc:subfield>      <mxc:subfield code="d">1984-....</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="511" ind1=" " ind2=" ">      <mxc:subfield code="3">16994646</mxc:subfield>      <mxc:subfield code="w">20..b.....</mxc:subfield>      <mxc:subfield code="a">A ghajatta</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Pseudonyme d'Hugo Coulais</mxc:subfield>      <mxc:subfield code="a">Auteur-compositeur-interprète</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="606" ind1=" " ind2=" ">      <mxc:subfield code="u">http://www.hugokepler.com/</mxc:subfield>      <mxc:subfield code="d">2015-10-01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Four friends [Enregistrement sonore] / Hugo Kepler, 2015</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">BFMTV</mxc:subfield>      <mxc:subfield code="u">dirigeants.bfmtv.com/Hugo-COULAIS-1161176/</mxc:subfield>      <mxc:subfield code="d">2015-10-02</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb169946450</srw:recordIdentifier>
+<srw:recordPosition>30</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20151001</ixm:attr>
+<ixm:attr name="LastModificationDate">20160115</ixm:attr>
+<mn:score>5.330669</mn:score>
+</srw:extraRecordData>
+</srw:record>
+</srw:records>
+<srw:nextRecordPosition>31</srw:nextRecordPosition>
+</srw:searchRetrieveResponse>

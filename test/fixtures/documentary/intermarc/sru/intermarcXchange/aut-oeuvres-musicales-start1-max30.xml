@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?><srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/" xmlns="http://catalogue.bnf.fr/namespaces/InterXMarc" xmlns:ixm="http://catalogue.bnf.fr/namespaces/InterXMarc" xmlns:mn="http://catalogue.bnf.fr/namespaces/motsnotices" xmlns:sd="http://www.loc.gov/zing/srw/diagnostic/">
+<srw:version>1.2</srw:version>
+<srw:echoedSearchRetrieveRequest>
+<srw:version>1.2</srw:version>
+<srw:query>aut.type any "tum"</srw:query>
+</srw:echoedSearchRetrieveRequest>
+<srw:numberOfRecords>192056</srw:numberOfRecords>
+<srw:records>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13558672x" type="Authority">   <mxc:leader>00414c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF135586727</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13558672x</mxc:controlfield>   <mxc:controlfield tag="008">000530040810yyita op        1764      1808                   210 </mxc:controlfield>   <mxc:datafield tag="043" ind1=" " ind2=" ">      <mxc:subfield code="g">2</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">12209564</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121186383</mxc:subfield>      <mxc:subfield code="w">.0 .b.....</mxc:subfield>      <mxc:subfield code="a">Paisiello</mxc:subfield>      <mxc:subfield code="m">Giovanni</mxc:subfield>      <mxc:subfield code="d">1740-1816</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Opéras</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Intégrale des opéras</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Convegno italo-tedesco Mozart, Paisiello, Rossini e l'opera buffa : Rom 1993, 1998</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove opera</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="624" ind1=" " ind2=" ">      <mxc:subfield code="a">780</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">009000304</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">014957434</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13558672x</srw:recordIdentifier>
+<srw:recordPosition>1</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20000530</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926543n" type="Authority">   <mxc:leader>00436c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139265430</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926543n</mxc:controlfield>   <mxc:controlfield tag="008">900521961202yyger li        1822      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>      <mxc:subfield code="a">ka01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13899553</mxc:subfield>      <mxc:subfield code="1">ISNI0000000120958492</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Schubert</mxc:subfield>      <mxc:subfield code="m">Franz</mxc:subfield>      <mxc:subfield code="d">1797-1828</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Herrn Josef von Spaun, Assessor in Linz</mxc:subfield>      <mxc:subfield code="k">D 749</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Und nimmer schreibst du ?</mxc:subfield>      <mxc:subfield code="k">D 749</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Texte de Matthäus von Collin</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 18220100</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Éd. : 1850</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Deutsch</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100569730</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926543n</srw:recordIdentifier>
+<srw:recordPosition>2</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900521</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb139266835" type="Authority">   <mxc:leader>01075c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139266831</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb139266835</mxc:controlfield>   <mxc:controlfield tag="008">900528131120yyfre opc       1828                             010 </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="b">va02</mxc:subfield>      <mxc:subfield code="b">vb02</mxc:subfield>      <mxc:subfield code="b">vd01</mxc:subfield>      <mxc:subfield code="b">ve01</mxc:subfield>      <mxc:subfield code="b">vf01</mxc:subfield>      <mxc:subfield code="a">cn01</mxc:subfield>      <mxc:subfield code="a">oa01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13899201</mxc:subfield>      <mxc:subfield code="1">ISNI000000012127560X</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Rossini</mxc:subfield>      <mxc:subfield code="m">Gioachino</mxc:subfield>      <mxc:subfield code="d">1792-1868</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Le comte Ory</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="301" ind1="6" ind2=" ">      <mxc:subfield code="3">17321096</mxc:subfield>      <mxc:subfield code="a">Rosellen</mxc:subfield>      <mxc:subfield code="m">Henri</mxc:subfield>      <mxc:subfield code="d">1811-1876</mxc:subfield>      <mxc:subfield code="t">[Souvenir du Comte Ory de G. Rossini : fantaisie brillante. Op. 78]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="301" ind1="2" ind2=" ">      <mxc:subfield code="3">17073864</mxc:subfield>      <mxc:subfield code="a">Lamotte</mxc:subfield>      <mxc:subfield code="m">Antony</mxc:subfield>      <mxc:subfield code="d">1819-1912</mxc:subfield>      <mxc:subfield code="t">[Quadrilles. Rossini, Gioachino. Le comte Ory]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="320" ind1=" " ind2=" ">      <mxc:subfield code="3">14438108</mxc:subfield>      <mxc:subfield code="9">145</mxc:subfield>      <mxc:subfield code="a">Scribe</mxc:subfield>      <mxc:subfield code="m">Eugène</mxc:subfield>      <mxc:subfield code="d">1791-1861</mxc:subfield>      <mxc:subfield code="t">Le comte Ory (livret d'opéra)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Opéra comique en 2 actes</mxc:subfield>      <mxc:subfield code="a">Livret de Eugène Scribe et Charles-Gaspard Delestre-Poirson</mxc:subfield>      <mxc:subfield code="a">1re représentation : Paris, Académie royale de musique, le 20 août 1828</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="608" ind1=" " ind2=" ">      <mxc:subfield code="b">la comtesse Adèle, Alice (sopranos)</mxc:subfield>      <mxc:subfield code="b">Isolier, Ragonde (mezzo-sopranos)</mxc:subfield>      <mxc:subfield code="b">le comte Ory (ténor)</mxc:subfield>      <mxc:subfield code="b">Raimbaud (baryton)</mxc:subfield>      <mxc:subfield code="b">le Gouverneur (basse)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Dictionnaire des oeuvres de l'art vocal</mxc:subfield>      <mxc:subfield code="a">Grove opera</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="624" ind1=" " ind2=" ">      <mxc:subfield code="a">780</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="907" ind1=" " ind2=" ">      <mxc:subfield code="o">GEA</mxc:subfield>      <mxc:subfield code="a">005362626</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">010369191</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100571180</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPD</mxc:subfield>      <mxc:subfield code="a">100267750</mxc:subfield>      <mxc:subfield code="b">AMA</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">16304220</mxc:subfield>      <mxc:subfield code="d">20131120</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">17321886</mxc:subfield>      <mxc:subfield code="d">20200109</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb139266835</srw:recordIdentifier>
+<srw:recordPosition>3</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900528</ixm:attr>
+<ixm:attr name="LastModificationDate">20200109</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926694t" type="Authority">   <mxc:leader>00452c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139266945</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926694t</mxc:controlfield>   <mxc:controlfield tag="008">900528130118yy    df        1881                             1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">oa01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13900121</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121174622</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Strauss</mxc:subfield>      <mxc:subfield code="m">Johann</mxc:subfield>      <mxc:subfield code="d">1825-1899</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Stürmisch in Lieb und Tanz</mxc:subfield>      <mxc:subfield code="k">RV 393</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Stürmisch in Lieb und Tanz</mxc:subfield>      <mxc:subfield code="p">Op. 393</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Polka rapide extraite de l'opérette Das Spitzentuch der Königin</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Éd. : 1881</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Strauss Edition Wien, 2011</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100571350</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926694t</srw:recordIdentifier>
+<srw:recordPosition>4</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900528</ixm:attr>
+<ixm:attr name="LastModificationDate">20130118</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926633m" type="Authority">   <mxc:leader>00868c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF13926633X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926633m</mxc:controlfield>   <mxc:controlfield tag="008">900523130328yyeng or        1747      1748                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">va01</mxc:subfield>      <mxc:subfield code="a">vc01</mxc:subfield>      <mxc:subfield code="a">vd02</mxc:subfield>      <mxc:subfield code="a">vf01</mxc:subfield>      <mxc:subfield code="a">cn01</mxc:subfield>      <mxc:subfield code="a">oa01</mxc:subfield>      <mxc:subfield code="a">zb01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13987321</mxc:subfield>      <mxc:subfield code="1">ISNI0000000122759702</mxc:subfield>      <mxc:subfield code="w">.0..b.ger.</mxc:subfield>      <mxc:subfield code="a">Händel</mxc:subfield>      <mxc:subfield code="m">Georg Friedrich</mxc:subfield>      <mxc:subfield code="d">1685-1759</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Joshua</mxc:subfield>      <mxc:subfield code="k">HWV 64</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="302" ind1=" " ind2=" ">      <mxc:subfield code="3">15770384</mxc:subfield>      <mxc:subfield code="a">Händel</mxc:subfield>      <mxc:subfield code="m">Georg Friedrich</mxc:subfield>      <mxc:subfield code="d">1685-1759</mxc:subfield>      <mxc:subfield code="t">[Joshua. HWV 64. No 14. Our limpid streams with freedom flow]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="322" ind1="6" ind2=" ">      <mxc:subfield code="3">13607547</mxc:subfield>      <mxc:subfield code="9">100</mxc:subfield>      <mxc:subfield code="w">.0 .b.....</mxc:subfield>      <mxc:subfield code="a">Morell</mxc:subfield>      <mxc:subfield code="m">Thomas</mxc:subfield>      <mxc:subfield code="d">1703-1784</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Joshua</mxc:subfield>      <mxc:subfield code="k">HHH I 26</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Oratorio en 3 actes</mxc:subfield>      <mxc:subfield code="a">Livret attribué à Thomas Morell</mxc:subfield>      <mxc:subfield code="a">Date de composition : 1747</mxc:subfield>      <mxc:subfield code="a">Créé à Londres, Royal Theatre, Covent Garden, le 9 mars 1748</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="608" ind1=" " ind2=" ">      <mxc:subfield code="b">Achsah (soprano)</mxc:subfield>      <mxc:subfield code="b">Othniel (alto)</mxc:subfield>      <mxc:subfield code="b">Joshua, un ange (ténor)</mxc:subfield>      <mxc:subfield code="b">Caleb (basse)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Händel Handbuch</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100570650</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPD</mxc:subfield>      <mxc:subfield code="a">100170710</mxc:subfield>      <mxc:subfield code="b">ATUM</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">14794074</mxc:subfield>      <mxc:subfield code="d">20080929</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">13862636</mxc:subfield>      <mxc:subfield code="d">20111221</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">16303612</mxc:subfield>      <mxc:subfield code="d">20130328</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926633m</srw:recordIdentifier>
+<srw:recordPosition>5</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900523</ixm:attr>
+<ixm:attr name="LastModificationDate">20130328</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926871q" type="Authority">   <mxc:leader>00302c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139268711</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926871q</mxc:controlfield>   <mxc:controlfield tag="008">900531960229yy    wz        ....      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">oa01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13900123</mxc:subfield>      <mxc:subfield code="1">ISNI0000000120314611</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Strauss</mxc:subfield>      <mxc:subfield code="m">Josef</mxc:subfield>      <mxc:subfield code="d">1827-1870</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Perlen der Liebe</mxc:subfield>      <mxc:subfield code="p">Op. 39</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Éd. : 1857</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100573160</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926871q</srw:recordIdentifier>
+<srw:recordPosition>6</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900531</ixm:attr>
+<ixm:attr name="LastModificationDate">20101130</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb139263046" type="Authority">   <mxc:leader>00419c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139263041</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb139263046</mxc:controlfield>   <mxc:controlfield tag="008">900515141009yy    qua       1945                             1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">sa02</mxc:subfield>      <mxc:subfield code="a">sb01</mxc:subfield>      <mxc:subfield code="a">sc01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13896112</mxc:subfield>      <mxc:subfield code="1">ISNI0000000108634436</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Korngold</mxc:subfield>      <mxc:subfield code="m">Erich Wolfgang</mxc:subfield>      <mxc:subfield code="d">1897-1957</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Quatuors</mxc:subfield>      <mxc:subfield code="b">Cordes</mxc:subfield>      <mxc:subfield code="n">No 3</mxc:subfield>      <mxc:subfield code="p">Op. 34</mxc:subfield>      <mxc:subfield code="t">Ré majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1945</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Baker, Slonimsky</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100567240</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPD</mxc:subfield>      <mxc:subfield code="a">100278280</mxc:subfield>      <mxc:subfield code="b">ATUM</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">14804156</mxc:subfield>      <mxc:subfield code="d">20141009</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb139263046</srw:recordIdentifier>
+<srw:recordPosition>7</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900515</ixm:attr>
+<ixm:attr name="LastModificationDate">20141009</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926540m" type="Authority">   <mxc:leader>00454c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139265409</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926540m</mxc:controlfield>   <mxc:controlfield tag="008">900521961202yyger li        1817      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>      <mxc:subfield code="a">ka01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13899553</mxc:subfield>      <mxc:subfield code="1">ISNI0000000120958492</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Schubert</mxc:subfield>      <mxc:subfield code="m">Franz</mxc:subfield>      <mxc:subfield code="d">1797-1828</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Am Strome</mxc:subfield>      <mxc:subfield code="k">D 539</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Am Strome</mxc:subfield>      <mxc:subfield code="p">Op. 8, no 4</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Ist mir's doch, als sei mein Leben</mxc:subfield>      <mxc:subfield code="k">D 539</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Texte de Johann Mayrhofer</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 18170300</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Éd. : 1831</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Deutsch</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100569700</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926540m</srw:recordIdentifier>
+<srw:recordPosition>8</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900521</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb139267614" type="Authority">   <mxc:leader>00509c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF13926761X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb139267614</mxc:controlfield>   <mxc:controlfield tag="008">900530180116yyger mo        1776                             1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="b">vc01</mxc:subfield>      <mxc:subfield code="a">ca02</mxc:subfield>      <mxc:subfield code="a">oh01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13975298</mxc:subfield>      <mxc:subfield code="1">ISNI0000000110198135</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Bach</mxc:subfield>      <mxc:subfield code="m">Carl Philipp Emanuel</mxc:subfield>      <mxc:subfield code="d">1714-1788</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Heilig</mxc:subfield>      <mxc:subfield code="k">H 778</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Heilig</mxc:subfield>      <mxc:subfield code="k">Wq 217</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Texte tiré d'Isaïe et du Te Deum, dans la traduction de Luther</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="609" ind1=" " ind2=" ">      <mxc:subfield code="r">com0</mxc:subfield>      <mxc:subfield code="d">1776</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="609" ind1=" " ind2=" ">      <mxc:subfield code="r">edi1</mxc:subfield>      <mxc:subfield code="a">Hamburg</mxc:subfield>      <mxc:subfield code="d">1779</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Helm, C. P. E. Bach</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove Music Online</mxc:subfield>      <mxc:subfield code="u">http://www.oxfordmusiconline.com</mxc:subfield>      <mxc:subfield code="d">2016-03-24</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100572060</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb139267614</srw:recordIdentifier>
+<srw:recordPosition>9</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900530</ixm:attr>
+<ixm:attr name="LastModificationDate">20180116</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926272d" type="Authority">   <mxc:leader>00692c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262726</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926272d</mxc:controlfield>   <mxc:controlfield tag="008">900514131022yyfre opc       1878                             1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="b">va02</mxc:subfield>      <mxc:subfield code="b">vz01</mxc:subfield>      <mxc:subfield code="b">vd02</mxc:subfield>      <mxc:subfield code="b">ve02</mxc:subfield>      <mxc:subfield code="b">vf01</mxc:subfield>      <mxc:subfield code="a">ca01</mxc:subfield>      <mxc:subfield code="a">oa01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13898195</mxc:subfield>      <mxc:subfield code="1">ISNI0000000083714439</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Paladilhe</mxc:subfield>      <mxc:subfield code="m">Émile</mxc:subfield>      <mxc:subfield code="d">1844-1926</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Suzanne</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="322" ind1="6" ind2=" ">      <mxc:subfield code="3">13009774</mxc:subfield>      <mxc:subfield code="9">100</mxc:subfield>      <mxc:subfield code="w">.0.2b.....</mxc:subfield>      <mxc:subfield code="a">Lockroy</mxc:subfield>      <mxc:subfield code="d">1803-1891</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="322" ind1="6" ind2=" ">      <mxc:subfield code="3">12780915</mxc:subfield>      <mxc:subfield code="9">100</mxc:subfield>      <mxc:subfield code="w">.0.2b.....</mxc:subfield>      <mxc:subfield code="a">Cormon</mxc:subfield>      <mxc:subfield code="m">Eugène</mxc:subfield>      <mxc:subfield code="d">1811-1903</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Opéra-comique en 3 actes</mxc:subfield>      <mxc:subfield code="a">1re représentation : Paris, Opéra-Comique (salle Favart), 30 décembre 1878</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="608" ind1=" " ind2=" ">      <mxc:subfield code="b">Suzanne, Éva (sopranos)</mxc:subfield>      <mxc:subfield code="b">Bob (soprano enfant)</mxc:subfield>      <mxc:subfield code="b">Richard Edwin, Barnett (ténors)</mxc:subfield>      <mxc:subfield code="b">Harry, Peperley (barytons)</mxc:subfield>      <mxc:subfield code="b">Lyonel (basse)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove music online</mxc:subfield>      <mxc:subfield code="u">http://www.oxfordmusiconline.com</mxc:subfield>      <mxc:subfield code="d">2013-10-19</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100566910</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926272d</srw:recordIdentifier>
+<srw:recordPosition>10</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900514</ixm:attr>
+<ixm:attr name="LastModificationDate">20131022</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb139260109" type="Authority">   <mxc:leader>00345c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139260102</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb139260109</mxc:controlfield>   <mxc:controlfield tag="008">900502990726yy    qua       1807      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">wa01</mxc:subfield>      <mxc:subfield code="a">sa01</mxc:subfield>      <mxc:subfield code="a">sb01</mxc:subfield>      <mxc:subfield code="a">sc01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">14785643</mxc:subfield>      <mxc:subfield code="1">ISNI0000000109145079</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Pleyel</mxc:subfield>      <mxc:subfield code="m">Ignaz</mxc:subfield>      <mxc:subfield code="d">1757-1831</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Quatuors</mxc:subfield>      <mxc:subfield code="b">Flûte, trio à cordes</mxc:subfield>      <mxc:subfield code="p">Op. 41, no 2</mxc:subfield>      <mxc:subfield code="t">Fa majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1807</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100564140</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb139260109</srw:recordIdentifier>
+<srw:recordPosition>11</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900502</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926293c" type="Authority">   <mxc:leader>00336c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262936</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926293c</mxc:controlfield>   <mxc:controlfield tag="008">900514980616yyeng ops       1931      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>      <mxc:subfield code="a">oa01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13926292</mxc:subfield>      <mxc:subfield code="1">ISNI0000000123197967</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Gruenberg</mxc:subfield>      <mxc:subfield code="m">Louis</mxc:subfield>      <mxc:subfield code="d">1884-1964</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">The Emperor Jones</mxc:subfield>      <mxc:subfield code="p">Op. 36</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Livret de K. de Jaffa</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1931</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100567120</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926293c</srw:recordIdentifier>
+<srw:recordPosition>12</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900514</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926562x" type="Authority">   <mxc:leader>00400c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139265626</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926562x</mxc:controlfield>   <mxc:controlfield tag="008">900521961202yyger li        1815      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>      <mxc:subfield code="a">ka01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13899553</mxc:subfield>      <mxc:subfield code="1">ISNI0000000120958492</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Schubert</mxc:subfield>      <mxc:subfield code="m">Franz</mxc:subfield>      <mxc:subfield code="d">1797-1828</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Das gestörte Glück</mxc:subfield>      <mxc:subfield code="k">D 309</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Ich hab' ein heisses junges Blut</mxc:subfield>      <mxc:subfield code="k">D 309</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Texte de Theodor Körner</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 18151015</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Deutsch</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100569920</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926562x</srw:recordIdentifier>
+<srw:recordPosition>13</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900521</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926200j" type="Authority">   <mxc:leader>00303c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262007</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926200j</mxc:controlfield>   <mxc:controlfield tag="008">900510980821yyeng mld       1913      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>      <mxc:subfield code="a">ka01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13891849</mxc:subfield>      <mxc:subfield code="1">ISNI0000000108785613</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Bridge</mxc:subfield>      <mxc:subfield code="m">Frank</mxc:subfield>      <mxc:subfield code="d">1879-1941</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">O that it were so</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Poème de Landor</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1913</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100566120</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926200j</srw:recordIdentifier>
+<srw:recordPosition>14</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900510</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926873d" type="Authority">   <mxc:leader>00378c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139268736</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926873d</mxc:controlfield>   <mxc:controlfield tag="008">900531050530yy    mr        1811                             1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">od01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13892445</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121428442</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Cherubini</mxc:subfield>      <mxc:subfield code="m">Luigi</mxc:subfield>      <mxc:subfield code="d">1760-1842</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">La favorite</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Marche militaire pour ensemble d'harmonie</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Échos de l'épopée impériale, La favorite [Enregistrement sonore]. SERP 0888CMC70048</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100573180</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926873d</srw:recordIdentifier>
+<srw:recordPosition>15</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900531</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb139269145" type="Authority">   <mxc:leader>00754c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139269140</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb139269145</mxc:controlfield>   <mxc:controlfield tag="008">900601090904yyger ter       1796      1801                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">va01</mxc:subfield>      <mxc:subfield code="a">vc01</mxc:subfield>      <mxc:subfield code="a">vd01</mxc:subfield>      <mxc:subfield code="a">kc01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13895053</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121441049</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Haydn</mxc:subfield>      <mxc:subfield code="m">Joseph</mxc:subfield>      <mxc:subfield code="d">1732-1809</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">An den Vetter</mxc:subfield>      <mxc:subfield code="k">Hob XXVb 1</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="301" ind1="8" ind2=" ">      <mxc:subfield code="3">18079405</mxc:subfield>      <mxc:subfield code="a">Saint-Saëns</mxc:subfield>      <mxc:subfield code="m">Camille</mxc:subfield>      <mxc:subfield code="d">1835-1921</mxc:subfield>      <mxc:subfield code="t">[Transcriptions. Haydn, Joseph. An den Vetter. Trio vocal et orch.. R. 239]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="322" ind1="8" ind2=" ">      <mxc:subfield code="3">11997083</mxc:subfield>      <mxc:subfield code="9">100</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Weisse</mxc:subfield>      <mxc:subfield code="m">Christian Felix</mxc:subfield>      <mxc:subfield code="d">1726-1804</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Ja, Vetter, ja</mxc:subfield>      <mxc:subfield code="k">Hob XXVb 1</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="502" ind1=" " ind2=" ">      <mxc:subfield code="3">15599452</mxc:subfield>      <mxc:subfield code="a">Haydn</mxc:subfield>      <mxc:subfield code="m">Joseph</mxc:subfield>      <mxc:subfield code="d">1732-1809</mxc:subfield>      <mxc:subfield code="t">[Ramler's lyrische Blumenlese]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Dates de composition : 1796-1801</mxc:subfield>      <mxc:subfield code="a">1re éd. : Leipzig : Breitkopf &amp; Härtel, 1803</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Hoboken, Haydn</mxc:subfield>      <mxc:subfield code="a">J. Haydn Werke. Reihe 30 : Mehrstimmige Gesänge. G. Henle, 1958</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100573590</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb139269145</srw:recordIdentifier>
+<srw:recordPosition>16</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900601</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926571w" type="Authority">   <mxc:leader>00674c01au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139265715</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926571w</mxc:controlfield>   <mxc:controlfield tag="008">900521191213yy    sy        1760    ?                            </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">sa02</mxc:subfield>      <mxc:subfield code="a">sc01</mxc:subfield>      <mxc:subfield code="a">zb  </mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13895053</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121441049</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Haydn</mxc:subfield>      <mxc:subfield code="m">Joseph</mxc:subfield>      <mxc:subfield code="d">1732-1809</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Symphonies</mxc:subfield>      <mxc:subfield code="k">Hob II 47</mxc:subfield>      <mxc:subfield code="t">Do majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="301" ind1=" " ind2=" ">      <mxc:subfield code="3">13916555</mxc:subfield>      <mxc:subfield code="t">[Kindersinfonie]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.ger.</mxc:subfield>      <mxc:subfield code="a">Kinder-Sinfonie</mxc:subfield>      <mxc:subfield code="k">Hob II 47</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Symphonie des jouets</mxc:subfield>      <mxc:subfield code="k">Hob II 47</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Symphonie burlesque</mxc:subfield>      <mxc:subfield code="k">Hob II 47</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Autrefois attribuée à tort à J. Haydn, aujourd'hui à Leopold Mozart, Michael Haydn ou Edmund Angerer</mxc:subfield>      <mxc:subfield code="a">Date de composition : ca 1760</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Hoboken</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove music online</mxc:subfield>      <mxc:subfield code="u">http://www.oxfordmusiconline.com</mxc:subfield>      <mxc:subfield code="d">2009-04-06</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100570020</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926571w</srw:recordIdentifier>
+<srw:recordPosition>17</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900521</ixm:attr>
+<ixm:attr name="LastModificationDate">20191213</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926720j" type="Authority">   <mxc:leader>00319c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139267207</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926720j</mxc:controlfield>   <mxc:controlfield tag="008">900529960712yy    sn        17..      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">kn01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13899904</mxc:subfield>      <mxc:subfield code="1">ISNI0000000109062038</mxc:subfield>      <mxc:subfield code="w"> 0  b spa </mxc:subfield>      <mxc:subfield code="a">Soler</mxc:subfield>      <mxc:subfield code="m">Antonio</mxc:subfield>      <mxc:subfield code="d">1729-1783</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Sonates</mxc:subfield>      <mxc:subfield code="b">Clavier</mxc:subfield>      <mxc:subfield code="n">No 54</mxc:subfield>      <mxc:subfield code="k">R 389</mxc:subfield>      <mxc:subfield code="t">Do majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 17..</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Rubio, Soler</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100571630</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926720j</srw:recordIdentifier>
+<srw:recordPosition>18</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900529</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926224j" type="Authority">   <mxc:leader>00335c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262249</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926224j</mxc:controlfield>   <mxc:controlfield tag="008">900511990726yyfre sg        1791    ? ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vd01</mxc:subfield>      <mxc:subfield code="a">vf01</mxc:subfield>      <mxc:subfield code="a">sa02</mxc:subfield>      <mxc:subfield code="a">sz01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="0" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Poursuite et retour de la famille ci-devant royale</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Chanson faisant suite à la fuite de la famille royale</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : ca 1791</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100566410</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926224j</srw:recordIdentifier>
+<srw:recordPosition>19</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900511</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926242g" type="Authority">   <mxc:leader>00235c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262427</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926242g</mxc:controlfield>   <mxc:controlfield tag="008">900511990726yyfre sg        1793      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="0" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Chanson sur la mort de Louis XVI</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1793</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100566590</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926242g</srw:recordIdentifier>
+<srw:recordPosition>20</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900511</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926302h" type="Authority">   <mxc:leader>00330c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139263027</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926302h</mxc:controlfield>   <mxc:controlfield tag="008">900515980624yy    qua       ....      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">sa02</mxc:subfield>      <mxc:subfield code="a">sb01</mxc:subfield>      <mxc:subfield code="a">sc01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13896112</mxc:subfield>      <mxc:subfield code="1">ISNI0000000108634436</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Korngold</mxc:subfield>      <mxc:subfield code="m">Erich Wolfgang</mxc:subfield>      <mxc:subfield code="d">1897-1957</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Quatuors</mxc:subfield>      <mxc:subfield code="b">Cordes</mxc:subfield>      <mxc:subfield code="n">No 1</mxc:subfield>      <mxc:subfield code="p">Op. 16</mxc:subfield>      <mxc:subfield code="t">La majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">1re exécution : 1924</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100567220</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926302h</srw:recordIdentifier>
+<srw:recordPosition>21</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900515</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb139262534" type="Authority">   <mxc:leader>00341c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262530</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb139262534</mxc:controlfield>   <mxc:controlfield tag="008">900511990726yyfre sg        1795      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">12493920</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121274383</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Gaveaux</mxc:subfield>      <mxc:subfield code="m">Pierre</mxc:subfield>      <mxc:subfield code="d">1760-1825</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Le réveil du peuple</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Texte de J. M. Souriguère de Saint-Marc</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1795</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100566710</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb139262534</srw:recordIdentifier>
+<srw:recordPosition>22</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900511</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb139267316" type="Authority">   <mxc:leader>00342c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139267310</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb139267316</mxc:controlfield>   <mxc:controlfield tag="008">900529960220yyger li        1900      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>      <mxc:subfield code="a">ka01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13899526</mxc:subfield>      <mxc:subfield code="1">ISNI000000012095618X</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Schoenberg</mxc:subfield>      <mxc:subfield code="m">Arnold</mxc:subfield>      <mxc:subfield code="d">1874-1951</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Dunkelnd über den See</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Gruss in die Ferne</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1900</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100571740</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb139267316</srw:recordIdentifier>
+<srw:recordPosition>23</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900529</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926624n" type="Authority">   <mxc:leader>00482c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139266240</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926624n</mxc:controlfield>   <mxc:controlfield tag="008">900522140127yyita md        1619      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz03</mxc:subfield>      <mxc:subfield code="a">zb01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13897646</mxc:subfield>      <mxc:subfield code="1">ISNI0000000122791833</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Monteverdi</mxc:subfield>      <mxc:subfield code="m">Claudio</mxc:subfield>      <mxc:subfield code="d">1567-1643</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Vorrei baciarti, o Filli</mxc:subfield>      <mxc:subfield code="k">SV 123</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="502" ind1=" " ind2=" ">      <mxc:subfield code="3">13916479</mxc:subfield>      <mxc:subfield code="a">Monteverdi</mxc:subfield>      <mxc:subfield code="m">Claudio</mxc:subfield>      <mxc:subfield code="d">1567-1643</mxc:subfield>      <mxc:subfield code="t">[Madrigaux. Livre 7. SV 117-145]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Madrigal à 2 voix et basse continue extrait du livre 7</mxc:subfield>      <mxc:subfield code="a">Texte de Giambattista Marini</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">1re édition : 1619</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100570560</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926624n</srw:recordIdentifier>
+<srw:recordPosition>24</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900522</ixm:attr>
+<ixm:attr name="LastModificationDate">20140127</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926290b" type="Authority">   <mxc:leader>00404c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262904</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926290b</mxc:controlfield>   <mxc:controlfield tag="008">900514980720yyeng op        1933      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">cn01</mxc:subfield>      <mxc:subfield code="a">cn01</mxc:subfield>      <mxc:subfield code="a">oa01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13926289</mxc:subfield>      <mxc:subfield code="1">ISNI0000000118784294</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Hanson</mxc:subfield>      <mxc:subfield code="m">Howard</mxc:subfield>      <mxc:subfield code="d">1896-1981</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Merry Mount</mxc:subfield>      <mxc:subfield code="p">Op. 31</mxc:subfield>      <mxc:subfield code="e">Opéra</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Livret de R. L. Stokes d'après Nathaniel Hawthorne</mxc:subfield>      <mxc:subfield code="a">Existe une suite tirée de l'opéra</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : 1933</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100567090</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926290b</srw:recordIdentifier>
+<srw:recordPosition>25</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900514</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926243t" type="Authority">   <mxc:leader>00267c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139262434</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926243t</mxc:controlfield>   <mxc:controlfield tag="008">900511990726yyfre sg        1793    ? ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="0" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Chanson de l'armée de Charette</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Chant de la chouannerie</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Date de composition : ca 1793</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100566600</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926243t</srw:recordIdentifier>
+<srw:recordPosition>26</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900511</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926640w" type="Authority">   <mxc:leader>00660c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139266404</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926640w</mxc:controlfield>   <mxc:controlfield tag="008">900523110802yy    co                                         1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">wa01</mxc:subfield>      <mxc:subfield code="a">wb01</mxc:subfield>      <mxc:subfield code="a">sa01</mxc:subfield>      <mxc:subfield code="a">wd01</mxc:subfield>      <mxc:subfield code="a">zb01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13900896</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121299169</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Vivaldi</mxc:subfield>      <mxc:subfield code="m">Antonio</mxc:subfield>      <mxc:subfield code="d">1678-1741</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Concertos</mxc:subfield>      <mxc:subfield code="b">Basson, flûte, hautbois, violon, basse continue</mxc:subfield>      <mxc:subfield code="k">RV 99</mxc:subfield>      <mxc:subfield code="t">Fa majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Concertos</mxc:subfield>      <mxc:subfield code="b">Basson, flûte, hautbois, violon, basse continue</mxc:subfield>      <mxc:subfield code="k">R 99</mxc:subfield>      <mxc:subfield code="t">Fa majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Concertos</mxc:subfield>      <mxc:subfield code="b">Basson, flûte, hautbois, violon, basse continue</mxc:subfield>      <mxc:subfield code="p">Op. 44, no 17</mxc:subfield>      <mxc:subfield code="t">Fa majeur</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">No 147 de l'éd. Malipiero</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Ryom</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100570720</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPD</mxc:subfield>      <mxc:subfield code="a">100164450</mxc:subfield>      <mxc:subfield code="b">ATUM</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">14793493</mxc:subfield>      <mxc:subfield code="d">20110802</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">13872543</mxc:subfield>      <mxc:subfield code="d">20110802</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926640w</srw:recordIdentifier>
+<srw:recordPosition>27</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900523</ixm:attr>
+<ixm:attr name="LastModificationDate">20110802</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926564m" type="Authority">   <mxc:leader>00424c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139265640</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926564m</mxc:controlfield>   <mxc:controlfield tag="008">900521090203yyger li        ....      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz01</mxc:subfield>      <mxc:subfield code="a">ka01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13899553</mxc:subfield>      <mxc:subfield code="1">ISNI0000000120958492</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Schubert</mxc:subfield>      <mxc:subfield code="m">Franz</mxc:subfield>      <mxc:subfield code="d">1797-1828</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.....</mxc:subfield>      <mxc:subfield code="a">Alte Liebe rostet nie</mxc:subfield>      <mxc:subfield code="k">D 477</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Texte de Johann Mayrhofer</mxc:subfield>      <mxc:subfield code="a">Date de composition : septembre 1816</mxc:subfield>      <mxc:subfield code="a">1re édition : 1895</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Deutsch</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100569940</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPD</mxc:subfield>      <mxc:subfield code="a">100390430</mxc:subfield>      <mxc:subfield code="b">ATUM</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">14813140</mxc:subfield>      <mxc:subfield code="d">20090203</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926564m</srw:recordIdentifier>
+<srw:recordPosition>28</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900521</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926384p" type="Authority">   <mxc:leader>00335c1 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139263842</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926384p</mxc:controlfield>   <mxc:controlfield tag="008">900515951202yylat mo        ....      ....                   1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">vz06</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13897802</mxc:subfield>      <mxc:subfield code="1">ISNI0000000079949980</mxc:subfield>      <mxc:subfield code="w">.0..b.....</mxc:subfield>      <mxc:subfield code="a">Mundy</mxc:subfield>      <mxc:subfield code="m">William</mxc:subfield>      <mxc:subfield code="d">1528?-1591?</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.lat.</mxc:subfield>      <mxc:subfield code="a">Adolescentulus sum ego</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="444" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.eng.</mxc:subfield>      <mxc:subfield code="a">Bow down thine eye</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Version originale en latin</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Grove 6</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100568040</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926384p</srw:recordIdentifier>
+<srw:recordPosition>29</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900515</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb13926602b" type="Authority">   <mxc:leader>00561c0 au22000272  45  </mxc:leader>   <mxc:controlfield tag="001">FRBNF139266023</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb13926602b</mxc:controlfield>   <mxc:controlfield tag="008">900522080826yy    zz        1892    ?                        1   </mxc:controlfield>   <mxc:datafield tag="048" ind1=" " ind2=" ">      <mxc:subfield code="a">ka01</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="100" ind1=" " ind2=" ">      <mxc:subfield code="3">13898840</mxc:subfield>      <mxc:subfield code="1">ISNI0000000121181144</mxc:subfield>      <mxc:subfield code="w"> 0  b     </mxc:subfield>      <mxc:subfield code="a">Ravel</mxc:subfield>      <mxc:subfield code="m">Maurice</mxc:subfield>      <mxc:subfield code="d">1875-1937</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="144" ind1="1" ind2=" ">      <mxc:subfield code="w">....b.fre.</mxc:subfield>      <mxc:subfield code="a">Sérénade grotesque</mxc:subfield>      <mxc:subfield code="k">O 5</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="502" ind1=" " ind2=" ">      <mxc:subfield code="3">14008992</mxc:subfield>      <mxc:subfield code="a">Ravel</mxc:subfield>      <mxc:subfield code="m">Maurice</mxc:subfield>      <mxc:subfield code="d">1875-1937</mxc:subfield>      <mxc:subfield code="t">[Musique pour piano seul]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="600" ind1=" " ind2=" ">      <mxc:subfield code="a">Dédicace à Ricardo Viñes</mxc:subfield>      <mxc:subfield code="a">Date de composition : ca 1892-1893</mxc:subfield>      <mxc:subfield code="a">1re exécution : 13 avril 1901, par Ricardo Viñes</mxc:subfield>      <mxc:subfield code="a">1re éd. : New York : Salabert et ARIMA, 1975</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="610" ind1=" " ind2=" ">      <mxc:subfield code="a">Marnat, Ravel</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPC</mxc:subfield>      <mxc:subfield code="a">100570340</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPD</mxc:subfield>      <mxc:subfield code="a">100512080</mxc:subfield>      <mxc:subfield code="b">ATUM</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="996" ind1=" " ind2=" ">      <mxc:subfield code="o">OPP</mxc:subfield>      <mxc:subfield code="a">14824299</mxc:subfield>      <mxc:subfield code="d">20071114</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb13926602b</srw:recordIdentifier>
+<srw:recordPosition>30</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19900522</ixm:attr>
+<ixm:attr name="LastModificationDate">20101108</ixm:attr>
+<mn:score>1.8017349</mn:score>
+</srw:extraRecordData>
+</srw:record>
+</srw:records>
+<srw:nextRecordPosition>31</srw:nextRecordPosition>
+</srw:searchRetrieveResponse>

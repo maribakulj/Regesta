@@ -265,7 +265,7 @@ WEMI inference can cascade (mint a Work, then link sibling Expressions).
 **Recommendation: keep bounded fixed passes; design FRBRisation to converge in a
 small declared number,** and escalate to scoped-fixpoint-with-cap *only if the
 WP-0 spike proves fixed passes can't express WEMI linking.* Decide empirically
-from the spike, not a priori. **Decision: accepted — bounded fixed passes (by recommendation, 2026-05-31); escalate to scoped-fixpoint-with-cap only if the WP-0 spike proves it necessary.**
+from the spike, not a priori. **Decision: accepted — bounded fixed passes (by recommendation, 2026-05-31); escalate to scoped-fixpoint-with-cap only if the WP-0 spike proves it necessary. Spike (2026-06-01): 28/30 manifestations carry explicit `145 $3` Work links → lookup, not cascade; bounded passes confirmed, fixpoint not needed.**
 
 ---
 

@@ -76,9 +76,39 @@ These *tune* what ADR 0016 deferred to the spike; none reopens a decision.
   remains open** as planned — to be probed when WEMI linking is prototyped.
 - Throwaway code; naive normalisation; illustrative multiscript handling.
 
+## WEMI-linking iteration (InterMARCXChange, 2026-06-01)
+
+Second spike (`dev/spike/wemi_xchange.py`) on the BnF SRU **InterMARCXChange**
+fixtures (`test/fixtures/documentary/intermarc/sru/`), 30 *Madame Bovary*
+manifestations:
+
+- **28/30 carry an explicit Manifestation→Work link** — field `145 $3` = the
+  Work authority id (`11938746`). 29/30 carry the author authority id (`100 $3`)
+  and **29/30 carry ISNI** (`100 $1`).
+- The 28 linked manifestations cluster to **one** Work via the explicit id — no
+  inference, a pure **lookup**.
+- The 2 unlinked records are instructive: one is a **publisher-feed ebook**
+  (no `$3`) that the (author+title) fallback keys to `flaubert|madame bovary` —
+  correct, but it lands in a *separate* cluster, so a **bridging** step is needed
+  to merge it into the existing Work; the other is **"Le Réalisme. Madame
+  Bovary…"**, a study guide — a genuinely *different* work the fallback correctly
+  keeps apart.
+
+Implications:
+
+- **WEMI linking is largely a lookup, not iterative inference** (93% explicit
+  here). → **D8 resolved: bounded fixed passes suffice; no fixpoint needed.** A
+  cascade could only arise on the minority fallback-synthesis path, which is
+  itself bounded (synthesise, then one bridge attempt to existing Works).
+- The fallback's *correct separation* of the study guide re-confirms **D11**
+  precision-first: do not merge on title similarity alone.
+- **ISNI (`$1`) ≈ 97%** → interoperable `sameAs` IRIs in the RDF / Linked Art
+  output essentially for free (D5).
+
 ## Net
 
 The architecture holds. The spike **sharpens D5 decisively** (embedded `$3` is
 the reconciliation key — reconciliation is a lookup, not ML), **confirms D11**
-precision-first on real over-merge, and **surfaces multiscript** as a
-first-class work-key concern. D8 stays open until WEMI linking is prototyped.
+precision-first on real over-merge, **surfaces multiscript** as a first-class
+work-key concern, and **resolves D8** (WEMI linking is a lookup → bounded passes
+suffice; no fixpoint). What remains is implementation, not decision.

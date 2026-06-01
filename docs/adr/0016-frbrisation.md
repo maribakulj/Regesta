@@ -99,6 +99,11 @@ ADR 0004's **bounded fixed passes**, with FRBRisation designed to converge in a
 small declared number (e.g. synthesize, then link). Escalate to a **scoped
 fixpoint for `infer` with a hard iteration cap** *only if* the WP-0 spike proves
 fixed passes cannot express WEMI linking. Decided empirically, not a priori.
+**Spike (2026-06-01):** on real InterMARCXChange, 28/30 *Madame Bovary*
+manifestations carry an explicit Work link (`145 $3`) — WEMI linking is a
+**lookup**, not a cascade — so bounded passes are confirmed sufficient and no
+fixpoint is needed; a cascade could only arise on the minority
+fallback-synthesis path, which is itself bounded.
 
 ## Alternatives considered
 
@@ -145,8 +150,9 @@ fixed passes cannot express WEMI linking. Decided empirically, not a priori.
 
 - The exact work-key ingredients, the confidence threshold, and the first
   authority snapshot to pin — **tuned by the WP-0 spike** (D5).
-- Whether `infer` ultimately needs a scoped fixpoint — **decided from the
-  spike** (D8); if yes, ADR 0004 gets a formal amendment then.
+- Whether `infer` ultimately needs a scoped fixpoint — **resolved by the WEMI
+  spike (2026-06-01): no.** Explicit `145 $3` Work links dominate (28/30), so
+  linking is a lookup; bounded passes suffice (D8). ADR 0004 is unaffected.
 - Reconciliation of subjects / events (Tier 3 / 4) — additive, later, behind the
   seam (D11).
 - The RDF / authority loader implementation and serialisation library — WP-2 /
