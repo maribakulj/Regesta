@@ -64,7 +64,10 @@ On real BnF INTERMARC, every access point carries an embedded authority id
 (`$3` / `$0` / `$1`) → authority IRI [primary, deterministic]; (2) the work-key
 hash [fallback when no embedded id]; (3) fuzzy name matching [last resort]. The
 work-key must also canonicalise **multiscript** parallel fields, and
-Manifestation identity is read from `001` / `003` (ARK), not synthesized.
+Manifestation identity is read from `001` / `003` (ARK), not synthesized. (This
+holds for **agents**; a broadened evaluation found explicit **Work** links
+`145 $3` cover only ~7% of the fixtures, so Work identity is mostly
+**inference**, not lookup — see `../wp0-spike-findings.md`.)
 
 ### 3. Clustering is batch-local, stabilised by deterministic identity (D6)
 Works / agents are clustered **within a run**; Regesta keeps no persistent
@@ -94,7 +97,9 @@ The same machinery reconciles named entities during conversion. Two dials:
   proposals. **Spike (2026-06-01):** bridging the unlinked *Madame Bovary*
   records, an exact author+title match scored **0 false merges** (ebook merged,
   study guide kept apart) while a greedy substring match produced **1 false
-  merge** — so auto-commit on exact only; near-misses go to proposals.
+  merge** — so auto-commit on exact only; near-misses go to proposals. (Caveat:
+  that was an easy pair; the broadened evaluation shows the fallback key
+  under-merges title variants and must key on the **uniform title**.)
 
 ### 6. Convergence: bounded passes, fixpoint only if forced (D8; notes ADR 0004)
 FRBRisation cascades (mint a Work, then link its Expressions). V1 keeps
@@ -102,11 +107,13 @@ ADR 0004's **bounded fixed passes**, with FRBRisation designed to converge in a
 small declared number (e.g. synthesize, then link). Escalate to a **scoped
 fixpoint for `infer` with a hard iteration cap** *only if* the WP-0 spike proves
 fixed passes cannot express WEMI linking. Decided empirically, not a priori.
-**Spike (2026-06-01):** on real InterMARCXChange, 28/30 *Madame Bovary*
-manifestations carry an explicit Work link (`145 $3`) — WEMI linking is a
-**lookup**, not a cascade — so bounded passes are confirmed sufficient and no
-fixpoint is needed; a cascade could only arise on the minority
-fallback-synthesis path, which is itself bounded.
+**Spike (2026-06-01) — corrected:** a broadened evaluation shows explicit Work
+links (`145 $3`) cover only ~7% of the bib fixtures (93% on the *Madame Bovary*
+showcase, 0% elsewhere), so WEMI linking is a **lookup for a minority and
+inference for the bulk**. The spikes exercised the lookup path, **not** the
+inference cascade — so bounded passes **stand as the default but are not yet
+confirmed**; they must be re-tested on Work-synthesis. See
+`../wp0-spike-findings.md`.
 
 ## Alternatives considered
 
@@ -153,9 +160,10 @@ fallback-synthesis path, which is itself bounded.
 
 - The exact work-key ingredients, the confidence threshold, and the first
   authority snapshot to pin — **tuned by the WP-0 spike** (D5).
-- Whether `infer` ultimately needs a scoped fixpoint — **resolved by the WEMI
-  spike (2026-06-01): no.** Explicit `145 $3` Work links dominate (28/30), so
-  linking is a lookup; bounded passes suffice (D8). ADR 0004 is unaffected.
+- Whether `infer` ultimately needs a scoped fixpoint — **still open.** The
+  spikes hit the lookup path only (explicit Work links ~7% of fixtures); the
+  inference cascade was not exercised. Bounded passes remain the default, to be
+  confirmed on a Work-synthesis spike (D8).
 - Reconciliation of subjects / events (Tier 3 / 4) — additive, later, behind the
   seam (D11).
 - The RDF / authority loader implementation and serialisation library — WP-2 /

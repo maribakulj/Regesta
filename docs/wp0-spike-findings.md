@@ -135,12 +135,46 @@ identity seam is built for it, not retrofitted.
 Caveat: only 2 unlinked records — this demonstrates the *mechanism and the
 precision principle*, not a fidelity statistic.
 
-## Net
+## Broadened evaluation — correction (2026-06-01)
 
-The architecture holds. The spike **sharpens D5 decisively** (embedded `$3` is
-the reconciliation key — reconciliation is a lookup, not ML), **confirms D11**
-precision-first on real over-merge, **surfaces multiscript** as a first-class
-work-key concern, and **resolves D8** (WEMI linking is a lookup → bounded passes
-suffice; no fixpoint), and the bridging iteration shows the **conservative match
-is precise** (0 false merges vs the greedy net's 1). What remains is
-implementation, not decision.
+Pushed by the question *"is one example enough?"*, I evaluated the fallback key
+against the explicit `145 $3` link as **ground truth across all 14 bib fixtures**
+(`dev/spike/keyeval.py`) and verified field coverage directly. **The earlier
+WEMI / D8 claim was an artefact of a showcase example.**
+
+- Explicit Work-link (`145 $3`) coverage: **93% on *Madame Bovary*, 0% on every
+  other set** (Hugo, Gracq, monographs, music, periodicals, youth, analytics) —
+  **~7% overall**. Verified: `145` (and 240/740 uniform titles) are genuinely
+  *absent* elsewhere, not a parser gap. *Madame Bovary* is the BnF's flagship
+  FRBR-ised example; for the **bulk of the catalogue, Works are not linked → they
+  must be inferred, not looked up.**
+
+What stands, what is retracted:
+
+- ✅ **Agent reconciliation is a lookup, robustly** — `100 $3` (and `6XX`/`7XX`
+  $3) is present across *all* genres. The first spike's finding generalises.
+- ❌ **"WEMI linking is a lookup → D8 resolved" is retracted.** True only for the
+  ~7% already FRBR-ised. The dominant path is **inference**, which the spikes did
+  *not* exercise (the showcase clustered by lookup, with no Work-synthesis
+  cascade). **D8 reverts to unconfirmed.**
+- ⚠️ **The fallback key is fragile.** Even within *Madame Bovary*, the one Work
+  spans 4+ raw `245`-title keys ("madame bovary", "…moeurs de province",
+  "…eaux-fortes originales…"): the key must use the **uniform title**, not the
+  title proper, and even then variants under-merge → many true merges become
+  *proposals*, not auto-commits.
+- ⚠️ **Work-link fields are heterogeneous by material type** (`145` monographs;
+  `730`/`7XX` name-title for music). The monograph-centric `145` assumption does
+  not generalise.
+- ⚠️ **Measuring FRBRisation fidelity is itself hard:** ground truth is sparse
+  exactly on the genres that need inference. A real evaluation needs labelled
+  data / BnF's own Work authorities — risk **R4** (data + oracle) biting as the
+  roadmap warned.
+
+## Net (corrected)
+
+The substrate decisions hold and **agent reconciliation is de-risked**. But
+**Work / FRBRisation is *characterised, not de-risked*** — and it looks *harder*
+than the showcase suggested: inference dominates, ground truth is sparse, the
+fallback key needs uniform titles. **D8 is reopened** pending an inference-path
+spike. This is the spike phase doing its job — failing cheaply now, before WP-1
+builds on a false premise.
