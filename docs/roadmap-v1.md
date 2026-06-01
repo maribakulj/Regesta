@@ -290,3 +290,44 @@ V1 is done when, on **real institutional samples**:
 - Two-tier pivot (CRM substrate + LRMoo overlay) as a possible alternative to
   a single LRMoo hub — recorded as the credible alternative to revisit if
   LRMoo tooling proves too thin.
+
+---
+
+## 10. Post-V1 horizon: from converter to store (not in V1)
+
+V1 is a **converter** — a pure, stateless, batch function (source → IR →
+target). A natural but *categorically different* successor is a **store you
+query and edit** — a stateful system of record. It is recorded here so the V1
+seams stay open to it, not because it is in scope.
+
+It is a ladder, not a binary; each rung adds value *and* operational burden:
+
+| Rung | Capability | Nature |
+|---|---|---|
+| 0 | Converter (V1) | stateless, ephemeral |
+| 1 | Persisted output | trivial |
+| 2 | Queryable (SPARQL / traversal / IIIF endpoints) | adopt a triple/graph store |
+| 3 | Incremental (ingest deltas, update without full re-batch) | hard — incremental inference + identity stability |
+| 4 | Editable / curated (humans accept/merge/split; decisions persist) | hard — becomes a web app with users |
+| 5 | Authoritative / cross-institution convergence hub | hardest — identity lifecycle, governance |
+
+**What it serves:** a living catalogue (continuous FRBRisation, à la BnF
+Transition bibliographique); cumulative cross-source reconciliation; curation of
+the FRBRisation tail at scale; serving the graph (a data.bnf.fr-like platform);
+audit over time. The most original niche is **rung 5 — the cross-institution
+convergence layer**: each institution has its own store, but nobody owns the
+convergence *between* them.
+
+**What it implies:** statefulness (concurrency, transactions, migrations);
+identity that is *authoritative*, not merely *reproducible* (merge / split /
+deprecate with stable redirects — an identity-lifecycle subsystem); incremental
+inference; a curation application (which V1 explicitly excludes). This is where
+**A′ / a real graph-store backend (see ADR 0017)** finally earns its keep — and
+the V1 converter becomes the store's **ingestion stage**, not dead weight.
+
+**Why it does not change V1:** the substrate already plants the seeds — the dual
+status model (ADR 0005) for curation, provenance for audit, entities +
+references for the graph, diagnostics / loss for quality. Going there is a
+*mission* decision, not a technical pivot. Until it is taken we pay nothing — we
+only keep three seams clean: **identity** (deterministic → versionable toward a
+lifecycle), **status / curation** (ADR 0005), and **provenance**.
