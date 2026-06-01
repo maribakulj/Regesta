@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang='en'><head>
+  <meta charset="utf-8">
+  <title>
+     404 —  IIIF | International Image Interoperability Framework
+  </title>
+  <meta name="description" content="IIIF is a set of open standards for delivering high-quality, attributed digital objects online at scale. It’s also an international community developing and implementing the IIIF APIs. IIIF is backed by a consortium of leading cultural institutions.">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
+ <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+ <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+ <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+ <link rel="manifest" href="/assets/site.webmanifest">
+ <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#E82334">
+ <meta name="msapplication-TileColor" content="#da532c">
+ <meta name="theme-color" content="#ffffff">
+
+
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="canonical" href="/404.html" />    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW5W9QRPH6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZW5W9QRPH6');
+    </script>
+        
+
+
+    <!-- Begin Jekyll SEO tag v2.9.0 -->
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="404" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="/404.html" />
+<meta property="og:url" content="/404.html" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="404" />
+<meta name="twitter:site" content="@iiif_io" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","headline":"404","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/assets/favicon.ico"}},"url":"/404.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+<!-- add for Mastodon verification -->
+<link rel="me" href="https://glammr.us/@iiif">
+
+</head>
+<body>
+
+<section class="hero is-primary" style="background-image: linear-gradient(to bottom, rgba(0, 25, 39, 0.68), rgba(0, 25, 39, 0.68));
+  background-size: cover;
+  background-position: bottom center;
+  background-attachment: fixed;
+  ">
+  
+  <div class="hero-head">
+    <nav id="navbar" class="navbar is-transparent is-spaced">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img src="/assets/images/logos/logo-sm.png" alt="IIIF logo" height="28">
+        <span class="brand-title">International Image Interoperability Framework</span>
+      </a>
+      <div class="navbar-burger" data-target="navbar" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="navbar-menu">
+      <div class="navbar-end">
+            <a class="navbar-item" href="/">Home</a>
+          
+            <a class="navbar-item" href="/demos">Demos</a>
+          
+            <a class="navbar-item" href="/events">Events</a>
+          
+            <a class="navbar-item" href="/news">News</a>
+          
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link"  href="/get-involved">
+                Get Involved
+              </a>
+              <div class="navbar-dropdown is-boxed is-active">
+                
+                  <a class="navbar-item" href="/community/">Community</a>
+                
+                  <a class="navbar-item" href="/community/consortium">Consortium</a>
+                
+                  <a class="navbar-item" href="/newsletter">Join Newsletter</a>
+                
+                  <a class="navbar-item" href="/get-involved/outreach-materials">Outreach Materials</a>
+                
+              </div>
+            </div>
+          
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link"  href="/get-started">
+                Get Started
+              </a>
+              <div class="navbar-dropdown is-boxed is-active">
+                
+                  <a class="navbar-item" href="/get-started/how-iiif-works">How IIIF Works</a>
+                
+                  <a class="navbar-item" href="/community/ambassadors/">IIIF Ambassadors</a>
+                
+                  <a class="navbar-item" href="https://iiif.io/guides">Guides</a>
+                
+                  <a class="navbar-item" href="https://iiif.io/api">APIs & Documentation</a>
+                
+                  <a class="navbar-item" href="/get-started/cookbook">Cookbooks</a>
+                
+                  <a class="navbar-item" href="/get-started/training">Training</a>
+                
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</nav>
+
+  </div>
+  
+
+  <div class="hero-body container">
+
+    
+
+    <div class="container has-text-centered">
+      
+      <h1 class="title is-size-2 is-size-3-mobile is-size-desktop is-size-1-widescreen">404</h1>
+      
+
+      
+      <p class="subtitle is-size-5">Page Not Found</p>
+      
+
+      
+    </div>
+  </div>
+</section>
+<section id="main">
+      
+      
+      <div class="container-block is-max-widescreen"><div class="container has-text-centered">
+    <h2 id="head-home">Head <a href="/">home</a>?</h2>
+  </div></div>
+
+      
+    </section>
+<footer id="footer" class="footer">
+  <div class="container">
+    <div class="columns">
+
+      <div class="navbar-brand column is-half">
+        <a class="navbar-item" href="/">
+          <img src="/assets/images/logos/logo-sm.png" alt="IIIF logo" height="28">
+          <span class="brand-title blue-text">International Image Interoperability Framework</span>
+        </a>
+        <p>IIIF is a set of open standards for delivering high-quality, attributed digital objects online at scale. It’s also an international community developing and implementing the IIIF APIs. IIIF is backed by a consortium of leading cultural institutions.</p>
+      </div>
+      <div class="column"></div>
+      
+      <div class="column menu-column">
+        <h4>About</h4>
+        <ul>
+        
+          <li>
+            <a href="/get-started/how-iiif-works">How IIIF Works</a>
+          </li>
+        
+          <li>
+            <a href="https://iiif.io/api">APIs & Documentation</a>
+          </li>
+        
+          <li>
+            <a href="/demos">Demos</a>
+          </li>
+        
+          <li>
+            <a href="https://iiif.io/guides">Tutorials & Guides</a>
+          </li>
+        
+          <li>
+            <a href="/privacy">Privacy policy</a>
+          </li>
+        
+        </ul>
+      </div>
+      
+      <div class="column menu-column">
+        <h4>Stay Connected</h4>
+        <ul>
+        
+          <li>
+            <a href="/news-and-events">News & Events</a>
+          </li>
+        
+          <li>
+            <a href="/newsletter">Join Newsletter</a>
+          </li>
+        
+          <li>
+            <a href="/community/groups">Community Groups</a>
+          </li>
+        
+          <li>
+            <a href="/community/consortium">Consortium</a>
+          </li>
+        
+          <li>
+            <a href="/contact">Contact Us</a>
+          </li>
+        
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+</footer><script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="text/javascript" src="/assets/js/carouselInit.js"></script>
+
+    
+        <!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" />
+
+<script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
+<script>
+  /* paste this line in verbatim */
+  window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+  /* customize formbutton below*/     
+  formbutton("create", {
+    action: "https://formspree.io/f/xbjwjlbn",
+    title: "Feedback",
+    fields: [
+      {
+        type: "radio",
+        name: "feedback_type",
+        value: "Comment",
+        label: "Comment",
+        style: {
+            display: "inline-block",
+            "padding-right": "10px"
+        }
+      },
+      {
+        type: "radio",
+        name: "feedback_type",
+        value: "Correction",
+        label: "Correction",
+        style: {
+            display: "inline-block",
+            "padding-right": "10px"
+        }
+      },
+      {
+        type: "radio",
+        name: "feedback_type",
+        value: "Bug",
+        label: "Bug",
+        style: {
+            display: "inline-block",
+            "padding-right": "10px"
+        }
+      },
+      { 
+        type: "email", 
+        label: "Email:", 
+        name: "Email",
+        required: true,
+        placeholder: "your@email.com"
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "Message",
+        placeholder: "We want to hear from you! Enter your feedback here.",
+      },
+      { 
+        type: "submit",
+        value: "Submit"
+      },
+      {
+        type: "hidden",
+        name: "Page",
+        value: window.location.pathname.replaceAll('/','|'),
+        style: {
+            display: "none"
+        }
+      }
+    ],
+    buttonImg: "<i class='fas fa-comment' style='font-size:24px'/>", 
+    styles: {
+      title: {
+        backgroundColor: "#0d232d"
+      },
+      button: {
+        backgroundColor: "#0d232d"
+      }
+    }
+  });
+</script>
+
+    
+  </body>
+</html>

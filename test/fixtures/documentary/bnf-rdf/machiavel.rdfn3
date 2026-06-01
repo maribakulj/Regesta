@@ -1,0 +1,2544 @@
+@prefix bio: <http://vocab.org/bio/0.1/> .
+@prefix bnf-onto: <http://data.bnf.fr/ontology/bnf-onto/> .
+@prefix bnfroles: <http://data.bnf.fr/vocabulary/roles/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix isni: <http://isni.org/ontology#> .
+@prefix marcrel: <http://id.loc.gov/vocabulary/relators/> .
+@prefix rdaa: <http://rdaregistry.info/Elements/a/#> .
+@prefix rdagroup2elements: <http://rdvocab.info/ElementsGr2/> .
+@prefix rdasoi: <http://www.rdaregistry.info/termList/statIdentification/> .
+@prefix rdau: <http://rdaregistry.info/Elements/u/#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://data.bnf.fr/ark:/12148/cb119137957studies> dcterms:subject <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb11947704p#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb119503461#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb12033078q#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb12107019q#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb12203064r#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb122620502#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb12516841r#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb13505664j#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb16903379c#about> dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb17159316q#about> dcterms:creator <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb17778426h#about> dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb300491804#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb301726484#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30462346x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb305490080#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30569992m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb306113569#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308362669#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532242#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853225d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853226r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532273#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853228f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853229s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532300#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853231b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853232p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532331#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853234c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853235q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532362#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853237d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853238r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532393#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532409#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853241n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532420#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853243b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853244p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532451#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853246c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853247q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853249d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853250m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853251z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532529#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853253n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853255b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853256p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532571#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853258c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853259q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853260x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532618#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853262m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853263z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532649#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853265n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532660#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853267b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853268p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532707#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853271k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853272x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532738#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853274m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853275z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532769#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853277n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532780#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853279b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853281w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532827#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853283k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853284x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532889#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853289n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853290v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853292j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853293w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853296x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308532978#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853298m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853299z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853300b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853301p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533021#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853303c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853304q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533052#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853306d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853307r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533083#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853309f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853310n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533110#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853312b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853313p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533141#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853315c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853316q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533172#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853318d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853319r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853320z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533219#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853322n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533230#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853324b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853325p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533261#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853327c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853328q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533292#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533308#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853331m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853332z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533339#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853334n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533350#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853336b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533381#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853339c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853340k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853341x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533428#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853343m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853344z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533459#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853346n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533470#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853348b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853349p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853350w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533517#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853352k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853353x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533548#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853355m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853356z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533579#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853358n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533590#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533606#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853361j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853362w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533637#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853364k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853365x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533668#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853367m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853368z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533699#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853370h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853371v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533726#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853373j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853374w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533757#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853376k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853377x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533788#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853379m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853380t#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533815#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853382h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853383v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533846#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853385j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853386w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533877#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853388k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853389x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533904#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853391g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853392t#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533935#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853394h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853395v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533966#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853397j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853398w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308533997#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853400m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853401z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853403n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308534040#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853405b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853406p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308534071#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853408c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853409q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853410x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308534118#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853412m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853413z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308534149#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853415n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308534160#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb30853417b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308534191#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb308534207#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb310820328#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb311394268#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb314438030#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb315057057#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb31505706k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb316061248#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb31716594x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb31763174h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32127933c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32127936d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404027b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404028p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040291#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040307#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404031k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404032x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040338#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404034m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404035z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404037n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404039b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404040j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404041w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040427#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404044x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040458#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404047z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040489#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404050v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040516#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404053w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040547#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404055k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404056x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404058m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404059z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb324040605#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404061h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404064j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32404065w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb32485100g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33030404w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085277s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb330852784#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085279g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085280p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb330852811#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085282c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb330852842#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085285d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085286r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb330852873#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085288f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085289s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb330852900#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085292p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb330852931#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085294c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33085295q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33265538n#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33339254k#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb335133352#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33984799s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33985756r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb339872723#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb339883749#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33995658c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb339973492#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997359c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997360k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997361x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb339973628#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997363m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997364z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997366n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb339973670#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997368b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997369p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb339973717#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997372k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997373x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb339973748#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb33997375m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb340004706#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb340046387#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34309995m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34320953x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34563859m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb345687675#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34603893q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34617547w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34633990k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34657307x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34676326c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb347418681#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34751248z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34771225q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb348094655#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34813152r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34848676z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34930449j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34932054h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb349353511#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34946878w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb34964366f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb350013918#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35020225c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb350757568#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb351234830#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb351708644#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35188898k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35189555q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35218653s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35221759n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb352280958#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35284118c#Expression> bnfroles:r680 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:trl <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb352903363#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35290337f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35290338s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb352903394#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35290340b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb354367520#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35495481r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb355147152#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb355481228#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35581421w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb356288072#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35649035r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb356490363#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35649037f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35659587k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35670934b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35692193j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35698876b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb357458909#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35798751w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35825807p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb358345728#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35866076c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb35944709f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36124375g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb361670218#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb365719127#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36571913k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36581386b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36581387p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb365813881#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36581389c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36599086n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36599746b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36649840p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb366671295#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb36967748m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb369964872#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37003984d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb370264489#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb370743148#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37109511q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37167508k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb371744977#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37181178m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb371952600#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37223580p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb372450419#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37252294x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37265915n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37271295f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37328618x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37344061v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37354778q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37371334p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37400290c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37400291q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37403053b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37403054p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb374030958#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37403817p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb374038181#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37403820k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37403823m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37432080m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37432092m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb374320949#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb374529690#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb374775952#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37507283z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37513345x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37521621g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb375241016#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37524144g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb375242066#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37530246p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37541266r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37553110j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37564392q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37568915w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb376278162#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37671137p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb376714632#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37741325s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb37758394h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38298730g#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38463903n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38543210r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb386695380#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38692504m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38692507n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb386925080#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38692509b#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb386925127#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38730918v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38730975p#Expression> bnfroles:r10 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:adp <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38755634w#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb387649967#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38827648m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb388364706#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb388572918#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38991368k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb38991389j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39081503x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39248291d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39279476x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39287936s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39311572t#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39311574h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39311577j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39312586r#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393125873#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39312588f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39312589s#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393125900#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39312591b#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39312592p#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393125931#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39312594c#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39312595q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393125962#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39317035p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393170361#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39317037c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39317038q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393170392#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393170408#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393202034#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39330538t#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39336509p#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39362477j#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39362478w#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393624797#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39362480f#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39362481s#Expression> bnfroles:r9990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb393624824#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39362483g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39459869p#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39461459j#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39461460r#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39461711c#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39461712q#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb394641610#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39464162b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39464163p#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39469125b#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39471369s#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb394713700#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39480786f#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39480787s#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb394807884#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39480789g#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39480790p#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39496003n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39766124s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb397667620#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb397689056#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb39976464d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb401851401#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb401953983#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb40216831z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb402178614#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb40899429q#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb410090494#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb410772051#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb411344412#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb411799377#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41204116k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb412042203#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41225528b#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41244982d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41333088q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41362345n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41366352w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41476618x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb414771043#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41622377z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb416345478#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41648257x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41663791p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb416637921#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb41663793c#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb416637952#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb416645080#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb419460651#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb419468537#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42008436s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42031692r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb420626302#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42064351p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42102147b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42113456k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42127459s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42277242q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42310780w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb424265898#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42429096w#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42433751m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb424494058#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42788743r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb427914036#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42803450h#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb428154897#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb42896245z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43057761r#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43251860k#Expression> bnfroles:r990 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43535153f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb435678137#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb435678226#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43632578b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb436460513#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43705561w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43705567z#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43707218d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43707568s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb437361113#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb437624765#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43776182f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43829021t#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb439710600#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43971061b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43984960d#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43985714x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb439864208#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb43986421m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb44257374g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb44345791n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb44391286r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45026270r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45115537g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45141416w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45197613w#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb452186756#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45280554g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45354237k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb453936138#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45395898h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45455212n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb454636939#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb454738545#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45499888b#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45527747q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45533704p#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45533750v#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45540811q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb455586359#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45569632q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb456608130#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45660935k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45715322x#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb457268938#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb45842363k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb46632521s#Expression> bnfroles:r71 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:att <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb46640055f#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb466534424#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb46722770h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb467280167#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb468048434#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb469313236#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47045902n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47050625g#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47137282n#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb471670596#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47227627k#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47255002q#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb472892783#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47310957m#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb473179021#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb473310464#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47333039b#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb473625409#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb474143066#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47529408r#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb47597712s#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb475979579#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb485767697#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb48619765h#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc1254961/cb448#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc1254961/cb449#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc1254961/cb450#Expression> bnfroles:r72 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:ant <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc57433n/ca59824270956792#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc57433n/ca59925250731125#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc57433n/ca59942115085961#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc57433n/ca59942115085965#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc57433n/ca59942115085966#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc57433n/ca59942115085967#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc8647x/cd0e20063#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc996444/cb24#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cc996444/cb278#Expression> bnfroles:r70 <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    marcrel:aut <https://data.bnf.fr/ark:/12148/cb119137957#about> ;
+    dcterms:contributor <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb119137957> a skos:Concept ;
+    bnf-onto:FRBNF 11913795 ;
+    bnf-onto:isniAttributionAgency "ISNI" ;
+    bnf-onto:isniAttributionDate "2017-08-18"^^xsd:date ;
+    isni:identifierValid "0000000121441233" ;
+    dcterms:created "1985-06-22" ;
+    dcterms:modified "2023-07-24" ;
+    rdau:P61160 rdasoi:1001 ;
+    rdfs:seeAlso <http://fr.wikipedia.org/wiki/Nicolas_Machiavel>,
+        <https://catalogue.bnf.fr/ark:/12148/cb119137957> ;
+    = <https://data.biblissima.fr/entity/Q21636> ;
+    skos:altLabel "Niklaus Machiavells (1469-1527)"@de,
+        "Nikolaus Machiavelli (1469-1527)"@de,
+        "Nicolas Maquiavelo (1469-1527)"@es,
+        "Amadio Niecolluci (1469-1527)"@fr,
+        "Nicolao Machiaueli (1469-1527)"@fr,
+        "Nicolas Machiavel (1469-1527)"@fr,
+        "Nicolas Machiavelle (1469-1527)"@fr,
+        "Niccolò Machiavelli (1469-1527)"@it,
+        "Nicolo Machiavegli (1469-1527)"@it,
+        "Nicolò Machiavelli (1469-1527)"@it,
+        "Nicolaus Machiavellus (1469-1527)"@la,
+        "Nicolaes Machiavel (1469-1527)"@nl,
+        "Nicolau Maquiavel (1469-1527)"@pt,
+        "Nikkolo Makiavelli"@ru,
+        "Никколо Макиавелли"@ru ;
+    skos:closeMatch <http://d-nb.info/gnd/118575775>,
+        <http://datos.bne.es/resource/XX951763>,
+        <http://id.loc.gov/authorities/n78096105> ;
+    skos:editorialNote "L'art de la guerre / Machiavel ; trad. par Toussaint Guiraudet, 1991; De' discorsi politici, e militari, libri tre, /scielti fra gravissimi scrittori, da Amadio Niecollucci, 1630. - . - GDEL : Machiavel, en ital. Niccolò Machiavelli. - . -"@fr,
+        "Larousse 19e s. ; Oeuvres philosophiques, 1992 : Machiavel, Nicolas. - . - BN Cat. gén.. - . -"@fr ;
+    skos:exactMatch <http://fr.dbpedia.org/resource/Nicolas_Machiavel>,
+        <http://fr.wikipedia.org/wiki/Nicolas_Machiavel>,
+        <http://isni.org/isni/0000000121441233>,
+        <http://viaf.org/viaf/95151646/>,
+        <http://wikidata.org/entity/Q1399>,
+        <http://www.idref.fr/027000168>,
+        <https://data.biblissima.fr/entity/Q21636>,
+        <https://musicbrainz.org/artist/1c62911a-1a92-48fd-a44b-b8fa58aaf2d8>,
+        <https://musicbrainz.org/artist/eeeacd5f-8efb-4ecc-b464-b4253f888c6b> ;
+    skos:note "Homme politique. - Écrivain. - Le pseudonyme Amadio Niecolluchi lui a été donné en 1630 pour l'édition d'un de ses textes, de façon à la rendre moins voyante pour l'Inquistion"@fr ;
+    skos:prefLabel "Machiavel (1469-1527)"@fr ;
+    foaf:focus <https://data.bnf.fr/ark:/12148/cb119137957#about> .
+
+<https://data.bnf.fr/ark:/12148/cb119137957#about> a foaf:Person ;
+    bnf-onto:firstYear 1469 ;
+    bnf-onto:lastYear 1527 ;
+    rdaa:P50071 <https://data.bnf.fr/ark:/12148/cb16467274q#about> ;
+    rdaa:P50097 <http://id.loc.gov/vocabulary/countries/it> ;
+    rdaa:P50100 <http://dewey.info/class/320/>,
+        <http://dewey.info/class/800/>,
+        "Littératures",
+        "Science politique" ;
+    rdaa:P50102 <http://id.loc.gov/vocabulary/iso639-2/ita> ;
+    rdaa:P50113 "Homme politique. - Écrivain. - Le pseudonyme Amadio Niecolluchi lui a été donné en 1630 pour l'édition d'un de ses textes, de façon à la rendre moins voyante pour l'Inquistion" ;
+    rdaa:P50118 "Florence (Italie)" ;
+    rdaa:P50119 "Florence (Italie)" ;
+    rdaa:P50120 <https://data.bnf.fr/date/1527/> ;
+    rdaa:P50121 <https://data.bnf.fr/date/1469/> ;
+    rdagroup2elements:biographicalInformation "Homme politique. - Écrivain. - Le pseudonyme Amadio Niecolluchi lui a été donné en 1630 pour l'édition d'un de ses textes, de façon à la rendre moins voyante pour l'Inquistion" ;
+    rdagroup2elements:countryAssociatedWithThePerson <http://id.loc.gov/vocabulary/countries/it> ;
+    rdagroup2elements:dateOfBirth <https://data.bnf.fr/date/1469/> ;
+    rdagroup2elements:dateOfDeath <https://data.bnf.fr/date/1527/> ;
+    rdagroup2elements:fieldOfActivityOfThePerson <http://dewey.info/class/320/>,
+        <http://dewey.info/class/800/>,
+        "Littératures",
+        "Science politique" ;
+    rdagroup2elements:languageOfThePerson <http://id.loc.gov/vocabulary/iso639-2/ita> ;
+    rdagroup2elements:placeOfBirth "Florence (Italie)" ;
+    rdagroup2elements:placeOfDeath "Florence (Italie)" ;
+    bio:birth "1469-05-03" ;
+    bio:death "1527-06-22" ;
+    = <http://fr.dbpedia.org/resource/Nicolas_Machiavel>,
+        <http://viaf.org/viaf/95151646>,
+        <http://www.idref.fr/027000168/id>,
+        <https://bp16.bnf.fr/ark:/12148/cb119137957>,
+        <https://data.bnf.fr/ark:/12148/cb119137957#foaf:Person> ;
+    foaf:birthday "05-03" ;
+    foaf:depiction <http://commons.wikimedia.org/wiki/Special:FilePath/Portrait%2520of%2520Niccol%25C3%25B2%2520Machiavelli%2520by%2520Santi%2520di%2520Tito.jpg>,
+        <https://gallica.bnf.fr/ark:/12148/bd6t5373752r.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bd6t541775530.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k13213817.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k13213921.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k15125927.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k1512962g.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k164131f.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k3324787f.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k33357463.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k33628789.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k48104078.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k4812524r.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k4814360j.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k49958r.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k499593.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k5427027b.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k5579106r.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k56251835.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k5685465x.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k5849269h.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k6138544n.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k61558412.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k6484832b.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k6485329f.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k6496097t.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k6502375s.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k6506417x.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k67219v.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k742943.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k95790r.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k97537007.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9753948r.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k97539532.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k97544223.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k97552694.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9755935r.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k97564449.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k97565029.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9756521n.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9756539b.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k97565437.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9756605w.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9756632s.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9760847b.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9760847b/f2.item.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9760847b/f3.item.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9760847b/f4.item.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9800986c.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9801823t.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/bpt6k9801823t/f2.item.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/btv1b104881297.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/btv1b52514202p.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/btv1b69471311.thumbnail>,
+        <https://gallica.bnf.fr/ark:/12148/btv1b84002883.thumbnail> ;
+    foaf:familyName "Machiavel" ;
+    foaf:gender "male" ;
+    foaf:page <https://data.bnf.fr/ark:/12148/cb119137957> .
+

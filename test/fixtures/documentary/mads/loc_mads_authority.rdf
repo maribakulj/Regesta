@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Variant rdf:about="http://id.loc.gov/authorities/lcsh/sh2002012502" xmlns="http://id.loc.gov/ontologies/mads/2010/11#">
+ 	<rdf:type rdf:resource="http://id.loc.gov/ontologies/mads/2010/11#GenreForm"/>
+ 	<variantLabel>Film and video adaptations</variantLabel>
+ 	<elementList rdf:parseType="Collection">
+ 	 	<GenreFormElement>
+ 	 	 	<elementValue>Film and video adaptations</elementValue>
+ 	 	</GenreFormElement>
+ 	</elementList>
+ 	<hasLaterEstablishedForm rdf:resource="http://id.loc.gov/authorities/lcsh/sh2010004769"/>
+ 	<hasLaterEstablishedForm rdf:resource="http://id.loc.gov/authorities/lcsh/sh2010004770"/>
+ 	<deletionNote>This authority record has been deleted because it is covered by the subdivisions {Film adaptations} (sh2010004769) and {Television adaptations} (sh2010004770).</deletionNote>
+ 	<isMemberOfMADSScheme rdf:resource="http://id.loc.gov/authorities/lcsh"/>
+ 	<isMemberOfMADSCollection rdf:resource="http://id.loc.gov/authorities/lcsh/collection_LCSH_General"/>
+ 	<adminMetadata>
+ 	 	<ri:RecordInfo xmlns:ri="http://id.loc.gov/ontologies/RecordInfo#">
+ 	 	 	<ri:recordCreationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2002-12-09T00:00:00-04:00</ri:recordCreationDate>
+ 	 	 	<ri:recordStatus rdf:datatype="http://www.w3.org/2001/XMLSchema#string">deleted</ri:recordStatus>
+ 	 	 	<ri:recordContentSource rdf:resource="http://id.loc.gov/vocabulary/organizations/ien"/>
+ 	 	 	<ri:languageOfCataloging rdf:resource="http://id.loc.gov/vocabulary/iso639-2/eng"/>
+ 	 	 	<ri:recordChangeDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2010-03-19T12:58:53-04:00</ri:recordChangeDate>
+ 	 	</ri:RecordInfo>
+ 	</adminMetadata>
+</Variant>
+</rdf:RDF>
