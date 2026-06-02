@@ -98,15 +98,19 @@ aggregation, not a new subsystem.
 The model is decided in full above; producers are wired incrementally. Honest
 current state, so the taxonomy is not mistaken for working code:
 
-- **`:dropped` / `:import`** — produced by INTERMARC FRBRisation
-  (`frbrise/loss-productions`): every native field the WEMI projection does not
-  represent.
+- **`:dropped` / `:import`** — produced by INTERMARC FRBRisation (`frbrise`) and
+  the canonical→WEMI projection (`lrmoo.project`): native / canonical fields the
+  WEMI view does not represent.
 - **`:dropped` / `:export`** — produced by the LRMoo RDF exporter
   (`export/export-losses`): every non-`:lrmoo/*` predicate the N-Triples target
   cannot express.
-- **`:coerced`, `:under-specified`, `:ambiguity-collapsed`** — defined in the
-  closed `loss-categories` enum but **have no producer yet** (reserved; wired as
-  the coercing/under-specifying transforms and projections land).
+- **`:under-specified` / `:import`** — produced by the canonical→WEMI projection
+  (`lrmoo.project`): when the canonical layer carries >=2 languages, the floor
+  mints a single Expression where the source implies several (parallel-language
+  Expressions collapsed) — the ADR 0013 graceful-degradation case.
+- **`:coerced`, `:ambiguity-collapsed`** — defined in the closed `loss-categories`
+  enum but **have no producer yet** (reserved; wired as the coercing / collapsing
+  transforms land).
 - The **round-trip** report (A → pivot → B vs A) is **not yet assembled** (WP-5).
 
 ## What this ADR does not decide

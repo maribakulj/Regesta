@@ -98,6 +98,40 @@
         (is (= 2 (:mapped c)))
         (is (= 4 (:total c)))))))
 
+(defn- multilingual
+  "A canonical record with `langs` parallel-language titles on fragments."
+  [id agent & title+langs]
+  (let [frags (map-indexed (fn [i _] (keyword "frag" (str (name id) "." i)))
+                           (partition 2 title+langs))]
+    (model/record
+     {:id id :kind :document
+      :fragments  (mapv #(model/fragment {:id % :source "dc:title"}) frags)
+      :assertions (into [(model/assertion {:subject id :predicate :canon/agent :value agent})]
+                        (mapcat (fn [frag [title lang]]
+                                  [(model/assertion {:subject frag :predicate :canon/title :value title})
+                                   (model/assertion {:subject frag :predicate :canon/lang :value lang})])
+                                frags (partition 2 title+langs)))})))
+
+(deftest parallel-languages-under-specify-the-single-expression
+  (testing "two language titles imply two Expressions; the floor mints one -> :under-specified"
+    (let [p  (project/project (multilingual :record/m "Victor Hugo"
+                                            "Les Misérables" "fr" "The Wretched" "en"))
+          us (filterv #(= :loss/under-specified (:code %)) (:diagnostics p))]
+      (is (= 1 (count (view/expressions p))))       ; the floor collapses to one
+      (is (= 1 (count us)))
+      (is (= :canon/lang (get-in (first us) [:detail :loss/source-field])))
+      (is (= :import     (get-in (first us) [:detail :loss/edge]))))))
+
+(deftest a-single-language-is-a-plain-drop-not-under-specified
+  (testing "one language is not carried onto the Expression -> :dropped, not :under-specified"
+    (let [p     (project/project (multilingual :record/s "Hugo" "Les Misérables" "fr"))
+          codes (set (map :code (dx/losses (:diagnostics p))))]
+      (is (contains? codes :loss/dropped))
+      (is (not (contains? codes :loss/under-specified)))
+      (is (some #(and (= :loss/dropped (:code %))
+                      (= :canon/lang (get-in % [:detail :loss/source-field])))
+                (dx/losses (:diagnostics p)))))))
+
 (deftest exports-to-rdf
   (testing "the projected WEMI graph serialises as N-Triples (F3/F2/F1 + R4/R3)"
     (let [nt (export/->ntriples

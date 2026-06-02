@@ -17,8 +17,11 @@
    - WEMI needs an Expression to connect Work and Manifestation (LRMoo has no
      direct Work–Manifestation link); canonical gives nothing to characterise it
      (language/form), so a minimal Expression is minted to carry the chain.
-   - Every `:canon/*` field not represented is reported as `:dropped` / `:import`
-     loss (ADR 0015). Minted claims default to `:proposed` (ADR 0005)."
+   - Loss (ADR 0015, import edge): unrepresented `:canon/*` fields are `:dropped`;
+     when the canonical layer carries >=2 distinct languages (parallel-language
+     titles = multiple Expressions of the work) the floor's single Expression is
+     `:under-specified` — the graceful-degradation case of ADR 0013. Minted claims
+     default to `:proposed` (ADR 0005)."
   (:require [clojure.string :as str]
             [regesta.diagnostics :as dx]
             [regesta.model :as model]
@@ -92,18 +95,53 @@
        (remove #{:canon/loss-marker})
        distinct))
 
-(defn- loss-productions
-  "A `:dropped` / `:import` loss diagnostic (ADR 0015) for each canonical field
-   the projection does not represent."
+(defn- dropped-losses
+  "A `:dropped` / `:import` loss for each canonical field the projection does not
+   represent. `:canon/lang` is handled separately (`language-losses`), since with
+   multiple languages it is an *under-specification*, not a plain drop."
   [record]
   (for [p (source-fields record)
-        :when (not (contains? mapped-source-fields p))]
+        :when (and (not (contains? mapped-source-fields p))
+                   (not= :canon/lang p))]
     {:kind  :diagnostic
      :value (dx/loss {:category     :dropped
                       :subject      (:id record)
                       :edge         :import
                       :source-field p
                       :message      (str (name p) " not represented in the LRMoo view")})}))
+
+(defn- distinct-langs
+  "Distinct `:canon/lang` values the record carries (one per parallel-language
+   title fragment)."
+  [record]
+  (->> (:assertions record)
+       (filter #(= :canon/lang (:predicate %)))
+       (map :value)
+       distinct))
+
+(defn- language-losses
+  "Language-driven loss (ADR 0015). When a title produced an Expression and the
+   canonical layer carries >=2 languages, the floor mints *one* Expression where
+   the source implies several → `:under-specified`. With exactly one language, the
+   language is simply not carried onto the Expression → `:dropped`."
+  [record]
+  (let [n (count (distinct-langs record))]
+    (cond
+      (not (first-literal record :canon/title)) []
+      (>= n 2) [{:kind  :diagnostic
+                 :value (dx/loss {:category     :under-specified
+                                  :subject      (:id record)
+                                  :edge         :import
+                                  :source-field :canon/lang
+                                  :message      (str n " language expressions collapsed to one"
+                                                     " — Expression level under-specified")})}]
+      (= n 1) [{:kind  :diagnostic
+                :value (dx/loss {:category     :dropped
+                                 :subject      (:id record)
+                                 :edge         :import
+                                 :source-field :canon/lang
+                                 :message      ":canon/lang not carried onto the Expression"})}]
+      :else [])))
 
 (defn coverage
   "How much of a record's canonical fields the WEMI projection represents:
@@ -115,10 +153,12 @@
     {:mapped m :total t :pct (if (pos? t) (quot (* 100 m) t) 0)}))
 
 (defn- runner
-  "Projection productions for one record: the WEMI graph plus a loss diagnostic
-   per dropped canonical field (ADR 0015 / 0013)."
+  "Projection productions for one record: the WEMI graph plus loss diagnostics —
+   dropped canonical fields and the language under-specification (ADR 0015 / 0013)."
   [record]
-  (into (wemi-productions record) (loss-productions record)))
+  (-> (wemi-productions record)
+      (into (dropped-losses record))
+      (into (language-losses record))))
 
 (def rule
   "Compiled `:infer` canonical→WEMI projection rule (ADR 0013)."

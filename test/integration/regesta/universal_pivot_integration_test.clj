@@ -93,3 +93,17 @@
       (is (str/includes? nt "lrmoo/F1_Work"))
       (is (str/includes? nt "lrmoo/F2_Expression"))
       (is (str/includes? nt "lrmoo/R4_embodies")))))
+
+(def ^:private json-bilingual
+  (str "{\"dc:title\":[{\"@value\":\"Les Misérables\",\"@language\":\"fr\"},"
+       "{\"@value\":\"The Wretched\",\"@language\":\"en\"}],"
+       "\"dc:creator\":\"Victor Hugo\"}"))
+
+(deftest parallel-language-titles-under-specify-the-expression-end-to-end
+  (testing "a bilingual DC record through the real vertical -> one Expression -> :under-specified"
+    (let [w  (project-source (shape/shape-json-plugin {:id :plugin/dc-bi :mapping json-mapping})
+                             {:record-id :record/bi :kind :document} json-bilingual)
+          us (filterv #(= :loss/under-specified (:code %)) (:diagnostics w))]
+      (is (= 1 (count (view/expressions w))))
+      (is (= 1 (count us)))
+      (is (= :canon/lang (get-in (first us) [:detail :loss/source-field]))))))
