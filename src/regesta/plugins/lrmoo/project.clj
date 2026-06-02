@@ -1,0 +1,132 @@
+(ns regesta.plugins.lrmoo.project
+  "Canonical → WEMI projection — the *generic* pivot (ADR 0013 §2: the LRMoo
+   plugin owns projection).
+
+   It reads only the canonical floor (`:canon/agent`, `:canon/title`) and mints a
+   WEMI graph, so **any** spoke that maps to canonical (via shape + mapping) gets
+   an LRMoo view — not just INTERMARC. This is the two-rung ladder's graceful
+   degradation (ADR 0013) made real: where `intermarc/frbrise` is the *enriched*
+   projection that exploits the native `145 $3` authority link, this is the
+   floor projection every format shares.
+
+   Honest limits:
+   - Canonical carries **no authority link**, so identity always falls back to the
+     string key (creator + normalised title). That key under-merges title variants
+     (measured: recall ~0.43, `docs/spikes/entity-resolution.md`) — the price of
+     projecting from the floor.
+   - WEMI needs an Expression to connect Work and Manifestation (LRMoo has no
+     direct Work–Manifestation link); canonical gives nothing to characterise it
+     (language/form), so a minimal Expression is minted to carry the chain.
+   - Every `:canon/*` field not represented is reported as `:dropped` / `:import`
+     loss (ADR 0015). Minted claims default to `:proposed` (ADR 0005)."
+  (:require [clojure.string :as str]
+            [regesta.diagnostics :as dx]
+            [regesta.model :as model]
+            [regesta.rules :as rules]
+            [regesta.runtime :as runtime]))
+
+(defn- norm
+  "Diacritic- and case-insensitive normalisation for the Work/Expression key."
+  [s]
+  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
+      (str/replace #"\p{M}+" "")
+      str/lower-case
+      str/trim
+      (str/replace #"\s+" " ")))
+
+(defn- first-literal
+  "First string-valued assertion for `pred` in `record`. Works whether the
+   canonical value is a record-level literal (`:canon/agent \"Hugo\"`) or lives on
+   a qualified fragment (`:canon/title` referencing a fragment that carries the
+   string), so the projection is agnostic to how a spoke shaped its canonical."
+  [record pred]
+  (->> (:assertions record)
+       (filter #(and (= pred (:predicate %)) (string? (:value %))))
+       first
+       :value))
+
+(defn- entity-prod [id kind prov]
+  {:kind :entity :value (model/entity {:id id :kind kind :provenance prov})})
+
+(defn- assert-prod [subject predicate value prov]
+  {:kind  :assertion
+   :value (model/assertion {:subject subject :predicate predicate :value value
+                            :status :proposed :provenance prov})})
+
+(defn- wemi-productions
+  "WEMI productions from the canonical floor: Manifestation always; Expression
+   when a title is present (the minimal connector); Work when a creator is too."
+  [record]
+  (let [rid   (:id record)
+        prov  (model/provenance {:pass :infer :derivation [rid]})
+        manif (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
+        title (first-literal record :canon/title)
+        agent (first-literal record :canon/agent)]
+    (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
+      title (conj (assert-prod manif :lrmoo/R33_has_string title prov))
+      title (into (let [wkey (str (or agent "") "|" (norm title))
+                        expr (model/mint-entity-id :lrmoo/F2_Expression wkey)
+                        work (when agent (model/mint-entity-id :lrmoo/F1_Work wkey))]
+                    ;; F1 and F2 minted from the same key are distinct ids: the
+                    ;; kind is part of the content hash (`mint-entity-id`).
+                    (cond-> [(entity-prod expr :lrmoo/F2_Expression prov)
+                             (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov)
+                             (assert-prod expr :lrmoo/R33_has_string title prov)]
+                      work (into [(entity-prod work :lrmoo/F1_Work prov)
+                                  (assert-prod work :lrmoo/R3_is_realised_in (model/reference expr) prov)
+                                  (assert-prod work :lrmoo/R33_has_string title prov)])))))))
+
+(def mapped-source-fields
+  "Canonical predicates the WEMI projection represents. Every other `:canon/*`
+   assertion a record carries is reported as loss (ADR 0015)."
+  #{:canon/title    ; -> R33 strings (Manifestation / Expression / Work)
+    :canon/agent})  ; -> F1_Work key (creator)
+
+(defn- source-fields
+  "Distinct `:canon/*` predicates the record carries, excluding the in-graph
+   loss marker (which is machinery, not source content)."
+  [record]
+  (->> (:assertions record)
+       (map :predicate)
+       (filter #(= "canon" (namespace %)))
+       (remove #{:canon/loss-marker})
+       distinct))
+
+(defn- loss-productions
+  "A `:dropped` / `:import` loss diagnostic (ADR 0015) for each canonical field
+   the projection does not represent."
+  [record]
+  (for [p (source-fields record)
+        :when (not (contains? mapped-source-fields p))]
+    {:kind  :diagnostic
+     :value (dx/loss {:category     :dropped
+                      :subject      (:id record)
+                      :edge         :import
+                      :source-field p
+                      :message      (str (name p) " not represented in the LRMoo view")})}))
+
+(defn coverage
+  "How much of a record's canonical fields the WEMI projection represents:
+   `{:mapped M :total T :pct P}`."
+  [record]
+  (let [fs (source-fields record)
+        m  (count (filter mapped-source-fields fs))
+        t  (count fs)]
+    {:mapped m :total t :pct (if (pos? t) (quot (* 100 m) t) 0)}))
+
+(defn- runner
+  "Projection productions for one record: the WEMI graph plus a loss diagnostic
+   per dropped canonical field (ADR 0015 / 0013)."
+  [record]
+  (into (wemi-productions record) (loss-productions record)))
+
+(def rule
+  "Compiled `:infer` canonical→WEMI projection rule (ADR 0013)."
+  (rules/compiled-rule {:id :rule.lrmoo/project :phase :infer :runner runner}))
+
+(defn project
+  "Run the canonical→WEMI projection over `record` (the `:infer` phase). Returns
+   the enriched record — WEMI entities and the R3/R4 links, derived from the
+   canonical floor alone."
+  [record]
+  (:record (runtime/run-phase record [rule] :infer)))

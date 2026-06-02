@@ -174,10 +174,13 @@ The decision stands; only a slice is built. Honest current state, so the target 
 not read as shipped:
 
 - **Built:** the `regesta.plugins.lrmoo` vocabulary subset (the WEMI core —
-  F1/F2/F3/F5, R3/R4/R7, R33); the derived typed traversal API (`lrmoo.view`); and
-  an **N-Triples** exporter (`lrmoo.export`) that emits a Manifestation's real
-  data.bnf ARK (ADR 0017). The two-rung ladder degrades as decided — off the
-  showcase a record yields a bare canonical/Manifestation view (measured,
+  F1/F2/F3/F5, R3/R4/R7, R33); the derived typed traversal API (`lrmoo.view`); an
+  **N-Triples** exporter (`lrmoo.export`) that emits a Manifestation's real
+  data.bnf ARK (ADR 0017); and the **generic canonical→WEMI projection**
+  (`lrmoo.project`) — the floor projection any spoke shares, proven cross-format
+  (a Dublin Core record in JSON *and* XML converges on the same Work,
+  `universal-pivot-integration-test`). The two-rung ladder degrades as decided —
+  off the showcase a record yields a bare Manifestation view (measured,
   `docs/eval/frbrisation-fidelity.md`).
 - **Not built** (named in Decision/Consequences as the *target*, not as done):
   - **Turtle / JSON-LD** — only N-Triples ships (the parenthetical "(JSON-LD,
@@ -186,8 +189,9 @@ not read as shipped:
   - **CRM / Linked Art down-projection** and the **museum spokes** — no exporter
     walks the F-class hierarchy yet;
   - the broader **CRM object core** beyond WEMI — the shipped subset is WEMI-only;
-  - the projection is currently INTERMARC-specific (`intermarc/frbrise`), not a
-    generic LRMoo projection rule set in the plugin.
+  - the projection minted from `:canon/*` (`lrmoo.project`) is generic, but the
+    *enriched* projection that exploits native authority links remains
+    INTERMARC-specific (`intermarc/frbrise`); other spokes get the floor view.
 
 ## What this ADR does not decide
 
