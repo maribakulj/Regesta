@@ -93,6 +93,22 @@ aggregation, not a new subsystem.
 - Transforms (ADR 0009 / 0010) should declare when they are lossy, so "coerced"
   is detected automatically rather than guessed.
 
+## Implementation status (2026-06-02)
+
+The model is decided in full above; producers are wired incrementally. Honest
+current state, so the taxonomy is not mistaken for working code:
+
+- **`:dropped` / `:import`** — produced by INTERMARC FRBRisation
+  (`frbrise/loss-productions`): every native field the WEMI projection does not
+  represent.
+- **`:dropped` / `:export`** — produced by the LRMoo RDF exporter
+  (`export/export-losses`): every non-`:lrmoo/*` predicate the N-Triples target
+  cannot express.
+- **`:coerced`, `:under-specified`, `:ambiguity-collapsed`** — defined in the
+  closed `loss-categories` enum but **have no producer yet** (reserved; wired as
+  the coercing/under-specifying transforms and projections land).
+- The **round-trip** report (A → pivot → B vs A) is **not yet assembled** (WP-5).
+
 ## What this ADR does not decide
 
 - The exact coverage formula and thresholds — tuned during WP-5.

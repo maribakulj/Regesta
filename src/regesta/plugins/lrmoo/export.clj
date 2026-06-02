@@ -12,6 +12,7 @@
    `:exporter` is a later assembly step (kept out here to avoid a cycle with
    the vocabulary namespace)."
   (:require [clojure.string :as str]
+            [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.plugins.lrmoo :as lrmoo]))
 
@@ -70,11 +71,30 @@
             (for [[s p o] (triples record)]
               (str "<" s "> <" p "> " (nt-object o) " ."))))
 
+(defn export-losses
+  "Export-edge loss (ADR 0015): this exporter serialises only the `:lrmoo/*`
+   view, so every other predicate the record carries (native `:intermarc/*`,
+   canonical, …) is *dropped* from the N-Triples target. One `:loss/dropped`
+   diagnostic per distinct dropped predicate per subject, `:edge :export`."
+  [record]
+  (->> (:assertions record)
+       (remove #(lrmoo-predicate? (:predicate %)))
+       (map (juxt :subject :predicate))
+       distinct
+       (mapv (fn [[subject pred]]
+               (dx/loss {:category     :dropped
+                         :subject      subject
+                         :edge         :export
+                         :source-field pred
+                         :message      (str (pr-str pred)
+                                            " not expressible in the LRMoo RDF export")})))))
+
 (defn exporter
   "ADR 0007 exporter: render the LRMoo view of `records` as one N-Triples
-   document. `(fn [opts records] -> {:output String :diagnostics []})`."
+   document, and report what the target cannot express as export-edge loss
+   (ADR 0015). `(fn [opts records] -> {:output String :diagnostics [...]})`."
   [_opts records]
   {:output      (->> records
                      (into [] (comp (map ->ntriples) (remove str/blank?)))
                      (str/join "\n"))
-   :diagnostics []})
+   :diagnostics (into [] (mapcat export-losses) records)})
