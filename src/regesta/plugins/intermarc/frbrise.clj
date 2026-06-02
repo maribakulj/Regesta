@@ -39,8 +39,22 @@
       str/trim
       (str/replace #"\s+" " ")))
 
-(defn- entity-prod [id kind prov]
-  {:kind :entity :value (model/entity {:id id :kind kind :provenance prov})})
+(defn- entity-prod
+  "An `:entity` production. `iri` (optional) is the external authority IRI."
+  ([id kind prov] (entity-prod id kind prov nil))
+  ([id kind prov iri]
+   {:kind  :entity
+    :value (model/entity (cond-> {:id id :kind kind :provenance prov}
+                           iri (assoc :iri iri)))}))
+
+(defn- ark-iri
+  "The data.bnf.fr IRI for `record` when its `:source` is an ARK, else nil. This
+   is faithful transcription of the identifier the source already carries — not
+   reconciliation — so the Manifestation node exports as its real, resolvable IRI."
+  [record]
+  (when-let [s (:source record)]
+    (when (str/starts-with? (str s) "ark:")
+      (str "http://data.bnf.fr/" s))))
 
 (defn- assert-prod [subject predicate value prov]
   {:kind  :assertion
@@ -54,9 +68,10 @@
   (let [rid   (:id record)
         prov  (model/provenance {:pass :infer :derivation [rid]})
         manif (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
+        miri  (ark-iri record)
         x3    (field record :intermarc/f145_3)
         m245  (field record :intermarc/f245_a)]
-    (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
+    (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov miri)]
       m245 (conj (assert-prod manif :lrmoo/R33_has_string m245 prov))
       x3   (into (let [expr (model/mint-entity-id :lrmoo/F2_Expression x3)
                        ttl  (field record :intermarc/f145_a)

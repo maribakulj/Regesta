@@ -19,14 +19,21 @@
 (def rdf-type "http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 
 (defn entity-iri
-  "IRI for an entity id. A keyword (the minted `:ent/*` case) becomes a
-   `urn:regesta:` IRI; a string id is assumed to be an IRI already and passes
-   through (so an authority IRI from reconciliation is used verbatim)."
+  "Fallback IRI for an entity id, used when the entity carries no authority
+   `:iri`. A keyword (the minted `:ent/*` case) becomes a `urn:regesta:` IRI; a
+   string id is assumed to be an IRI already and passes through."
   [id]
   (cond
     (keyword? id) (str "urn:regesta:" (namespace id) ":" (name id))
     (string? id)  id
     :else         (str "urn:regesta:" id)))
+
+(defn- iri-index
+  "Map entity id → its authority `:iri`, for the entities of `record` that carry
+   one (e.g. a Manifestation's data.bnf ARK). Export prefers these over the
+   synthetic `urn:regesta:` fallback, for both subject and reference-object IRIs."
+  [record]
+  (into {} (keep (fn [e] (when-let [i (:iri e)] [(:id e) i]))) (:entities record)))
 
 (defn- lrmoo-predicate? [p]
   (and (keyword? p) (= "lrmoo" (namespace p))))
@@ -37,18 +44,20 @@
    its value is a reference) or a literal triple. Each item is `[s-iri p-iri o]`
    with `o` = `{:iri s}` | `{:lit v}`."
   [record]
-  (concat
-   (for [e (:entities record)
-         :when (lrmoo/entity-kind? (:kind e))]
-     [(entity-iri (:id e)) rdf-type {:iri (lrmoo/iri (:kind e))}])
-   (for [a (:assertions record)
-         :when (lrmoo-predicate? (:predicate a))]
-     (let [v (:value a)]
-       [(entity-iri (:subject a))
-        (lrmoo/iri (:predicate a))
-        (if (model/reference-value? v)
-          {:iri (entity-iri (:value/target v))}
-          {:lit v})]))))
+  (let [idx (iri-index record)
+        iri (fn [id] (or (get idx id) (entity-iri id)))]
+    (concat
+     (for [e (:entities record)
+           :when (lrmoo/entity-kind? (:kind e))]
+       [(iri (:id e)) rdf-type {:iri (lrmoo/iri (:kind e))}])
+     (for [a (:assertions record)
+           :when (lrmoo-predicate? (:predicate a))]
+       (let [v (:value a)]
+         [(iri (:subject a))
+          (lrmoo/iri (:predicate a))
+          (if (model/reference-value? v)
+            {:iri (iri (:value/target v))}
+            {:lit v})])))))
 
 (defn- nt-escape [s]
   (-> (str s)

@@ -25,6 +25,24 @@
   (is (= "urn:regesta:ent:work" (export/entity-iri :ent/work)))
   (is (= "http://x/y" (export/entity-iri "http://x/y"))))   ; string passthrough
 
+(deftest authority-iri-is-preferred-over-the-urn-fallback
+  (testing "an entity's :iri is used for its own node AND for references to it"
+    (let [r  (model/record
+              {:id :record/r1 :kind :book
+               :entities [(model/entity {:id :ent/manif :kind :lrmoo/F3_Manifestation
+                                         :iri "http://data.bnf.fr/ark:/12148/cb304403926"})
+                          (model/entity {:id :ent/expr :kind :lrmoo/F2_Expression})]
+               :assertions [(model/assertion {:subject :ent/manif :predicate :lrmoo/R4_embodies
+                                              :value (model/reference :ent/expr)})]})
+          ts (set (export/triples r))]
+      (testing "the manifestation node uses its ARK, not urn:regesta"
+        (is (contains? ts ["http://data.bnf.fr/ark:/12148/cb304403926"
+                           RDF-TYPE {:iri "http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation"}])))
+      (testing "the R4 triple's subject is the ARK; its object (no :iri) falls back to urn"
+        (is (contains? ts ["http://data.bnf.fr/ark:/12148/cb304403926"
+                           "http://iflastandards.info/ns/lrm/lrmoo/R4_embodies"
+                           {:iri "urn:regesta:ent:expr"}]))))))
+
 (deftest triples-type-property-and-literal
   (let [ts (set (export/triples rec))]
     (testing "each WEMI entity is typed to its F-class IRI"

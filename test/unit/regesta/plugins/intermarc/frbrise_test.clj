@@ -68,6 +68,18 @@
       (is (str/includes? nt "lrmoo/F2_Expression"))
       (is (str/includes? nt "lrmoo/R4_embodies")))))
 
+(deftest manifestation-carries-its-real-ark-iri
+  (testing "the Manifestation node exports as its data.bnf ARK, not a urn:regesta id"
+    (let [r    (frbrise/frbrise (by-id records :bnf/cb304403926))
+          manif (first (view/manifestations r))
+          nt   (export/->ntriples r)]
+      (is (= "http://data.bnf.fr/ark:/12148/cb304403926" (:iri manif)))
+      (testing "the ARK is the subject of the F3 type and R4 triples; no urn for the manifestation"
+        (is (str/includes? nt "<http://data.bnf.fr/ark:/12148/cb304403926> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation>"))
+        (is (str/includes? nt "<http://data.bnf.fr/ark:/12148/cb304403926> <http://iflastandards.info/ns/lrm/lrmoo/R4_embodies>")))
+      (testing "the Expression has no authority IRI yet (needs check-char resolution) -> urn fallback"
+        (is (nil? (:iri (first (view/expressions r)))))))))
+
 (deftest frbrisation-reports-loss
   (let [r  (frbrise/frbrise (by-id records :bnf/cb304403926))
         ls (dx/losses (:diagnostics r))]

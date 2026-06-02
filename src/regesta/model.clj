@@ -116,6 +116,12 @@
   [:map
    [:id Id]
    [:kind :keyword]
+   ;; Optional *external* authority IRI for this entity (e.g. its data.bnf.fr
+   ;; ARK), distinct from `:id` which is the *internal* content-derived key used
+   ;; for clustering/dedup (`mint-entity-id`). Set only when a faithful IRI is
+   ;; known from the source (transcription) or reconciliation; RDF export prefers
+   ;; it over a synthetic `urn:regesta:` IRI. See ADR 0013 (interoperable output).
+   [:iri {:optional true} :string]
    [:provenance {:optional true} Provenance]])
 
 ;; ---------------------------------------------------------------------------
@@ -472,11 +478,13 @@
     raw     (assoc :raw raw)))
 
 (defn entity
-  "Construct a synthesized Entity. Required: :id, :kind. :provenance optional.
-   `id` is normally produced by `mint-entity-id`; `:kind` is a plugin keyword
-   (e.g. :lrmoo/work). See ADR 0017."
-  [{:keys [id kind provenance]}]
+  "Construct a synthesized Entity. Required: :id, :kind. :iri and :provenance
+   optional. `id` is normally produced by `mint-entity-id`; `:kind` is a plugin
+   keyword (e.g. :lrmoo/work); `:iri` is the external authority IRI when known.
+   See ADR 0017."
+  [{:keys [id kind iri provenance]}]
   (cond-> {:id id :kind kind}
+    iri        (assoc :iri iri)
     provenance (assoc :provenance provenance)))
 
 (defn assertion
