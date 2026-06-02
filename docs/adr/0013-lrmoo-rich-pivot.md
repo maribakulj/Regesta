@@ -168,6 +168,27 @@ generalises to coverage rated at *both* rungs.
 - **Risk:** LRMoo maturity / tooling (roadmap R6) — mitigated by the view being
   derived (cheap to adjust) and the two-tier fallback (D1).
 
+## Implementation status (2026-06-02)
+
+The decision stands; only a slice is built. Honest current state, so the target is
+not read as shipped:
+
+- **Built:** the `regesta.plugins.lrmoo` vocabulary subset (the WEMI core —
+  F1/F2/F3/F5, R3/R4/R7, R33); the derived typed traversal API (`lrmoo.view`); and
+  an **N-Triples** exporter (`lrmoo.export`) that emits a Manifestation's real
+  data.bnf ARK (ADR 0017). The two-rung ladder degrades as decided — off the
+  showcase a record yields a bare canonical/Manifestation view (measured,
+  `docs/eval/frbrisation-fidelity.md`).
+- **Not built** (named in Decision/Consequences as the *target*, not as done):
+  - **Turtle / JSON-LD** — only N-Triples ships (the parenthetical "(JSON-LD,
+    Turtle)" in Consequences is aspirational; they are thin follow-ons over the
+    same `triples` seq);
+  - **CRM / Linked Art down-projection** and the **museum spokes** — no exporter
+    walks the F-class hierarchy yet;
+  - the broader **CRM object core** beyond WEMI — the shipped subset is WEMI-only;
+  - the projection is currently INTERMARC-specific (`intermarc/frbrise`), not a
+    generic LRMoo projection rule set in the plugin.
+
 ## What this ADR does not decide
 
 - Runtime minting semantics — **ADR 0011 amendment** (forthcoming; D4).

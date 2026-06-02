@@ -160,6 +160,32 @@ confirmed**; they must be re-tested on Work-synthesis. See
 - This formalises the reversal of the README's "deduplication out of scope"
   boundary (roadmap §1–2).
 
+## Implementation status (2026-06-02)
+
+This ADR decided the full FRBRisation / identity / reconciliation design; only a
+slice is built. Honest current state, so the design is not read as shipped:
+
+- **Built:**
+  - Per-record INTERMARC FRBRisation (`intermarc/frbrise`): Manifestation from the
+    ARK, Expression from the embedded `145 $3` link, Work from creator + uniform
+    title, with R4/R3 links and R33 titles.
+  - Deterministic identity via `model/mint-entity-id` (the §1 "work-key hash"),
+    idempotent at merge (ADR 0008) — measured P=R=1.0 on the showcase, recall gap
+    measured off it (`docs/eval/frbrisation-fidelity.md`).
+  - Import-edge loss (ADR 0015).
+- **Not built** (decided here; the scale layer is ADR 0018, Proposed):
+  - the **pluggable resolver seam** (§1 / §4) — identity is a *direct* call to
+    `mint-entity-id`, not a swappable resolver; the hash is the only resolver;
+  - the **authority-anchored resolver**, the pinned **authority snapshot** (§2),
+    and `sameAs` emission — only the Manifestation's transcribed ARK is emitted
+    (ADR 0017), no reconciliation;
+  - **confidence-gated auto-commit** / D7 (§4) — infer productions are `:proposed`
+    by the engine default; promotion to `:asserted` is unimplemented (ADR 0014);
+  - the **batch / cross-record clustering index** (§3) — FRBRisation is strictly
+    per-record (exact clustering works by id collision; no fuzzy batch index);
+  - **reconciliation breadth** (§5 / D11) — nothing beyond reading the embedded
+    link; agents / works / places / Geonames not built.
+
 ## What this ADR does not decide
 
 - The exact work-key ingredients, the confidence threshold, and the first

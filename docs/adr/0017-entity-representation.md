@@ -80,6 +80,10 @@ agnosticism (ADR 0003) holds, and `structural-vocabulary` is unchanged.
 - The `:kind` vocabulary (`:lrmoo/work` …) — plugin / WP-2.
 - The work-key composition feeding `mint-entity-id` — FRBRisation plugin / WP-3
   (D5).
-- The status of inferred assertions — settled by ADR 0005 / 0014: machine truth
-  (`:status :asserted`) marked by `:provenance {:pass :infer …}` + confidence;
-  the uncertain tail is `:proposed`. There is no `:inferred` status (ADR 0005).
+- The status of inferred assertions — settled by ADR 0005 / 0014: infer
+  productions default to **`:proposed`** (the precision-first engine policy,
+  `rules/default-status-for-phase`), marked by `:provenance {:pass :infer …}` +
+  confidence; high-confidence promotion to `:asserted` (D7) is future and
+  unimplemented. There is no `:inferred` status (ADR 0005). *(Corrected
+  2026-06-02: an earlier draft here said inferred assertions are `:asserted`,
+  contradicting ADR 0014 and `default-status-for-phase`.)*

@@ -4,6 +4,12 @@ Structural decisions that shape the Regesta core. Each ADR is a standalone
 document: context, decision, consequences. New major decisions get their own
 ADR; supersessions are explicit, not silent edits.
 
+**Status convention.** Status records the *decision*, not the build. An accepted
+decision may be only partly implemented; where the gap is material the ADR carries
+an `## Implementation status` section listing what is built vs decided-but-unbuilt,
+and the index below is annotated *"partially implemented — see ADR"*. This keeps a
+decision from being read as shipped code (an audit honesty rule).
+
 ## Index
 
 | # | Title | Status |
@@ -20,10 +26,10 @@ ADR; supersessions are explicit, not silent edits.
 | [0010](./0010-stdlib-extensibility.md) | Stdlib extensibility: predicates and transforms via plugins | Accepted |
 | [0011](./0011-fragments-for-qualified-values.md) | Fragments as the canonical home for qualified values | Accepted (entity-minting added by 0014) |
 | [0012](./0012-fragment-identity-scheme.md) | Fragment identity scheme | Accepted (extended by 0016) |
-| [0013](./0013-lrmoo-rich-pivot.md) | LRMoo as the rich pivot vocabulary, via a derived typed view | Accepted |
+| [0013](./0013-lrmoo-rich-pivot.md) | LRMoo as the rich pivot vocabulary, via a derived typed view | Accepted (partially implemented — see ADR) |
 | [0014](./0014-runtime-entity-minting.md) | Runtime entity minting (amends 0011) | Accepted |
-| [0015](./0015-loss-model.md) | Loss model: unit, edges, categories, metric | Accepted |
-| [0016](./0016-frbrisation.md) | FRBRisation: synthesizing WEMI, identity, and reconciliation | Accepted (scale layer in 0018) |
+| [0015](./0015-loss-model.md) | Loss model: unit, edges, categories, metric | Accepted (partially implemented — see ADR) |
+| [0016](./0016-frbrisation.md) | FRBRisation: synthesizing WEMI, identity, and reconciliation | Accepted (partially implemented; scale layer in 0018) |
 | [0017](./0017-entity-representation.md) | Synthesized entity representation (entities on records) | Accepted |
 | [0018](./0018-entity-resolution-at-scale.md) | Entity resolution at scale: reconcile-to-authority, equivalence as assertion, revisability | Proposed |
 
