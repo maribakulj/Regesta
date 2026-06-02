@@ -16,6 +16,7 @@
    A lossy pure-CRM *replacement* (and the export-edge loss it would report) is a
    later slice; this one is the lossless additive view."
   (:require [clojure.string :as str]
+            [regesta.diagnostics :as dx]
             [regesta.plugins.lrmoo :as lrmoo]
             [regesta.plugins.lrmoo.export :as export]))
 
@@ -74,3 +75,79 @@
                      (into [] (comp (map ->ntriples) (remove str/blank?)))
                      (str/join "\n"))
    :diagnostics (into [] (mapcat export/export-losses) records)})
+
+;; ---------------------------------------------------------------------------
+;; Pure-CRM (replacement) — lossy, with the loss reported (slice 2)
+;;
+;; Replaces each LRMoo triple with its CRM equivalent and drops the LRMoo
+;; original. Two losses follow directly from the OWL and are reported at the
+;; export edge (ADR 0015):
+;;   - F2_Expression and F3_Manifestation both become E73_Information_Object, so
+;;     their type distinction is lost              -> :under-specified
+;;   - each WEMI relation becomes a generic CRM property (R3->P130, R4->P165, …)
+;;                                                 -> :coerced
+;; The dropped non-:lrmoo/* predicates are reported by `export/export-losses`,
+;; exactly as for the additive view.
+;; ---------------------------------------------------------------------------
+
+(defn crm-only-triples
+  "`export/triples` with each LRMoo type/relation *replaced* by its CRM
+   super-type/-property (the LRMoo triples dropped). Pure CRM — lossy; the loss is
+   reported by `crm-only-losses`."
+  [record]
+  (map
+   (fn [[s p o :as triple]]
+     (cond
+       (and (= p export/rdf-type) (class-iri->crm (:iri o)))
+       [s p {:iri (class-iri->crm (:iri o))}]
+
+       (prop-iri->crm p)
+       [s (prop-iri->crm p) o]
+
+       :else triple))
+   (export/triples record)))
+
+(defn ->crm-only-ntriples
+  "Render `record` as pure CIDOC-CRM N-Triples (no LRMoo F/R). \"\" when empty."
+  [record]
+  (export/render-ntriples (crm-only-triples record)))
+
+(defn- has-kind? [record kind]
+  (boolean (some #(= kind (:kind %)) (:entities record))))
+
+(defn crm-only-losses
+  "Export-edge loss (ADR 0015) the pure-CRM replacement incurs: the E73 type
+   collapse (`:under-specified`, when both an Expression and a Manifestation are
+   present) and each WEMI relation's generalisation to a generic CRM property
+   (`:coerced`)."
+  [record]
+  (let [collapse (when (and (has-kind? record :lrmoo/F2_Expression)
+                            (has-kind? record :lrmoo/F3_Manifestation))
+                   [(dx/loss {:category     :under-specified
+                              :subject      (:id record)
+                              :edge         :export
+                              :source-field :lrmoo/F3_Manifestation
+                              :message      (str "F2_Expression and F3_Manifestation both serialise as "
+                                                 "E73_Information_Object; the WEMI type distinction is "
+                                                 "lost in pure CRM")})])
+        coerced  (for [p (distinct (map :predicate (:assertions record)))
+                       :when (contains? property-superproperty p)]
+                   (dx/loss {:category     :coerced
+                             :subject      (:id record)
+                             :edge         :export
+                             :source-field p
+                             :message      (str (name p) " serialised as the generic "
+                                                (property-superproperty p))}))]
+    (vec (concat collapse coerced))))
+
+(defn crm-only-exporter
+  "ADR 0007 exporter for the *pure* CRM serialisation: only E/P triples, with the
+   replacement's loss reported (E73 collapse + relation generalisation) on top of
+   the dropped-native-predicate loss the LRMoo export already accounts."
+  [_opts records]
+  {:output      (->> records
+                     (into [] (comp (map ->crm-only-ntriples) (remove str/blank?)))
+                     (str/join "\n"))
+   :diagnostics (into [] (mapcat (fn [r] (concat (export/export-losses r)
+                                                 (crm-only-losses r))))
+                      records)})
