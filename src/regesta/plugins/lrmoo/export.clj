@@ -72,13 +72,20 @@
     (str "<" (:iri o) ">")
     (str "\"" (nt-escape (:lit o)) "\"")))
 
-(defn ->ntriples
-  "Render `record`'s LRMoo triples as N-Triples (one `<s> <p> o .` per line).
-   Returns \"\" for a record with no LRMoo content."
-  [record]
+(defn render-ntriples
+  "Render a seq of `[s p o]` triples (o = `{:iri _}` | `{:lit _}`) as N-Triples,
+   one `<s> <p> o .` per line. Reused by alternative projections (e.g. the CRM
+   down-projection) that augment the triple seq before rendering."
+  [triples]
   (str/join "\n"
-            (for [[s p o] (triples record)]
+            (for [[s p o] triples]
               (str "<" s "> <" p "> " (nt-object o) " ."))))
+
+(defn ->ntriples
+  "Render `record`'s LRMoo triples as N-Triples. Returns \"\" for a record with no
+   LRMoo content."
+  [record]
+  (render-ntriples (triples record)))
 
 (defn export-losses
   "Export-edge loss (ADR 0015): this exporter serialises only the `:lrmoo/*`

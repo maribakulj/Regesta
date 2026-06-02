@@ -15,6 +15,7 @@
             [regesta.model :as model]
             [regesta.plugins.intermarc :as intermarc]
             [regesta.plugins.intermarc.frbrise :as frbrise]
+            [regesta.plugins.lrmoo.crm :as crm]
             [regesta.plugins.lrmoo.export :as export]
             [regesta.plugins.lrmoo.view :as view]))
 
@@ -71,3 +72,11 @@
           r2 (frbrise/frbrise r1)]
       (is (= (:entities r1) (:entities r2)))
       (is (= (:assertions r1) (:assertions r2))))))
+
+(deftest the-vertical-also-down-projects-to-cidoc-crm
+  (testing "the FRBRised manifestation emits CRM-compatible triples, additively (museum spoke)"
+    (let [nt (crm/->ntriples (showcase))]
+      (is (str/includes? nt "iflastandards.info/ns/lrm/lrmoo/F3_Manifestation"))  ; LRMoo kept
+      (is (str/includes? nt "cidoc-crm/E89_Propositional_Object"))                ; Work  -> E89
+      (is (str/includes? nt "cidoc-crm/E73_Information_Object"))                   ; E/M   -> E73
+      (is (str/includes? nt "cidoc-crm/P165_incorporates")))))                    ; R4    -> P165
