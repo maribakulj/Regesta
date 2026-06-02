@@ -132,6 +132,26 @@
                       (= :canon/lang (get-in % [:detail :loss/source-field])))
                 (dx/losses (:diagnostics p)))))))
 
+(deftest uncertain-title-collapses-with-an-ambiguity-loss
+  (testing "an uncertain :canon/title (ADR 0001 multiplicity) is collapsed to one -> :ambiguity-collapsed"
+    (let [r (model/record
+             {:id :record/u :kind :document
+              :assertions [(model/assertion {:subject :record/u :predicate :canon/agent
+                                             :value "Victor Hugo"})
+                           (model/assertion {:subject :record/u :predicate :canon/title
+                                             :value (model/uncertain ["Les Misérables" "Les Miserables"])})]})
+          p  (project/project r)
+          ac (filterv #(= :loss/ambiguity-collapsed (:code %)) (:diagnostics p))]
+      (testing "the title is no longer silently skipped — an Expression is minted"
+        (is (= 1 (count (view/expressions p)))))
+      (is (= 1 (count ac)))
+      (is (= :canon/title (get-in (first ac) [:detail :loss/source-field])))
+      (is (= :import (get-in (first ac) [:detail :loss/edge])))
+      (testing "the chosen alternative lands on the Expression as R33"
+        (is (some #(and (= :lrmoo/R33_has_string (:predicate %))
+                        (= "Les Misérables" (:value %)))
+                  (:assertions p)))))))
+
 (deftest exports-to-rdf
   (testing "the projected WEMI graph serialises as N-Triples (F3/F2/F1 + R4/R3)"
     (let [nt (export/->ntriples

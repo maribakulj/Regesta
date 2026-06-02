@@ -18,10 +18,10 @@
      direct Work–Manifestation link); canonical gives nothing to characterise it
      (language/form), so a minimal Expression is minted to carry the chain.
    - Loss (ADR 0015, import edge): unrepresented `:canon/*` fields are `:dropped`;
-     when the canonical layer carries >=2 distinct languages (parallel-language
-     titles = multiple Expressions of the work) the floor's single Expression is
-     `:under-specified` — the graceful-degradation case of ADR 0013. Minted claims
-     default to `:proposed` (ADR 0005)."
+     >=2 distinct languages (parallel-language titles = multiple Expressions) make
+     the floor's single Expression `:under-specified` (ADR 0013 graceful
+     degradation); an `uncertain` title collapsed to one alternative is
+     `:ambiguity-collapsed`. Minted claims default to `:proposed` (ADR 0005)."
   (:require [clojure.string :as str]
             [regesta.diagnostics :as dx]
             [regesta.model :as model]
@@ -48,6 +48,24 @@
        first
        :value))
 
+(defn- uncertain-title
+  "First `uncertain` (ADR 0001 multiplicity) `:canon/title` value in `record`,
+   or nil. Used only when no literal title is present."
+  [record]
+  (->> (:assertions record)
+       (filter #(= :canon/title (:predicate %)))
+       (map :value)
+       (filter model/uncertain-value?)
+       first))
+
+(defn- title-of
+  "The title string for the Work/Expression: a literal when present, else the
+   first string alternative of an uncertain `:canon/title`. Without this, an
+   uncertain title would be silently skipped and no Expression minted."
+  [record]
+  (or (first-literal record :canon/title)
+      (first (filter string? (:value/alternatives (uncertain-title record))))))
+
 (defn- entity-prod [id kind prov]
   {:kind :entity :value (model/entity {:id id :kind kind :provenance prov})})
 
@@ -63,7 +81,7 @@
   (let [rid   (:id record)
         prov  (model/provenance {:pass :infer :derivation [rid]})
         manif (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
-        title (first-literal record :canon/title)
+        title (title-of record)
         agent (first-literal record :canon/agent)]
     (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
       title (conj (assert-prod manif :lrmoo/R33_has_string title prov))
@@ -152,13 +170,30 @@
         t  (count fs)]
     {:mapped m :total t :pct (if (pos? t) (quot (* 100 m) t) 0)}))
 
+(defn- ambiguity-losses
+  "Ambiguity loss (ADR 0015): when the title was taken from an `uncertain` value
+   (no literal won), the projection forced one of N candidates → `:ambiguity-
+   collapsed`, tied to the assertion IR's multiplicity (ADR 0001)."
+  [record]
+  (if (and (nil? (first-literal record :canon/title))
+           (some string? (:value/alternatives (uncertain-title record))))
+    [{:kind  :diagnostic
+      :value (dx/loss {:category     :ambiguity-collapsed
+                       :subject      (:id record)
+                       :edge         :import
+                       :source-field :canon/title
+                       :message      "uncertain :canon/title collapsed to one alternative"})}]
+    []))
+
 (defn- runner
   "Projection productions for one record: the WEMI graph plus loss diagnostics —
-   dropped canonical fields and the language under-specification (ADR 0015 / 0013)."
+   dropped canonical fields, the language under-specification, and an uncertain-
+   title ambiguity collapse (ADR 0015 / 0013)."
   [record]
   (-> (wemi-productions record)
       (into (dropped-losses record))
-      (into (language-losses record))))
+      (into (language-losses record))
+      (into (ambiguity-losses record))))
 
 (def rule
   "Compiled `:infer` canonical→WEMI projection rule (ADR 0013)."

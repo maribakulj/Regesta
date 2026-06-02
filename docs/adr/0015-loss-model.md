@@ -108,9 +108,11 @@ current state, so the taxonomy is not mistaken for working code:
   (`lrmoo.project`): when the canonical layer carries >=2 languages, the floor
   mints a single Expression where the source implies several (parallel-language
   Expressions collapsed) — the ADR 0013 graceful-degradation case.
-- **`:coerced`, `:ambiguity-collapsed`** — defined in the closed `loss-categories`
-  enum but **have no producer yet** (reserved; wired as the coercing / collapsing
-  transforms land).
+- **`:ambiguity-collapsed` / `:import`** — produced by the canonical→WEMI
+  projection (`lrmoo.project`): an `uncertain` `:canon/title` (the assertion IR's
+  multiplicity, ADR 0001) collapsed to one alternative.
+- **`:coerced`** — defined in the closed `loss-categories` enum but **has no
+  producer yet** (reserved; wired when a self-declaring lossy transform lands).
 - The **round-trip** report (A → pivot → B vs A) is **not yet assembled** (WP-5).
 
 ## What this ADR does not decide
