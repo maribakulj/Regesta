@@ -111,8 +111,13 @@ current state, so the taxonomy is not mistaken for working code:
 - **`:ambiguity-collapsed` / `:import`** — produced by the canonical→WEMI
   projection (`lrmoo.project`): an `uncertain` `:canon/title` (the assertion IR's
   multiplicity, ADR 0001) collapsed to one alternative.
-- **`:coerced`** — defined in the closed `loss-categories` enum but **has no
-  producer yet** (reserved; wired when a self-declaring lossy transform lands).
+- **`:coerced` / `:import`** — produced by the mapping compiler (`mapping`) when a
+  rename applies a transform chain containing a self-declared lossy transform
+  (`transforms/lossy-transforms`, e.g. case folding).
+
+All four loss categories now have a producer, across both edges. Still outstanding:
+- Plugin-contributed transforms are not yet classified for lossiness (their
+  `:coerced` defaults to off); only core transforms declare it.
 - The **round-trip** report (A → pivot → B vs A) is **not yet assembled** (WP-5).
 
 ## What this ADR does not decide

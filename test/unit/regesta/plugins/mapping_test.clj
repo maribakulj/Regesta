@@ -173,11 +173,33 @@
       (is (every? #(= :record/r1 (:subject %)) asrts)))))
 
 (deftest flat-mapping-applies-transform-chain
-  (let [m      (assoc minimal-mapping :mapping/transform [:trim :lowercase])
-        cr     (mapping/compile-mapping m stdlib)
-        record (record-with :native/x ["  ABC  " "DeF" "ghi"])
-        vals   (mapv #(:value (:value %)) (rules/apply-rule cr record))]
-    (is (= ["abc" "def" "ghi"] vals))))
+  (let [m       (assoc minimal-mapping :mapping/transform [:trim :lowercase])
+        cr      (mapping/compile-mapping m stdlib)
+        record  (record-with :native/x ["  ABC  " "DeF" "ghi"])
+        prods   (rules/apply-rule cr record)
+        asserts (filter #(= :assertion (:kind %)) prods)]
+    (is (= ["abc" "def" "ghi"] (mapv #(:value (:value %)) asserts)))
+    (testing "the lossy :lowercase transform also reports a :coerced loss per value (ADR 0015)"
+      (let [coerced (filter #(= :loss/coerced (get-in % [:value :code])) prods)]
+        (is (= 3 (count coerced)))))))
+
+(deftest lossy-transform-emits-coerced-loss
+  (testing "a mapping whose chain discards detail reports :coerced/:import on the source field"
+    (let [m    (assoc minimal-mapping :mapping/transform [:lowercase])
+          cr   (mapping/compile-mapping m stdlib)
+          d    (->> (rules/apply-rule cr (record-with :native/x ["FOO"]))
+                    (filter #(= :diagnostic (:kind %)))
+                    first
+                    :value)]
+      (is (= :loss/coerced (:code d)))
+      (is (= :import     (get-in d [:detail :loss/edge])))
+      (is (= :native/x   (get-in d [:detail :loss/source-field])))
+      (is (= :rule.from-mapping/x (get-in d [:provenance :rule])))))
+  (testing "a non-lossy chain (:trim) emits no :coerced loss"
+    (let [m  (assoc minimal-mapping :mapping/transform [:trim])
+          cr (mapping/compile-mapping m stdlib)
+          ps (rules/apply-rule cr (record-with :native/x ["  x  "]))]
+      (is (every? #(= :assertion (:kind %)) ps)))))
 
 (deftest flat-mapping-multiplicity-preserved
   (let [cr     (mapping/compile-mapping minimal-mapping stdlib)

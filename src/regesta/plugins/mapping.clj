@@ -31,6 +31,7 @@
    assumes the fragments already exist on the record at `:normalize`
    time."
   (:require [malli.core :as m]
+            [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.plugins.transforms :as tx]
             [regesta.rules :as rules]))
@@ -161,6 +162,19 @@
             :message    message
             :provenance (normalize-provenance rule-id)})})
 
+(defn- coerced-production
+  "An import-edge `:coerced` loss (ADR 0015) for a value represented through a
+   lossy transform chain. The native predicate `from` is the lost source field."
+  [{:keys [subject from chain rule-id]}]
+  {:kind :diagnostic
+   :value (dx/loss {:category     :coerced
+                    :subject      subject
+                    :edge         :import
+                    :source-field from
+                    :message      (str "lossy transform chain " (pr-str chain)
+                                       " discarded detail")
+                    :provenance   (normalize-provenance rule-id)})})
+
 (defn- truncate
   "Trim a stringified value to at most `n` chars with an ellipsis. Used
    only in diagnostic messages so a `:transform-failed` on a 10 kB blob
@@ -220,6 +234,7 @@
         to         (:mapping/to mapping-rule)
         chain      (get mapping-rule :mapping/transform [])
         transform  (tx/compose transforms-stdlib chain)
+        lossy?     (boolean (some tx/lossy? chain))
         on-empty   (get mapping-rule :mapping/on-empty :skip)
         confidence (get mapping-rule :mapping/confidence 1.0)
         default    (:mapping/default mapping-rule)
@@ -229,27 +244,31 @@
         q-from     (:from qualifier)
         q-as       (:as qualifier)
 
+        ;; A match yields a seq of productions: the rename assertion, plus a
+        ;; `:coerced` loss when the chain includes a lossy transform (ADR 0015).
         emit-rename-match
         (fn [[s _p v]]
           (cond
             (nil? v)
-            nil
+            []
 
             (or (empty? chain) (not (model/primitive-value? v)))
-            (assertion-production
-             {:subject s :predicate to :value v
-              :confidence confidence :rule-id rule-id})
+            [(assertion-production
+              {:subject s :predicate to :value v
+               :confidence confidence :rule-id rule-id})]
 
             :else
             (let [v' (transform v)]
               (if (some? v')
-                (assertion-production
-                 {:subject s :predicate to :value v'
-                  :confidence confidence :rule-id rule-id})
-                (diagnostic-production
-                 {:severity :info :code :transform-failed
-                  :subject s :rule-id rule-id
-                  :message (transform-failed-message chain v)})))))
+                (cond-> [(assertion-production
+                          {:subject s :predicate to :value v'
+                           :confidence confidence :rule-id rule-id})]
+                  lossy? (conj (coerced-production
+                                {:subject s :from from :chain chain :rule-id rule-id})))
+                [(diagnostic-production
+                  {:severity :info :code :transform-failed
+                   :subject s :rule-id rule-id
+                   :message (transform-failed-message chain v)})]))))
 
         emit-qualifier-match
         (fn [[s _p v]]
@@ -276,7 +295,7 @@
           (let [triples      (rules/record-triples record)
                 from-matches (filterv (fn [[_ p _]] (= p from)) triples)
                 base-prods   (if (seq from-matches)
-                               (into [] (keep emit-rename-match) from-matches)
+                               (into [] (mapcat emit-rename-match) from-matches)
                                (emit-on-empty (:id record)))]
             (if qualifier
               (let [qual-matches (filterv (fn [[_ p _]] (= p q-from)) triples)]

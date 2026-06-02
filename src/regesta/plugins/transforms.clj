@@ -87,6 +87,25 @@
    :parse-iso-date parse-iso-date*})
 
 ;; ---------------------------------------------------------------------------
+;; Lossiness (ADR 0015 §Consequences: "transforms should declare when they are
+;; lossy, so :coerced is detected automatically"). Case folding irreversibly
+;; discards case detail — applying it is a `:coerced` loss. :trim (whitespace is
+;; noise, and it is the documented cross-format reconciliation recipe) and the
+;; numeric / date parses (which *fail* into a :transform-failed diagnostic rather
+;; than silently lose detail) are not lossy. Plugin transforms are not yet
+;; classified — their lossiness defaults to false.
+;; ---------------------------------------------------------------------------
+
+(def lossy-transforms
+  "Core transforms whose application discards detail (ADR 0015 `:coerced`)."
+  #{:lowercase :uppercase})
+
+(defn lossy?
+  "True if transform name `n` is a known lossy core transform."
+  [n]
+  (contains? lossy-transforms n))
+
+;; ---------------------------------------------------------------------------
 ;; Composition
 ;;
 ;; ADR 0009 §Transform: `:mapping/transform` is a vector applied

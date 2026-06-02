@@ -122,6 +122,14 @@
   (doseq [[name f] tx/core-transforms]
     (is (fn? f) (str "transform " name " must be a function"))))
 
+(deftest lossy-classification
+  (testing "case folding discards detail (ADR 0015 :coerced); trim/parse do not"
+    (is (tx/lossy? :lowercase))
+    (is (tx/lossy? :uppercase))
+    (is (not (tx/lossy? :trim)))
+    (is (not (tx/lossy? :parse-int)))
+    (is (not (tx/lossy? :parse-iso-date)))))
+
 ;; ---------------------------------------------------------------------------
 ;; Composition
 ;; ---------------------------------------------------------------------------
