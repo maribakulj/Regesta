@@ -67,7 +67,9 @@ work-key must also canonicalise **multiscript** parallel fields, and
 Manifestation identity is read from `001` / `003` (ARK), not synthesized. (This
 holds for **agents**; a broadened evaluation found explicit **Work** links
 `145 $3` are sparse in bibliographic records (outside FRBR pilots), so Work
-identity is mostly **inference**, not lookup — see `../wp0-spike-findings.md`.)
+identity is mostly **inference**, not lookup — see `../wp0-spike-findings.md`.
+The scale layer for this inference — reconcile-to-authority, equivalence as
+assertion, revisability — is decided in **ADR 0018**.)
 
 ### 3. Clustering is batch-local, stabilised by deterministic identity (D6)
 Works / agents are clustered **within a run**; Regesta keeps no persistent
@@ -99,7 +101,8 @@ The same machinery reconciles named entities during conversion. Two dials:
   study guide kept apart) while a greedy substring match produced **1 false
   merge** — so auto-commit on exact only; near-misses go to proposals. (Caveat:
   that was an easy pair; the broadened evaluation shows the fallback key
-  under-merges title variants and must key on the **uniform title**.)
+  under-merges title variants and must key on the **uniform title**. Measured at
+  recall **0.43** in the offline ER spike; see ADR 0018.)
 
 ### 6. Convergence: bounded passes, fixpoint only if forced (D8; notes ADR 0004)
 FRBRisation cascades (mint a Work, then link its Expressions). V1 keeps
