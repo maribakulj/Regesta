@@ -587,7 +587,7 @@
 ;; ---------------------------------------------------------------------------
 
 (deftest supported-actions-enumerates-the-stdlib
-  (is (= #{:assert :diagnostic :repair} (rules/supported-actions))))
+  (is (= #{:assert :diagnostic :repair :entity} (rules/supported-actions))))
 
 ;; ---------------------------------------------------------------------------
 ;; Validate-rule explanation surface

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS2/"
+    xmlns:premis="info:lc/xmlns/premis-v2" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.loc.gov/METS2/ mets2.xsd"
+    version="2.0" >
+    
+    <mets:header>
+        <mets:intellectualEntityLabel>Einstein's Tongue</mets:intellectualEntityLabel>
+        <mets:intellectualEntityType>Photograph</mets:intellectualEntityType>
+        <mets:metsProfile>http://www.loc.gov/mets/profiles/99999999.xml</mets:metsProfile>
+        <mets:metsUse>SIP</mets:metsUse>
+        <mets:metsStatus>ACTIVE</mets:metsStatus>
+        <premis:linkingIntellectualEntityIdentifier >
+            <premis:linkingIntellectualEntityIdentifierType>URL</premis:linkingIntellectualEntityIdentifierType>
+            <premis:linkingIntellectualEntityIdentifierValue>http://en.wikipedia.org/wiki/File:Einstein_tongue.jpg</premis:linkingIntellectualEntityIdentifierValue>
+        </premis:linkingIntellectualEntityIdentifier>
+        <premis:objectIdentifier  >
+            <premis:objectIdentifierType>LOCAL</premis:objectIdentifierType>
+            <premis:objectIdentifierValue>METS_0001</premis:objectIdentifierValue>
+        </premis:objectIdentifier>
+        <premis:linkingEventIdentifier >
+            <premis:linkingEventIdentifierType>LOCAL</premis:linkingEventIdentifierType>
+            <premis:linkingEventIdentifierValue>EVT_0001</premis:linkingEventIdentifierValue>
+        </premis:linkingEventIdentifier>
+        <premis:linkingAgentIdentifier >
+            <premis:linkingAgentIdentifierType>EMAIL</premis:linkingAgentIdentifierType>
+            <premis:linkingAgentIdentifierValue>thabing@uiuc.edu</premis:linkingAgentIdentifierValue>
+            <premis:linkingAgentRole>CREATOR</premis:linkingAgentRole>
+        </premis:linkingAgentIdentifier>
+    </mets:header>
+    <mets:objectGroup>
+        <mets:objectGroupUse>CONTENT FILES</mets:objectGroupUse>
+        <mets:objectGroup>
+            <mets:objectGroupUse>LO-RES COPY</mets:objectGroupUse>
+            <mets:objectGroupStatus>APPROVED</mets:objectGroupStatus>
+            <mets:file version="2.2" metsExtension="2.0">
+                <premis:objectIdentifier>
+                    <premis:objectIdentifierType>LOCAL</premis:objectIdentifierType>
+                    <premis:objectIdentifierValue>OBJ_0001</premis:objectIdentifierValue>
+                </premis:objectIdentifier>
+                <premis:objectCharacteristics>
+                    <premis:compositionLevel>0</premis:compositionLevel>
+                    <premis:fixity>
+                        <premis:messageDigestAlgorithm>MD5</premis:messageDigestAlgorithm>
+                        <premis:messageDigest>1234567890abcdef</premis:messageDigest>
+                    </premis:fixity>
+                    <premis:format>
+                        <premis:formatDesignation>
+                            <premis:formatName>image/jpeg</premis:formatName>
+                        </premis:formatDesignation>
+                    </premis:format>
+                </premis:objectCharacteristics>
+                <premis:storage>
+                    <premis:contentLocation>
+                        <premis:contentLocationType>URL</premis:contentLocationType>
+                        <premis:contentLocationValue>http://upload.wikimedia.org/wikipedia/en/thumb/8/86/Einstein_tongue.jpg/220px-Einstein_tongue.jpg</premis:contentLocationValue>
+                    </premis:contentLocation>
+                </premis:storage>
+                <premis:relationship>
+                    <premis:relationshipType>HAS_METADATA</premis:relationshipType>
+                    <premis:relationshipSubType>DESCRIPTIVE</premis:relationshipSubType>
+                    <premis:relatedObjectIdentification>
+                        <premis:relatedObjectIdentifierType>LOCAL</premis:relatedObjectIdentifierType>
+                        <premis:relatedObjectIdentifierValue>DMD_0001</premis:relatedObjectIdentifierValue>
+                    </premis:relatedObjectIdentification>
+                </premis:relationship>
+                <mets:embeddedContent>
+                    <mets:binaryData>AAAABBBBCCCC</mets:binaryData>
+                </mets:embeddedContent>
+            </mets:file>
+        </mets:objectGroup>
+        <mets:objectGroup>
+            <mets:objectGroupUse>HI-RES COPY</mets:objectGroupUse>
+            <mets:objectGroupStatus>APPROVED</mets:objectGroupStatus>
+            <mets:file version="2.2" metsExtension="2.0">
+                <premis:objectIdentifier>
+                    <premis:objectIdentifierType>LOCAL</premis:objectIdentifierType>
+                    <premis:objectIdentifierValue>OBJ_0002</premis:objectIdentifierValue>
+                </premis:objectIdentifier>
+                <premis:objectCharacteristics>
+                    <premis:compositionLevel>0</premis:compositionLevel>
+                    <premis:fixity>
+                        <premis:messageDigestAlgorithm>MD5</premis:messageDigestAlgorithm>
+                        <premis:messageDigest>abcdef1234567890</premis:messageDigest>
+                    </premis:fixity>
+                    <premis:format>
+                        <premis:formatDesignation>
+                            <premis:formatName>image/jpeg</premis:formatName>
+                        </premis:formatDesignation>
+                    </premis:format>
+                </premis:objectCharacteristics>
+                <premis:storage>
+                    <premis:contentLocation>
+                        <premis:contentLocationType>URL</premis:contentLocationType>
+                        <premis:contentLocationValue>http://www.hdwallpapers-desktop.com/wallpaper/wp-content/uploads/2012/10/09/1934/Albert-Einstein-Wallpaper-scientist-physicist-theorist-face-tongue.jpg</premis:contentLocationValue>
+                    </premis:contentLocation>
+                </premis:storage>
+                <premis:relationship>
+                    <premis:relationshipType>METADATA</premis:relationshipType>
+                    <premis:relationshipSubType>DESCRIPTIVE</premis:relationshipSubType>
+                    <premis:relatedObjectIdentification>
+                        <premis:relatedObjectIdentifierType>LOCAL</premis:relatedObjectIdentifierType>
+                        <premis:relatedObjectIdentifierValue>DMD_0001</premis:relatedObjectIdentifierValue>
+                    </premis:relatedObjectIdentification>
+                </premis:relationship>
+            </mets:file>
+        </mets:objectGroup>
+    </mets:objectGroup>
+    <mets:objectGroup>
+        <mets:objectGroupUse>DESCRIPTIVE METADATA</mets:objectGroupUse>
+        <mets:file version="2.2" metsExtension="2.0">
+            <premis:objectIdentifier>
+                <premis:objectIdentifierType>LOCAL</premis:objectIdentifierType>
+                <premis:objectIdentifierValue>DMD_0001</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+                <premis:compositionLevel>0</premis:compositionLevel>
+                <premis:format>
+                    <premis:formatDesignation>
+                        <premis:formatName>text/xml</premis:formatName>
+                    </premis:formatDesignation>
+                </premis:format>
+            </premis:objectCharacteristics>
+            <premis:linkingEventIdentifier>
+                <premis:linkingEventIdentifierType>LOCAL</premis:linkingEventIdentifierType>
+                <premis:linkingEventIdentifierValue>EVT_0002</premis:linkingEventIdentifierValue>
+            </premis:linkingEventIdentifier>
+            <mets:objectUse>MODS</mets:objectUse>
+            <mets:embeddedContent>
+                <mets:xmlData>
+                    <mods xmlns:xlink="http://www.w3.org/1999/xlink" version="3.4"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3"
+                        xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd">
+                        <titleInfo>
+                            <title>Einstein tongue</title>
+                         </titleInfo>
+                        <name type="personal" >
+                            <namePart>Sasse, Arthur</namePart>
+                            <role>
+                                <roleTerm type="text">photographer</roleTerm>
+                            </role>
+                        </name>
+                        <typeOfResource>still image</typeOfResource>
+                        <originInfo>
+                            <dateCreated>1951-03-14</dateCreated>
+                        </originInfo>
+                        <abstract>Albert Einstein famously sticks his tongue out for a photographer.</abstract>
+                        <subject>
+                            <name><namePart>Einstein, Albert</namePart></name>
+                        </subject>
+                    </mods>
+                </mets:xmlData>
+            </mets:embeddedContent>
+        </mets:file>
+    </mets:objectGroup>
+    <mets:objectGroup>
+        <mets:objectGroupUse>LOGICAL STRUCTURE MAP</mets:objectGroupUse>
+        <mets:objectGroup>
+            <mets:objectGroupLabel>Tongue</mets:objectGroupLabel>
+            <mets:filePart>
+                <premis:linkingObjectIdentifier>
+                    <premis:linkingObjectIdentifierType>LOCAL</premis:linkingObjectIdentifierType>
+                    <premis:linkingObjectIdentifierValue>OBJ_0002</premis:linkingObjectIdentifierValue>
+                </premis:linkingObjectIdentifier>
+                <mets:rectangle>
+                    <mets:topLeft>
+                        <mets:x>100</mets:x>
+                        <mets:y>100</mets:y>
+                    </mets:topLeft>
+                    <mets:bottomRight>
+                        <mets:x>300</mets:x>
+                        <mets:y>400</mets:y>
+                    </mets:bottomRight>
+                </mets:rectangle>
+            </mets:filePart>
+        </mets:objectGroup>
+        <mets:objectGroup>
+            <mets:objectGroupLabel>Left Eye</mets:objectGroupLabel>
+            <mets:filePart>
+                <premis:linkingObjectIdentifier>
+                    <premis:linkingObjectIdentifierType>LOCAL</premis:linkingObjectIdentifierType>
+                    <premis:linkingObjectIdentifierValue>OBJ_0002</premis:linkingObjectIdentifierValue>
+                </premis:linkingObjectIdentifier>
+                <mets:circle>
+                    <mets:center>
+                        <mets:x>20</mets:x>
+                        <mets:y>30</mets:y>
+                    </mets:center>
+                    <mets:radius>20</mets:radius>
+                </mets:circle>
+            </mets:filePart>
+        </mets:objectGroup>
+        <mets:objectGroup>
+            <mets:objectGroupLabel>Right Eye</mets:objectGroupLabel>
+            <mets:filePart>
+                <premis:linkingObjectIdentifier>
+                    <premis:linkingObjectIdentifierType>LOCAL</premis:linkingObjectIdentifierType>
+                    <premis:linkingObjectIdentifierValue>OBJ_0002</premis:linkingObjectIdentifierValue>
+                </premis:linkingObjectIdentifier>
+                <mets:circle>
+                    <mets:center>
+                        <mets:x>80</mets:x>
+                        <mets:y>30</mets:y>
+                    </mets:center>
+                    <mets:radius>20</mets:radius>
+                </mets:circle>
+            </mets:filePart>
+        </mets:objectGroup>
+    </mets:objectGroup>
+    <premis:event version="2.2" >
+        <premis:eventIdentifier>
+            <premis:eventIdentifierType>LOCAL</premis:eventIdentifierType>
+            <premis:eventIdentifierValue>EVT_0001</premis:eventIdentifierValue>
+        </premis:eventIdentifier>
+        <premis:eventType>METS_FILE_CREATED</premis:eventType>
+        <premis:eventDateTime>2013-02-20T15:57:01Z</premis:eventDateTime>
+    </premis:event>
+    <premis:event version="2.2" >
+        <premis:eventIdentifier>
+            <premis:eventIdentifierType>LOCAL</premis:eventIdentifierType>
+            <premis:eventIdentifierValue>EVT_0002</premis:eventIdentifierValue>
+        </premis:eventIdentifier>
+        <premis:eventType>MODS_FILE_CREATED</premis:eventType>
+        <premis:eventDateTime>2012-11-20T15:57:01Z</premis:eventDateTime>
+    </premis:event>
+    
+</mets:mets>

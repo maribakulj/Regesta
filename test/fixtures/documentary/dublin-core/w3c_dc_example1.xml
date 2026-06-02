@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<metadata
+  xmlns="http://www.ukoln.ac.uk/metadata/dcdot/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.ukoln.ac.uk/metadata/dcdot/ http://www.ukoln.ac.uk/metadata/dcdot/dcdot.xsd"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  
+  <dc:identifier>
+    http://example.org/DC_example1.jpg
+  </dc:identifier>
+   
+  <dc:title xml:lang="en" >
+    Dublin Core Tutorial
+  </dc:title>
+  
+  <dc:language>
+    en
+  </dc:language>
+  
+  <dc:contributor>
+    The Dublin Core Task Force
+  </dc:contributor>
+   
+  <dc:creator>
+    Alan Kelsey
+  </dc:creator>
+  
+  <dc:date>
+    2007-01-06T00:00:00.00
+  </dc:date>
+  
+  <dc:coverage>
+    Hennepin Technical College
+  </dc:coverage>
+    
+  <dc:description xml:lang="en">
+    Learning Advanced Web Design can be fun and easy! Learn how to design web pages with proper tags, styles, and scripting.
+  </dc:description>
+  
+  <dc:subject xml:lang="en" >
+    Dublin Core Meta Tags
+  </dc:subject>
+  
+  <dc:type>
+    Image
+  </dc:type>
+  
+  <dc:relation>
+    TutorialOnline.info
+  </dc:relation>
+
+  <dc:source>
+    Dublin Core metadata image
+  </dc:source>
+
+  <dc:rights>
+    Copyright 2007, Alan Kelsey, Ltd. All rights reserved.
+  </dc:rights>
+  
+  <dc:publisher>
+    Alan Kelsey, Ltd.
+  </dc:publisher>
+
+  <dc:format>
+    image/jpeg
+  </dc:format>
+
+</metadata>

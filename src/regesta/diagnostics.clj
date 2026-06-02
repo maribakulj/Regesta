@@ -164,6 +164,87 @@
      :codes        (count (into #{} (map :code) diagnostics))}))
 
 ;; ---------------------------------------------------------------------------
+;; Loss (ADR 0015 / D9)
+;;
+;; Loss is a first-class diagnostic *category*, not a new subsystem. A loss
+;; diagnostic has code `:loss/<category>` (so the existing by-code /
+;; group-by-code aggregations work on it unchanged), and carries the
+;; conversion `edge` and the lost native `source-field` in `:detail`. It pairs
+;; with the in-graph `:canon/loss-marker` assertion (the canonical plugin).
+;; The metric is always a per-category breakdown, never a single number.
+;; ---------------------------------------------------------------------------
+
+(def loss-categories
+  "Closed set of loss kinds (ADR 0015):
+   - :dropped             — no target representation at all
+   - :coerced             — represented via a lossy transform
+   - :under-specified     — the target is coarser than the source
+   - :ambiguity-collapsed — N candidates existed; the target forced one"
+  #{:dropped :coerced :under-specified :ambiguity-collapsed})
+
+(def loss-edges
+  "Where loss is measured: :import (source→pivot) or :export (pivot→target)."
+  #{:import :export})
+
+(defn loss
+  "Construct a loss Diagnostic (ADR 0015). `category` ∈ `loss-categories`;
+   `edge` ∈ `loss-edges`; `source-field` names the lost native field (opaque
+   to the core). The code is `:loss/<category>`. Severity defaults to :info —
+   loss is reported, not a failure — raise it per call when a loss is serious.
+   Returns a model Diagnostic; throws on an unknown category or edge."
+  [{:keys [category subject edge source-field message severity provenance]
+    :or   {severity :info}}]
+  (when-not (contains? loss-categories category)
+    (throw (ex-info "Unknown loss category"
+                    {:category category :supported loss-categories})))
+  (when-not (contains? loss-edges edge)
+    (throw (ex-info "Unknown loss edge" {:edge edge :supported loss-edges})))
+  (model/diagnostic
+   {:severity   severity
+    :code       (keyword "loss" (name category))
+    :subject    subject
+    :message    message
+    :provenance provenance
+    :detail     (cond-> {:loss/edge edge}
+                  source-field (assoc :loss/source-field source-field))}))
+
+(defn loss?
+  "True if `d` is a loss diagnostic (its code lives in the `loss` namespace)."
+  [d]
+  (= "loss" (namespace (:code d))))
+
+(defn losses
+  "The loss diagnostics in the collection."
+  [diagnostics]
+  (filterv loss? diagnostics))
+
+(defn loss-category
+  "The category keyword of a loss diagnostic (e.g. :dropped), or nil if `d`
+   is not a loss diagnostic."
+  [d]
+  (when (loss? d) (keyword (name (:code d)))))
+
+(defn count-by-loss-category
+  "Map loss-category → count over the loss diagnostics in the collection,
+   including zeros for categories not present."
+  [diagnostics]
+  (reduce (fn [acc d] (update acc (loss-category d) (fnil inc 0)))
+          (zipmap loss-categories (repeat 0))
+          (losses diagnostics)))
+
+(defn loss-summary
+  "Per-category and per-edge breakdown of loss (ADR 0015 — never a single
+   number): {:total N :by-category {…} :by-edge {…}}."
+  [diagnostics]
+  (let [ls (losses diagnostics)]
+    {:total       (count ls)
+     :by-category (count-by-loss-category ls)
+     :by-edge     (reduce (fn [acc d]
+                            (update acc (get-in d [:detail :loss/edge]) (fnil inc 0)))
+                          {}
+                          ls)}))
+
+;; ---------------------------------------------------------------------------
 ;; Reporting
 ;;
 ;; Plain text, no colors, no terminal control. The CLI is free to add

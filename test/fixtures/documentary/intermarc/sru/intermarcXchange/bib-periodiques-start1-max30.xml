@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?><srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/" xmlns="http://catalogue.bnf.fr/namespaces/InterXMarc" xmlns:ixm="http://catalogue.bnf.fr/namespaces/InterXMarc" xmlns:mn="http://catalogue.bnf.fr/namespaces/motsnotices" xmlns:sd="http://www.loc.gov/zing/srw/diagnostic/">
+<srw:version>1.2</srw:version>
+<srw:echoedSearchRetrieveRequest>
+<srw:version>1.2</srw:version>
+<srw:query>bib.recordtype any "per"</srw:query>
+</srw:echoedSearchRetrieveRequest>
+<srw:numberOfRecords>552972</srw:numberOfRecords>
+<srw:records>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb41322132x" type="Bibliographic">   <mxc:leader>00315c01s 2200027  145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF41322132000000X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb41322132x</mxc:controlfield>   <mxc:controlfield tag="008">080827c 1998                 frfre p?xxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">La Revanche</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Paris</mxc:subfield>      <mxc:subfield code="c">[s.n.?]</mxc:subfield>      <mxc:subfield code="d">1998-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">gr. fol.</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="768" ind1="4" ind2=" ">      <mxc:subfield code="3">41321539</mxc:subfield>      <mxc:subfield code="t">Notice nécrologique sur Maria-Philippe Coupelin, peintre...</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb41322132x</srw:recordIdentifier>
+<srw:recordPosition>1</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20080827</ixm:attr>
+<ixm:attr name="LastModificationDate">20080827</ixm:attr>
+<mn:score>1.9063045</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb42734220q" type="Bibliographic">   <mxc:leader>00283c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF42734220000000X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb42734220q</mxc:controlfield>   <mxc:controlfield tag="008">120824c 1947                 nzeng pzxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2="0">      <mxc:subfield code="a">Landfall</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Landfall</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">[Dunedin, New Zealand]</mxc:subfield>      <mxc:subfield code="c">Otago university press</mxc:subfield>      <mxc:subfield code="d">1947-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°</mxc:subfield>      <mxc:subfield code="d">22 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Trimestriel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb42734220q</srw:recordIdentifier>
+<srw:recordPosition>2</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20120824</ixm:attr>
+<ixm:attr name="LastModificationDate">20120926</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb42489050t" type="Bibliographic">   <mxc:leader>00336n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF424890500000000</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb42489050t</mxc:controlfield>   <mxc:controlfield tag="008">110816d 1909                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bulletin paroissial</mxc:subfield>      <mxc:subfield code="b">Beaurepaire (Vendée)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Bulletin paroissial de Beaurepaire</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">N° 1(juillet 1909)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Saint-Maixent</mxc:subfield>      <mxc:subfield code="c">E Payet</mxc:subfield>      <mxc:subfield code="d">1909-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb42489050t</srw:recordIdentifier>
+<srw:recordPosition>3</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20110816</ixm:attr>
+<ixm:attr name="LastModificationDate">20110816</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb42178200v" type="Bibliographic">   <mxc:leader>00415c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF421782000000003</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb42178200v</mxc:controlfield>   <mxc:controlfield tag="008">100413c 1958                 useng p?xxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2="0">      <mxc:subfield code="a">December magazine</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">December magazine</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">Vol. 1, n°1</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Highland Park</mxc:subfield>      <mxc:subfield code="c">Chicago press</mxc:subfield>      <mxc:subfield code="d">1958-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°1</mxc:subfield>      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="768" ind1="1" ind2=" ">      <mxc:subfield code="3">42178137</mxc:subfield>      <mxc:subfield code="t">Essays from the "Friday literary review", 1909-1913</mxc:subfield>      <mxc:subfield code="y">0-913204-32-3</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="768" ind1="1" ind2=" ">      <mxc:subfield code="3">42178204</mxc:subfield>      <mxc:subfield code="t">"Expresslanes"</mxc:subfield>      <mxc:subfield code="y">0-913204-26-9</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb42178200v</srw:recordIdentifier>
+<srw:recordPosition>4</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20100413</ixm:attr>
+<ixm:attr name="LastModificationDate">20100413</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb423339421" type="Bibliographic">   <mxc:leader>00328n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF42333942000000X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb423339421</mxc:controlfield>   <mxc:controlfield tag="008">101209d 1908                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bulletin paroissial</mxc:subfield>      <mxc:subfield code="b">Artigat</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Bulletin paroissial d'Artigat</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">N° 1(Décembre 1908)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Rennes</mxc:subfield>      <mxc:subfield code="c">Trochu</mxc:subfield>      <mxc:subfield code="d">1908-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb423339421</srw:recordIdentifier>
+<srw:recordPosition>5</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20101209</ixm:attr>
+<ixm:attr name="LastModificationDate">20101209</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb37583794p" type="Bibliographic">   <mxc:leader>00332n01s 2200027 i245a </mxc:leader>   <mxc:controlfield tag="001">FRBNF375837940000007</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb37583794p</mxc:controlfield>   <mxc:controlfield tag="008">821218n                      fr    p  7b     1</mxc:controlfield>   <mxc:controlfield tag="009">ax x          xx   </mxc:controlfield>   <mxc:datafield tag="022" ind1="1" ind2=" ">      <mxc:subfield code="a">0706-6120</mxc:subfield>      <mxc:subfield code="c">0706-6120</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2=" ">      <mxc:subfield code="a">Annual report - Brooke Bond Foods Limited</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="0" ind2=" ">      <mxc:subfield code="a">[Annual report]</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="f">[Brooke Bond Foods Limited]</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="917" ind1=" " ind2=" ">      <mxc:subfield code="o">OPL</mxc:subfield>      <mxc:subfield code="a">004847313</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="919" ind1=" " ind2=" ">      <mxc:subfield code="p">FR</mxc:subfield>      <mxc:subfield code="o">CNEPS</mxc:subfield>      <mxc:subfield code="a">07066120</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb37583794p</srw:recordIdentifier>
+<srw:recordPosition>6</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">19871004</ixm:attr>
+<ixm:attr name="LastModificationDate">20130628</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb46567594n" type="Bibliographic">   <mxc:leader>00285c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF465675940000006</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb46567594n</mxc:controlfield>   <mxc:controlfield tag="008">200706c 1969                 nleng pkxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2="0">      <mxc:subfield code="a">Oosters genootschap in Nederland</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Oosters genootschap in Nederland</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2="1">      <mxc:subfield code="a">Leiden</mxc:subfield>      <mxc:subfield code="c">E. J. Brill</mxc:subfield>      <mxc:subfield code="d">1969-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°</mxc:subfield>      <mxc:subfield code="d">22 cm</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb46567594n</srw:recordIdentifier>
+<srw:recordPosition>7</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20200706</ixm:attr>
+<ixm:attr name="LastModificationDate">20200727</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb47216665p" type="Bibliographic">   <mxc:leader>00295c01s 2200027  145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF472166650000000</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb47216665p</mxc:controlfield>   <mxc:controlfield tag="008">230328c 1983                 befre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">aa d          xx   </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2="0">      <mxc:subfield code="a">Belgia 2000</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Belgia 2000</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2="1">      <mxc:subfield code="a">Grimbergen</mxc:subfield>      <mxc:subfield code="c">Byblos</mxc:subfield>      <mxc:subfield code="d">1983-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">24 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="300" ind1=" " ind2=" ">      <mxc:subfield code="a">Notice rédigée d'après  : 6 (1984)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb47216665p</srw:recordIdentifier>
+<srw:recordPosition>8</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20230328</ixm:attr>
+<ixm:attr name="LastModificationDate">20230329</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb425104587" type="Bibliographic">   <mxc:leader>00367c01s 22000271i245a </mxc:leader>   <mxc:controlfield tag="001">FRBNF425104580000007</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb425104587</mxc:controlfield>   <mxc:controlfield tag="008">110922c                      nleng pm jb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="022" ind1="2" ind2=" ">      <mxc:subfield code="a">1873-3085</mxc:subfield>      <mxc:subfield code="c">1293-2558</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2=" ">      <mxc:subfield code="a">Solid stat sciences</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Solid state sciences (Online)</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="c">Elsevier</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="321" ind1=" " ind2=" ">      <mxc:subfield code="t">Mir@bel</mxc:subfield>      <mxc:subfield code="x">2678-0038</mxc:subfield>      <mxc:subfield code="u">https://reseau-mirabel.info</mxc:subfield>      <mxc:subfield code="v">https://reseau-mirabel.info/revue/issn/1873-3085</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb425104587</srw:recordIdentifier>
+<srw:recordPosition>9</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20110922</ixm:attr>
+<ixm:attr name="LastModificationDate">20240715</ixm:attr>
+<mn:score>1.9061558</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb40075101r" type="Bibliographic">   <mxc:leader>00292n01s 2200027  345a </mxc:leader>   <mxc:controlfield tag="001">FRBNF400751010000005</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb40075101r</mxc:controlfield>   <mxc:controlfield tag="008">051123c 2002                 cheng pb40b  001 </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="022" ind1="2" ind2=" ">      <mxc:subfield code="a">1424-862X</mxc:subfield>      <mxc:subfield code="c">1424-862X</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2=" ">      <mxc:subfield code="a">NeuroSignals</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Neuro-signals</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Basel</mxc:subfield>      <mxc:subfield code="c">Karger</mxc:subfield>      <mxc:subfield code="d">2002-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">28 cm</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb40075101r</srw:recordIdentifier>
+<srw:recordPosition>10</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20051123</ixm:attr>
+<ixm:attr name="LastModificationDate">20130327</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb40188761c" type="Bibliographic">   <mxc:leader>00311n01s 2200027  345a </mxc:leader>   <mxc:controlfield tag="001">FRBNF401887610000006</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb40188761c</mxc:controlfield>   <mxc:controlfield tag="008">060628c 199?                 brpor p? kb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="022" ind1="2" ind2=" ">      <mxc:subfield code="a">0101-3262</mxc:subfield>      <mxc:subfield code="c">0101-3262</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="210" ind1=" " ind2=" ">      <mxc:subfield code="a">Cad. CEDES</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2=" ">      <mxc:subfield code="a">Cadernos CEDES</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Cadernos CEDES</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Campinas</mxc:subfield>      <mxc:subfield code="c">CEDES</mxc:subfield>      <mxc:subfield code="d">-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">30 cm</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb40188761c</srw:recordIdentifier>
+<srw:recordPosition>11</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20060628</ixm:attr>
+<ixm:attr name="LastModificationDate">20130327</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb453677712" type="Bibliographic">   <mxc:leader>00309c01s 2200027  145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF453677710000005</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb453677712</mxc:controlfield>   <mxc:controlfield tag="008">171011n 196.                 frfre p?xxb      </mxc:controlfield>   <mxc:controlfield tag="009">ax x          xx   </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="a">sti</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2="0">      <mxc:subfield code="a">Documents catéchétiques africains</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Documents catéchétiques africains</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="f">[dir.] Jean Orchampt</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Tours</mxc:subfield>      <mxc:subfield code="c">Maison Mame</mxc:subfield>      <mxc:subfield code="d">196.-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">30 cm</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb453677712</srw:recordIdentifier>
+<srw:recordPosition>12</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20171011</ixm:attr>
+<ixm:attr name="LastModificationDate">20171030</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb424438811" type="Bibliographic">   <mxc:leader>00398n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF424438810000009</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb424438811</mxc:controlfield>   <mxc:controlfield tag="008">110601d 1936                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bulletin paroissial</mxc:subfield>      <mxc:subfield code="b">Carmaux. 1936-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Le Messager de Sainte-Cécile de Carmaux</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">1re année n° 1(novembre 1936)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Albi</mxc:subfield>      <mxc:subfield code="c">J. Jomier</mxc:subfield>      <mxc:subfield code="d">1936-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">43 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="780" ind1=" " ind2="2">      <mxc:subfield code="3">42443884</mxc:subfield>      <mxc:subfield code="t">Bulletin paroissial (Carmaux. 1933-1936)</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb424438811</srw:recordIdentifier>
+<srw:recordPosition>13</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20110601</ixm:attr>
+<ixm:attr name="LastModificationDate">20110601</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb44236891s" type="Bibliographic">   <mxc:leader>00315c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF442368910000003</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb44236891s</mxc:controlfield>   <mxc:controlfield tag="008">141205d 1946 1947            deger pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Die Fähre</mxc:subfield>      <mxc:subfield code="b">München</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Die Fähre</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">1. Jahrgang (1946)-2. Jahrgang (1947)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">München</mxc:subfield>      <mxc:subfield code="c">W. Weismann</mxc:subfield>      <mxc:subfield code="d">1946-1947</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°</mxc:subfield>      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb44236891s</srw:recordIdentifier>
+<srw:recordPosition>14</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20141205</ixm:attr>
+<ixm:attr name="LastModificationDate">20141208</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb42054621c" type="Bibliographic">   <mxc:leader>00352c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF420546210000007</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb42054621c</mxc:controlfield>   <mxc:controlfield tag="008">090918c 200.                 itita paxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2="0">      <mxc:subfield code="a">Politica e religione</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Politica e religione</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="e">annuario</mxc:subfield>      <mxc:subfield code="f">direttore Michele Nicoletti</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Brescia</mxc:subfield>      <mxc:subfield code="c">Morcelliana</mxc:subfield>      <mxc:subfield code="d">[200.]-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">21 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Annuel</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="750" ind1="2" ind2="3">      <mxc:subfield code="a">Annuario : politica e religione</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb42054621c</srw:recordIdentifier>
+<srw:recordPosition>15</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20090918</ixm:attr>
+<ixm:attr name="LastModificationDate">20110307</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb400511121" type="Bibliographic">   <mxc:leader>00272c01s 22000271i245a </mxc:leader>   <mxc:controlfield tag="001">FRBNF400511120000003</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb400511121</mxc:controlfield>   <mxc:controlfield tag="008">051013c                      gbeng pb 2b      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="022" ind1="2" ind2=" ">      <mxc:subfield code="a">1365-3121</mxc:subfield>      <mxc:subfield code="c">0954-4879</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2=" ">      <mxc:subfield code="a">Terra nova</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Terra nova</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="e">The European Journal of Geosciences</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="c">Blackwell</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb400511121</srw:recordIdentifier>
+<srw:recordPosition>16</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20051013</ixm:attr>
+<ixm:attr name="LastModificationDate">20130327</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb437293920" type="Bibliographic">   <mxc:leader>00321c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF437293920000005</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb437293920</mxc:controlfield>   <mxc:controlfield tag="008">131213n 18..                 ooger p?xxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="040" ind1=" " ind2=" ">      <mxc:subfield code="b">xdhh</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Deutschen Wochenschach</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Deutschen Wochenschach</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">[S.n.]</mxc:subfield>      <mxc:subfield code="c">[S.l.]</mxc:subfield>      <mxc:subfield code="d">[18..]-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">24 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="768" ind1="2" ind2=" ">      <mxc:subfield code="3">43729418</mxc:subfield>      <mxc:subfield code="t">Über das Wesen des Schachproblems</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb437293920</srw:recordIdentifier>
+<srw:recordPosition>17</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20131213</ixm:attr>
+<ixm:attr name="LastModificationDate">20251024</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb457622626" type="Bibliographic">   <mxc:leader>00400c01s 22000271 345a </mxc:leader>   <mxc:controlfield tag="001">FRBNF457622620000007</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb457622626</mxc:controlfield>   <mxc:controlfield tag="008">190704d 1942                 useng p? 1b      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="022" ind1="2" ind2=" ">      <mxc:subfield code="a">0270-2193</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2=" ">      <mxc:subfield code="a">Dance magazine</mxc:subfield>      <mxc:subfield code="b">New-York.1942</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Dance magazine</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2="1">      <mxc:subfield code="a">New-York</mxc:subfield>      <mxc:subfield code="c">Rudor Publishing</mxc:subfield>      <mxc:subfield code="d">1942</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="780" ind1=" " ind2="0">      <mxc:subfield code="3">39137906</mxc:subfield>      <mxc:subfield code="t">The American dancer</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="785" ind1=" " ind2="0">      <mxc:subfield code="3">45762274</mxc:subfield>      <mxc:subfield code="t">Dance magazine (New-York.1942-1945)</mxc:subfield>      <mxc:subfield code="x">0270-2207</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb457622626</srw:recordIdentifier>
+<srw:recordPosition>18</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20190704</ixm:attr>
+<ixm:attr name="LastModificationDate">20190704</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb40086382k" type="Bibliographic">   <mxc:leader>00295c01s 2200027  345a </mxc:leader>   <mxc:controlfield tag="001">FRBNF400863820000002</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb40086382k</mxc:controlfield>   <mxc:controlfield tag="008">051220c 1968                 cheng p?40b  001 </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="022" ind1="2" ind2=" ">      <mxc:subfield code="a">0014-3022</mxc:subfield>      <mxc:subfield code="c">0014-3022</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="210" ind1=" " ind2=" ">      <mxc:subfield code="a">Eur. neurol.</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2=" ">      <mxc:subfield code="a">European neurology</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">European neurology</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Basel</mxc:subfield>      <mxc:subfield code="c">Karger</mxc:subfield>      <mxc:subfield code="d">1968-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">28 cm</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb40086382k</srw:recordIdentifier>
+<srw:recordPosition>19</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20051220</ixm:attr>
+<ixm:attr name="LastModificationDate">20130327</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb42264972n" type="Bibliographic">   <mxc:leader>00356c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF422649720000001</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb42264972n</mxc:controlfield>   <mxc:controlfield tag="008">100831d 1906                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bulletin paroissial</mxc:subfield>      <mxc:subfield code="b">Artemare</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">L'écho paroissial d'Artemare</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">1re année, N° 1(Février 1906)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Bourg</mxc:subfield>      <mxc:subfield code="c">impr. J. Dureuil</mxc:subfield>      <mxc:subfield code="d">1906-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb42264972n</srw:recordIdentifier>
+<srw:recordPosition>20</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20100831</ixm:attr>
+<ixm:attr name="LastModificationDate">20100831</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb44313803q" type="Bibliographic">   <mxc:leader>00435n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF443138030000002</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb44313803q</mxc:controlfield>   <mxc:controlfield tag="008">150415c 1997                 deeng paxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Neues Shake-Speare Journal</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Neues Shake-Speare Journal</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">Band 1 (1997)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Buchholz (Allemagne)</mxc:subfield>      <mxc:subfield code="c">Laugwitz Verl.</mxc:subfield>      <mxc:subfield code="d">1997-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°</mxc:subfield>      <mxc:subfield code="d">cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Annuel</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="768" ind1="1" ind2=" ">      <mxc:subfield code="3">44292149</mxc:subfield>      <mxc:subfield code="t">Such fruits out of Italy</mxc:subfield>      <mxc:subfield code="y">9783933077370</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="768" ind1="1" ind2=" ">      <mxc:subfield code="3">43811008</mxc:subfield>      <mxc:subfield code="t">Shakespeare's education</mxc:subfield>      <mxc:subfield code="y">9783933077301</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb44313803q</srw:recordIdentifier>
+<srw:recordPosition>21</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20150415</ixm:attr>
+<ixm:attr name="LastModificationDate">20150415</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb422649839" type="Bibliographic">   <mxc:leader>00358n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF422649830000005</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb422649839</mxc:controlfield>   <mxc:controlfield tag="008">100831d 1909                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bulletin paroissial</mxc:subfield>      <mxc:subfield code="b">Artenay</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">L'écho paroissial d'Artenay</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">1re année, N° 1(Octobre 1909)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Orléans</mxc:subfield>      <mxc:subfield code="c">impr. Jeanne d'Arc</mxc:subfield>      <mxc:subfield code="d">1909-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb422649839</srw:recordIdentifier>
+<srw:recordPosition>22</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20100831</ixm:attr>
+<ixm:attr name="LastModificationDate">20100831</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb457506738" type="Bibliographic">   <mxc:leader>00391n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF45750673000000X</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb457506738</mxc:controlfield>   <mxc:controlfield tag="008">190618n                      frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Unir</mxc:subfield>      <mxc:subfield code="b">Paris</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Unir</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="e">bulletin intérieur pour le retour du Parti communiste français aux principes marxistes-léninistes</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2="1">      <mxc:subfield code="a">Paris</mxc:subfield>      <mxc:subfield code="b">27 rue du Faubourg-Montmartre, Paris 9e</mxc:subfield>      <mxc:subfield code="c">Georges Morel</mxc:subfield>      <mxc:subfield code="d">1961</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°</mxc:subfield>      <mxc:subfield code="d">21 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb457506738</srw:recordIdentifier>
+<srw:recordPosition>23</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20190618</ixm:attr>
+<ixm:attr name="LastModificationDate">20190618</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb43710194r" type="Bibliographic">   <mxc:leader>00316n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF437101940000004</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb43710194r</mxc:controlfield>   <mxc:controlfield tag="008">131113n 19..                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">ag                 </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Regards du mois</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Regards du mois</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Rodez</mxc:subfield>      <mxc:subfield code="c">Regards du mois</mxc:subfield>      <mxc:subfield code="d">[19..]-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°</mxc:subfield>      <mxc:subfield code="d">30 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="300" ind1=" " ind2=" ">      <mxc:subfield code="a">Fonds commun de bulletins paroissiaux</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb43710194r</srw:recordIdentifier>
+<srw:recordPosition>24</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20131113</ixm:attr>
+<ixm:attr name="LastModificationDate">20131113</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb42333944q" type="Bibliographic">   <mxc:leader>00328n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF423339440000004</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb42333944q</mxc:controlfield>   <mxc:controlfield tag="008">101209d 1906                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bulletin paroissial</mxc:subfield>      <mxc:subfield code="b">Arudy</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Bulletin paroissial d'Arudy</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">N° 1(Mai 1906)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Saint-Maixent</mxc:subfield>      <mxc:subfield code="c">E. Payet</mxc:subfield>      <mxc:subfield code="d">1906-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb42333944q</srw:recordIdentifier>
+<srw:recordPosition>25</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20101209</ixm:attr>
+<ixm:attr name="LastModificationDate">20101209</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb413524044" type="Bibliographic">   <mxc:leader>00282n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF413524040000002</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb413524044</mxc:controlfield>   <mxc:controlfield tag="008">081009d 2003 2004            deger paxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Benn-Jahrbuch</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Benn-Jahrbuch</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">1</mxc:subfield>      <mxc:subfield code="b">2</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Stuttgart</mxc:subfield>      <mxc:subfield code="c">Klett-Cotta</mxc:subfield>      <mxc:subfield code="d">2003-2004</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">2 n°</mxc:subfield>      <mxc:subfield code="d">21 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Annuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb413524044</srw:recordIdentifier>
+<srw:recordPosition>26</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20081009</ixm:attr>
+<ixm:attr name="LastModificationDate">20081009</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb47151114v" type="Bibliographic">   <mxc:leader>00295n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF471511140000003</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb47151114v</mxc:controlfield>   <mxc:controlfield tag="008">221209c 20..                 frfre aaxxb      </mxc:controlfield>   <mxc:controlfield tag="009">az  g              </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bilan &amp; perspectives</mxc:subfield>      <mxc:subfield code="b">Havas</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="0" ind2=" ">      <mxc:subfield code="a">Bilan et perspectives</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="f">Havas group</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2="1">      <mxc:subfield code="a">Puteaux</mxc:subfield>      <mxc:subfield code="c">Havas</mxc:subfield>      <mxc:subfield code="d">[20..]-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">vol.</mxc:subfield>      <mxc:subfield code="d">21 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Annuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb47151114v</srw:recordIdentifier>
+<srw:recordPosition>27</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20221209</ixm:attr>
+<ixm:attr name="LastModificationDate">20221209</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb422635055" type="Bibliographic">   <mxc:leader>00360n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF422635050000002</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb422635055</mxc:controlfield>   <mxc:controlfield tag="008">100828d 1909                 frfre pmxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Bulletin paroissial</mxc:subfield>      <mxc:subfield code="b">Arrou</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Écho d'Arrou</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="e">bulletin paroissial</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">1re année, N° 1(Octobre 1909)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Orléans</mxc:subfield>      <mxc:subfield code="c">Imp. Jeanne d'Arc</mxc:subfield>      <mxc:subfield code="d">1909-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">23 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Mensuel</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb422635055</srw:recordIdentifier>
+<srw:recordPosition>28</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20100828</ixm:attr>
+<ixm:attr name="LastModificationDate">20100828</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb46956855t" type="Bibliographic">   <mxc:leader>00362c01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF469568550000007</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb46956855t</mxc:controlfield>   <mxc:controlfield tag="008">220128c 2007                   fre p?xxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="0" ind2="0">      <mxc:subfield code="a">Zangia</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Zangia</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="e">magazine de la Parismonsantaro Cie</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">Vol.1 (2007)</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2="1">      <mxc:subfield code="a">Oulan-Bator</mxc:subfield>      <mxc:subfield code="c">Parismonsantaro Cie</mxc:subfield>      <mxc:subfield code="d">2007-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="a">n°</mxc:subfield>      <mxc:subfield code="d">25 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">Périodicité inconnue</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb46956855t</srw:recordIdentifier>
+<srw:recordPosition>29</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20220128</ixm:attr>
+<ixm:attr name="LastModificationDate">20220201</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+<srw:record>
+<srw:recordSchema>marcxchange</srw:recordSchema>
+<srw:recordPacking>xml</srw:recordPacking>
+<srw:recordData>
+<mxc:record xmlns:mxc="info:lc/xmlns/marcxchange-v2" format="INTERMARC" id="ark:/12148/cb39984346x" type="Bibliographic">   <mxc:leader>00325n01s 22000271 145a </mxc:leader>   <mxc:controlfield tag="001">FRBNF399843460000007</mxc:controlfield>   <mxc:controlfield tag="003">http://catalogue.bnf.fr/ark:/12148/cb39984346x</mxc:controlfield>   <mxc:controlfield tag="008">050608c 1995                 itita paxxb      </mxc:controlfield>   <mxc:controlfield tag="009">a                  </mxc:controlfield>   <mxc:datafield tag="051" ind1=" " ind2=" ">      <mxc:subfield code="a">txt</mxc:subfield>      <mxc:subfield code="b">n</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="222" ind1="1" ind2="0">      <mxc:subfield code="a">Il tolomeo</mxc:subfield>      <mxc:subfield code="b">Venezia</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="245" ind1="1" ind2=" ">      <mxc:subfield code="a">Il tolomeo</mxc:subfield>      <mxc:subfield code="d">Texte imprimé</mxc:subfield>      <mxc:subfield code="e">articoli, recensioni e inediti delle nuove letterature</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="255" ind1="2" ind2=" ">      <mxc:subfield code="a">N°1</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="260" ind1=" " ind2=" ">      <mxc:subfield code="a">Venezia</mxc:subfield>      <mxc:subfield code="c">Supernova</mxc:subfield>      <mxc:subfield code="d">1995-</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="280" ind1=" " ind2=" ">      <mxc:subfield code="d">24 cm</mxc:subfield>   </mxc:datafield>   <mxc:datafield tag="326" ind1="1" ind2=" ">      <mxc:subfield code="a">800</mxc:subfield>   </mxc:datafield>
+</mxc:record>      </srw:recordData>
+<srw:recordIdentifier>ark:/12148/cb39984346x</srw:recordIdentifier>
+<srw:recordPosition>30</srw:recordPosition>
+<srw:extraRecordData>
+<ixm:attr name="CreationDate">20050608</ixm:attr>
+<ixm:attr name="LastModificationDate">20050608</ixm:attr>
+<mn:score>1.9060099</mn:score>
+</srw:extraRecordData>
+</srw:record>
+</srw:records>
+<srw:nextRecordPosition>31</srw:nextRecordPosition>
+</srw:searchRetrieveResponse>

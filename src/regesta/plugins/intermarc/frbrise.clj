@@ -1,0 +1,141 @@
+(ns regesta.plugins.intermarc.frbrise
+  "INTERMARC → WEMI FRBRisation (WP-3, ADR 0016). A compiled `:infer` rule that
+   reads `:intermarc/*` assertions and mints LRMoo entities, using the embedded
+   authority link (the `f145_3` lookup validated in the WP-0 spike) — no fuzzy
+   inference for authority-controlled records.
+
+   This slice models the link the data carries directly:
+
+     <mxc:record>                              -> F3_Manifestation (id from ARK)
+     f145 ($m language, $3 authority id)       -> F2_Expression    (id from f145_3)
+     R4_embodies                               Manifestation -> Expression
+
+   So manifestations sharing an `f145_3` collapse to one Expression by id alone
+   (ADR 0008) — lookup-based clustering, no batch state. The Work level (R3,
+   from author + uniform title) and the fuzzy fallback for records without
+   `f145` are a later slice (the spike showed the fallback needs bridging).
+   Minted claims default to `:proposed` (ADR 0005); confidence-gating to
+   `:asserted` is future (D7).
+
+   A `compiled-rule` (not a data rule): it computes content-derived ids, which
+   the data DSL deliberately cannot express (the mapping compiler does the same)."
+  (:require [clojure.string :as str]
+            [regesta.diagnostics :as dx]
+            [regesta.model :as model]
+            [regesta.rules :as rules]
+            [regesta.runtime :as runtime]))
+
+(defn- field
+  "First value of `record`'s assertion with predicate `pred`, or nil."
+  [record pred]
+  (->> (:assertions record) (filter #(= pred (:predicate %))) first :value))
+
+(defn- norm
+  "Diacritic- and case-insensitive normalisation for the Work key."
+  [s]
+  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
+      (str/replace #"\p{M}+" "")
+      str/lower-case
+      str/trim
+      (str/replace #"\s+" " ")))
+
+(defn- entity-prod
+  "An `:entity` production. `iri` (optional) is the external authority IRI."
+  ([id kind prov] (entity-prod id kind prov nil))
+  ([id kind prov iri]
+   {:kind  :entity
+    :value (model/entity (cond-> {:id id :kind kind :provenance prov}
+                           iri (assoc :iri iri)))}))
+
+(defn- ark-iri
+  "The data.bnf.fr IRI for `record` when its `:source` is an ARK, else nil. This
+   is faithful transcription of the identifier the source already carries — not
+   reconciliation — so the Manifestation node exports as its real, resolvable IRI."
+  [record]
+  (when-let [s (:source record)]
+    (when (str/starts-with? (str s) "ark:")
+      (str "http://data.bnf.fr/" s))))
+
+(defn- assert-prod [subject predicate value prov]
+  {:kind  :assertion
+   :value (model/assertion {:subject subject :predicate predicate :value value
+                            :status :proposed :provenance prov})})
+
+(defn- wemi-productions
+  "WEMI entity and link productions for one INTERMARC record (see ns doc).
+   Manifestation always; Expression + Work when the embedded link is present."
+  [record]
+  (let [rid   (:id record)
+        prov  (model/provenance {:pass :infer :derivation [rid]})
+        manif (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
+        miri  (ark-iri record)
+        x3    (field record :intermarc/f145_3)
+        m245  (field record :intermarc/f245_a)]
+    (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov miri)]
+      m245 (conj (assert-prod manif :lrmoo/R33_has_string m245 prov))
+      x3   (into (let [expr (model/mint-entity-id :lrmoo/F2_Expression x3)
+                       ttl  (field record :intermarc/f145_a)
+                       auth (or (field record :intermarc/f100_3)
+                                (field record :intermarc/f100_a))
+                       work (when (and auth ttl)
+                              (model/mint-entity-id :lrmoo/F1_Work
+                                                    (str auth "|" (norm ttl))))]
+                   (cond-> [(entity-prod expr :lrmoo/F2_Expression prov)
+                            (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov)]
+                     ttl  (conj (assert-prod expr :lrmoo/R33_has_string ttl prov))
+                     work (into [(entity-prod work :lrmoo/F1_Work prov)
+                                 (assert-prod work :lrmoo/R3_is_realised_in (model/reference expr) prov)
+                                 (assert-prod work :lrmoo/R33_has_string ttl prov)])))))))
+
+(def mapped-source-fields
+  "INTERMARC fields the current LRMoo projection represents. Every other
+   `:intermarc/*` field a record carries is reported as loss (ADR 0015); as
+   FRBRisation grows (agents, more attributes, …) this set grows and loss
+   shrinks — the loss report tracks the improvement."
+  #{:intermarc/f145_3   ; -> F2_Expression id
+    :intermarc/f145_a   ; -> Expression / Work title
+    :intermarc/f100_3   ; -> F1_Work key (author authority)
+    :intermarc/f245_a}) ; -> Manifestation title
+
+(defn- source-fields [record]
+  (->> (:assertions record)
+       (map :predicate)
+       (filter #(= "intermarc" (namespace %)))
+       distinct))
+
+(defn- loss-productions
+  "A loss diagnostic (ADR 0015) for each source field the projection drops."
+  [record]
+  (for [p (source-fields record)
+        :when (not (contains? mapped-source-fields p))]
+    {:kind  :diagnostic
+     :value (dx/loss {:category     :dropped
+                      :subject      (:id record)
+                      :edge         :import
+                      :source-field p
+                      :message      (str (name p) " not represented in the LRMoo view")})}))
+
+(defn coverage
+  "How much of a record's INTERMARC fields the LRMoo projection represents:
+   `{:mapped M :total T :pct P}`."
+  [record]
+  (let [fs (source-fields record)
+        m  (count (filter mapped-source-fields fs))
+        t  (count fs)]
+    {:mapped m :total t :pct (if (pos? t) (quot (* 100 m) t) 0)}))
+
+(defn runner
+  "FRBRisation productions for one record: the WEMI projection plus a loss
+   diagnostic per dropped source field (ADR 0015 / 0016)."
+  [record]
+  (into (wemi-productions record) (loss-productions record)))
+
+(def rule
+  "Compiled `:infer` FRBRisation rule (ADR 0016)."
+  (rules/compiled-rule {:id :rule.intermarc/frbrise :phase :infer :runner runner}))
+
+(defn frbrise
+  "Run INTERMARC FRBRisation over `record` (the `:infer` phase). Returns the
+   enriched record — Manifestation/Expression entities and the R4 link."
+  [record]
+  (:record (runtime/run-phase record [rule] :infer)))

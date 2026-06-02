@@ -16,6 +16,8 @@
    What the runtime merges:
    - `:assertion` productions → appended to `record[:assertions]`.
    - `:diagnostic` productions → appended to `record[:diagnostics]`.
+   - `:entity` productions → appended to `record[:entities]`, deduplicated by
+     id (ADR 0014/0017). A re-mint of the same content-derived id is a no-op.
    - `:repair` productions → not merged into the record in V1; authors
      that want repairs attached to a diagnostic place them inline in
      the diagnostic template's `:repairs` vector. Standalone repairs
@@ -66,6 +68,13 @@
   [d]
   [(:subject d) (:code d) (:severity d) (:message d)])
 
+(defn entity-identity
+  "Identity key for entity deduplication: the entity id alone. Identity is
+   content-derived (ADR 0016), so the same entity minted independently from
+   two records shares an id and a re-mint is a no-op at merge (ADR 0008)."
+  [e]
+  (:id e))
+
 (defn- dedup-append [record k item identity-fn]
   (let [existing      (get record k [])
         existing-keys (into #{} (map identity-fn) existing)]
@@ -77,6 +86,7 @@
   (case (:kind production)
     :assertion  (dedup-append record :assertions  (:value production) assertion-identity)
     :diagnostic (dedup-append record :diagnostics (:value production) diagnostic-identity)
+    :entity     (dedup-append record :entities    (:value production) entity-identity)
     :repair     record  ;; standalone repairs not merged in V1
     record))
 

@@ -1,0 +1,51 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix madsrdf: <http://www.loc.gov/mads/rdf/v1#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ri: <http://id.loc.gov/ontologies/RecordInfo#> .
+
+<http://id.loc.gov/authorities/sh2010004770>
+    madsrdf:adminMetadata [
+        ri:languageOfCataloging <http://id.loc.gov/vocabulary/iso639-2/eng> ;
+        ri:recordChangeDate "2010-08-16T13:31:07"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        ri:recordContentSource <http://id.loc.gov/vocabulary/organizations/dlc> ;
+        ri:recordStatus "revised"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        a ri:RecordInfo
+    ], [
+        ri:languageOfCataloging <http://id.loc.gov/vocabulary/iso639-2/eng> ;
+        ri:recordChangeDate "2010-03-19T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+        ri:recordContentSource <http://id.loc.gov/vocabulary/organizations/dlc> ;
+        ri:recordStatus "new"^^<http://www.w3.org/2001/XMLSchema#string> ;
+        a ri:RecordInfo
+    ] ;
+    madsrdf:authoritativeLabel "Television adaptations"@en ;
+    madsrdf:elementList ([
+            madsrdf:elementValue "Television adaptations" ;
+            a madsrdf:GenreFormElement
+        ]
+    ) ;
+    madsrdf:exampleNote "Reference under the heading {Television adaptations}" ;
+    madsrdf:hasBroaderAuthority <http://id.loc.gov/authorities/sh2002012498> ;
+    madsrdf:hasEarlierEstablishedForm [
+        madsrdf:elementList ([
+                madsrdf:elementValue "Film and video adaptations" ;
+                a madsrdf:GenreFormElement
+            ]
+        ) ;
+        madsrdf:variantLabel "Film and video adaptations"@en ;
+        a madsrdf:GenreForm, madsrdf:Variant
+    ] ;
+    madsrdf:hasVariant [
+        madsrdf:elementList ([
+                madsrdf:elementValue "Film and video adaptations" ;
+                a madsrdf:GenreFormElement
+            ]
+        ) ;
+        madsrdf:variantLabel "Film and video adaptations"@en ;
+        a madsrdf:GenreForm, madsrdf:Variant
+    ] ;
+    madsrdf:isMemberOfMADSCollection <http://id.loc.gov/authorities/collection_GenreFormSubdivisions>, <http://id.loc.gov/authorities/collection_LCSH_General>, <http://id.loc.gov/authorities/collection_Subdivisions>, <http://id.loc.gov/lcsh/collection_PatternHeadingH1110>, <http://id.loc.gov/lcsh/collection_PatternHeadingH1155.8>, <http://id.loc.gov/lcsh/collection_PatternHeadingH1156>, <http://id.loc.gov/lcsh/collection_PatternHeadingH1160> ;
+    madsrdf:isMemberOfMADSScheme <http://id.loc.gov/authorities/lcsh> ;
+    madsrdf:note "Use as a form subdivision under names of individual persons for collections of film adaptations of their creative works. Also use under individual literatures, individual literary works entered undet title, and types and forms of musical compositions for collections of film adaptations of those works." ;
+    a madsrdf:Authority, madsrdf:GenreForm ;
+    owl:sameAs <http://id.loc.gov/authorities/sh2010004770#concept>, <info:lc/authorities/sh2010004770> .
+

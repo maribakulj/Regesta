@@ -1,0 +1,333 @@
+# Regesta V1 — Redefined Roadmap (rich LRMoo pivot)
+
+- Status: **Proposed**
+- Date: 2026-05-31
+- Supersedes: the twelve-sprint roadmap table in [`README.md`](../README.md) (§ Roadmap)
+- Builds on (kept): ADR 0001, 0002, 0003, 0005, 0007, 0009, 0010, 0012
+- Amends / reopens: ADR 0004 (fixpoint), ADR 0008 (idempotency), ADR 0011 (minting)
+- Introduces (WP-0): a Pivot ADR, a Loss-model ADR, a FRBRisation ADR, a Conformance ADR
+
+> How to read this. Work packages are **dependency-ordered**; each carries an
+> explicit **gate** (exit criterion) and the ADRs it touches. Nothing here is
+> code yet: the foundational ADRs are themselves the first deliverable (WP-0).
+> Timeline ranges are honest, not optimistic — see § 5.
+
+---
+
+## 1. Why this redefinition
+
+The original V1 targets a *thin* canonical vocabulary (~10 `:canon/*`
+predicates) and a small set of flat-ish formats (Dublin Core, CSV, a MARC-XML
+*lite* subset). The new criteria raise the bar to a **production-grade,
+loss-aware conversion hub** usable by flagship institutions (BnF, Louvre):
+
+- a **rich pivot** grounded in **LRMoo** (the object-oriented expression of
+  IFLA LRM, a specialization of CIDOC-CRM) — see § 3;
+- **real** MARC21 (not a lite subset), **IIIF**, **CIDOC-CRM / Linked Art**,
+  and native **LRMoo / RDF** as first-class spokes;
+- **loss-aware** projection: every conversion emits a measurable loss report;
+- **conformance** to institutional profiles (e.g. BnF INTERMARC/UNIMARC,
+  museum Linked Art/IIIF profiles).
+
+This **reverses an explicit V1 boundary.** Today `README.md` lists
+IIIF, CIDOC CRM, Linked Art **and deduplication** as *deliberately out of
+scope* for V1. The redefinition pulls all four in. (Deduplication arrives
+implicitly: cross-record Work clustering is the heart of FRBRisation —
+see WP-3.)
+
+It also **cashes in an option the team already bought.** `README.md`
+(§ Roadmap, "Architectural compatibility constraint") records that the V1 IR,
+vocabulary layering, and mapping schema were deliberately shaped to
+accommodate event-centric and nested-resource models *without rework* —
+which is exactly what produced the qualified-value design of ADR 0011. The
+rich pivot is the intended evolution path, not a detour.
+
+---
+
+## 2. What is kept, what is reopened
+
+**Kept as-is (the substrate — Sprints 0–6, landed):**
+
+- the assertion-based IR (ADR 0001) — ground truth stays flat assertions;
+- the agnostic core / vocabulary layering (ADR 0003) — no ontology in the core;
+- plugins-as-data (ADR 0007) and the stdlib-extension mechanism (ADR 0010);
+- the rule DSL (ADR 0002), mapping schema (ADR 0009), status model (ADR 0005);
+- the seven design principles and ADR discipline.
+
+**Reopened or amended:**
+
+- **ADR 0011** — lift the *ingest-only* restriction on fragment/entity minting:
+  `infer`/`repair` rules must be able to **mint** synthesized entities
+  (FRBRisation needs to create Work/Expression nodes that exist in no source).
+- **ADR 0008** — synthesized-entity identity must be a **deterministic
+  function of source content**, so re-running an idempotent merge produces no
+  duplicate entities. Minting and idempotency are reconciled here.
+- **ADR 0004** — "fixed passes, no fixpoint" is under pressure: WEMI inference
+  may require iterating until no new entities appear. WP-0 decides whether V1
+  keeps fixed passes (with a bounded iteration count) or admits a scoped
+  fixpoint for the `infer` phase.
+- **`README.md`** — the roadmap table and the out-of-scope list are rewritten
+  (task in WP-0).
+
+**Strategy lock (decided, see prior design discussion).** The pivot uses
+**strategy C**: assertions remain ground truth; a **derived, typed LRMoo
+graph view** is computed on top, and it lives **in a plugin**, not the core.
+C is conditioned on ADR 0003: it is "plugins-as-data" applied to the ontology
+itself — the LRMoo plugin is the rich sibling of `regesta.plugins.canonical`.
+Reopening 0003 (letting the core own an ontology) is the *only* thing that
+would reopen the C-vs-typed-core-IR choice; as long as 0003 stands, C stands.
+
+---
+
+## 3. Locked architecture (recap)
+
+```
+  spoke importers ──▶  assertions (IR, ground truth)  ──▶  spoke exporters
+     (MARC21, DC,          ▲   provenance · confidence ·         (LRMoo/RDF,
+      IIIF, CRM…)          │   status · diagnostics              Linked Art,
+                           │                                     IIIF, MARC21…)
+                  derived LRMoo typed view  (regesta.plugins.lrmoo)
+                  F1 Work · F2 Expression · F3 Manifestation · F5 Item
+                  + reused CIDOC-CRM classes/properties
+```
+
+- **Pivot vocabulary: LRMoo.** It is the smallest standard that subsumes both
+  the bibliographic WEMI world and the event-centric CRM world, because it
+  *extends* CIDOC-CRM. Plain CRM under-specifies WEMI; Linked Art / BIBFRAME
+  are better as **spokes** (profiles), not the hub; generic RDF is too shallow
+  to even express the distinctions whose loss we must report.
+- **Down-projection is free.** LRMoo F-classes are subclasses of CRM classes,
+  so the museum spoke (CRM / Linked Art) is reached by walking up the
+  hierarchy. The reverse (CRM → WEMI) is lossy and needs inference — which is
+  why the hub is the richer model.
+- **The typed view is derived**, so it cannot drift from ground truth.
+
+---
+
+## 4. Work packages
+
+Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
+**gate** that must be green before downstream WPs build on it.
+
+### WP-0 — Design lock + FRBRisation spike
+- **Goal:** settle the load-bearing decisions in ADRs before writing engine code.
+- **Deliverables:** Pivot ADR (C + LRMoo, with the 0003 dependency stated);
+  ADR 0011 amendment (runtime minting); ADR 0008 reconciliation (deterministic
+  synthesized identity); ADR 0004 decision (fixpoint vs bounded passes);
+  Loss-model ADR; FRBRisation ADR; Conformance ADR; rewrite of the `README.md`
+  roadmap + out-of-scope sections. **Throwaway FRBRisation spike** on a small
+  real MARC sample to de-risk WP-3 before committing the plan.
+- **Depends on:** nothing (kicks off the program).
+- **Gate:** ADRs reviewed and at least Proposed; the spike demonstrates a
+  plausible MARC→WEMI path with measurable, reproducible Work identity.
+
+### WP-1 — Substrate extensions
+- **Goal:** the minimal core/runtime changes strategy C requires.
+- **Deliverables:** runtime minting in `infer`/`repair` with deterministic
+  identity (implements the 0011/0008 amendments, extends the 0012 identity
+  scheme to synthesized entities); explicit **reference-typing** primitives in
+  the substrate strong enough to derive a typed view; **loss as a first-class
+  diagnostic category**; bounded iteration (or scoped fixpoint) per the WP-0
+  ADR 0004 decision.
+- **Depends on:** WP-0.
+- **Gate:** entities mint reproducibly (idempotent re-run = zero new entities);
+  all existing 0008 idempotency property tests stay green.
+
+### WP-2 — LRMoo pivot plugin + derived typed view
+- **Goal:** the rich canonical layer as a plugin (`regesta.plugins.lrmoo`).
+- **Deliverables:** the LRMoo vocabulary (F1/F2/F3/F5 + reused CRM
+  classes/properties); **projection rules + a view API** that materializes the
+  typed graph from assertions (C2); mapping to/from `:canon/*` where sensible;
+  loss-marker integration.
+- **Depends on:** WP-1.
+- **Gate:** assertions ↔ LRMoo view round-trips; the view is provably derived
+  (regenerating it from assertions is idempotent and side-effect-free).
+
+### WP-3 — FRBRisation engine  *(highest technical risk)*
+- **Goal:** synthesize WEMI from flat catalogue data.
+- **Deliverables:** `infer`/`repair` rule sets that derive Work/Expression/
+  Manifestation/Item and their R-relations from MARC records; **cross-record
+  Work clustering** (same Work across many manifestations → one minted Work,
+  stable identity); loss accounting for ambiguous or un-FRBRisable cases.
+- **Depends on:** WP-1, WP-2; informed by the WP-0 spike.
+- **Gate:** on a real MARC corpus, MARC→WEMI with a published fidelity metric
+  and loss report; idempotent identity verified at scale (re-run mints nothing).
+
+### WP-4 — Spoke plugins
+- **Goal:** the real importers/exporters, ordered by value and risk.
+- **Sequence (recommended):**
+  1. **Dublin Core** (in/out) — simplest; the end-to-end *pipe-cleaner* that
+     validates the pivot with low complexity. Keep from the original Sprint 7.
+  2. **MARC21 real** (in/out) — full fields/subfields, not lite; the highest-
+     value spoke (BnF). Couples to WP-3 via FRBRisation.
+  3. **IIIF Presentation** (in) — import manifests; link digital objects to
+     pivot entities (`:canon/digital-object`).
+  4. **CIDOC-CRM / Linked Art** (out, maybe in) — museum spoke; Linked Art as
+     an export *profile* of CRM (Louvre).
+  5. **LRMoo / RDF (JSON-LD, Turtle)** (out) — serialize the pivot itself.
+- **Depends on:** WP-2 (all), WP-3 (MARC, partially IIIF linking).
+- **Gate (per spoke):** round-trip + loss report + a coverage metric against
+  the LRMoo pivot (the ADR 0003 "rated on canonical coverage" rule, lifted to
+  the rich vocabulary).
+
+### WP-5 — Loss-aware projection (productized)
+- **Goal:** make loss a measurable, first-class output, not a footnote.
+- **Deliverables:** a structured loss model (categories: *dropped*, *coerced*,
+  *under-specified*, *ambiguity-collapsed*), computed at both edges
+  (import A→pivot, export pivot→B); per-record and aggregate reports
+  (machine + human-readable); a coverage percentage. Built on diagnostics +
+  `:canon/loss-marker` + the WP-0 Loss-model ADR.
+- **Depends on:** WP-1 (loss diagnostics), grows with each WP-4 spoke.
+- **Gate:** "what did I lose converting X→Y?" answerable for every spoke pair,
+  with numbers an institutional evaluator can audit.
+
+### WP-6 — Conformance to institutional profiles
+- **Goal:** "prod-ready *for this institution*" — usually underestimated.
+- **Deliverables:** institutional profiles (BnF INTERMARC/UNIMARC specifics,
+  IIIF Presentation 3.0, a Linked Art profile) expressed as **validation rule
+  sets**; conformance reports = diagnostics filtered to a profile.
+- **Depends on:** WP-4, WP-5; **external data** (see § 7).
+- **Gate:** a passing conformance report for ≥1 BnF profile and ≥1 museum
+  profile on real institutional samples.
+
+### WP-7 — Scale & performance
+- **Goal:** real corpora (BnF catalogues are millions of records).
+- **Deliverables:** streaming end-to-end (ADR 0007 already left the door open
+  via reducible records); memory/throughput budgets; the hard one —
+  **cross-record Work clustering at scale**, which is inherently global/stateful
+  and in tension with streaming.
+- **Depends on:** WP-3, WP-4.
+- **Gate:** a realistic corpus processed within a stated time/memory budget.
+
+### WP-8 — CLI / packaging / DX
+- **Goal:** drive everything from `regesta.app`.
+- **Deliverables:** `convert`, `validate`, `report` (loss), `conformance`,
+  `apply-repairs`; packaging for institutional deployment.
+- **Depends on:** WP-4, WP-5, WP-6.
+- **Gate:** every capability reachable from the CLI on real inputs.
+
+### WP-9 — Hardening & release
+- **Goal:** ship V1.
+- **Deliverables:** edge cases, golden tests on real data, docs, loss-report
+  UX, a security statement on the plugin trust model (ADR 0010 trust-on-require
+  vs institutional deployment), `v1.0.0`.
+- **Depends on:** all.
+- **Gate:** the Definition of Done (§ 8).
+
+---
+
+## 5. Phasing & honest timeline
+
+At the original small-team pace, this is an **~18–24 month program**, not a
+re-skin of the twelve-sprint plan. Ranges, not points:
+
+| Phase | Work packages | Rough span |
+|------|----------------|-----------|
+| 0 — Design lock + de-risk | WP-0 | 1–2 mo |
+| 1 — Substrate + pivot | WP-1, WP-2 (+ DC pipe-cleaner) | 3–4 mo |
+| 2 — FRBRisation + MARC21 | WP-3, WP-4 (MARC) | 4–6 mo |
+| 3 — Remaining spokes + loss | WP-4 (IIIF/CRM/LRMoo), WP-5 | 3–4 mo |
+| 4 — Conformance + scale | WP-6, WP-7 | 3–4 mo |
+| 5 — CLI + hardening + release | WP-8, WP-9 | 2–3 mo |
+
+Staffing changes this materially; the table assumes the pace that landed
+Sprints 0–6. "Production at two flagship institutions" is a **program**, with
+an external dependency (§ 7) that no amount of engineering removes.
+
+---
+
+## 6. Risk register
+
+| # | Risk | Severity | Mitigation |
+|---|------|----------|-----------|
+| R1 | **FRBRisation fidelity** — cross-record Work clustering is the hardest single problem (and was explicitly out of V1 scope as "deduplication"). | High | De-risk with the WP-0 spike *before* committing; treat fidelity as a measured metric, not a binary. |
+| R2 | **Minting vs idempotency (0008)** — synthesized identity must be deterministic or merges duplicate/thrash. | High | Identity = pure function of source content; property tests in WP-1. |
+| R3 | **Fixpoint pressure (0004)** — WEMI inference may need iteration; V1 principle is "no fixpoint." | Medium | WP-0 decides: bounded passes vs scoped fixpoint for `infer`. |
+| R4 | **Real-data dependency** — "prod-ready" is unverifiable without institutional data + a conformance oracle. | High | Secure a data/conformance partnership early (§ 7); gates WP-3/4/6. |
+| R5 | **Scale** — millions of records vs global Work clustering vs streaming. | Medium | Stream where possible; isolate the stateful clustering stage; budget in WP-7. |
+| R6 | **LRMoo maturity/tooling** — recent standard, fewer reference implementations than Linked Art. | Medium | Lean on CRM tooling underneath; keep the view derived so we can adjust. |
+| R7 | **Scope/timeline realism** — 18–24 months, two flagship targets. | Medium | Honest phasing; DC pipe-cleaner first; ship value per spoke. |
+
+---
+
+## 7. External dependency (non-engineering, but blocking)
+
+The single thing engineering cannot manufacture: **real institutional data and
+a conformance oracle.** A credible MARC21↔LRMoo path, a believable loss metric,
+and a passing INTERMARC/Linked Art conformance report all require BnF/Louvre
+sample data and their acceptance criteria. This gates WP-3, WP-4, and WP-6.
+Securing it should start in parallel with WP-0; without it, "production-ready"
+is an assertion we cannot verify.
+
+---
+
+## 8. Definition of Done for V1
+
+V1 is done when, on **real institutional samples**:
+
+1. **MARC21 ↔ LRMoo** round-trips with a published loss report and a stated
+   statement-coverage percentage.
+2. **FRBRisation** yields stable WEMI identities — an idempotent re-run mints
+   no new entities — verified on a real corpus.
+3. **IIIF** manifests import and link to pivot entities.
+4. Export to **CIDOC-CRM / Linked Art** JSON-LD validates against a museum
+   profile (Louvre sample).
+5. **Conformance** reports pass for ≥1 BnF profile and ≥1 museum profile.
+6. The **CLI** drives convert / validate / loss-report / conformance, and
+   processes a realistic corpus within a stated performance budget.
+7. All touched **ADRs are Accepted**; `README.md` reflects the redefined V1.
+
+---
+
+## 9. Open questions for WP-0 to settle
+
+- Fixpoint vs bounded passes for `infer` (ADR 0004).
+- The exact synthesized-entity identity key (author + uniform-title? work-key
+  hashing?) and its collision behaviour (ADR 0008/0012).
+- Loss-model categories and the coverage metric's precise definition.
+- Whether IIIF and CIDOC/Linked Art ship import as well as export in V1, or
+  export-only with import deferred.
+- Two-tier pivot (CRM substrate + LRMoo overlay) as a possible alternative to
+  a single LRMoo hub — recorded as the credible alternative to revisit if
+  LRMoo tooling proves too thin.
+
+---
+
+## 10. Post-V1 horizon: from converter to store (not in V1)
+
+V1 is a **converter** — a pure, stateless, batch function (source → IR →
+target). A natural but *categorically different* successor is a **store you
+query and edit** — a stateful system of record. It is recorded here so the V1
+seams stay open to it, not because it is in scope.
+
+It is a ladder, not a binary; each rung adds value *and* operational burden:
+
+| Rung | Capability | Nature |
+|---|---|---|
+| 0 | Converter (V1) | stateless, ephemeral |
+| 1 | Persisted output | trivial |
+| 2 | Queryable (SPARQL / traversal / IIIF endpoints) | adopt a triple/graph store |
+| 3 | Incremental (ingest deltas, update without full re-batch) | hard — incremental inference + identity stability |
+| 4 | Editable / curated (humans accept/merge/split; decisions persist) | hard — becomes a web app with users |
+| 5 | Authoritative / cross-institution convergence hub | hardest — identity lifecycle, governance |
+
+**What it serves:** a living catalogue (continuous FRBRisation, à la BnF
+Transition bibliographique); cumulative cross-source reconciliation; curation of
+the FRBRisation tail at scale; serving the graph (a data.bnf.fr-like platform);
+audit over time. The most original niche is **rung 5 — the cross-institution
+convergence layer**: each institution has its own store, but nobody owns the
+convergence *between* them.
+
+**What it implies:** statefulness (concurrency, transactions, migrations);
+identity that is *authoritative*, not merely *reproducible* (merge / split /
+deprecate with stable redirects — an identity-lifecycle subsystem); incremental
+inference; a curation application (which V1 explicitly excludes). This is where
+**A′ / a real graph-store backend (see ADR 0017)** finally earns its keep — and
+the V1 converter becomes the store's **ingestion stage**, not dead weight.
+
+**Why it does not change V1:** the substrate already plants the seeds — the dual
+status model (ADR 0005) for curation, provenance for audit, entities +
+references for the graph, diagnostics / loss for quality. Going there is a
+*mission* decision, not a technical pivot. Until it is taken we pay nothing — we
+only keep three seams clean: **identity** (deterministic → versionable toward a
+lifecycle), **status / curation** (ADR 0005), and **provenance**.
