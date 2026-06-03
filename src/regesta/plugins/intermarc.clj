@@ -20,86 +20,26 @@
 
    Like every plugin (ADR 0007) this exposes an `:importer` closure; the core
    never sees `:intermarc/*`. Indicators and the leader are not yet captured
-   (a later refinement)."
-  (:require [clojure.data.xml :as xml]
-            [clojure.string :as str]
-            [regesta.model :as model]))
+   (a later refinement).
 
-;; ---------------------------------------------------------------------------
-;; data.xml element helpers
-;;
-;; clojure.data.xml represents an element as {:tag :attrs :content}. We match
-;; by *local name* (`(name tag)`) so namespace-URI encoding is irrelevant, and
-;; read attributes by their local name for the same reason.
-;; ---------------------------------------------------------------------------
-
-(defn- local-name [elem]
-  (when (and (map? elem) (:tag elem))
-    (name (:tag elem))))
-
-(defn- attr
-  "Attribute value whose key's local name is `k` (a string), or nil."
-  [elem k]
-  (some (fn [[ak av]] (when (= k (name ak)) av)) (:attrs elem)))
-
-(defn- text-of
-  "Concatenated string content of `elem`, or nil if it has none."
-  [elem]
-  (let [ss (filter string? (:content elem))]
-    (when (seq ss) (apply str ss))))
-
-(defn- elements
-  "Depth-first seq of every element map in a parsed data.xml `tree`."
-  [tree]
-  (when (map? tree)
-    (cons tree (mapcat elements (:content tree)))))
+   The MARCXML field/subfield parse lives in `regesta.plugins.marcxml` (shared
+   with the MARC21 spoke); this namespace supplies only the INTERMARC policies:
+   a record is an `<mxc:record>` (a `record` carrying the `id` ARK, vs the SRU
+   `<srw:record>` wrapper that has none), its id is `:bnf/<cb-number>`, and its
+   `:kind` comes from the `type` attribute."
+  (:require [clojure.string :as str]
+            [regesta.plugins.marcxml :as marcxml]))
 
 (defn- mxc-record?
   "True for an `<mxc:record>` (local name `record` carrying the `id` ARK),
    distinguishing it from the SRU `<srw:record>` wrapper, which has none."
   [elem]
-  (and (= "record" (local-name elem)) (some? (attr elem "id"))))
-
-;; ---------------------------------------------------------------------------
-;; Record assembly
-;; ---------------------------------------------------------------------------
+  (and (= "record" (marcxml/local-name elem)) (some? (marcxml/attr elem "id"))))
 
 (defn- record-id-from-ark
   "`:bnf/<cb-number>` from an ARK like \"ark:/12148/cb304403926\"."
   [ark]
   (keyword "bnf" (last (str/split ark #"/"))))
-
-(defn- field-assertions
-  "Assertions for one control/data field element of a record."
-  [record-id field]
-  (let [tag (attr field "tag")]
-    (case (local-name field)
-      "controlfield"
-      (when-let [v (text-of field)]
-        [(model/assertion {:subject record-id
-                           :predicate (keyword "intermarc" (str "f" tag))
-                           :value v
-                           :provenance (model/provenance {:pass :ingest})})])
-      "datafield"
-      (for [sf (:content field)
-            :when (= "subfield" (local-name sf))
-            :let [code (attr sf "code")
-                  v    (text-of sf)]
-            :when (and code v)]
-        (model/assertion {:subject record-id
-                          :predicate (keyword "intermarc" (str "f" tag "_" code))
-                          :value v
-                          :provenance (model/provenance {:pass :ingest})}))
-      nil)))
-
-(defn- parse-record [opts elem]
-  (let [ark  (attr elem "id")
-        rid  (record-id-from-ark ark)
-        typ  (attr elem "type")
-        kind (or (:kind opts)
-                 (keyword "intermarc" (str/lower-case (or typ "record"))))
-        as   (vec (mapcat #(field-assertions rid %) (:content elem)))]
-    (model/record {:id rid :kind kind :source ark :assertions as})))
 
 ;; ---------------------------------------------------------------------------
 ;; Public API + plugin
@@ -109,10 +49,15 @@
   "Parse an InterMARCXChange `xml-string` into a vector of Records. `opts` may
    carry `:kind` (else derived from each record's `type`)."
   [xml-string opts]
-  (->> (xml/parse-str xml-string)
-       elements
-       (filter mxc-record?)
-       (mapv #(parse-record opts %))))
+  (marcxml/parse-records
+   xml-string
+   {:ns        "intermarc"
+    :record?   mxc-record?
+    :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
+    :kind      (fn [e] (or (:kind opts)
+                           (keyword "intermarc"
+                                    (str/lower-case (or (marcxml/attr e "type") "record")))))
+    :source    (fn [e] (marcxml/attr e "id"))}))
 
 (defn- source->string
   "Accept either a raw string or an ADR 0007 tagged source map."

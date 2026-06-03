@@ -222,14 +222,20 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 | WP-1 substrate (minting, loss diagnostic) | ✅ |
 | WP-2 LRMoo plugin + view | ✅ |
 | WP-3 FRBRisation (INTERMARC; clustering = id-collision; loss) | ✅ |
-| WP-4 spokes | ◐ — INTERMARC-SRU in ✅; canonical→WEMI floor (inline DC) ✅; N-Triples + additive/pure CRM out ✅; **MARC21, real DC/MODS, IIIF, Linked Art, Turtle/JSON-LD not built** |
-| WP-5 loss-aware report | ✅ (with a double-count defect — see remediation) |
+| WP-4 spokes | ◐ — **5 importers in ✅**: INTERMARC-SRU, MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **2 round-trips ✅** (DC + MARC21↔floor, loss measured, id-stable & idempotent); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** — N-Triples · Turtle · compacted JSON-LD, for both the LRMoo view and the additive/pure CRM down-projection; **MODS/IIIF export, Linked Art profile not built; MARC21↔LRMoo is at the *floor* level, not conformance-checked** |
+| WP-5 loss-aware report | ✅ (cross-edge double-count fixed in remediation R3) |
 | WP-6 conformance · WP-7 scale · WP-8 CLI · WP-9 release | ✗ |
 
 Also delivered beyond the original WPs: ADR 0018 (entity resolution at scale,
 *Proposed*); the D7 commit policy (`:asserted` ⇔ proof, else `:proposed`;
-`:certified-only?` export); and three measured evals (C2 fidelity, showcase
-boundary, OpenLibrary ER) corroborating the recall ceiling on independent data.
+`:certified-only?` export); three measured evals (C2 fidelity, showcase
+boundary, OpenLibrary ER) corroborating the recall ceiling on independent data;
+and a **multi-spoke convergence capstone** — INTERMARC + MARC21 + Dublin Core +
+MODS in one registry reaching one LRMoo pivot with one unified loss report, and
+the three floor formats (DC, MARC21, MODS) content-converging on the same Work id
+(the hub property). It also forced spoke mapping-ids to be globally distinctive
+(the compiler keys rule ids on the name portion, ADR 0009), so the spokes are
+genuinely composable.
 
 **Remediation gate before WP-4 resumes:** a self-audit
 ([`cleanup/audit-2026-06-03.md`](./cleanup/audit-2026-06-03.md)) found six fix-now

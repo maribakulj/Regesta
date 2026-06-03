@@ -6,12 +6,16 @@
    and predicate IRIs come straight from `lrmoo/iri`.
 
    `triples` yields the graph as data (`[s p o]`, `o` = `{:iri _}` | `{:lit _}`);
-   `exporter` follows the ADR 0007 exporter contract. Only `:lrmoo/*`
-   predicates are exported by this slice; canonical/native predicates serialise
-   once their own IRI mappings land. Wiring this into the LRMoo plugin map's
-   `:exporter` is a later assembly step (kept out here to avoid a cycle with
-   the vocabulary namespace)."
-  (:require [clojure.string :as str]
+   `exporter` follows the ADR 0007 exporter contract. Three RDF serialisations
+   render that one seq — N-Triples (canonical, line-based), Turtle (prefixed,
+   grouped by subject) and compacted JSON-LD (web-native) — so the CRM
+   down-projection and any future view reuse them by augmenting the seq first.
+   Only `:lrmoo/*` predicates are exported by this slice; canonical/native
+   predicates serialise once their own IRI mappings land. Wiring this into the
+   LRMoo plugin map's `:exporter` is a later assembly step (kept out here to avoid
+   a cycle with the vocabulary namespace)."
+  (:require [clojure.data.json :as json]
+            [clojure.string :as str]
             [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.plugins.lrmoo :as lrmoo]))
@@ -106,6 +110,87 @@
    proof-backed (`:asserted`) subgraph."
   ([record] (->ntriples record {}))
   ([record opts] (render-ntriples (triples record opts))))
+
+;; ---------------------------------------------------------------------------
+;; Turtle and JSON-LD — the same triple seq, prefixed/grouped (Turtle) and
+;; web-native (compacted JSON-LD). `rdf:type` renders as Turtle's `a` and as
+;; JSON-LD's `@type`; IRIs under a known namespace compact to `prefix:local`.
+;; ---------------------------------------------------------------------------
+
+(def ^:private rdf-prefixes
+  {"crm"   "http://www.cidoc-crm.org/cidoc-crm/"
+   "lrmoo" "http://iflastandards.info/ns/lrm/lrmoo/"
+   "rdf"   "http://www.w3.org/1999/02/22-rdf-syntax-ns#"})
+
+(defn- compact-iri
+  "`prefix:local` if `iri` sits under a known namespace, else nil."
+  [iri]
+  (some (fn [[pfx ns]] (when (str/starts-with? iri ns) (str pfx ":" (subs iri (count ns)))))
+        rdf-prefixes))
+
+(defn- compact-prefix
+  "The prefix name of `iri` if it is compactable, else nil."
+  [iri]
+  (some (fn [[pfx ns]] (when (str/starts-with? iri ns) pfx)) rdf-prefixes))
+
+(defn- ttl-iri [iri] (or (compact-iri iri) (str "<" iri ">")))
+(defn- ttl-term [o] (if (:iri o) (ttl-iri (:iri o)) (str "\"" (nt-escape (:lit o)) "\"")))
+
+(defn render-turtle
+  "Render a `[s p o]` triple seq as Turtle: `@prefix` headers for the namespaces
+   actually used, then statements grouped by subject — `a` for `rdf:type`, `;`
+   between predicates and `,` between repeated objects. nil for an empty seq."
+  [triples]
+  (when (seq triples)
+    (let [used     (into (sorted-set)
+                         (comp (mapcat (fn [[_ p o]]
+                                         [(when (not= p rdf-type) (compact-prefix p))
+                                          (when (:iri o) (compact-prefix (:iri o)))]))
+                               (remove nil?))
+                         triples)
+          header   (str/join "\n" (for [pfx used]
+                                    (str "@prefix " pfx ": <" (rdf-prefixes pfx) "> .")))
+          subjects (distinct (map first triples))
+          by-subj  (group-by first triples)
+          stmt     (fn [s]
+                     (let [preds (distinct (map second (by-subj s)))
+                           lines (for [p preds]
+                                   (let [os (->> (by-subj s) (filter #(= p (second %))) (map #(nth % 2)))]
+                                     (str "    " (if (= p rdf-type) "a" (ttl-iri p)) " "
+                                          (str/join " , " (map ttl-term os)))))]
+                       (str (ttl-iri s) "\n" (str/join " ;\n" lines) " .")))]
+      (str header (when (seq used) "\n\n") (str/join "\n" (map stmt subjects))))))
+
+(defn render-jsonld
+  "Render a `[s p o]` triple seq as compacted JSON-LD: an `@context` of the
+   namespace prefixes and an `@graph` of one node object per subject (`@type` for
+   `rdf:type`, `{\"@id\" …}` for IRI objects). nil for an empty seq."
+  [triples]
+  (when (seq triples)
+    (let [by-subj (group-by first triples)
+          add     (fn [m k v] (update m k (fn [ex] (cond (nil? ex) v (vector? ex) (conj ex v) :else [ex v]))))
+          term    (fn [o] (if (:iri o) {"@id" (or (compact-iri (:iri o)) (:iri o))} (:lit o)))
+          node    (fn [s]
+                    (reduce (fn [acc [_ p o]]
+                              (if (= p rdf-type)
+                                (add acc "@type" (or (compact-iri (:iri o)) (:iri o)))
+                                (add acc (or (compact-iri p) p) (term o))))
+                            {"@id" s}
+                            (by-subj s)))]
+      (json/write-str {"@context" rdf-prefixes
+                       "@graph"   (mapv node (distinct (map first triples)))}))))
+
+(defn ->turtle
+  "Render `record`'s LRMoo triples as Turtle (\"\" when empty). `opts` may carry
+   `:certified-only?` (D7)."
+  ([record] (->turtle record {}))
+  ([record opts] (or (render-turtle (triples record opts)) "")))
+
+(defn ->jsonld
+  "Render `record`'s LRMoo triples as compacted JSON-LD (\"\" when empty). `opts`
+   may carry `:certified-only?` (D7)."
+  ([record] (->jsonld record {}))
+  ([record opts] (or (render-jsonld (triples record opts)) "")))
 
 (defn export-losses
   "Export-edge loss (ADR 0015): this exporter serialises only the `:lrmoo/*`
