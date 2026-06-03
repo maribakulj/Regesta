@@ -126,3 +126,15 @@
                              :assertions [(model/assertion {:subject :ent/e :predicate :lrmoo/R33_has_string
                                                             :value "t" :status :proposed})]})]
         (is (= "" (export/->ntriples p {:certified-only? true})))))))
+
+(deftest certified-only-keeps-iri-bearing-entities-without-claims
+  (testing "a titleless ARK Manifestation (determinate id, no claims) stays certified; a string-key Work does not (R2)"
+    (let [r    (model/record
+                {:id :record/r1 :kind :book
+                 :entities [(model/entity {:id :ent/m :kind :lrmoo/F3_Manifestation
+                                           :iri "http://data.bnf.fr/ark:/12148/cbX"})
+                            (model/entity {:id :ent/w :kind :lrmoo/F1_Work})]})  ; no iri, no claims
+          cert (set (export/triples r {:certified-only? true}))]
+      (is (contains? cert ["http://data.bnf.fr/ark:/12148/cbX" RDF-TYPE
+                           {:iri "http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation"}]))
+      (is (not (contains? cert ["urn:regesta:ent:w" RDF-TYPE {:iri F1}]))))))

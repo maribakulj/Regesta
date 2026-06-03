@@ -60,10 +60,15 @@
 (defn- entity-prod [id kind prov]
   {:kind :entity :value (model/entity {:id id :kind kind :provenance prov})})
 
-(defn- assert-prod [subject predicate value prov]
-  {:kind  :assertion
-   :value (model/assertion {:subject subject :predicate predicate :value value
-                            :status :proposed :provenance prov})})
+(defn- assert-prod
+  "An `:assertion` production. `status` is the commit decision (D7): `:asserted`
+   for transcription (the record's own title), `:proposed` for the string-key
+   WEMI inference. Defaults to `:proposed` — the floor has no determinate id."
+  ([subject predicate value prov] (assert-prod subject predicate value prov :proposed))
+  ([subject predicate value prov status]
+   {:kind  :assertion
+    :value (model/assertion {:subject subject :predicate predicate :value value
+                             :status status :provenance prov})}))
 
 (defn- wemi-productions
   "WEMI productions from the canonical floor: Manifestation always; Expression
@@ -75,7 +80,9 @@
         title (title-of record)
         agent (first-literal record :canon/agent)]
     (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
-      title (conj (assert-prod manif :lrmoo/R33_has_string title prov))
+      ;; the Manifestation's own title is transcription -> certified (D7);
+      ;; the string-key Expression/Work below are inference -> :proposed.
+      title (conj (assert-prod manif :lrmoo/R33_has_string title prov :asserted))
       title (into (let [wkey (str (or agent "") "|" (text/norm title))
                         expr (model/mint-entity-id :lrmoo/F2_Expression wkey)
                         work (when agent (model/mint-entity-id :lrmoo/F1_Work wkey))]

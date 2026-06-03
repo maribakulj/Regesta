@@ -60,8 +60,12 @@
                                              (when (model/reference-value? (:value a))
                                                [(:value/target (:value a))])))
                                      lrmoo-as)))
+         ;; an entity is certified if a determinate id (an authority :iri, e.g. an
+         ;; ARK) fixes it, or a certified claim references it — so a titleless ARK
+         ;; Manifestation is kept, but a string-key Work (no iri, only :proposed
+         ;; claims) is not (audit R2).
          ents    (cond->> (:entities record)
-                   certified-only? (filterv #(contains? refd (:id %))))]
+                   certified-only? (filterv #(or (:iri %) (contains? refd (:id %)))))]
      (concat
       (for [e ents
             :when (lrmoo/entity-kind? (:kind e))]
