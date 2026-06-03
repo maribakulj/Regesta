@@ -115,6 +115,26 @@ Equivalence predicates and appellations are **opaque keys** to the core (ADR 000
 only the plugin / view interprets them. Entity resolution at scale adds **no**
 structural vocabulary — consistent with every prior decision.
 
+## Evidence (2026-06-03)
+
+The premise is now corroborated on **two independent corpora** (see
+`docs/eval/entity-resolution.md`): on Madame Bovary vs data.bnf (P = R = 1.0 *with*
+the link, ~0.43 recall *without*) and on ~4 555 OpenLibrary editions / 328 works
+*independent of the BnF* (exact `author + title`: genuine precision ≈ 1.0 but recall
+≈ 0.37; loosening trades precision for recall; author-only collapses to P = 0.05).
+The trade-off and the need for the authority link are measured, not asserted.
+
+Two findings sharpen this ADR:
+- §3 (offline clustering is a *recall aid*, proof-gated) is the right call: exact
+  match is near-perfectly precise but low-recall — so auto-commit the exact tier
+  (the D7 commit policy now does), propose the rest.
+- A clean, broad work-grouping **gold does not exist** in open sources (BnF,
+  Wikidata, OpenLibrary each fail differently — OpenLibrary even fragments
+  *Frankenstein* across 14 works). So tail recall cannot be *certified* against an
+  external authority; it must be evidence-gated and curated, never benchmarked into
+  existence. The **live-reconciliation yield** therefore stays the one unmeasured
+  number, gated on a curated/fetched authority (the live T1 probe).
+
 ## Alternatives considered
 
 - **Global pairwise record linkage** (cluster millions among themselves). Rejected
