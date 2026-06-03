@@ -40,3 +40,12 @@ It is **directional, not definitive**: only ~18 authors, all canonical (the
 opposite of the long tail), and English-edition-heavy. The conclusion it
 corroborates — string clustering cannot get both precision and recall; the
 authority link is what does — is what generalises, not the exact numbers.
+
+## Integrity
+
+UTF-8, **no BOM**, Unix newlines. The export that produced this file
+double-encoded one author (`Honoré de Balzac` → `HonorÃ©…`) on 84 rows and
+prepended a BOM; both were repaired in place (the eval keys on `work_key` /
+`title`, and no correctly-spelled `Honoré` rows existed, so the fix changed no
+cluster and no metric). If you regenerate the CSV, write UTF-8 without a BOM and
+spot-check accented authors before committing.
