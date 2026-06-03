@@ -66,6 +66,16 @@
   [record]
   (export/render-ntriples (crm-triples record)))
 
+(defn ->turtle
+  "Render `record`'s additive LRMoo+CRM view as Turtle (crm:/lrmoo: prefixed). \"\" when empty."
+  [record]
+  (or (export/render-turtle (crm-triples record)) ""))
+
+(defn ->jsonld
+  "Render `record`'s additive LRMoo+CRM view as compacted JSON-LD. \"\" when empty."
+  [record]
+  (or (export/render-jsonld (crm-triples record)) ""))
+
 (defn exporter
   "ADR 0007 exporter: the additive LRMoo+CRM N-Triples of `records`. Loss is the
    same as the LRMoo exporter's (this view adds CRM triples, drops nothing), so it
@@ -111,6 +121,16 @@
   "Render `record` as pure CIDOC-CRM N-Triples (no LRMoo F/R). \"\" when empty."
   [record]
   (export/render-ntriples (crm-only-triples record)))
+
+(defn ->crm-only-turtle
+  "Render `record` as pure CIDOC-CRM Turtle (crm: prefixed, no LRMoo). \"\" when empty."
+  [record]
+  (or (export/render-turtle (crm-only-triples record)) ""))
+
+(defn ->crm-only-jsonld
+  "Render `record` as pure CIDOC-CRM compacted JSON-LD (no LRMoo). \"\" when empty."
+  [record]
+  (or (export/render-jsonld (crm-only-triples record)) ""))
 
 (defn- has-kind? [record kind]
   (boolean (some #(= kind (:kind %)) (:entities record))))

@@ -2,7 +2,8 @@
   "Unit tests for the additive CIDOC-CRM down-projection (museum spoke, ADR 0013):
    every LRMoo type/relation triple gains its CRM super-type/super-property triple,
    losslessly."
-  (:require [clojure.string :as str]
+  (:require [clojure.data.json :as json]
+            [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [regesta.model :as model]
             [regesta.plugins.lrmoo.crm :as crm]
@@ -101,3 +102,22 @@
     (is (not (str/includes? output "lrm/lrmoo/F1")))
     (is (some #(= :loss/under-specified (:code %)) diagnostics))
     (is (some #(= :loss/coerced (:code %)) diagnostics))))
+
+(deftest crm-views-serialise-to-turtle-and-jsonld
+  (testing "additive Turtle prefixes both vocabularies and types each entity twice"
+    (let [ttl (crm/->turtle rec)]
+      (is (str/includes? ttl "@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> ."))
+      (is (str/includes? ttl "@prefix lrmoo:"))
+      (is (str/includes? ttl "lrmoo:F1_Work"))                 ; LRMoo type kept
+      (is (str/includes? ttl "crm:E89_Propositional_Object")))) ; CRM super-type added
+  (testing "pure-CRM Turtle is crm: only (no LRMoo F/R survive)"
+    (let [ttl (crm/->crm-only-turtle rec)]
+      (is (str/includes? ttl "a crm:E73_Information_Object"))
+      (is (str/includes? ttl "crm:P165_incorporates"))
+      (is (not (str/includes? ttl "lrmoo:")))))
+  (testing "pure-CRM JSON-LD carries only crm: types (E73 collapse visible)"
+    (let [graph (get (json/read-str (crm/->crm-only-jsonld rec)) "@graph")
+          types (set (mapcat (fn [n] (let [t (get n "@type")] (if (vector? t) t [t]))) graph))]
+      (is (contains? types "crm:E89_Propositional_Object"))
+      (is (contains? types "crm:E73_Information_Object"))
+      (is (not-any? #(str/starts-with? % "lrmoo:") types)))))

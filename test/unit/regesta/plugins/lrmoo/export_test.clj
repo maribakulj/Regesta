@@ -1,7 +1,8 @@
 (ns regesta.plugins.lrmoo.export-test
   "Unit tests for the LRMoo RDF export (WP-2 slice 3, ADR 0013): the triple
-   model and the N-Triples rendering on a hand-built WEMI graph."
-  (:require [clojure.string :as str]
+   model and the N-Triples / Turtle / JSON-LD rendering on a hand-built WEMI graph."
+  (:require [clojure.data.json :as json]
+            [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [regesta.model :as model]
             [regesta.plugins.lrmoo.export :as export]))
@@ -138,3 +139,59 @@
       (is (contains? cert ["http://data.bnf.fr/ark:/12148/cbX" RDF-TYPE
                            {:iri "http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation"}]))
       (is (not (contains? cert ["urn:regesta:ent:w" RDF-TYPE {:iri F1}]))))))
+
+(deftest turtle-rendering
+  (let [ttl (export/->turtle rec)]
+    (testing "a @prefix header for the namespace actually used (lrmoo), not rdf (a -> 'a')"
+      (is (str/includes? ttl "@prefix lrmoo: <http://iflastandards.info/ns/lrm/lrmoo/> ."))
+      (is (not (str/includes? ttl "@prefix rdf:"))))
+    (testing "rdf:type renders as 'a', predicates/types compact, subjects/urn objects stay full"
+      (is (str/includes? ttl "a lrmoo:F1_Work"))
+      (is (str/includes? ttl "lrmoo:R3_is_realised_in <urn:regesta:ent:expr>"))
+      (is (str/includes? ttl "lrmoo:R33_has_string \"Madame Bovary\""))
+      (is (str/includes? ttl "<urn:regesta:ent:work>")))
+    (testing "every statement block ends in ' .'"
+      (is (every? #(str/ends-with? (str/trimr %) ".")
+                  (remove str/blank? (str/split ttl #"(?m)^(?=\S)")))))
+    (testing "a record with no LRMoo content yields the empty string"
+      (is (= "" (export/->turtle (model/record {:id :record/x :kind :book})))))))
+
+(deftest jsonld-rendering
+  (let [parsed (json/read-str (export/->jsonld rec))]
+    (testing "an @context of the namespace prefixes and one node per subject"
+      (is (= "http://iflastandards.info/ns/lrm/lrmoo/" (get-in parsed ["@context" "lrmoo"])))
+      (is (= 2 (count (get parsed "@graph")))))
+    (let [by-id (into {} (map (juxt #(get % "@id") identity)) (get parsed "@graph"))
+          work  (get by-id "urn:regesta:ent:work")
+          expr  (get by-id "urn:regesta:ent:expr")]
+      (testing "rdf:type -> @type (compacted); a reference -> {@id …}; a literal -> a string"
+        (is (= "lrmoo:F1_Work" (get work "@type")))
+        (is (= {"@id" "urn:regesta:ent:expr"} (get work "lrmoo:R3_is_realised_in")))
+        (is (= "lrmoo:F2_Expression" (get expr "@type")))
+        (is (= "Madame Bovary" (get expr "lrmoo:R33_has_string")))))
+    (testing "a record with no LRMoo content yields the empty string"
+      (is (= "" (export/->jsonld (model/record {:id :record/x :kind :book})))))))
+
+(deftest all-three-serialisations-encode-the-same-triples
+  (testing "Turtle and JSON-LD carry exactly the triples N-Triples does (verifiable, no modelling)"
+    (let [ts        (export/triples rec)
+          nt-lines  (remove str/blank? (str/split-lines (export/->ntriples rec)))
+          jsonld    (json/read-str (export/->jsonld rec))
+          ;; one JSON-LD statement per (predicate value) pair, @type counted per type
+          json-stmts (reduce (fn [n node]
+                               (+ n (reduce-kv (fn [m k v]
+                                                 (cond (= k "@id")   m
+                                                       (= k "@type") (+ m (if (vector? v) (count v) 1))
+                                                       (vector? v)   (+ m (count v))
+                                                       :else         (inc m)))
+                                               0 node)))
+                             0 (get jsonld "@graph"))]
+      (is (= (count ts) (count nt-lines)))
+      (is (= (count ts) json-stmts))
+      (testing "certified-only? threads through every serialisation"
+        (let [p (model/record {:id :record/p :kind :book
+                               :entities [(model/entity {:id :ent/e :kind :lrmoo/F2_Expression})]
+                               :assertions [(model/assertion {:subject :ent/e :predicate :lrmoo/R33_has_string
+                                                              :value "t" :status :proposed})]})]
+          (is (= "" (export/->turtle p {:certified-only? true})))
+          (is (= "" (export/->jsonld p {:certified-only? true}))))))))
