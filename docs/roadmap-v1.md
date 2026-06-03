@@ -233,7 +233,11 @@ boundary, OpenLibrary ER) corroborating the recall ceiling on independent data;
 and a **multi-spoke convergence capstone** — INTERMARC + MARC21 + Dublin Core +
 MODS in one registry reaching one LRMoo pivot with one unified loss report, and
 the three floor formats (DC, MARC21, MODS) content-converging on the same Work id
-(the hub property). It also forced spoke mapping-ids to be globally distinctive
+(the hub property); the **Linked Art profile export** (museum/Louvre, mapping
+verified vs the official examples); and the **`regesta.convert` assembly** — the
+institution-facing keystone wiring the 5 importers × 8 target serialisations
+through one pivot in a single call, returning the output plus the ADR 0015 loss
+report over every edge. It also forced spoke mapping-ids to be globally distinctive
 (the compiler keys rule ids on the name portion, ADR 0009), so the spokes are
 genuinely composable.
 
