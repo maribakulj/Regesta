@@ -179,9 +179,11 @@
         prods   (rules/apply-rule cr record)
         asserts (filter #(= :assertion (:kind %)) prods)]
     (is (= ["abc" "def" "ghi"] (mapv #(:value (:value %)) asserts)))
-    (testing "the lossy :lowercase transform also reports a :coerced loss per value (ADR 0015)"
+    (testing "the lossy chain reports a :coerced loss only for values it changed (ADR 0015; R4)"
+      ;; \"  ABC  \" and \"DeF\" change; \"ghi\" is already trimmed+lowercase, so
+      ;; trim+lowercase is a no-op on it — no coercion, no loss. 2 of 3, not 3.
       (let [coerced (filter #(= :loss/coerced (get-in % [:value :code])) prods)]
-        (is (= 3 (count coerced)))))))
+        (is (= 2 (count coerced)))))))
 
 (deftest lossy-transform-emits-coerced-loss
   (testing "a mapping whose chain discards detail reports :coerced/:import on the source field"
@@ -199,7 +201,13 @@
     (let [m  (assoc minimal-mapping :mapping/transform [:trim])
           cr (mapping/compile-mapping m stdlib)
           ps (rules/apply-rule cr (record-with :native/x ["  x  "]))]
-      (is (every? #(= :assertion (:kind %)) ps)))))
+      (is (every? #(= :assertion (:kind %)) ps))))
+  (testing "a lossy transform that is a no-op on the value emits no :coerced loss (R4)"
+    (let [m  (assoc minimal-mapping :mapping/transform [:lowercase])
+          cr (mapping/compile-mapping m stdlib)
+          ps (rules/apply-rule cr (record-with :native/x ["foo"]))]  ; already lowercase
+      (is (every? #(= :assertion (:kind %)) ps))
+      (is (= ["foo"] (mapv #(get-in % [:value :value]) ps))))))
 
 (deftest flat-mapping-multiplicity-preserved
   (let [cr     (mapping/compile-mapping minimal-mapping stdlib)

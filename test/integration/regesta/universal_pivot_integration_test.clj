@@ -1,12 +1,18 @@
 (ns regesta.universal-pivot-integration-test
-  "Universality proof (ADR 0013): a *non-MARC* source reaches the LRMoo pivot.
+  "Format-agnostic pivot, demonstrated off-MARC (ADR 0013): a *non-MARC* source
+   reaches the LRMoo pivot.
 
    Two Dublin Core records — one JSON-LD, one XML — each run the full chain
    shape-adapter ingest (ADR 0007) -> mapping to the canonical floor (ADR 0009) ->
    canonical→WEMI projection (ADR 0013) -> RDF, with no INTERMARC anywhere. They
    converge on the *same* Work and Expression by content alone (ADR 0008 / 0012 at
-   the WEMI level), proving the pivot is format-agnostic — a real hub, not an
-   INTERMARC converter in disguise."
+   the WEMI level), showing the projection reads only the canonical floor — on this
+   evidence a real hub, not an INTERMARC converter in disguise.
+
+   Honest scope: this *demonstrates* format-agnosticism on Dublin Core (the one
+   non-MARC spoke wired so far), via two hand-built records. It is not a proof of
+   universality across formats — that accrues as real DC/MODS/etc. spokes land
+   (WP-4). What it does pin down: the pivot has no INTERMARC dependency."
   (:require [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [regesta.diagnostics :as dx]

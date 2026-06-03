@@ -186,10 +186,11 @@ not read as shipped:
   - **Turtle / JSON-LD** — only N-Triples ships (the parenthetical "(JSON-LD,
     Turtle)" in Consequences is aspirational; they are thin follow-ons over the
     same `triples` seq);
-  - **CRM down-projection** exists but only in its *additive, lossless* form
-    (`lrmoo.crm`: each LRMoo type/relation also asserts its CRM super-type/-property,
-    verified vs the OWL). The **pure-CRM replacement** (lossy: F2/F3 collapse to E73,
-    relations generalise — reported as export loss) and **Linked Art** are not built;
+  - **CRM down-projection** ships in both forms in `lrmoo.crm`: *additive / lossless*
+    (LRMoo + its CRM super-type/-property, verified vs the OWL) and *pure-CRM
+    replacement* (E/P only — lossy: F2/F3 collapse to E73, relations generalise — with
+    that loss reported at the export edge). **Linked Art** and Turtle/JSON-LD are not
+    built;
   - the broader **CRM object core** beyond WEMI — the shipped subset is WEMI-only;
   - the projection minted from `:canon/*` (`lrmoo.project`) is generic, but the
     *enriched* projection that exploits native authority links remains

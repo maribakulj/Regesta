@@ -161,3 +161,23 @@
       (is (str/includes? nt "lrmoo/F1_Work"))
       (is (str/includes? nt "lrmoo/R4_embodies"))
       (is (str/includes? nt "lrmoo/R3_is_realised_in")))))
+
+(deftest the-floor-certifies-only-transcription
+  (testing "the Manifestation title is transcription (:asserted); the string-key WEMI is :proposed (D7)"
+    (let [r         (project/project (canon :record/p :canon/agent "Hugo" :canon/title "Les Misérables"))
+          manif     (:id (first (view/manifestations r)))
+          manif-r33 (filter #(and (= :lrmoo/R33_has_string (:predicate %)) (= manif (:subject %)))
+                            (:assertions r))
+          inferred  (filter #(and (= "lrmoo" (namespace (:predicate %))) (not= manif (:subject %)))
+                            (:assertions r))]
+      (is (seq manif-r33))
+      (is (every? model/asserted? manif-r33))      ; the record's own title is certified
+      (is (seq inferred))
+      (is (every? model/proposed? inferred)))      ; Expression/Work string-key inference is proposed
+    (testing "certified-only export keeps the Manifestation + its title, drops the proposed Work/Expression"
+      (let [nt (export/->ntriples (project/project (canon :record/p :canon/agent "Hugo" :canon/title "Les Misérables"))
+                                  {:certified-only? true})]
+        (is (str/includes? nt "lrmoo/F3_Manifestation"))
+        (is (str/includes? nt "Les Mis"))
+        (is (not (str/includes? nt "lrmoo/F1_Work")))
+        (is (not (str/includes? nt "lrmoo/F2_Expression")))))))

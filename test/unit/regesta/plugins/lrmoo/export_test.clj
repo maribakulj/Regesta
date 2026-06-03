@@ -99,3 +99,42 @@
         (is (every? #(= :export (get-in % [:detail :loss/edge])) ls)))
       (testing "the exporter surfaces them in its result"
         (is (= ls (:diagnostics (export/exporter {} [r]))))))))
+
+(deftest certified-only-emits-only-the-asserted-subgraph
+  (let [r    (model/record
+              {:id :record/r1 :kind :book
+               :entities [(model/entity {:id :ent/work :kind :lrmoo/F1_Work})
+                          (model/entity {:id :ent/expr :kind :lrmoo/F2_Expression})
+                          (model/entity {:id :ent/manif :kind :lrmoo/F3_Manifestation})]
+               :assertions [(model/assertion {:subject :ent/manif :predicate :lrmoo/R4_embodies
+                                              :value (model/reference :ent/expr) :status :asserted})
+                            (model/assertion {:subject :ent/work :predicate :lrmoo/R3_is_realised_in
+                                              :value (model/reference :ent/expr) :status :proposed})]})
+        all  (set (export/triples r))
+        cert (set (export/triples r {:certified-only? true}))]
+    (testing "default emits both; certified-only keeps the asserted R4, drops the proposed R3"
+      (is (contains? all  ["urn:regesta:ent:work" R3 {:iri "urn:regesta:ent:expr"}]))
+      (is (some #(= "http://iflastandards.info/ns/lrm/lrmoo/R4_embodies" (second %)) cert))
+      (is (not (some #(= R3 (second %)) cert))))
+    (testing "certified-only types only the entities the asserted claim references (manif + expr, not work)"
+      (is (contains? cert ["urn:regesta:ent:manif" RDF-TYPE
+                           {:iri "http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation"}]))
+      (is (not (contains? cert ["urn:regesta:ent:work" RDF-TYPE {:iri F1}]))))
+    (testing "a fully-proposed record certifies to the empty string"
+      (let [p (model/record {:id :record/p :kind :book
+                             :entities [(model/entity {:id :ent/e :kind :lrmoo/F2_Expression})]
+                             :assertions [(model/assertion {:subject :ent/e :predicate :lrmoo/R33_has_string
+                                                            :value "t" :status :proposed})]})]
+        (is (= "" (export/->ntriples p {:certified-only? true})))))))
+
+(deftest certified-only-keeps-iri-bearing-entities-without-claims
+  (testing "a titleless ARK Manifestation (determinate id, no claims) stays certified; a string-key Work does not (R2)"
+    (let [r    (model/record
+                {:id :record/r1 :kind :book
+                 :entities [(model/entity {:id :ent/m :kind :lrmoo/F3_Manifestation
+                                           :iri "http://data.bnf.fr/ark:/12148/cbX"})
+                            (model/entity {:id :ent/w :kind :lrmoo/F1_Work})]})  ; no iri, no claims
+          cert (set (export/triples r {:certified-only? true}))]
+      (is (contains? cert ["http://data.bnf.fr/ark:/12148/cbX" RDF-TYPE
+                           {:iri "http://iflastandards.info/ns/lrm/lrmoo/F3_Manifestation"}]))
+      (is (not (contains? cert ["urn:regesta:ent:w" RDF-TYPE {:iri F1}]))))))

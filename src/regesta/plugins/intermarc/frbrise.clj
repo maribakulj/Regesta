@@ -14,8 +14,10 @@
    (ADR 0008) — lookup-based clustering, no batch state. The Work level (R3,
    from author + uniform title) and the fuzzy fallback for records without
    `f145` are a later slice (the spike showed the fallback needs bridging).
-   Minted claims default to `:proposed` (ADR 0005); confidence-gating to
-   `:asserted` is future (D7).
+   Commit policy (D7, ADR 0014/0016): claims resting on a determinate identifier
+   (the ARK, the `145 $3` link) are `:asserted` (certified); the Work whose
+   creator is only a name string stays `:proposed`. The string-key floor
+   projection (`lrmoo.project`) proposes everything.
 
    A `compiled-rule` (not a data rule): it computes content-derived ids, which
    the data DSL deliberately cannot express (the mapping compiler does the same)."
@@ -23,21 +25,13 @@
             [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.rules :as rules]
-            [regesta.runtime :as runtime]))
+            [regesta.runtime :as runtime]
+            [regesta.text :as text]))
 
 (defn- field
   "First value of `record`'s assertion with predicate `pred`, or nil."
   [record pred]
   (->> (:assertions record) (filter #(= pred (:predicate %))) first :value))
-
-(defn- norm
-  "Diacritic- and case-insensitive normalisation for the Work key."
-  [s]
-  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
-      (str/replace #"\p{M}+" "")
-      str/lower-case
-      str/trim
-      (str/replace #"\s+" " ")))
 
 (defn- entity-prod
   "An `:entity` production. `iri` (optional) is the external authority IRI."
@@ -56,14 +50,25 @@
     (when (str/starts-with? (str s) "ark:")
       (str "http://data.bnf.fr/" s))))
 
-(defn- assert-prod [subject predicate value prov]
-  {:kind  :assertion
-   :value (model/assertion {:subject subject :predicate predicate :value value
-                            :status :proposed :provenance prov})})
+(defn- assert-prod
+  "An `:assertion` production. `status` is the commit decision (D7): `:asserted`
+   for claims resting on a determinate identifier (the ARK, the `145 $3` link),
+   `:proposed` for inferred-but-unproven claims. Defaults to `:proposed`."
+  ([subject predicate value prov] (assert-prod subject predicate value prov :proposed))
+  ([subject predicate value prov status]
+   {:kind  :assertion
+    :value (model/assertion {:subject subject :predicate predicate :value value
+                             :status status :provenance prov})}))
 
 (defn- wemi-productions
   "WEMI entity and link productions for one INTERMARC record (see ns doc).
-   Manifestation always; Expression + Work when the embedded link is present."
+   Manifestation always; Expression + Work when the embedded link is present.
+
+   Commit policy (D7, ADR 0014/0016): everything here rests on a determinate
+   identifier — the Manifestation is the record itself (ARK), the Expression and
+   R4 come from the `145 $3` authority link — so it is `:asserted` (certified).
+   The one exception is the Work whose creator is only a name string (`100 $a`,
+   no `100 $3` authority id): its key is partly fuzzy, so it stays `:proposed`."
   [record]
   (let [rid   (:id record)
         prov  (model/provenance {:pass :infer :derivation [rid]})
@@ -72,20 +77,21 @@
         x3    (field record :intermarc/f145_3)
         m245  (field record :intermarc/f245_a)]
     (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov miri)]
-      m245 (conj (assert-prod manif :lrmoo/R33_has_string m245 prov))
+      m245 (conj (assert-prod manif :lrmoo/R33_has_string m245 prov :asserted))
       x3   (into (let [expr (model/mint-entity-id :lrmoo/F2_Expression x3)
                        ttl  (field record :intermarc/f145_a)
-                       auth (or (field record :intermarc/f100_3)
-                                (field record :intermarc/f100_a))
+                       a3   (field record :intermarc/f100_3)
+                       auth (or a3 (field record :intermarc/f100_a))
+                       wst  (if a3 :asserted :proposed)   ; authority-backed creator?
                        work (when (and auth ttl)
                               (model/mint-entity-id :lrmoo/F1_Work
-                                                    (str auth "|" (norm ttl))))]
+                                                    (str auth "|" (text/norm ttl))))]
                    (cond-> [(entity-prod expr :lrmoo/F2_Expression prov)
-                            (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov)]
-                     ttl  (conj (assert-prod expr :lrmoo/R33_has_string ttl prov))
+                            (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov :asserted)]
+                     ttl  (conj (assert-prod expr :lrmoo/R33_has_string ttl prov :asserted))
                      work (into [(entity-prod work :lrmoo/F1_Work prov)
-                                 (assert-prod work :lrmoo/R3_is_realised_in (model/reference expr) prov)
-                                 (assert-prod work :lrmoo/R33_has_string ttl prov)])))))))
+                                 (assert-prod work :lrmoo/R3_is_realised_in (model/reference expr) prov wst)
+                                 (assert-prod work :lrmoo/R33_has_string ttl prov wst)])))))))
 
 (def mapped-source-fields
   "INTERMARC fields the current LRMoo projection represents. Every other

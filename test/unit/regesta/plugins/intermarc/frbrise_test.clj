@@ -104,3 +104,23 @@
     (is (= 4 (:mapped c)))     ; f145_3, f145_a, f100_3, f245_a (was 2 last slice)
     (is (> (:total c) 10))     ; many INTERMARC fields are present
     (is (< (:pct c) 50))))     ; still partial — the loss report tracks the gap
+
+(deftest commit-policy-asserts-proof-backed-claims
+  (testing "the f145-linked, f100_3-backed showcase record: every WEMI claim is :asserted (certified)"
+    (let [r        (frbrise/frbrise (by-id records :bnf/cb304403926))
+          lrmoo-as (filter #(= "lrmoo" (namespace (:predicate %))) (:assertions r))]
+      (is (seq lrmoo-as))
+      (is (every? model/asserted? lrmoo-as))))
+  (testing "145 link but creator only a name string (no 100$3) -> Work claims stay :proposed"
+    (let [synth (model/record
+                 {:id :bnf/synth :kind :intermarc/bibliographic :source "ark:/12148/cbsynth"
+                  :assertions [(model/assertion {:subject :bnf/synth :predicate :intermarc/f145_3 :value "999"})
+                               (model/assertion {:subject :bnf/synth :predicate :intermarc/f145_a :value "Some Work"})
+                               (model/assertion {:subject :bnf/synth :predicate :intermarc/f245_a :value "A Title"})
+                               (model/assertion {:subject :bnf/synth :predicate :intermarc/f100_a :value "Anonymous"})]})
+          by-pred (group-by :predicate (:assertions (frbrise/frbrise synth)))]
+      (testing "the R4 link (from 145$3) is asserted"
+        (is (every? model/asserted? (:lrmoo/R4_embodies by-pred))))
+      (testing "the R3 realisation (name-string creator) is proposed"
+        (is (seq (:lrmoo/R3_is_realised_in by-pred)))
+        (is (every? model/proposed? (:lrmoo/R3_is_realised_in by-pred)))))))
