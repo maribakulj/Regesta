@@ -40,24 +40,39 @@
 
 (defn triples
   "The LRMoo view of `record` as RDF triples. Each WEMI entity is typed to its
-   F-class; each `:lrmoo/*` assertion becomes an object-property triple (when
-   its value is a reference) or a literal triple. Each item is `[s-iri p-iri o]`
-   with `o` = `{:iri s}` | `{:lit v}`."
-  [record]
-  (let [idx (iri-index record)
-        iri (fn [id] (or (get idx id) (entity-iri id)))]
-    (concat
-     (for [e (:entities record)
-           :when (lrmoo/entity-kind? (:kind e))]
-       [(iri (:id e)) rdf-type {:iri (lrmoo/iri (:kind e))}])
-     (for [a (:assertions record)
-           :when (lrmoo-predicate? (:predicate a))]
-       (let [v (:value a)]
-         [(iri (:subject a))
-          (lrmoo/iri (:predicate a))
-          (if (model/reference-value? v)
-            {:iri (iri (:value/target v))}
-            {:lit v})])))))
+   F-class; each `:lrmoo/*` assertion becomes an object-property triple (when its
+   value is a reference) or a literal triple. Each item is `[s-iri p-iri o]` with
+   `o` = `{:iri s}` | `{:lit v}`.
+
+   With `{:certified-only? true}` (D7), only `:asserted` assertions are emitted —
+   the proof-backed subgraph an institution can ship with no fabricated identity —
+   and only the entities those certified claims reference are typed."
+  ([record] (triples record {}))
+  ([record {:keys [certified-only?]}]
+   (let [idx     (iri-index record)
+         iri     (fn [id] (or (get idx id) (entity-iri id)))
+         as      (cond->> (:assertions record)
+                   certified-only? (filterv model/asserted?))
+         lrmoo-as (filterv #(lrmoo-predicate? (:predicate %)) as)
+         refd    (when certified-only?
+                   (into #{} (mapcat (fn [a]
+                                       (cons (:subject a)
+                                             (when (model/reference-value? (:value a))
+                                               [(:value/target (:value a))])))
+                                     lrmoo-as)))
+         ents    (cond->> (:entities record)
+                   certified-only? (filterv #(contains? refd (:id %))))]
+     (concat
+      (for [e ents
+            :when (lrmoo/entity-kind? (:kind e))]
+        [(iri (:id e)) rdf-type {:iri (lrmoo/iri (:kind e))}])
+      (for [a lrmoo-as]
+        (let [v (:value a)]
+          [(iri (:subject a))
+           (lrmoo/iri (:predicate a))
+           (if (model/reference-value? v)
+             {:iri (iri (:value/target v))}
+             {:lit v})]))))))
 
 (defn- nt-escape [s]
   (-> (str s)
@@ -83,9 +98,10 @@
 
 (defn ->ntriples
   "Render `record`'s LRMoo triples as N-Triples. Returns \"\" for a record with no
-   LRMoo content."
-  [record]
-  (render-ntriples (triples record)))
+   LRMoo content. `opts` may carry `:certified-only?` (D7) to emit only the
+   proof-backed (`:asserted`) subgraph."
+  ([record] (->ntriples record {}))
+  ([record opts] (render-ntriples (triples record opts))))
 
 (defn export-losses
   "Export-edge loss (ADR 0015): this exporter serialises only the `:lrmoo/*`
@@ -108,9 +124,10 @@
 (defn exporter
   "ADR 0007 exporter: render the LRMoo view of `records` as one N-Triples
    document, and report what the target cannot express as export-edge loss
-   (ADR 0015). `(fn [opts records] -> {:output String :diagnostics [...]})`."
-  [_opts records]
+   (ADR 0015). `opts` may carry `:certified-only?` (D7) to ship only the
+   proof-backed subgraph. `(fn [opts records] -> {:output String :diagnostics [...]})`."
+  [opts records]
   {:output      (->> records
-                     (into [] (comp (map ->ntriples) (remove str/blank?)))
+                     (into [] (comp (map #(->ntriples % opts)) (remove str/blank?)))
                      (str/join "\n"))
    :diagnostics (into [] (mapcat export-losses) records)})

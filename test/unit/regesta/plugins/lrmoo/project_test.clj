@@ -161,3 +161,11 @@
       (is (str/includes? nt "lrmoo/F1_Work"))
       (is (str/includes? nt "lrmoo/R4_embodies"))
       (is (str/includes? nt "lrmoo/R3_is_realised_in")))))
+
+(deftest the-floor-projection-proposes-everything
+  (testing "canonical has no determinate id, so every floor claim is :proposed (D7) — and certifies to nothing"
+    (let [r        (project/project (canon :record/p :canon/agent "Hugo" :canon/title "Les Misérables"))
+          lrmoo-as (filter #(= "lrmoo" (namespace (:predicate %))) (:assertions r))]
+      (is (seq lrmoo-as))
+      (is (every? model/proposed? lrmoo-as))
+      (is (= "" (export/->ntriples r {:certified-only? true}))))))

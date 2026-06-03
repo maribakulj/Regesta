@@ -41,9 +41,13 @@ Three constraints bound the decision:
    (`regesta.rules/default-status-for-phase`), `:infer` / `:repair` productions
    are **`:proposed`** — proposals until confirmed (the conservative,
    precision-first default). The D7 hybrid's *high-confidence auto-commit*
-   (promotion to `:asserted` machine truth) is a confidence-gating refinement,
-   **not yet implemented** (WP-3); a rule may already set `:status` explicitly to
-   opt in. There is **no** `:inferred` status (ADR 0005). The entity
+   (promotion to `:asserted`) is **now implemented** as a commit policy: a minting
+   rule sets `:status :asserted` for claims resting on a determinate identifier
+   (the embedded `145 $3` link, the record ARK) and leaves fuzzy claims
+   `:proposed` (`intermarc/frbrise`); the string-key floor projection
+   (`lrmoo/project`) proposes everything; and the export can ship just the
+   certified subgraph (`:certified-only?`). There is **no** `:inferred` status
+   (ADR 0005). The entity
    *declaration* itself is structural — it goes into `:entities`, statusless.
 
 3. **`repair` proposes, never commits, entities.** Per the dual status model and

@@ -173,14 +173,16 @@ slice is built. Honest current state, so the design is not read as shipped:
     idempotent at merge (ADR 0008) — measured P=R=1.0 on the showcase, recall gap
     measured off it (`docs/eval/frbrisation-fidelity.md`).
   - Import-edge loss (ADR 0015).
+  - **Confidence-gated commit (D7, §4)** — proof-backed claims (ARK, `145 $3`
+    link) are `:asserted`; the name-string-creator Work and the whole canonical
+    floor projection stay `:proposed`; the export ships the certified subgraph via
+    `:certified-only?`. (Threshold is the *evidence type*, not a numeric score.)
 - **Not built** (decided here; the scale layer is ADR 0018, Proposed):
   - the **pluggable resolver seam** (§1 / §4) — identity is a *direct* call to
     `mint-entity-id`, not a swappable resolver; the hash is the only resolver;
   - the **authority-anchored resolver**, the pinned **authority snapshot** (§2),
     and `sameAs` emission — only the Manifestation's transcribed ARK is emitted
     (ADR 0017), no reconciliation;
-  - **confidence-gated auto-commit** / D7 (§4) — infer productions are `:proposed`
-    by the engine default; promotion to `:asserted` is unimplemented (ADR 0014);
   - the **batch / cross-record clustering index** (§3) — FRBRisation is strictly
     per-record (exact clustering works by id collision; no fuzzy batch index);
   - **reconciliation breadth** (§5 / D11) — nothing beyond reading the embedded
