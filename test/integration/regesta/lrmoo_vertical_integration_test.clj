@@ -95,6 +95,11 @@
         (is (pos? (get-in report [:by-edge :import :total])))
         (is (pos? (get-in report [:by-edge :export :total])))
         (is (contains? (set (:source-fields report)) :intermarc/f100_a)))
+      (testing "distinct losses collapse the cross-edge double-count (audit R3)"
+        ;; on the real corpus the same native field is lost at both edges, so the
+        ;; deduped count is strictly below the field×edge event total.
+        (is (< (:distinct-losses report) (:total report)))
+        (is (str/includes? text (str (:distinct-losses report) " distinct losses"))))
       (testing "the rendering names both edges"
         (is (str/includes? text "import edge"))
         (is (str/includes? text "export edge"))))))

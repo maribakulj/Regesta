@@ -22,11 +22,19 @@
    merge of import-edge loss (on the records, via `dx/collect-many`) and
    export-edge loss (from the exporter result). Returns:
 
-     {:total N
-      :by-category     {category -> count}         ; aggregate, all edges
+     {:total           N   ; loss *events* — diagnostics, summed across edges
+      :distinct-losses N   ; distinct [subject source-field], deduped across edges
+      :by-category     {category -> count}         ; events, all edges
       :by-edge         {:import {:total :by-category :by-source-field}
                         :export {…}}
       :source-fields   [… distinct native fields lost, sorted …]}
+
+   `:total` and `:distinct-losses` differ on purpose (audit R3): the same native
+   field can be lost at *both* edges — unmapped on import and again unexpressible
+   on export — so it raises `:total` by two events but is one distinct loss. The
+   per-edge totals are clean (a field is flagged at most once per edge); read
+   `:total` as field×edge events, `:distinct-losses` (and `:source-fields`) as
+   the deduplicated 'which of my fields didn't survive' answer.
 
    `opts` may carry `:records` (count) for context; it is echoed back under
    `:records`."
@@ -37,11 +45,12 @@
                        {:total           (count es)
                         :by-category     (dx/count-by-loss-category es)
                         :by-source-field (dx/count-by-source-field es)})]
-     (cond-> {:total         (count ls)
-              :by-category   (dx/count-by-loss-category ls)
-              :by-edge       (into {} (map (fn [[e es]] [e (edge-report es)]))
-                                   (group-by dx/loss-edge ls))
-              :source-fields (vec (sort-by str (distinct (keep dx/loss-source-field ls))))}
+     (cond-> {:total           (count ls)
+              :distinct-losses (count (distinct (map (juxt :subject dx/loss-source-field) ls)))
+              :by-category     (dx/count-by-loss-category ls)
+              :by-edge         (into {} (map (fn [[e es]] [e (edge-report es)]))
+                                     (group-by dx/loss-edge ls))
+              :source-fields   (vec (sort-by str (distinct (keep dx/loss-source-field ls))))}
        records (assoc :records records)))))
 
 (defn- top-fields
@@ -62,18 +71,22 @@
 
 (defn format-conversion-report
   "Human-readable rendering of a `conversion-report` (ADR 0015), for CLI /
-   institutional audit. Never prints. Returns the empty-loss line when clean."
-  [{:keys [total by-category by-edge records source-fields] :as _report}]
+   institutional audit. Leads with the deduplicated loss count, then the raw
+   event total, then the clean per-edge breakdown (audit R3 — no merged,
+   double-counting field line). Never prints; returns the empty-loss line
+   when clean."
+  [{:keys [total distinct-losses by-category by-edge records source-fields] :as _report}]
   (if (zero? total)
     (str "Loss report: lossless"
          (when records (str " (" records " records)")))
-    (let [head (str "Loss report — " total " loss"
-                    (when records (str " across " records " records"))
-                    "\n  by category: " (category-line by-category)
-                    "\n  source fields lost (" (count source-fields) "): "
-                    (top-fields (reduce (fn [m e] (merge-with + m (:by-source-field e)))
-                                        {} (vals by-edge))
-                                10))
+    (let [n-fields (count source-fields)
+          head (str "Loss report — "
+                    distinct-losses (if (= 1 distinct-losses) " distinct loss" " distinct losses")
+                    " over " n-fields (if (= 1 n-fields) " native field" " native fields")
+                    " (" total (if (= 1 total) " field×edge event" " field×edge events")
+                    (when records (str ", " records (if (= 1 records) " record" " records")))
+                    ")"
+                    "\n  by category: " (category-line by-category))
           edge-block (fn [edge]
                        (when-let [er (get by-edge edge)]
                          (str "\n  " (name edge) " edge — " (:total er)

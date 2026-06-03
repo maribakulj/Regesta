@@ -25,6 +25,10 @@
   (let [r (lr/conversion-report diags {:records 1})]
     (is (= 5 (:total r)))
     (is (= 1 (:records r)))
+    (testing "distinct losses dedupe [subject source-field] across edges (audit R3)"
+      ;; f100_a is lost 3× (2 import + 1 export) but is one distinct field-loss,
+      ;; so :total 5 events collapse to 3 distinct losses.
+      (is (= 3 (:distinct-losses r))))
     (testing "aggregate by category (zeros for unused categories kept)"
       (is (= 3 (get-in r [:by-category :dropped])))
       (is (= 1 (get-in r [:by-category :coerced])))
@@ -47,7 +51,9 @@
 (deftest renders-human-readable
   (let [s (lr/format-conversion-report (lr/conversion-report diags {:records 1}))]
     (is (str/includes? s "Loss report"))
-    (is (str/includes? s "across 1 records"))
+    (is (str/includes? s "3 distinct losses"))   ; deduped headline, not the 5 events (R3)
+    (is (str/includes? s "5 field×edge events"))
+    (is (str/includes? s "1 record"))
     (is (str/includes? s "import edge"))
     (is (str/includes? s "export edge"))
     (is (str/includes? s "f100_a")))
