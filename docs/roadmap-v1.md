@@ -230,11 +230,12 @@ Also delivered beyond the original WPs: ADR 0018 (entity resolution at scale,
 *Proposed*); the D7 commit policy (`:asserted` ⇔ proof, else `:proposed`;
 `:certified-only?` export); three measured evals (C2 fidelity, showcase
 boundary, OpenLibrary ER) corroborating the recall ceiling on independent data;
-and a **multi-spoke convergence capstone** — INTERMARC + MARC21 + Dublin Core in
-one registry reaching one LRMoo pivot with one unified loss report, and the two
-floor formats content-converging on the same Work id (the hub property). It also
-forced spoke mapping-ids to be globally distinctive (the compiler keys rule ids
-on the name portion, ADR 0009), so the spokes are genuinely composable.
+and a **multi-spoke convergence capstone** — INTERMARC + MARC21 + Dublin Core +
+MODS in one registry reaching one LRMoo pivot with one unified loss report, and
+the three floor formats (DC, MARC21, MODS) content-converging on the same Work id
+(the hub property). It also forced spoke mapping-ids to be globally distinctive
+(the compiler keys rule ids on the name portion, ADR 0009), so the spokes are
+genuinely composable.
 
 **Remediation gate before WP-4 resumes:** a self-audit
 ([`cleanup/audit-2026-06-03.md`](./cleanup/audit-2026-06-03.md)) found six fix-now
