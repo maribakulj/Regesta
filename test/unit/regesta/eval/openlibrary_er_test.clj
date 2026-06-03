@@ -13,7 +13,8 @@
    this gold* is understated and the honest signal is recall. Numbers are printed
    for the record; the assertions pin only the robust, directional facts."
   (:require [clojure.string :as str]
-            [clojure.test :refer [deftest is testing]]))
+            [clojure.test :refer [deftest is testing]]
+            [regesta.text :as text]))
 
 (def ^:private csv-path "test/fixtures/er-gold/openlibrary/work-editions.csv")
 
@@ -41,15 +42,9 @@
                (let [[w e t a] (parse-line line)]
                  {:work w :edition e :title t :author a})))))
 
-(defn- norm [s]
-  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
-      (str/replace #"\p{M}+" "")
-      (str/replace #"[^0-9A-Za-z ]" " ")
-      str/lower-case str/trim (str/replace #"\s+" " ")))
-
 (defn- k-gold      [r] (:work r))
-(defn- k-authtitle [r] [(:author r) (norm (:title r))])
-(defn- k-pfx2      [r] [(:author r) (vec (take 2 (str/split (norm (:title r)) #" ")))])
+(defn- k-authtitle [r] [(:author r) (text/norm (:title r))])         ; the exact key the floor projection uses
+(defn- k-pfx2      [r] [(:author r) (vec (take 2 (str/split (text/norm (:title r)) #" ")))])
 (defn- k-author    [r] (:author r))
 
 (defn- c2 [n] (quot (* n (dec n)) 2))

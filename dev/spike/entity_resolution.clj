@@ -9,13 +9,12 @@
 ;;
 ;; Run: clojure -M:sandbox -i dev/spike/entity_resolution.clj
 (require '[clojure.string :as str]
-         '[regesta.plugins.intermarc :as im])
+         '[regesta.plugins.intermarc :as im]
+         '[regesta.text :as text])
 
 (defn one [r p] (->> (:assertions r) (filter #(= p (:predicate %))) first :value))
 
-(defn norm [s]
-  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
-      (str/replace #"\p{M}+" "") str/lower-case str/trim (str/replace #"\s+" " ")))
+(def norm text/norm)   ; single shared normalisation (audit R1)
 
 (defn title-prefix [s n] (->> (str/split (norm s) #" ") (take n) (str/join " ")))
 

@@ -22,20 +22,11 @@
      the floor's single Expression `:under-specified` (ADR 0013 graceful
      degradation); an `uncertain` title collapsed to one alternative is
      `:ambiguity-collapsed`. Minted claims default to `:proposed` (ADR 0005)."
-  (:require [clojure.string :as str]
-            [regesta.diagnostics :as dx]
+  (:require [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.rules :as rules]
-            [regesta.runtime :as runtime]))
-
-(defn- norm
-  "Diacritic- and case-insensitive normalisation for the Work/Expression key."
-  [s]
-  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
-      (str/replace #"\p{M}+" "")
-      str/lower-case
-      str/trim
-      (str/replace #"\s+" " ")))
+            [regesta.runtime :as runtime]
+            [regesta.text :as text]))
 
 (defn- first-literal
   "First string-valued assertion for `pred` in `record`. Works whether the
@@ -85,7 +76,7 @@
         agent (first-literal record :canon/agent)]
     (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
       title (conj (assert-prod manif :lrmoo/R33_has_string title prov))
-      title (into (let [wkey (str (or agent "") "|" (norm title))
+      title (into (let [wkey (str (or agent "") "|" (text/norm title))
                         expr (model/mint-entity-id :lrmoo/F2_Expression wkey)
                         work (when agent (model/mint-entity-id :lrmoo/F1_Work wkey))]
                     ;; F1 and F2 minted from the same key are distinct ids: the

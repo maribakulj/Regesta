@@ -25,21 +25,13 @@
             [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.rules :as rules]
-            [regesta.runtime :as runtime]))
+            [regesta.runtime :as runtime]
+            [regesta.text :as text]))
 
 (defn- field
   "First value of `record`'s assertion with predicate `pred`, or nil."
   [record pred]
   (->> (:assertions record) (filter #(= pred (:predicate %))) first :value))
-
-(defn- norm
-  "Diacritic- and case-insensitive normalisation for the Work key."
-  [s]
-  (-> (java.text.Normalizer/normalize (str s) java.text.Normalizer$Form/NFKD)
-      (str/replace #"\p{M}+" "")
-      str/lower-case
-      str/trim
-      (str/replace #"\s+" " ")))
 
 (defn- entity-prod
   "An `:entity` production. `iri` (optional) is the external authority IRI."
@@ -93,7 +85,7 @@
                        wst  (if a3 :asserted :proposed)   ; authority-backed creator?
                        work (when (and auth ttl)
                               (model/mint-entity-id :lrmoo/F1_Work
-                                                    (str auth "|" (norm ttl))))]
+                                                    (str auth "|" (text/norm ttl))))]
                    (cond-> [(entity-prod expr :lrmoo/F2_Expression prov)
                             (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov :asserted)]
                      ttl  (conj (assert-prod expr :lrmoo/R33_has_string ttl prov :asserted))
