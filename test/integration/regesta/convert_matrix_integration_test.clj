@@ -48,7 +48,7 @@
     (let [dc (:output (run :intermarc :dc))]
       (is (pos? (count dc)) "intermarc->dc is now non-empty (was the degenerate case)")
       (is (re-find #"<dc:title>Madame Bovary</dc:title>" dc))
-      (is (re-find #"<dc:creator>Gustave Flaubert</dc:creator>" dc)))   ; 245 $f -> :canon/agent
+      (is (re-find #"<dc:creator>Flaubert, Gustave</dc:creator>" dc)))   ; controlled 100 -> :canon/agent
     (is (re-find #"<datafield tag=\"245\"" (:output (run :intermarc :marc21)))
         "intermarc->marc21 now carries the title datafield, not just the 001")
     (testing "all five spokes round-trip to DC non-empty"

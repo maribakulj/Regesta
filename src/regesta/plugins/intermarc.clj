@@ -28,6 +28,7 @@
    `<srw:record>` wrapper that has none), its id is `:bnf/<cb-number>`, and its
    `:kind` comes from the `type` attribute."
   (:require [clojure.string :as str]
+            [regesta.model :as model]
             [regesta.plugins.marcxml :as marcxml]))
 
 (defn- mxc-record?
@@ -41,23 +42,49 @@
   [ark]
   (keyword "bnf" (last (str/split ark #"/"))))
 
+(defn- first-value [record predicate]
+  (->> (:assertions record)
+       (some #(when (and (= predicate (:predicate %)) (string? (:value %))) (:value %)))))
+
+(defn- with-agent-name
+  "Synthesise a single controlled author name from the 100 main-entry subfields —
+   `$a` (surname) + `$m` (forename), catalog form \"Surname, Forename\" — as a
+   `:intermarc/f100_name` assertion, so a flat mapping can lift the *controlled*
+   author (not the transcribed 245 $f responsibility statement) to `:canon/agent`.
+   The 100 authority identifiers (`$3` BnF id, `$1` ISNI) are not represented:
+   the canonical floor (ADR 0003) is string-only and has no slot for an
+   authority-linked agent — that identity lives on the enriched `frbrise` rung,
+   and lifting it to a first-class agent entity is a deliberate later step."
+  [record]
+  (let [surname  (first-value record :intermarc/f100_a)
+        forename (first-value record :intermarc/f100_m)]
+    (if surname
+      (update record :assertions conj
+              (model/assertion {:subject    (:id record)
+                                :predicate  :intermarc/f100_name
+                                :value      (if forename (str surname ", " forename) surname)
+                                :provenance (model/provenance {:pass :ingest})}))
+      record)))
+
 ;; ---------------------------------------------------------------------------
 ;; Public API + plugin
 ;; ---------------------------------------------------------------------------
 
 (defn ingest
-  "Parse an InterMARCXChange `xml-string` into a vector of Records. `opts` may
-   carry `:kind` (else derived from each record's `type`)."
+  "Parse an InterMARCXChange `xml-string` into a vector of Records, each with a
+   synthesised `:intermarc/f100_name` controlled author. `opts` may carry `:kind`
+   (else derived from each record's `type`)."
   [xml-string opts]
-  (marcxml/parse-records
-   xml-string
-   {:ns        "intermarc"
-    :record?   mxc-record?
-    :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
-    :kind      (fn [e] (or (:kind opts)
-                           (keyword "intermarc"
-                                    (str/lower-case (or (marcxml/attr e "type") "record")))))
-    :source    (fn [e] (marcxml/attr e "id"))}))
+  (mapv with-agent-name
+        (marcxml/parse-records
+         xml-string
+         {:ns        "intermarc"
+          :record?   mxc-record?
+          :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
+          :kind      (fn [e] (or (:kind opts)
+                                 (keyword "intermarc"
+                                          (str/lower-case (or (marcxml/attr e "type") "record")))))
+          :source    (fn [e] (marcxml/attr e "id"))})))
 
 (defn- source->string
   "Accept either a raw string or an ADR 0007 tagged source map."
@@ -82,13 +109,15 @@
   "INTERMARC→canonical mapping for the bibliographic core. INTERMARC reaches the
    WEMI pivot through the *enriched* `frbrise` rung (the 145 $3 authority link),
    not the floor projection — but populating `:canon/*` too lets the round-trip
-   exporters (DC, MARC21) and the Linked Art creator read off it. The native
-   100 $a/$m split (surname/forename) cannot be recombined by a flat mapping, so
-   the agent is taken from 245 $f (the responsibility statement, the full display
-   name); recombining 100 is a later refinement."
+   exporters (DC, MARC21) and the Linked Art creator read off it. The agent is the
+   *controlled* 100 main entry, recombined to `:intermarc/f100_name` by the
+   importer (surname + forename), not the transcribed 245 $f responsibility
+   statement (which can be compound — multiple names and roles). The 100 authority
+   link (BnF id / ISNI) is not carried: the floor is string-only (see
+   `with-agent-name`)."
   [{:mapping/id :map/intermarc-title :mapping/from :intermarc/f245_a :mapping/to :canon/title
     :mapping/transform [:trim]}
-   {:mapping/id :map/intermarc-agent :mapping/from :intermarc/f245_f :mapping/to :canon/agent
+   {:mapping/id :map/intermarc-agent :mapping/from :intermarc/f100_name :mapping/to :canon/agent
     :mapping/transform [:trim]}
    {:mapping/id :map/intermarc-date :mapping/from :intermarc/f260_d :mapping/to :canon/date
     :mapping/transform [:trim]}

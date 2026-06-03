@@ -71,7 +71,7 @@
                                 (map :value) set))]
       (is (= 5 (count intermarc/mapping)))
       (is (= #{"Madame Bovary"} (vals :canon/title)))
-      (is (= #{"Gustave Flaubert"} (vals :canon/agent)))            ; 245 $f
+      (is (= #{"Flaubert, Gustave"} (vals :canon/agent)))          ; controlled 100 $a + $m
       (is (seq (vals :canon/date)))                                 ; 260 $d (varies by edition)
       (is (seq (vals :canon/identifier)))                           ; 001 / 003
       (testing "the native :intermarc/* assertions are retained (frbrise still reads them)"
