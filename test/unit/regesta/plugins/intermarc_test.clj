@@ -5,7 +5,9 @@
             [clojure.test :refer [deftest is testing]]
             [regesta.model :as model]
             [regesta.plugins :as plugins]
-            [regesta.plugins.intermarc :as intermarc]))
+            [regesta.plugins.intermarc :as intermarc]
+            [regesta.plugins.mapping :as mapping]
+            [regesta.runtime :as runtime]))
 
 (def fixture
   "test/fixtures/documentary/intermarc/sru/intermarcXchange/bib-flaubert-madame-bovary-start1-max30.xml")
@@ -56,3 +58,21 @@
   (is (plugins/valid-plugin? intermarc/plugin))
   (let [reg (plugins/register plugins/empty-registry intermarc/plugin)]
     (is (= intermarc/plugin (plugins/lookup reg :regesta/intermarc)))))
+
+(deftest normalises-the-bibliographic-core-to-the-canonical-floor
+  (testing "the INTERMARC->canonical mapping lifts 245/260/001/003 onto :canon/* (for round-trip export)"
+    (let [reg      (plugins/register plugins/empty-registry intermarc/plugin)
+          compiled (mapping/compile-mappings (plugins/all-mappings reg)
+                                             (plugins/effective-transforms reg))
+          showcase (first (filter #(= "ark:/12148/cb304403926" (:source %)) records))
+          canon    (:record (runtime/run-phase showcase compiled :normalize))
+          vals     (fn [p] (->> (:assertions canon)
+                                (filter #(and (= p (:predicate %)) (string? (:value %))))
+                                (map :value) set))]
+      (is (= 5 (count intermarc/mapping)))
+      (is (= #{"Madame Bovary"} (vals :canon/title)))
+      (is (= #{"Gustave Flaubert"} (vals :canon/agent)))            ; 245 $f
+      (is (seq (vals :canon/date)))                                 ; 260 $d (varies by edition)
+      (is (seq (vals :canon/identifier)))                           ; 001 / 003
+      (testing "the native :intermarc/* assertions are retained (frbrise still reads them)"
+        (is (some #(= :intermarc/f145_3 (:predicate %)) (:assertions canon)))))))

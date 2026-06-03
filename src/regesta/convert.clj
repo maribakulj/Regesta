@@ -71,18 +71,19 @@
 ;; ---------------------------------------------------------------------------
 
 (defn- to-wemi
-  "Import `source` through `spoke`, then project each record to WEMI by the
-   appropriate rung. Returns `{:records [wemi…] :ingest [loss…]}`."
+  "Import `source` through `spoke`, normalise to the canonical floor, then project
+   each record to WEMI by the appropriate rung — INTERMARC's enriched `frbrise`
+   (via the 145 $3 link) or the floor `project`. Both run normalize first, so
+   `:canon/*` is populated for every spoke (the round-trip exporters read it).
+   Returns `{:records [wemi…] :ingest [loss…]}`."
   [{:keys [plugin enriched?]} opts source]
-  (let [{:keys [records diagnostics]} ((:importer plugin) opts source)]
+  (let [{:keys [records diagnostics]} ((:importer plugin) opts source)
+        reg      (plug/register plug/empty-registry plugin)
+        compiled (mapping/compile-mappings (plug/all-mappings reg)
+                                           (plug/effective-transforms reg))
+        to-pivot (if enriched? frbrise/frbrise project/project)]
     {:ingest  diagnostics
-     :records (if enriched?
-                (mapv frbrise/frbrise records)
-                (let [reg      (plug/register plug/empty-registry plugin)
-                      compiled (mapping/compile-mappings (plug/all-mappings reg)
-                                                         (plug/effective-transforms reg))]
-                  (mapv #(project/project (:record (runtime/run-phase % compiled :normalize)))
-                        records)))}))
+     :records (mapv #(to-pivot (:record (runtime/run-phase % compiled :normalize))) records)}))
 
 (defn convert
   "Convert `source` from spoke `from` to serialisation `to`. Returns

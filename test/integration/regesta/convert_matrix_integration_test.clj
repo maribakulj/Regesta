@@ -4,12 +4,10 @@
    runs without throwing and yields an ADR 0015 loss report — and documents the
    one honest degenerate case.
 
-   The degenerate case: INTERMARC reaches WEMI via the *enriched* `frbrise` rung,
-   which populates `:lrmoo/*` directly and **bypasses the canonical floor**. The
-   round-trip exporters (`dc`, `marc21`) read `:canon/*`, so for INTERMARC they
-   have nothing to serialise — `intermarc → dc` is empty, and `intermarc → marc21`
-   survives only via the `001` control number carried on `:source`. The WEMI/CRM/
-   Linked-Art targets read `:lrmoo/*` and work for every spoke."
+   The WEMI/CRM/Linked-Art targets read `:lrmoo/*` and work for every spoke; the
+   round-trip exporters (`dc`, `marc21`) read `:canon/*`, which every spoke —
+   INTERMARC included, since it now normalises to the floor alongside `frbrise` —
+   populates."
   (:require [clojure.test :refer [deftest is testing]]
             [regesta.convert :as cv]))
 
@@ -45,12 +43,14 @@
             to   [:ntriples :turtle :jsonld :crm :crm-only :linked-art]]
       (is (pos? (count (:output (run from to)))) (str from "->" to " is non-empty")))))
 
-(deftest intermarc-round-trip-export-is-degenerate-frbrise-bypasses-canonical
-  (testing "frbrise populates :lrmoo/* but not :canon/*, so the canonical round-trip exporters are starved"
-    (is (= "" (:output (run :intermarc :dc)))
-        "intermarc->dc is empty: ->dc-xml reads :canon/* which frbrise never set")
-    (is (re-find #"<controlfield tag=\"001\">" (:output (run :intermarc :marc21)))
-        "intermarc->marc21 survives only via the 001 carried on :source")
-    (testing "the floor spokes, which DO populate :canon/*, round-trip non-empty"
-      (doseq [from [:dc :marc21 :mods :iiif]]
+(deftest intermarc-populates-the-floor-and-round-trips
+  (testing "INTERMARC normalises to :canon/* (alongside frbrise's enriched WEMI), so it round-trips"
+    (let [dc (:output (run :intermarc :dc))]
+      (is (pos? (count dc)) "intermarc->dc is now non-empty (was the degenerate case)")
+      (is (re-find #"<dc:title>Madame Bovary</dc:title>" dc))
+      (is (re-find #"<dc:creator>Gustave Flaubert</dc:creator>" dc)))   ; 245 $f -> :canon/agent
+    (is (re-find #"<datafield tag=\"245\"" (:output (run :intermarc :marc21)))
+        "intermarc->marc21 now carries the title datafield, not just the 001")
+    (testing "all five spokes round-trip to DC non-empty"
+      (doseq [from froms]
         (is (pos? (count (:output (run from :dc)))) (str from "->dc"))))))

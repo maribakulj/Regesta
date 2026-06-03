@@ -78,10 +78,31 @@
   {:records (ingest (source->string source) opts)
    :diagnostics []})
 
+(def mapping
+  "INTERMARC→canonical mapping for the bibliographic core. INTERMARC reaches the
+   WEMI pivot through the *enriched* `frbrise` rung (the 145 $3 authority link),
+   not the floor projection — but populating `:canon/*` too lets the round-trip
+   exporters (DC, MARC21) and the Linked Art creator read off it. The native
+   100 $a/$m split (surname/forename) cannot be recombined by a flat mapping, so
+   the agent is taken from 245 $f (the responsibility statement, the full display
+   name); recombining 100 is a later refinement."
+  [{:mapping/id :map/intermarc-title :mapping/from :intermarc/f245_a :mapping/to :canon/title
+    :mapping/transform [:trim]}
+   {:mapping/id :map/intermarc-agent :mapping/from :intermarc/f245_f :mapping/to :canon/agent
+    :mapping/transform [:trim]}
+   {:mapping/id :map/intermarc-date :mapping/from :intermarc/f260_d :mapping/to :canon/date
+    :mapping/transform [:trim]}
+   {:mapping/id :map/intermarc-control :mapping/from :intermarc/f001 :mapping/to :canon/identifier
+    :mapping/transform [:trim]}
+   {:mapping/id :map/intermarc-ark :mapping/from :intermarc/f003 :mapping/to :canon/identifier
+    :mapping/transform [:trim]}])
+
 (def plugin
-  "The INTERMARC-SRU importer plugin (ADR 0007)."
+  "The INTERMARC-SRU importer plugin (ADR 0007). Ships `:mapping` (used to populate
+   the canonical floor alongside `frbrise`'s enriched WEMI) and the `:importer`."
   {:plugin/spec-version 1
    :id                  :regesta/intermarc
    :input-format        :xml
+   :mapping             mapping
    :importer            importer
-   :doc                 "INTERMARC-SRU (InterMARCXChange) importer — fields/subfields as :intermarc/* assertions."})
+   :doc                 "INTERMARC-SRU (InterMARCXChange) importer — fields/subfields as :intermarc/* assertions; bibliographic core mapped to the canonical floor."})
