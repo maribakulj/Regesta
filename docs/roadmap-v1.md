@@ -214,6 +214,29 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 - **Depends on:** all.
 - **Gate:** the Definition of Done (§ 8).
 
+### Current state (2026-06-03)
+
+| WP | status |
+|----|--------|
+| WP-0 design lock + spike | ✅ |
+| WP-1 substrate (minting, loss diagnostic) | ✅ |
+| WP-2 LRMoo plugin + view | ✅ |
+| WP-3 FRBRisation (INTERMARC; clustering = id-collision; loss) | ✅ |
+| WP-4 spokes | ◐ — INTERMARC-SRU in ✅; canonical→WEMI floor (inline DC) ✅; N-Triples + additive/pure CRM out ✅; **MARC21, real DC/MODS, IIIF, Linked Art, Turtle/JSON-LD not built** |
+| WP-5 loss-aware report | ✅ (with a double-count defect — see remediation) |
+| WP-6 conformance · WP-7 scale · WP-8 CLI · WP-9 release | ✗ |
+
+Also delivered beyond the original WPs: ADR 0018 (entity resolution at scale,
+*Proposed*); the D7 commit policy (`:asserted` ⇔ proof, else `:proposed`;
+`:certified-only?` export); and three measured evals (C2 fidelity, showcase
+boundary, OpenLibrary ER) corroborating the recall ceiling on independent data.
+
+**Remediation gate before WP-4 resumes:** a self-audit
+([`cleanup/audit-2026-06-03.md`](./cleanup/audit-2026-06-03.md)) found six fix-now
+defects (norm drift, D7 inconsistency, loss double-count, `:coerced` over-report,
+a corrupt fixture, docstring honesty). They belong to no future WP and are cleared
+first; the capability gaps above stay scheduled where they are.
+
 ---
 
 ## 5. Phasing & honest timeline
