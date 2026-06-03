@@ -115,10 +115,16 @@ current state, so the taxonomy is not mistaken for working code:
   rename applies a transform chain containing a self-declared lossy transform
   (`transforms/lossy-transforms`, e.g. case folding).
 
-All four loss categories now have a producer, across both edges. Still outstanding:
+All four loss categories now have a producer, across both edges. The
+institution-facing **conversion loss report** is assembled
+(`regesta.loss-report`): per-edge, per-category and **per-source-field**
+aggregation of both edges' loss, with a human-readable rendering — the
+"which of *my* fields survived?" artifact this ADR specifies. Still outstanding:
 - Plugin-contributed transforms are not yet classified for lossiness (their
   `:coerced` defaults to off); only core transforms declare it.
-- The **round-trip** report (A → pivot → B vs A) is **not yet assembled** (WP-5).
+- A *full* round-trip (re-import the target B and diff against A) needs a reverse
+  importer; the report covers the per-field survival account across one
+  conversion's two edges, which is the assemblable part.
 
 ## What this ADR does not decide
 

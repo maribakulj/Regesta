@@ -224,6 +224,16 @@
   [d]
   (when (loss? d) (keyword (name (:code d)))))
 
+(defn loss-edge
+  "The conversion edge of a loss diagnostic (:import | :export), or nil."
+  [d]
+  (get-in d [:detail :loss/edge]))
+
+(defn loss-source-field
+  "The native source field a loss diagnostic names (opaque keyword), or nil."
+  [d]
+  (get-in d [:detail :loss/source-field]))
+
 (defn count-by-loss-category
   "Map loss-category → count over the loss diagnostics in the collection,
    including zeros for categories not present."
@@ -232,17 +242,26 @@
           (zipmap loss-categories (repeat 0))
           (losses diagnostics)))
 
+(defn count-by-source-field
+  "Map source-field → loss count over the loss diagnostics in the collection —
+   the institution's native-field view (ADR 0015: 'which of *my* fields were
+   lost?'). Diagnostics with no `:loss/source-field` are omitted."
+  [diagnostics]
+  (reduce (fn [acc d]
+            (if-let [f (loss-source-field d)] (update acc f (fnil inc 0)) acc))
+          {}
+          (losses diagnostics)))
+
 (defn loss-summary
-  "Per-category and per-edge breakdown of loss (ADR 0015 — never a single
-   number): {:total N :by-category {…} :by-edge {…}}."
+  "Per-category, per-edge and per-source-field breakdown of loss (ADR 0015 —
+   never a single number):
+   {:total N :by-category {…} :by-edge {…} :by-source-field {…}}."
   [diagnostics]
   (let [ls (losses diagnostics)]
-    {:total       (count ls)
-     :by-category (count-by-loss-category ls)
-     :by-edge     (reduce (fn [acc d]
-                            (update acc (get-in d [:detail :loss/edge]) (fnil inc 0)))
-                          {}
-                          ls)}))
+    {:total          (count ls)
+     :by-category    (count-by-loss-category ls)
+     :by-edge        (reduce (fn [acc d] (update acc (loss-edge d) (fnil inc 0))) {} ls)
+     :by-source-field (count-by-source-field ls)}))
 
 ;; ---------------------------------------------------------------------------
 ;; Reporting
