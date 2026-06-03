@@ -222,7 +222,7 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 | WP-1 substrate (minting, loss diagnostic) | ✅ |
 | WP-2 LRMoo plugin + view | ✅ |
 | WP-3 FRBRisation (INTERMARC; clustering = id-collision; loss) | ✅ |
-| WP-4 spokes | ◐ — **5 importers in ✅**: INTERMARC-SRU, MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **2 round-trips ✅** (DC + MARC21↔floor, loss measured, id-stable & idempotent); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** — N-Triples · Turtle · compacted JSON-LD, for both the LRMoo view and the additive/pure CRM down-projection; **MODS/IIIF export, Linked Art profile not built; MARC21↔LRMoo is at the *floor* level, not conformance-checked** |
+| WP-4 spokes | ◐ — **5 importers in ✅**: INTERMARC-SRU, MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **2 round-trips ✅** (DC + MARC21↔floor, loss measured, id-stable & idempotent); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** (N-Triples · Turtle · JSON-LD, LRMoo + CRM views); **Linked Art profile out ✅** (museum/Louvre target — F3→HumanMadeObject carries F2→LinguisticObject part_of F1→PropositionalObject, mapping verified vs the official examples, `docs/eval/linked-art.md`); **MODS/IIIF round-trip not built; MARC21↔LRMoo at the *floor* level, neither it nor Linked Art conformance-checked** |
 | WP-5 loss-aware report | ✅ (cross-edge double-count fixed in remediation R3) |
 | WP-6 conformance · WP-7 scale · WP-8 CLI · WP-9 release | ✗ |
 
