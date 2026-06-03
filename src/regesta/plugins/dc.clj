@@ -69,23 +69,23 @@
   "Declarative DC→canonical mapping for the nine DCMES elements with a canonical
    home. `dc:title` and `dc:description` are qualified by `xml:lang` (→
    `:canon/lang` on a fragment, ADR 0011). Every rule trims (XML whitespace)."
-  [{:mapping/id :dc/title :mapping/from :dc/title :mapping/to :canon/title
+  [{:mapping/id :map/dc-title :mapping/from :dc/title :mapping/to :canon/title
     :mapping/transform [:trim] :mapping/qualifier {:from :xml/lang :as :canon/lang}}
-   {:mapping/id :dc/creator :mapping/from :dc/creator :mapping/to :canon/agent
+   {:mapping/id :map/dc-creator :mapping/from :dc/creator :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :dc/contributor :mapping/from :dc/contributor :mapping/to :canon/agent
+   {:mapping/id :map/dc-contributor :mapping/from :dc/contributor :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :dc/publisher :mapping/from :dc/publisher :mapping/to :canon/agent
+   {:mapping/id :map/dc-publisher :mapping/from :dc/publisher :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :dc/date :mapping/from :dc/date :mapping/to :canon/date
+   {:mapping/id :map/dc-date :mapping/from :dc/date :mapping/to :canon/date
     :mapping/transform [:trim]}
-   {:mapping/id :dc/identifier :mapping/from :dc/identifier :mapping/to :canon/identifier
+   {:mapping/id :map/dc-identifier :mapping/from :dc/identifier :mapping/to :canon/identifier
     :mapping/transform [:trim]}
-   {:mapping/id :dc/relation :mapping/from :dc/relation :mapping/to :canon/relation
+   {:mapping/id :map/dc-relation :mapping/from :dc/relation :mapping/to :canon/relation
     :mapping/transform [:trim]}
-   {:mapping/id :dc/source :mapping/from :dc/source :mapping/to :canon/relation
+   {:mapping/id :map/dc-source :mapping/from :dc/source :mapping/to :canon/relation
     :mapping/transform [:trim]}
-   {:mapping/id :dc/description :mapping/from :dc/description :mapping/to :canon/note
+   {:mapping/id :map/dc-description :mapping/from :dc/description :mapping/to :canon/note
     :mapping/transform [:trim] :mapping/qualifier {:from :xml/lang :as :canon/lang}}])
 
 (def dc-elements

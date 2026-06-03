@@ -70,39 +70,39 @@
    Several MARC fields collapse onto one canonical predicate (the agent roles,
    the identifier flavours); that under-specification is the floor's, surfaced as
    loss when the pivot is projected to a role-aware target."
-  [{:mapping/id :marc21/title :mapping/from :marc21/f245_a :mapping/to :canon/title
+  [{:mapping/id :map/marc21-title :mapping/from :marc21/f245_a :mapping/to :canon/title
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/author-100 :mapping/from :marc21/f100_a :mapping/to :canon/agent
+   {:mapping/id :map/marc21-author-100 :mapping/from :marc21/f100_a :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/corporate-110 :mapping/from :marc21/f110_a :mapping/to :canon/agent
+   {:mapping/id :map/marc21-corporate-110 :mapping/from :marc21/f110_a :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/meeting-111 :mapping/from :marc21/f111_a :mapping/to :canon/agent
+   {:mapping/id :map/marc21-meeting-111 :mapping/from :marc21/f111_a :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/added-700 :mapping/from :marc21/f700_a :mapping/to :canon/agent
+   {:mapping/id :map/marc21-added-700 :mapping/from :marc21/f700_a :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/added-corporate-710 :mapping/from :marc21/f710_a :mapping/to :canon/agent
+   {:mapping/id :map/marc21-added-corporate-710 :mapping/from :marc21/f710_a :mapping/to :canon/agent
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/date-260 :mapping/from :marc21/f260_c :mapping/to :canon/date
+   {:mapping/id :map/marc21-date-260 :mapping/from :marc21/f260_c :mapping/to :canon/date
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/date-264 :mapping/from :marc21/f264_c :mapping/to :canon/date
+   {:mapping/id :map/marc21-date-264 :mapping/from :marc21/f264_c :mapping/to :canon/date
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/lccn-010 :mapping/from :marc21/f010_a :mapping/to :canon/identifier
+   {:mapping/id :map/marc21-lccn-010 :mapping/from :marc21/f010_a :mapping/to :canon/identifier
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/isbn-020 :mapping/from :marc21/f020_a :mapping/to :canon/identifier
+   {:mapping/id :map/marc21-isbn-020 :mapping/from :marc21/f020_a :mapping/to :canon/identifier
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/issn-022 :mapping/from :marc21/f022_a :mapping/to :canon/identifier
+   {:mapping/id :map/marc21-issn-022 :mapping/from :marc21/f022_a :mapping/to :canon/identifier
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/sysnum-035 :mapping/from :marc21/f035_a :mapping/to :canon/identifier
+   {:mapping/id :map/marc21-sysnum-035 :mapping/from :marc21/f035_a :mapping/to :canon/identifier
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/url-856 :mapping/from :marc21/f856_u :mapping/to :canon/digital-object
+   {:mapping/id :map/marc21-url-856 :mapping/from :marc21/f856_u :mapping/to :canon/digital-object
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/note-500 :mapping/from :marc21/f500_a :mapping/to :canon/note
+   {:mapping/id :map/marc21-note-500 :mapping/from :marc21/f500_a :mapping/to :canon/note
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/contents-505 :mapping/from :marc21/f505_a :mapping/to :canon/note
+   {:mapping/id :map/marc21-contents-505 :mapping/from :marc21/f505_a :mapping/to :canon/note
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/credits-511 :mapping/from :marc21/f511_a :mapping/to :canon/note
+   {:mapping/id :map/marc21-credits-511 :mapping/from :marc21/f511_a :mapping/to :canon/note
     :mapping/transform [:trim]}
-   {:mapping/id :marc21/summary-520 :mapping/from :marc21/f520_a :mapping/to :canon/note
+   {:mapping/id :map/marc21-summary-520 :mapping/from :marc21/f520_a :mapping/to :canon/note
     :mapping/transform [:trim]}])
 
 ;; ---------------------------------------------------------------------------
