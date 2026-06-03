@@ -222,7 +222,7 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 | WP-1 substrate (minting, loss diagnostic) | ✅ |
 | WP-2 LRMoo plugin + view | ✅ |
 | WP-3 FRBRisation (INTERMARC; clustering = id-collision; loss) | ✅ |
-| WP-4 spokes | ◐ — INTERMARC-SRU in ✅; **MARC21 (MARCXML) in ✅** (`regesta.plugins.marc21` on the shared `marcxml` core, bibliographic subset → floor, real LoC fixture); **Dublin Core (DCMES 1.1) round-trip ✅** (`dc` in + `dc.export` out — first true source→pivot→source loop, loss measured); canonical→WEMI floor ✅; N-Triples + additive/pure CRM out ✅; **MARC21 export, MODS, IIIF, Linked Art, Turtle/JSON-LD not built** |
+| WP-4 spokes | ◐ — INTERMARC-SRU in ✅; **MARC21 (MARCXML) round-trip ✅** (`marc21` in + `marc21.export` out — MARC21↔floor, real LoC fixture; round-trip loss measured: 19 floor-coverage drops + 4 collapses, id-stable & idempotent); **Dublin Core round-trip ✅** (`dc` + `dc.export`); shared `marcxml` core; canonical→WEMI floor ✅; N-Triples + additive/pure CRM out ✅; **MODS, IIIF, Linked Art, Turtle/JSON-LD not built; MARC21↔LRMoo is at the *floor* level, not yet conformance-checked** |
 | WP-5 loss-aware report | ✅ (cross-edge double-count fixed in remediation R3) |
 | WP-6 conformance · WP-7 scale · WP-8 CLI · WP-9 release | ✗ |
 
