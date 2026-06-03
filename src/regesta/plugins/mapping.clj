@@ -245,7 +245,10 @@
         q-as       (:as qualifier)
 
         ;; A match yields a seq of productions: the rename assertion, plus a
-        ;; `:coerced` loss when the chain includes a lossy transform (ADR 0015).
+        ;; `:coerced` loss only when a lossy transform *actually changed* the
+        ;; value (ADR 0015; audit R4). A lossy transform that is a no-op on this
+        ;; value — lowercasing already-lowercase text — discarded nothing, so it
+        ;; is no loss; reporting one anyway over-counts coercion.
         emit-rename-match
         (fn [[s _p v]]
           (cond
@@ -263,8 +266,9 @@
                 (cond-> [(assertion-production
                           {:subject s :predicate to :value v'
                            :confidence confidence :rule-id rule-id})]
-                  lossy? (conj (coerced-production
-                                {:subject s :from from :chain chain :rule-id rule-id})))
+                  (and lossy? (not= v' v))
+                  (conj (coerced-production
+                         {:subject s :from from :chain chain :rule-id rule-id})))
                 [(diagnostic-production
                   {:severity :info :code :transform-failed
                    :subject s :rule-id rule-id
