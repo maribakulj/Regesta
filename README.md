@@ -230,6 +230,21 @@ FRBRisation, end to end
 - Clojure CLI (https://clojure.org/guides/install_clojure)
 - clj-kondo and cljfmt (installed via `:lint` / `:fmt` aliases)
 
+### Convert (CLI)
+
+```bash
+# Convert a source document to a target serialisation through the LRMoo pivot.
+# The converted document goes to stdout; the loss report (ADR 0015) to stderr.
+clojure -M:run convert path/to/record.xml --from marc21 --to linked-art
+
+# List the supported source and target formats
+clojure -M:run formats
+#  from: dc iiif intermarc marc21 mods
+#  to:   crm crm-only dc jsonld linked-art marc21 ntriples turtle
+```
+
+(In a Clojars-restricted sandbox, prepend `:sandbox` — `clojure -M:sandbox:run …`.)
+
 ### Common tasks
 
 ```bash
