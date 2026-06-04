@@ -27,7 +27,7 @@
         (is (contains? (:by-edge loss) :export) (str from " has an export edge"))))))
 
 (deftest the-pivot-renders-to-every-target
-  (testing "one source (MARC21 Ray Charles) serialises to all nine targets"
+  (testing "one source (MARC21 Ray Charles) serialises to all ten targets"
     (let [s (src :marc21)]
       (doseq [[to needle] [[:ntriples   "lrmoo/F3_Manifestation"]
                            [:turtle     "@prefix lrmoo:"]
@@ -37,7 +37,8 @@
                            [:linked-art "HumanMadeObject"]
                            [:dc         "<dc:title"]
                            [:marc21     "<controlfield tag=\"001\""]
-                           [:mods       "<mods xmlns="]]]
+                           [:mods       "<mods xmlns="]
+                           [:iiif       "\"type\":\"Manifest\""]]]
         (let [{:keys [output loss]} (cv/convert {:from :marc21 :to to :source s})]
           (is (str/includes? output needle) (str "target " to))
           (is (pos? (:total loss)) (str "target " to " reported loss")))))))
