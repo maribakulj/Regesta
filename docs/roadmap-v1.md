@@ -222,7 +222,7 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 | WP-1 substrate (minting, loss diagnostic) | ✅ |
 | WP-2 LRMoo plugin + view | ✅ |
 | WP-3 FRBRisation (INTERMARC; clustering = id-collision; loss) | ✅ |
-| WP-4 spokes | ◐ — **5 importers in ✅**: INTERMARC-SRU, MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **2 round-trips ✅** (DC + MARC21↔floor, loss measured, id-stable & idempotent); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** (N-Triples · Turtle · JSON-LD, LRMoo + CRM views); **Linked Art profile out ✅** (museum/Louvre target — F3→HumanMadeObject carries F2→LinguisticObject part_of F1→PropositionalObject, mapping verified vs the official examples, `docs/eval/linked-art.md`); **MODS/IIIF round-trip not built; MARC21↔LRMoo at the *floor* level, neither it nor Linked Art conformance-checked** |
+| WP-4 spokes | ◐ — **5 importers in ✅**: INTERMARC-SRU, MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **3 round-trips ✅** (DC + MARC21 + MODS ↔ floor, loss measured, id-stable & idempotent); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** (N-Triples · Turtle · JSON-LD, LRMoo + CRM views); **Linked Art profile out ✅** (museum/Louvre target — F3→HumanMadeObject carries F2→LinguisticObject part_of F1→PropositionalObject, mapping verified vs the official examples, `docs/eval/linked-art.md`); both LoC XSLT oracles in (MARC→DC differential, MARC→MODS convergence); **IIIF round-trip not built; MARC21↔LRMoo at the *floor* level** |
 | WP-5 loss-aware report | ✅ (cross-edge double-count fixed in remediation R3) |
 | WP-8 CLI | ◐ — `regesta convert` / **`validate`** (canonical rules, policy-driven non-zero exit) / `formats` (`regesta.cli`, `:run` alias) over the conversion assembly; conformance subcommand not built |
 | WP-6 conformance · WP-7 scale · WP-9 release | ✗ |
@@ -236,7 +236,7 @@ MODS in one registry reaching one LRMoo pivot with one unified loss report, and
 the three floor formats (DC, MARC21, MODS) content-converging on the same Work id
 (the hub property); the **Linked Art profile export** (museum/Louvre, mapping
 verified vs the official examples); and the **`regesta.convert` assembly** — the
-institution-facing keystone wiring the 5 importers × 8 target serialisations
+institution-facing keystone wiring the 5 importers × 9 target serialisations
 through one pivot in a single call, returning the output plus the ADR 0015 loss
 report over every edge. It also forced spoke mapping-ids to be globally distinctive
 (the compiler keys rule ids on the name portion, ADR 0009), so the spokes are

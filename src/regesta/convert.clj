@@ -6,7 +6,7 @@
    This is the namespace that wires the parts the rest of the system built and the
    convergence capstone proved compose: the five importers, the two projection
    rungs (INTERMARC's enriched `frbrise`, the floor `project` for the others), and
-   the eight exporters. `convert` returns the output string plus the conversion
+   the nine exporters. `convert` returns the output string plus the conversion
    loss report, in one call.
 
    Loss is collected at three points and merged: import-edge (a spoke's
@@ -26,6 +26,7 @@
             [regesta.plugins.lrmoo.project :as project]
             [regesta.plugins.mapping :as mapping]
             [regesta.plugins.marc21.export :as marc21-export]
+            [regesta.plugins.mods.export :as mods-export]
             [regesta.runtime :as runtime]
             [regesta.spokes :as spokes]))
 
@@ -60,7 +61,8 @@
    :crm-only   {:render crm/->crm-only-ntriples      :losses crm-only-losses}
    :linked-art {:render linked-art/->jsonld          :losses linked-art/export-losses}
    :dc         {:render dc-export/->dc-xml           :losses dc-export/export-losses}
-   :marc21     {:render marc21-export/->marcxml      :losses marc21-export/export-losses}})
+   :marc21     {:render marc21-export/->marcxml      :losses marc21-export/export-losses}
+   :mods       {:render mods-export/->mods-xml       :losses mods-export/export-losses}})
 
 (defn source-formats [] (spokes/source-formats))
 (defn target-formats [] (set (keys exporters)))
