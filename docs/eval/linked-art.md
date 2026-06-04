@@ -76,11 +76,17 @@ with the same ISNI already mint the same agent id by content).
 
 ## Honest scope (V1)
 
-- A Linked Art-**profile** serialisation. Root conformance against the official
-  `object.json` schema (required fields + `additionalProperties:false`) is checked
-  in `regesta.eval.linked-art-conformance-test`; full draft-2020-12 validation
-  (nested `$defs`, formats) needs a validator the offline env can't fetch and is
-  deferred to a Maven-enabled run.
+- A Linked Art-**profile** serialisation, now validated with the **real**
+  draft-2020-12 validator (`com.networknt/json-schema-validator`, a test-only dep
+  from Maven Central) against the official `$ref`-resolved schema set, in
+  `regesta.eval.linked-art-conformance-test`. Honest calibration: that schema is
+  *stricter than real Linked Art* (it models `carries`/`part_of` as id-only refs and
+  is `additionalProperties:false`), so even Getty's own Mona Lisa example fails it.
+  Our output is **cleaner** than that example — zero root-level errors, the only
+  deviations being `additionalProperties` on the embedded Expression under
+  `/carries` (no `type`/`const`/`required`/`format` errors). The remaining
+  institutional piece (a **Louvre-specific** profile / acceptance criteria) is the
+  only part that still needs a partnership.
 - `created_by` is emitted whenever a `:canon/agent` is present — **all five spokes
   now populate it** (INTERMARC via the controlled `100`; DC/MARC21/MODS via their
   mappings). When the agent carries an authority id (INTERMARC's ISNI) the `Person`
