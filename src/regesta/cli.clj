@@ -1,18 +1,22 @@
 (ns regesta.cli
-  "Command-line entry point wrapping `regesta.convert` (WP-8) — the last step from
-   library to runnable tool. Converts a source document to a target serialisation:
-   the converted document goes to **stdout**, the ADR 0015 loss report to **stderr**.
+  "Command-line entry point (WP-8) — the last step from library to runnable tool.
+   `convert` runs a source document through the LRMoo pivot to a target
+   serialisation (document to **stdout**, ADR 0015 loss report to **stderr**);
+   `validate` runs the canonical rules and exits non-zero on failure.
 
-     regesta convert <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
+     regesta convert  <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
+     regesta validate <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
      regesta formats
      regesta --help
 
-   `run` is pure — it parses args, does the conversion and returns
-   `{:exit :out :err}` without printing or exiting — so tests drive it directly;
-   `-main` is the thin shell that prints the streams and calls `System/exit`."
+   `run` is pure — it parses args, does the work and returns `{:exit :out :err}`
+   without printing or exiting — so tests drive it directly; `-main` is the thin
+   shell that prints the streams and calls `System/exit`."
   (:require [clojure.string :as str]
             [regesta.convert :as convert]
-            [regesta.loss-report :as lr]))
+            [regesta.diagnostics :as dx]
+            [regesta.loss-report :as lr]
+            [regesta.validate :as validate]))
 
 (def ^:private usage
   (str/join
@@ -20,16 +24,19 @@
    ["regesta — documentary-metadata conversion through the LRMoo pivot"
     ""
     "Usage:"
-    "  regesta convert <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
+    "  regesta convert  <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
+    "  regesta validate <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
     "  regesta formats          list the supported source and target formats"
     "  regesta --help"
     ""
     "  --from        source format (a spoke)"
-    "  --to          target serialisation"
+    "  --to          target serialisation (convert)"
+    "  --policy      validate failure policy: errors-only (default), errors-and-warnings, strict, never"
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
-    "  --out         write the output to a file instead of stdout"
+    "  --out         write the output to a file instead of stdout (convert)"
     ""
-    "The converted document is written to stdout; the loss report goes to stderr."]))
+    "convert writes the document to stdout, the loss report to stderr;"
+    "validate writes the diagnostics report to stderr and exits non-zero on failure."]))
 
 (defn- parse-args
   "Parse `args` into {:command :positional [..] :flags {str str} :help?}.
@@ -84,8 +91,40 @@
       (catch Exception e
         {:exit 2 :out "" :err (str "error: " (.getMessage e))}))))
 
+(defn- do-validate [{:strs [from policy record-id]} input]
+  (cond
+    (not (and from input))
+    {:exit 2 :out "" :err (str "validate needs <input-file> --from <fmt>\n\n" usage)}
+
+    (not (.exists (java.io.File. ^String input)))
+    {:exit 2 :out "" :err (str "input file not found: " input)}
+
+    :else
+    (try
+      (let [rid (cond record-id    (->record-id record-id)
+                      (= from "dc") (keyword "doc" (file-stem input))
+                      :else         nil)
+            pol (if policy (keyword policy) :errors-only)
+            {:keys [records diagnostics summary failed?]}
+            (validate/validate {:from   (keyword from)
+                                :source (slurp input)
+                                :opts   (cond-> {} rid (assoc :record-id rid))
+                                :policy pol})
+            verdict (str (if failed? "INVALID" "VALID")
+                         " — " records " record" (when (not= 1 records) "s") ", "
+                         (get-in summary [:by-severity :error]) " error(s), "
+                         (get-in summary [:by-severity :warning]) " warning(s)"
+                         " [policy " (name pol) "]")]
+        {:exit (if failed? 1 0)
+         :out  ""
+         :err  (if (seq diagnostics) (str (dx/format-report diagnostics) "\n" verdict) verdict)})
+      (catch clojure.lang.ExceptionInfo e
+        {:exit 2 :out "" :err (str "error: " (.getMessage e) " " (pr-str (ex-data e)))})
+      (catch Exception e
+        {:exit 2 :out "" :err (str "error: " (.getMessage e))}))))
+
 (defn run
-  "Pure CLI core: parse `args`, run the conversion, return `{:exit :out :err}`.
+  "Pure CLI core: parse `args`, run the command, return `{:exit :out :err}`.
    Never prints, never exits."
   [args]
   (let [{:keys [command help? flags positional]} (parse-args args)]
@@ -95,6 +134,7 @@
                                  :err (str (fmt-line "from: " (convert/source-formats)) "\n"
                                            (fmt-line "to:   " (convert/target-formats)))}
       (= command "convert")     (do-convert flags (first positional))
+      (= command "validate")    (do-validate flags (first positional))
       :else                     {:exit 2 :out "" :err (str "unknown command: " command "\n\n" usage)})))
 
 (defn -main [& args]

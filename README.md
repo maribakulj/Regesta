@@ -237,6 +237,9 @@ FRBRisation, end to end
 # The converted document goes to stdout; the loss report (ADR 0015) to stderr.
 clojure -M:run convert path/to/record.xml --from marc21 --to linked-art
 
+# Validate against the canonical rules; exits non-zero on failure (CI gate).
+clojure -M:run validate path/to/record.xml --from marc21 --policy errors-and-warnings
+
 # List the supported source and target formats
 clojure -M:run formats
 #  from: dc iiif intermarc marc21 mods
