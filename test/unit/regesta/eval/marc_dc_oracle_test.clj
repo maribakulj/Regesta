@@ -66,9 +66,14 @@
         (StreamSource. (File. (str crosswalks "MARC21slimUtils.xsl")))))))
 
 (defn- run-oracle
-  "Transform `marcxml` through the LoC `MARC21slim2OAIDC.xsl` (JDK XSLT 1.0)."
+  "Transform `marcxml` through the LoC `MARC21slim2OAIDC.xsl` (JDK XSLT 1.0). The
+   `URIResolver` supplies the imported utility stylesheet locally; we also pin
+   `accessExternalStylesheet` to `all` so the `xsl:import` is permitted identically
+   across the JDK matrix (21/24) rather than depending on a runner's JAXP default."
   [marcxml]
-  (let [tf (doto (TransformerFactory/newInstance) (.setURIResolver utils-resolver))
+  (let [tf (doto (TransformerFactory/newInstance)
+             (.setAttribute "http://javax.xml.XMLConstants/property/accessExternalStylesheet" "all")
+             (.setURIResolver utils-resolver))
         t  (.newTransformer tf (StreamSource. (File. (str crosswalks "loc-MARC21slim2OAIDC.xsl"))))
         w  (StringWriter.)]
     (.transform t (StreamSource. (StringReader. marcxml)) (StreamResult. w))
