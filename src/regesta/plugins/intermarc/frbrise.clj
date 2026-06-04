@@ -145,3 +145,32 @@
    enriched record — Manifestation/Expression entities and the R4 link."
   [record]
   (:record (runtime/run-phase record [rule] :infer)))
+
+(defn- isni->uri
+  "ISNI authority URI from an INTERMARC 100 $1 value like \"ISNI0000000122762442\"
+   (keep the 16 ISNI characters)."
+  [isni]
+  (str "https://isni.org/isni/" (str/replace (str isni) #"[^0-9X]" "")))
+
+(defn with-identified-agent
+  "Mint a first-class, authority-identified agent when the INTERMARC main entry
+   carries an ISNI (100 $1): a `:crm/E21_Person` entity whose `:iri` is the ISNI
+   URI. Because that IRI is a *determinate* identifier the agent identity is
+   certified (D7) — the gold for agent reconciliation, which the string-only
+   canonical floor (ADR 0003) cannot hold. The Person's name is the controlled
+   `:canon/agent` already on the record; the Linked Art export surfaces the
+   identified Person.
+
+   V1 scope, stated plainly: one agent (the 100 main entry); no explicit creation
+   event (the association is implicit — one main author per record); no
+   cross-record agent de-duplication (that is ADR 0018 proper, though two records
+   with the same ISNI already mint the same id by content); other spokes carry no
+   authority id, so they get a label-only creator. A no-op without an ISNI."
+  [record]
+  (if-let [isni (field record :intermarc/f100_1)]
+    (let [iri  (isni->uri isni)
+          id   (model/mint-entity-id :crm/E21_Person iri)
+          prov (model/provenance {:pass :infer :derivation [(:id record)]})]
+      (update record :entities (fnil conj [])
+              (model/entity {:id id :kind :crm/E21_Person :iri iri :provenance prov})))
+    record))

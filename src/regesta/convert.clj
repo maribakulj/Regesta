@@ -38,14 +38,16 @@
 ;; ---------------------------------------------------------------------------
 
 (def importers
-  "Source format -> {:plugin <ADR 0007 plugin> :enriched? <uses frbrise?>}.
-   `:enriched?` spokes carry a native authority link and take the enriched
-   projection; the rest take the floor projection (mapping -> normalize -> project)."
-  {:intermarc {:plugin intermarc/plugin :enriched? true}
-   :dc        {:plugin dc/plugin}
-   :marc21    {:plugin marc21/plugin}
-   :mods      {:plugin mods/plugin}
-   :iiif      {:plugin iiif/plugin}})
+  "Source format -> {:plugin <ADR 0007 plugin> :to-pivot <record -> WEMI record>}.
+   INTERMARC takes the *enriched* `frbrise` rung (the 145 $3 authority link) and
+   then mints its authority-identified agent; the rest take the floor `project`.
+   Every spoke normalises to `:canon/*` first (in `to-wemi`)."
+  {:intermarc {:plugin intermarc/plugin
+               :to-pivot (comp frbrise/with-identified-agent frbrise/frbrise)}
+   :dc        {:plugin dc/plugin     :to-pivot project/project}
+   :marc21    {:plugin marc21/plugin :to-pivot project/project}
+   :mods      {:plugin mods/plugin   :to-pivot project/project}
+   :iiif      {:plugin iiif/plugin   :to-pivot project/project}})
 
 (defn- crm-only-losses [record]
   (concat (crm/crm-only-losses record) (export/export-losses record)))
@@ -76,12 +78,11 @@
    (via the 145 $3 link) or the floor `project`. Both run normalize first, so
    `:canon/*` is populated for every spoke (the round-trip exporters read it).
    Returns `{:records [wemi…] :ingest [loss…]}`."
-  [{:keys [plugin enriched?]} opts source]
+  [{:keys [plugin to-pivot]} opts source]
   (let [{:keys [records diagnostics]} ((:importer plugin) opts source)
         reg      (plug/register plug/empty-registry plugin)
         compiled (mapping/compile-mappings (plug/all-mappings reg)
-                                           (plug/effective-transforms reg))
-        to-pivot (if enriched? frbrise/frbrise project/project)]
+                                           (plug/effective-transforms reg))]
     {:ingest  diagnostics
      :records (mapv #(to-pivot (:record (runtime/run-phase % compiled :normalize))) records)}))
 

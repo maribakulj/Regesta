@@ -97,3 +97,23 @@
       (is (= "LinguisticObject" (get expr "type")))
       (is (nil? (get expr "created_by")))           ; no creator
       (is (nil? (get expr "part_of"))))))           ; no Work
+
+(deftest an-identified-agent-entity-puts-its-iri-on-the-person
+  (testing "a :crm/E21_Person entity with an ISNI iri -> created_by Person carries that id (D7)"
+    (let [r (model/record
+             {:id :record/r1 :kind :book
+              :entities [(model/entity {:id :ent/m :kind :lrmoo/F3_Manifestation})
+                         (model/entity {:id :ent/e :kind :lrmoo/F2_Expression})
+                         (model/entity {:id :ent/a :kind :crm/E21_Person
+                                        :iri "https://isni.org/isni/0000000122762442"})]
+              :assertions [(model/assertion {:subject :ent/m :predicate :lrmoo/R4_embodies
+                                             :value (model/reference :ent/e)})
+                           (model/assertion {:subject :ent/m :predicate :lrmoo/R33_has_string
+                                             :value "Madame Bovary"})
+                           (model/assertion {:subject :record/r1 :predicate :canon/agent
+                                             :value "Flaubert, Gustave"})]})
+          person (-> (la/->jsonld r) json/read-str
+                     (get-in ["carries" 0 "created_by" "carried_out_by" 0]))]
+      (is (= "Person" (get person "type")))
+      (is (= "Flaubert, Gustave" (get person "_label")))
+      (is (= "https://isni.org/isni/0000000122762442" (get person "id"))))))

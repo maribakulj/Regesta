@@ -55,7 +55,27 @@
                            "classified_as" [(assoc (type-obj aat-description "Description")
                                                    "classified_as" [(type-obj aat-brief-text "Brief Text")])]
                            "content" content})
-(defn- person-obj [label] {"type" "Person" "_label" label})
+(defn- person-obj
+  "A Linked Art Person. `iri` (an authority id, e.g. an ISNI URI) is attached as
+   `id` when present — an *identified* creator (D7-certified), not a bare label."
+  [label iri]
+  (cond-> {"type" "Person" "_label" label}
+    iri (assoc "id" iri)))
+
+(defn- agent-iri
+  "The authority IRI of the record's identified agent entity (`:crm/E21_Person`,
+   V1: the INTERMARC ISNI Person), or nil."
+  [record]
+  (some #(when (and (= :crm/E21_Person (:kind %)) (:iri %)) (:iri %)) (:entities record)))
+
+(defn- persons
+  "Linked Art Person objects for the record's `agents`. When there is exactly one
+   agent and an identified agent entity, that one Person carries the authority id."
+  [record agents]
+  (let [iri (agent-iri record)]
+    (if (and iri (= 1 (count agents)))
+      [(person-obj (first agents) iri)]
+      (mapv #(person-obj % nil) agents))))
 (defn- digital-obj [url] {"type" "VisualItem"
                           "digitally_shown_by" [{"type" "DigitalObject"
                                                  "classified_as" [(type-obj aat-digital-image "Digital Image")]
@@ -102,7 +122,7 @@
                       (cond-> {"id" (export/entity-iri (:id expr)) "type" "LinguisticObject"}
                         title        (assoc "_label" title "identified_by" [(name-obj title)])
                         (seq agents) (assoc "created_by" {"type" "Creation"
-                                                          "carried_out_by" (mapv person-obj agents)})
+                                                          "carried_out_by" (persons record agents)})
                         work         (assoc "part_of" [(cond-> {"id" (export/entity-iri (:id work))
                                                                 "type" "PropositionalObject"}
                                                          title (assoc "_label" title))])))]

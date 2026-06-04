@@ -53,6 +53,27 @@ was fetched from the official site and read directly. The decisive examples:
   → `DigitalObject`; `subject_of` for a IIIF manifest) — the Linked Art model
   `digital` page.
 
+## Identified agents (the first brick of agent reconciliation)
+
+When the source carries an authority identifier for the creator, the agent is
+minted as a **first-class `:crm/E21_Person` entity** whose `:iri` is that
+identifier, and the Linked Art `created_by` Person carries it as `id` — an
+*identified* creator, not a bare label:
+
+```json
+"created_by": { "type": "Creation", "carried_out_by": [
+  { "type": "Person", "id": "https://isni.org/isni/0000000122762442",
+    "_label": "Flaubert, Gustave" } ] }
+```
+
+Because the ISNI is a *determinate* identifier, the agent identity is certified
+(D7) — exactly the signal real agent reconciliation needs. V1 mints it for
+INTERMARC's 100 `$1` ISNI (`regesta.plugins.intermarc.frbrise/with-identified-agent`);
+the string-only canonical floor (ADR 0003) cannot hold an authority-linked agent,
+so the floor spokes still emit a label-only creator. Cross-record agent
+de-duplication is ADR 0018 proper (deliberately not done here, though two records
+with the same ISNI already mint the same agent id by content).
+
 ## Honest scope (V1)
 
 - A Linked Art-**profile** serialisation; **not** validated against a Linked Art
