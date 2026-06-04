@@ -62,3 +62,22 @@
       (is (str/includes? err "needs"))))
   (testing "an unknown command exits 2"
     (is (= 2 (:exit (cli/run ["frobnicate"]))))))
+
+(deftest validate-command
+  (testing "a titled source validates with exit 0"
+    (let [{:keys [exit err]} (cli/run ["validate" marc21 "--from" "marc21"])]
+      (is (= 0 exit))
+      (is (str/includes? err "VALID"))
+      (is (not (str/includes? err "INVALID")))))
+  (testing "a titleless record warns; errors-only passes, errors-and-warnings fails (exit 1)"
+    (let [path (str (System/getProperty "java.io.tmpdir") "/regesta-notitle-" (System/nanoTime) ".xml")]
+      (try
+        (spit path "<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:creator>Anon</dc:creator></metadata>")
+        (is (= 0 (:exit (cli/run ["validate" path "--from" "dc"]))))
+        (let [{:keys [exit err]} (cli/run ["validate" path "--from" "dc" "--policy" "errors-and-warnings"])]
+          (is (= 1 exit))
+          (is (str/includes? err "INVALID"))
+          (is (str/includes? err "missing-title")))
+        (finally (.delete (java.io.File. path))))))
+  (testing "validate needs --from"
+    (is (= 2 (:exit (cli/run ["validate" marc21]))))))
