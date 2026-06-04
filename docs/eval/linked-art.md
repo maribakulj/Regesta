@@ -76,11 +76,15 @@ with the same ISNI already mint the same agent id by content).
 
 ## Honest scope (V1)
 
-- A Linked Art-**profile** serialisation; **not** validated against a Linked Art
-  processor or shape (no JSON-LD framing/expansion round-trip).
-- `created_by` is emitted only when a `:canon/agent` is present — i.e. for the
-  floor spokes (DC, MARC21, MODS). INTERMARC's creator lives in `:intermarc/f100_a`
-  and is not lifted to `:canon/agent`, so its Linked Art output omits the creator.
+- A Linked Art-**profile** serialisation. Root conformance against the official
+  `object.json` schema (required fields + `additionalProperties:false`) is checked
+  in `regesta.eval.linked-art-conformance-test`; full draft-2020-12 validation
+  (nested `$defs`, formats) needs a validator the offline env can't fetch and is
+  deferred to a Maven-enabled run.
+- `created_by` is emitted whenever a `:canon/agent` is present — **all five spokes
+  now populate it** (INTERMARC via the controlled `100`; DC/MARC21/MODS via their
+  mappings). When the agent carries an authority id (INTERMARC's ISNI) the `Person`
+  carries it as `id` (see *Identified agents* above); otherwise it is label-only.
 - Dates, relations and native predicates are not expressed; they are reported as
   export-edge loss (ADR 0015).
 - A `subject_of` link to the IIIF *manifest* (vs `representation` of the image) is
