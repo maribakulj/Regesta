@@ -41,12 +41,9 @@
             [clojure.set :as set]
             [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
-            [regesta.convert :as convert])
-  (:import [java.io File StringReader StringWriter]
-           [javax.xml.transform TransformerFactory URIResolver]
-           [javax.xml.transform.stream StreamResult StreamSource]))
+            [regesta.convert :as convert]
+            [regesta.eval.loc-xslt :as loc-xslt]))
 
-(def ^:private crosswalks "test/fixtures/conformance/crosswalks/")
 (def ^:private marc-source
   (slurp "test/fixtures/documentary/marc21/marcxml/loc_collection.xml"))
 
@@ -55,29 +52,10 @@
   #{"title" "creator" "subject" "description" "publisher" "contributor" "date"
     "type" "format" "identifier" "source" "language" "relation" "coverage" "rights"})
 
-;; --- the LoC stylesheet as an offline oracle -------------------------------
+;; --- the LoC stylesheet as an offline oracle (see regesta.eval.loc-xslt) ----
 
-(def ^:private utils-resolver
-  "Redirects the oracle's one absolute `xsl:import` (loc.gov, 403 here) to the
-   locally-vendored `MARC21slimUtils.xsl`. Everything else resolves normally."
-  (reify URIResolver
-    (resolve [_ href _]
-      (when (str/includes? href "slimUtils")
-        (StreamSource. (File. (str crosswalks "MARC21slimUtils.xsl")))))))
-
-(defn- run-oracle
-  "Transform `marcxml` through the LoC `MARC21slim2OAIDC.xsl` (JDK XSLT 1.0). The
-   `URIResolver` supplies the imported utility stylesheet locally; we also pin
-   `accessExternalStylesheet` to `all` so the `xsl:import` is permitted identically
-   across the JDK matrix (21/24) rather than depending on a runner's JAXP default."
-  [marcxml]
-  (let [tf (doto (TransformerFactory/newInstance)
-             (.setAttribute "http://javax.xml.XMLConstants/property/accessExternalStylesheet" "all")
-             (.setURIResolver utils-resolver))
-        t  (.newTransformer tf (StreamSource. (File. (str crosswalks "loc-MARC21slim2OAIDC.xsl"))))
-        w  (StringWriter.)]
-    (.transform t (StreamSource. (StringReader. marcxml)) (StreamResult. w))
-    (str w)))
+(defn- run-oracle [marcxml]
+  (loc-xslt/run-stylesheet "loc-MARC21slim2OAIDC.xsl" marcxml))
 
 ;; --- DCMES extraction, sound across single- and multi-root output ----------
 
