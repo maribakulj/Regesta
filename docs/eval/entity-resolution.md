@@ -61,3 +61,25 @@ OpenLibrary all fail differently) — so recall on the long tail cannot be *cert
 against an external authority. That scarcity is itself the finding: reconciliation
 there is intrinsically hard and must be evidence-gated (certify the proven, propose
 the rest, document the abstention), not benchmarked into existence.
+
+## Agents — certified reconciliation on real BnF data (`regesta.eval.bnf-agent-reconciliation-test`)
+
+The same lesson on the *agent* axis, and the cleanest demonstration yet. 100 real
+INTERMARC records (`bib.author all "victor hugo"` / `"jules verne"`, BnF SRU): 43
+carry a main-entry ISNI (100 `$1`), reconciled by that authority id to **12
+distinct agents**.
+
+The point is **precision by construction**. "Victor Hugo" / "Jules Verne" as a
+*search string* match a dozen distinct people — the novelist **Jules Verne** vs his
+biographer **Jean Jules-Verne**; Victor Hugo's grandson (the painter Georges-Victor)
+and son (the translator François-Victor); a cohort of Latin-American authors *named*
+"Víctor Hugo …". Keying on the ISNI keeps every one of them apart; a name match
+would have conflated them into a single blob. (The writer Victor Hugo himself does
+not even surface as a main-entry agent in this slice — honest coverage, not a merge.)
+
+And the negative pole, the perfect illustration of why a *determinate* id is
+non-negotiable: a naive name-search for "Victor Hugo" in the authority fallback
+resolved to **`Q1459231` — the Victor Hugo *metro station* in Paris** (no ISNI). A
+name string can match a namesake, a descendant, **or a non-person**. So a name-only
+agent never enters the certified set; only an authority id earns `:asserted` (D7).
+This is reconcile-to-authority (ADR 0018) shown true on real data.

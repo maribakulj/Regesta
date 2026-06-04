@@ -1,0 +1,112 @@
+[
+    {
+        "searched_name":  "Victor Hugo",
+        "label":  "Victor Hugo",
+        "variants":  "",
+        "qid":  "Q1459231",
+        "wikidata":  "https://www.wikidata.org/wiki/Q1459231",
+        "isni":  null,
+        "viaf":  null,
+        "bnf":  null,
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q1459231.json"
+    },
+    {
+        "searched_name":  "Jules Verne",
+        "label":  "Jules Verne",
+        "variants":  "Jules Gabriel Verne | Julius Verne",
+        "qid":  "Q33977",
+        "wikidata":  "https://www.wikidata.org/wiki/Q33977",
+        "isni":  "0000000121400562",
+        "viaf":  "76323989",
+        "bnf":  "11928016k",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q33977.json"
+    },
+    {
+        "searched_name":  "Honoré de Balzac",
+        "label":  "Honoré de Balzac",
+        "variants":  "Balzac | Balzak | Horace de Saint-Aubin | Lord R’hoone | Balzac, Honoré de | Horace de Saint- Aubin | Onoreh deh Balzaḳ | Lord R\u0027Hoone | Ônôrē de Balzaq | Jeune ceélibataire | Onore de Balzak | Honorato De Balzac | H. Balzak | Honoreé De Balzac | H. Balzac | Horace de S.- Aubin | Honoriusz Balzac | Un Jeune ceélibataire | Lord O\u0027Rhoone | Ūnūrīh dī Balzāk | R\u0027Hoone | Onore de Bal\u0027zak | Hônôrê đơ Banzăc | Honore de Balzak | de. Balzac | Honorato Balzac | Honoré de Balsac | Honoreé de Balzac | Baruzakku | Pa-erh-cha-kʻo | Honoré. Balzac | Honoreé DeBalzac | Onore. Bal\u0027zak | Onorato di Balzac | Honoriusz. Balzac | H. de Balzac | Onore Balzéak | Honoriusz. Balzak | Instituteur Matricante | Pa-erh-cha-kò | Saint Aubin | Ba’erzhake | Honoryusz. Balzac | Abbeé Savonati | Honoräe de Balzac | Honoratus de Balzac | A. de Villergleé | Honoré Balssa | Honoré De Balzac | Ba\u0027erzhake | Saint Aubin de Poitiers | M. de Balzac | Onore Balʹzak | Honore de Bal\u0027zac | H. de. Balzac | Honoreé von Balzac | Honore de Balzac | Jeune ceelibataire | Honoree De Balzac | Honoree de Balzac | Un Jeune ceelibataire | Honore de Balsac | Honore. Balzac | Honoree DeBalzac | Onore Balzeak | Pa-erh-cha-ko | Abbee Savonati | A. de Villerglee | Honore Balssa | Honoree von Balzac",
+        "qid":  "Q9711",
+        "wikidata":  "https://www.wikidata.org/wiki/Q9711",
+        "isni":  "0000000123478072",
+        "viaf":  "29529595",
+        "bnf":  "118900414",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q9711.json"
+    },
+    {
+        "searched_name":  "Gustave Flaubert",
+        "label":  "Gustave Flaubert",
+        "variants":  "Flaubert",
+        "qid":  "Q43444",
+        "wikidata":  "https://www.wikidata.org/wiki/Q43444",
+        "isni":  "0000000122762442",
+        "viaf":  "9846192",
+        "bnf":  "11902894q",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q43444.json"
+    },
+    {
+        "searched_name":  "Émile Zola",
+        "label":  "Émile Zola",
+        "variants":  "Zola | Maître de Médan | Émile Édouard Charles Antoine Zola",
+        "qid":  "Q504",
+        "wikidata":  "https://www.wikidata.org/wiki/Q504",
+        "isni":  "0000000120958660",
+        "viaf":  "32004502",
+        "bnf":  "119297200",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q504.json"
+    },
+    {
+        "searched_name":  "Marcel Proust",
+        "label":  "Marcel Proust",
+        "variants":  "Valentin Louis Georges Eugène Marcel Proust | Proust | Bernard d\u0027Algouvres | Valentin Louis Georges Eugéne Marcel Proust | Valentin-Louis-Georges-Eugéne-Marcel Proust | Valentin Louis Georges Eugene Marcel Proust | Valentin-Louis-Georges-Eugene-Marcel Proust | Valentin-Louis-Georges-Eugène-Marcel Proust",
+        "qid":  "Q7199",
+        "wikidata":  "https://www.wikidata.org/wiki/Q7199",
+        "isni":  "0000000121003911",
+        "viaf":  "32001793",
+        "bnf":  "119207126",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q7199.json"
+    },
+    {
+        "searched_name":  "Charles Baudelaire",
+        "label":  "Charles Baudelaire",
+        "variants":  "Baudelaire, Charles | Charles Pierre Baudelaire | Baudelaire | Charles Pierre Baudelaire-Dufaÿs",
+        "qid":  "Q501",
+        "wikidata":  "https://www.wikidata.org/wiki/Q501",
+        "isni":  "0000000121221863",
+        "viaf":  "17218730",
+        "bnf":  "118905823",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q501.json"
+    },
+    {
+        "searched_name":  "George Sand",
+        "label":  "George Sand",
+        "variants":  "Amantine Aurore Lucile Dupin | Aurore Dupin de Francueil | Amantine-Aurore-Lucile Dupin | Aurore Dupin | Lucile Aurore Dupin | Amantine Lucile Aurore Dupin | Amandine Lucile Aurore Dupin | Baroness Dudevant | Jules Sand | Lucie Dudevant | Aurore Amantine Lucile Dupin | Aurore Amantine Lucile Sand | Amandine-Aaurore-Lucile Dupin | George nee Dupin Sand | Mrs. George Sand | Georges Sand | Amandine-Aurore-Lucile Dudevant | Amandine-Aaurore-Lucile Dudevant | A.A.L. Dudevant-Dupin",
+        "qid":  "Q3816",
+        "wikidata":  "https://www.wikidata.org/wiki/Q3816",
+        "isni":  "0000000121309531",
+        "viaf":  "46766944",
+        "bnf":  "119236010",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q3816.json"
+    },
+    {
+        "searched_name":  "Alexandre Dumas",
+        "label":  "Alexandre Dumas",
+        "variants":  "Dumas père | Alexandre Dumas père | Alexandre Dumas, père | Dumas, Alexandre | A. Dumas | Dumas Davy de la Pailleterie | Alexandre Dumas pere | Alexandre Dumas, father | Alexandre Dumas Davy de la Pailleterie | Alexandre Dumas, the Elder",
+        "qid":  "Q38337",
+        "wikidata":  "https://www.wikidata.org/wiki/Q38337",
+        "isni":  "0000000121012885",
+        "viaf":  "51688902",
+        "bnf":  "119010630",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q38337.json"
+    },
+    {
+        "searched_name":  "Stendhal",
+        "label":  "Stendhal",
+        "variants":  "Bombet, Louis-Alexandre-André-César, | Henri Beyle | Marie Henri Beyle",
+        "qid":  "Q502",
+        "wikidata":  "https://www.wikidata.org/wiki/Q502",
+        "isni":  "0000000120981326",
+        "viaf":  "17823",
+        "bnf":  "119255047",
+        "source_entitydata":  "https://www.wikidata.org/wiki/Special:EntityData/Q502.json"
+    }
+]
