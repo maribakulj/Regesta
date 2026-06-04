@@ -124,3 +124,24 @@
       (testing "the R3 realisation (name-string creator) is proposed"
         (is (seq (:lrmoo/R3_is_realised_in by-pred)))
         (is (every? model/proposed? (:lrmoo/R3_is_realised_in by-pred)))))))
+
+(deftest mints-an-identified-agent-from-the-isni
+  (testing "with-identified-agent adds a :crm/E21_Person carrying the ISNI URI (D7-certified id)"
+    (let [rec (model/record
+               {:id :bnf/x :kind :intermarc/bibliographic
+                :assertions [(model/assertion {:subject :bnf/x :predicate :intermarc/f100_1
+                                               :value "ISNI0000000122762442"})
+                             (model/assertion {:subject :bnf/x :predicate :canon/agent
+                                               :value "Flaubert, Gustave"})]})
+          out (frbrise/with-identified-agent rec)
+          agent (first (filter #(= :crm/E21_Person (:kind %)) (:entities out)))]
+      (is (some? agent))
+      (is (= "https://isni.org/isni/0000000122762442" (:iri agent)))
+      (testing "the same ISNI mints the same agent id (content-addressed, ADR 0008)"
+        (is (= (:id agent)
+               (:id (first (filter #(= :crm/E21_Person (:kind %))
+                                   (:entities (frbrise/with-identified-agent rec))))))))
+      (testing "a record with no ISNI is a no-op"
+        (is (empty? (filter #(= :crm/E21_Person (:kind %))
+                            (:entities (frbrise/with-identified-agent
+                                         (model/record {:id :bnf/y :kind :book}))))))))))

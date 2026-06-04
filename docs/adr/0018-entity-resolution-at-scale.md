@@ -2,6 +2,14 @@
 
 - Status: Proposed
 - Date: 2026-06-02
+- Partially implemented (2026-06-04): the **certified tier** of decisions 1 and 5
+  — reconcile *to an authority*, by a determinate id, never pairwise — is real for
+  agents in `regesta.reconcile`: identified `:crm/E21_Person` entities (an ISNI
+  minted by `intermarc.frbrise/with-identified-agent`) are blocked by their
+  authority `:iri` and collapsed to one reconciled agent across records (the store
+  is the agent registry it returns). Exact and D7-`:asserted` — the Madame Bovary
+  fixture reconciles to one Flaubert. The **fuzzy tier** (decisions 3/4: scored
+  proposals, the equivalence-assertion verdict, revisability) remains proposed.
 - Builds on: ADR 0016 (FRBRisation — decides the *deferred* scale layer it names),
   ADR 0013 (rich pivot / strategy C — equivalence resolved in the view), ADR 0005
   (status — `:proposed` equivalence), ADR 0001 (assertions), ADR 0008 (idempotency
