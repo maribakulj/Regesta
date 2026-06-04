@@ -73,7 +73,7 @@
 ;; Pipeline
 ;; ---------------------------------------------------------------------------
 
-(defn- to-wemi
+(defn to-wemi
   "Import `source` through `spoke`, normalise to the canonical floor, then project
    each record to WEMI by the appropriate rung — INTERMARC's enriched `frbrise`
    (via the 145 $3 link) or the floor `project`. Both run normalize first, so
