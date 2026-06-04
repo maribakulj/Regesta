@@ -98,6 +98,7 @@
   :coverage
   {:extra-paths ["test/unit" "test/property" "test/integration"]
    :extra-deps  {org.clojure/test.check        {:mvn/version "1.1.1"}
+                 com.networknt/json-schema-validator {:mvn/version "3.0.3"}
                  cloverage/cloverage           {:mvn/version "1.2.4"}}
    :main-opts   ["-m" "cloverage.coverage"
                  "--src-ns-path" "src"
