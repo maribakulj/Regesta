@@ -8,8 +8,12 @@
   minted by `intermarc.frbrise/with-identified-agent`) are blocked by their
   authority `:iri` and collapsed to one reconciled agent across records (the store
   is the agent registry it returns). Exact and D7-`:asserted` — the Madame Bovary
-  fixture reconciles to one Flaubert. The **fuzzy tier** (decisions 3/4: scored
-  proposals, the equivalence-assertion verdict, revisability) remains proposed.
+  fixture reconciles to one Flaubert. The **fuzzy tier** (decisions 3/4) is now
+  *started*: `reconcile/propose-agent-links` emits confidence-scored (token-set)
+  name→authority *proposals* — `:proposed`, never `:asserted` — with a
+  `:certifiable?` guard so a perfect name match to an id-less entry (the Victor
+  Hugo *metro station*) can never be promoted. The equivalence-assertion verdict
+  *store* and revisability over a maintained authority index remain proposed.
 - Builds on: ADR 0016 (FRBRisation — decides the *deferred* scale layer it names),
   ADR 0013 (rich pivot / strategy C — equivalence resolved in the view), ADR 0005
   (status — `:proposed` equivalence), ADR 0001 (assertions), ADR 0008 (idempotency

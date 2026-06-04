@@ -79,3 +79,28 @@
             vh        (first (filter #(= "Victor Hugo" (get % "searched_name")) authority))]
         (is (nil? (get vh "isni")))                              ; Q1459231 = Paris metro station
         (is (str/includes? (get vh "source_entitydata") "Q1459231"))))))
+
+(defn- authority-pool []
+  (->> (json/read-str (slurp "test/fixtures/er-gold/bnf-agents/authority.json"))
+       (mapv (fn [e] {:id       (get e "isni")
+                      :label    (get e "label")
+                      :variants (remove str/blank? (map str/trim (str/split (or (get e "variants") "") #"\|")))}))))
+
+(deftest fuzzy-tier-on-the-real-authority-pool
+  (let [pool    (authority-pool)
+        propose (fn [nm] (first (reconcile/propose-agent-links [nm] pool)))]
+    (testing "a free name resolves to the certified author by token-set match — still :proposed"
+      (let [p (propose "Gustave Flaubert")]
+        (is (= "0000000122762442" (:authority-id p)))    ; the very ISNI the certified tier uses
+        (is (= :proposed (:status p)))
+        (is (true? (:certifiable? p)))))
+    (testing "partial / variant match on real variants: 'Balzac' -> Honoré de Balzac"
+      (let [p (propose "Balzac")]
+        (is (= "Honoré de Balzac" (:authority-label p)))
+        (is (true? (:certifiable? p)))))
+    (testing "the metro lesson on real data: 'Victor Hugo' matches the id-less Q1459231 entry"
+      (let [p (propose "Victor Hugo")]
+        (is (= "Victor Hugo" (:authority-label p)))
+        (is (= 1.0 (:score p)))                          ; perfect name match…
+        (is (false? (:certifiable? p)))                  ; …but no ISNI (metro station) -> never :asserted
+        (is (= :proposed (:status p)))))))

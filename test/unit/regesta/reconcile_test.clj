@@ -43,3 +43,32 @@
     (is (zero? (:distinct (rec/reconcile-agents [(record-with-agent :rec/x "Anon" nil)]))))
     (is (str/includes? (rec/format-agent-reconciliation (rec/reconcile-agents []))
                        "no authority-identified agents"))))
+
+(def ^:private pool
+  [{:id "isni:flaubert" :label "Gustave Flaubert" :variants ["Flaubert"]}
+   {:id "isni:balzac"   :label "Honoré de Balzac" :variants ["Balzac" "Balzak"]}
+   {:id nil             :label "Victor Hugo"      :variants []}])   ; a name with no id (the metro case)
+
+(deftest fuzzy-tier-proposes-never-asserts
+  (testing "order-insensitive token match: 'Gustave Flaubert' -> the Flaubert authority"
+    (let [[p] (rec/propose-agent-links ["Gustave Flaubert"] pool)]
+      (is (= "isni:flaubert" (:authority-id p)))
+      (is (= 1.0 (:score p)))
+      (is (= :proposed (:status p)))                 ; never :asserted (D7)
+      (is (true? (:certifiable? p)))))
+  (testing "partial match via a variant: 'Balzac' -> Honoré de Balzac"
+    (let [[p] (rec/propose-agent-links ["Balzac"] pool)]
+      (is (= "isni:balzac" (:authority-id p)))
+      (is (true? (:certifiable? p)))))
+  (testing "below threshold -> no proposal"
+    (is (empty? (rec/propose-agent-links ["Marcel Proust"] pool 0.5))))
+  (testing "everything emitted is :proposed, sorted by score"
+    (is (every? #(= :proposed (:status %)) (rec/propose-agent-links ["Flaubert" "Balzac"] pool)))))
+
+(deftest the-metro-station-guard
+  (testing "a perfect name match to an id-less entry is :proposed but NOT certifiable"
+    (let [[p] (rec/propose-agent-links ["Victor Hugo"] pool)]
+      (is (= "Victor Hugo" (:authority-label p)))
+      (is (= 1.0 (:score p)))                        ; perfect name match
+      (is (= :proposed (:status p)))
+      (is (false? (:certifiable? p))))))             ; no id -> can never be promoted to :asserted
