@@ -1,35 +1,38 @@
 (ns regesta.validate
-  "Validation pass — the institutional gate that complements `regesta.convert`
-   (validate *before* you convert). Import a source, normalise it to the canonical
-   floor, run the canonical `:validate` rules (ADR 0003), and return the
-   diagnostics with a pass/fail verdict under a failure policy.
+  "Validation gate — the *mechanism* an institution gates an ingest on: import a
+   source, normalise it to the canonical floor, run the canonical `:validate` rule
+   set (ADR 0003), and return the diagnostics with a pass/fail verdict under a
+   failure policy. The reusable pipeline (import → normalize → validate → policy)
+   is the deliverable; the rule *content* is whatever the canonical plugin ships
+   (V1: one rule, `:title-required` — the set grows by justified need, ADR 0003).
 
-   It reuses `regesta.convert`'s source-spoke registry, registers the canonical
-   plugin alongside, and runs the `:normalize` → `:validate` pipeline. Loss is a
-   separate concern (that is `convert`/`loss-report`); this answers only \"is the
-   canonical record valid?\"."
-  (:require [regesta.convert :as convert]
-            [regesta.diagnostics :as dx]
+   Validity is **not** loss. A record can be `VALID` here and still have lost
+   fields in conversion — that is a separate, fully-modelled concern (ADR 0015,
+   reported by `regesta.convert` / `regesta.loss-report`); this answers only \"does
+   the canonical record satisfy the rules?\". Reads the source-spoke registry from
+   `regesta.spokes` (no dependency on the export stack)."
+  (:require [regesta.diagnostics :as dx]
             [regesta.plugins :as plug]
             [regesta.plugins.canonical :as canonical]
             [regesta.plugins.mapping :as mapping]
             [regesta.rules :as rules]
-            [regesta.runtime :as runtime]))
+            [regesta.runtime :as runtime]
+            [regesta.spokes :as spokes]))
 
 (def ^:private pipeline [{:phase :normalize} {:phase :validate}])
 
 (defn validate
-  "Validate `source` (source spoke `from`) against the canonical rules. Returns:
+  "Validate `source` (source spoke `from`) against the canonical rule set. Returns:
 
      {:records N :diagnostics [...] :summary {...} :failed? bool}
 
    `opts` is threaded to the importer (e.g. `:record-id`); `policy`
    (∈ `dx/failure-policies`, default `:errors-only`) decides `:failed?`. Throws on
-   an unknown `from`."
+   an unknown `from`. Note: this reports *validity*, not loss (see ns doc)."
   [{:keys [from source opts policy] :or {opts {} policy :errors-only}}]
-  (when-not (contains? convert/importers from)
-    (throw (ex-info "Unknown source format" {:from from :supported (convert/source-formats)})))
-  (let [plugin    (:plugin (convert/importers from))
+  (when-not (contains? spokes/plugins from)
+    (throw (ex-info "Unknown source format" {:from from :supported (spokes/source-formats)})))
+  (let [plugin    (spokes/plugin from)
         registry  (-> plug/empty-registry
                       (plug/register plugin)
                       (plug/register canonical/plugin))

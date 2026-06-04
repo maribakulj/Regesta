@@ -18,36 +18,33 @@
             [regesta.diagnostics :as dx]
             [regesta.loss-report :as lr]
             [regesta.plugins :as plug]
-            [regesta.plugins.dc :as dc]
             [regesta.plugins.dc.export :as dc-export]
-            [regesta.plugins.iiif :as iiif]
-            [regesta.plugins.intermarc :as intermarc]
             [regesta.plugins.intermarc.frbrise :as frbrise]
             [regesta.plugins.lrmoo.crm :as crm]
             [regesta.plugins.lrmoo.export :as export]
             [regesta.plugins.lrmoo.linked-art :as linked-art]
             [regesta.plugins.lrmoo.project :as project]
             [regesta.plugins.mapping :as mapping]
-            [regesta.plugins.marc21 :as marc21]
             [regesta.plugins.marc21.export :as marc21-export]
-            [regesta.plugins.mods :as mods]
-            [regesta.runtime :as runtime]))
+            [regesta.runtime :as runtime]
+            [regesta.spokes :as spokes]))
 
 ;; ---------------------------------------------------------------------------
-;; Registries — the supported source spokes and target serialisations.
+;; Registries — the source spokes live in `regesta.spokes` (shared with
+;; `regesta.validate`); convert owns the projection rung per spoke and the
+;; target serialisations.
 ;; ---------------------------------------------------------------------------
 
-(def importers
-  "Source format -> {:plugin <ADR 0007 plugin> :to-pivot <record -> WEMI record>}.
+(def ^:private to-pivots
+  "Source format -> the projection that lifts a normalised record to WEMI.
    INTERMARC takes the *enriched* `frbrise` rung (the 145 $3 authority link) and
    then mints its authority-identified agent; the rest take the floor `project`.
    Every spoke normalises to `:canon/*` first (in `to-wemi`)."
-  {:intermarc {:plugin intermarc/plugin
-               :to-pivot (comp frbrise/with-identified-agent frbrise/frbrise)}
-   :dc        {:plugin dc/plugin     :to-pivot project/project}
-   :marc21    {:plugin marc21/plugin :to-pivot project/project}
-   :mods      {:plugin mods/plugin   :to-pivot project/project}
-   :iiif      {:plugin iiif/plugin   :to-pivot project/project}})
+  {:intermarc (comp frbrise/with-identified-agent frbrise/frbrise)
+   :dc        project/project
+   :marc21    project/project
+   :mods      project/project
+   :iiif      project/project})
 
 (defn- crm-only-losses [record]
   (concat (crm/crm-only-losses record) (export/export-losses record)))
@@ -65,7 +62,7 @@
    :dc         {:render dc-export/->dc-xml           :losses dc-export/export-losses}
    :marc21     {:render marc21-export/->marcxml      :losses marc21-export/export-losses}})
 
-(defn source-formats [] (set (keys importers)))
+(defn source-formats [] (spokes/source-formats))
 (defn target-formats [] (set (keys exporters)))
 
 ;; ---------------------------------------------------------------------------
@@ -78,8 +75,10 @@
    (via the 145 $3 link) or the floor `project`. Both run normalize first, so
    `:canon/*` is populated for every spoke (the round-trip exporters read it).
    Returns `{:records [wemi…] :ingest [loss…]}`."
-  [{:keys [plugin to-pivot]} opts source]
-  (let [{:keys [records diagnostics]} ((:importer plugin) opts source)
+  [from opts source]
+  (let [plugin   (spokes/plugin from)
+        to-pivot (to-pivots from)
+        {:keys [records diagnostics]} ((:importer plugin) opts source)
         reg      (plug/register plug/empty-registry plugin)
         compiled (mapping/compile-mappings (plug/all-mappings reg)
                                            (plug/effective-transforms reg))]
@@ -93,12 +92,12 @@
    `opts` is threaded to the importer (e.g. `:record-id` for the single-record
    spokes). Throws with the supported sets on an unknown `from`/`to`."
   [{:keys [from to source opts] :or {opts {}}}]
-  (when-not (contains? importers from)
+  (when-not (contains? spokes/plugins from)
     (throw (ex-info "Unknown source format" {:from from :supported (source-formats)})))
   (when-not (contains? exporters to)
     (throw (ex-info "Unknown target format" {:to to :supported (target-formats)})))
   (let [{:keys [render losses]} (exporters to)
-        {:keys [records ingest]} (to-wemi (importers from) opts source)
+        {:keys [records ingest]} (to-wemi from opts source)
         projection-loss (dx/collect-many records)
         export-loss     (into [] (mapcat losses) records)
         output          (->> records
