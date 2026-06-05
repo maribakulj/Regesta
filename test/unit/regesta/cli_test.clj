@@ -87,6 +87,9 @@
 (def ^:private intermarc
   "test/fixtures/documentary/intermarc/sru/intermarcXchange/bnf-sru-victor-hugo-50.xml")
 
+(def ^:private intermarc-bovary
+  "test/fixtures/documentary/intermarc/sru/intermarcXchange/bib-flaubert-madame-bovary-start1-max30.xml")
+
 (deftest report-emits-the-loss-report-only
   (testing "report MARC21 -> DC: the loss report to stdout, no converted document"
     (let [{:keys [exit out]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc"])]
@@ -188,3 +191,12 @@
       (is (str/includes? err "needs --profile"))))
   (testing "an unknown --profile exits 2"
     (is (= 2 (:exit (cli/run ["conformance" marc21 "--from" "marc21" "--profile" "bogus"]))))))
+
+(deftest conformance-supports-the-intermarc-profile
+  (testing "INTERMARC Bovary showcase vs the BnF INTERMARC profile: conformant"
+    (let [{:keys [exit err]} (cli/run ["conformance" intermarc-bovary "--from" "intermarc" "--profile" "intermarc"])]
+      (is (= 0 exit))
+      (is (str/includes? err "CONFORMANT"))
+      (is (not (str/includes? err "NON-CONFORMANT")))
+      (is (str/includes? err "BnF INTERMARC"))
+      (is (str/includes? err "heading-authority-linked")))))

@@ -54,7 +54,7 @@
     ""
     "  --from        source format (a spoke)"
     "  --to          target serialisation (convert, report)"
-    "  --profile     conformance profile: linked-art"
+    "  --profile     conformance profile: linked-art, intermarc"
     "  --policy      validate / conformance: errors-only (default), errors-and-warnings, strict, never"
     "                apply-repairs: flag (default), accept, reject"
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"

@@ -94,3 +94,53 @@
       (is (true? failed?))
       (is (= :error (:max-severity summary)))
       (is (some #(= :conformance.linked-art/has-name (:code %)) diagnostics)))))
+
+;; ---------------------------------------------------------------------------
+;; The BnF INTERMARC (bibliographic) profile — over native :intermarc/* fields
+;; ---------------------------------------------------------------------------
+
+(defn- imarc
+  "An INTERMARC bibliographic record carrying the given [predicate value] fields."
+  [fields]
+  (model/record {:id :bnf/x :kind :intermarc/bibliographic
+                 :assertions (mapv (fn [[p v]] (model/assertion {:subject :bnf/x :predicate p :value v}))
+                                   fields)}))
+
+(deftest intermarc-hard-essentials-are-errors
+  (testing "a record with neither 001 nor 245 fails both essentials"
+    (let [errs (filter #(= :error (:severity %))
+                       (conf/check-record conf/intermarc-profile (imarc [])))]
+      (is (= #{"control-number" "title"} (codes errs))))))
+
+(deftest intermarc-heading-must-be-authority-linked
+  (let [check #(codes (conf/check-record conf/intermarc-profile (imarc %)))
+        essentials [[:intermarc/f001 "1"] [:intermarc/f245_a "T"]]]
+    (testing "a 100 heading with no $3 link warns (Transition bibliographique)"
+      (is (contains? (check (conj essentials [:intermarc/f100_a "Hugo, Victor"]))
+                     "heading-authority-linked")))
+    (testing "a 100 heading WITH a $3 link does not"
+      (is (not (contains? (check (conj essentials [:intermarc/f100_a "Hugo, Victor"] [:intermarc/f100_3 "ISNI"]))
+                          "heading-authority-linked"))))
+    (testing "no 100 heading at all is conformant on that check (nothing to link)"
+      (is (not (contains? (check essentials) "heading-authority-linked"))))))
+
+(def ^:private imarc-dir "test/fixtures/documentary/intermarc/sru/intermarcXchange/")
+
+(deftest intermarc-profile-on-real-bnf-records
+  (let [run (fn [file] (conf/conformance {:from :intermarc :profile conf/intermarc-profile
+                                          :source (slurp (str imarc-dir file))}))
+        n   (fn [diags code] (count (filter #(= code (:code %)) diags)))]
+    (testing "the FRBRised Bovary showcase is conformant — 1 unlinked heading + 2 work-link infos"
+      (let [{:keys [failed? diagnostics records]} (run "bib-flaubert-madame-bovary-start1-max30.xml")]
+        (is (= 30 records))
+        (is (false? failed?))
+        (is (= 1 (n diagnostics :conformance.intermarc/heading-authority-linked)))
+        (is (= 2 (n diagnostics :conformance.intermarc/work-authority-link)))))
+    (testing "a monographs set with a record missing its 245 is non-conformant (a title error)"
+      (let [{:keys [failed? diagnostics]} (run "bib-monographies-start1-max30.xml")]
+        (is (true? failed?))
+        (is (= 1 (n diagnostics :conformance.intermarc/title)))))
+    (testing "periodicals (no personal author) are conformant — not flagged for a missing 100"
+      (let [{:keys [failed? diagnostics]} (run "bib-periodiques-start1-max30.xml")]
+        (is (false? failed?))
+        (is (zero? (n diagnostics :conformance.intermarc/heading-authority-linked)))))))

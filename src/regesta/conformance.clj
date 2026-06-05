@@ -8,11 +8,17 @@
    gates a *target conversion* on.
 
    Dataless by construction. A profile's checks encode the **public** model of the
-   target (here the Linked Art object model — https://linked.art). The only
-   institution-specific input is the *acceptance threshold* — which severities a
-   given institution treats as failing — and that is the `policy` parameter, exactly
-   as in `regesta.validate`. So the BnF/Louvre acceptance *criteria* are a knob, not
-   a blocker on building the mechanism.
+   target or source format — the Linked Art object model (https://linked.art) for
+   the museum/Louvre target, the BnF INTERMARC kitcat field model for the BnF
+   source. The only institution-specific input is the *acceptance threshold* —
+   which severities a given institution treats as failing — and that is the `policy`
+   parameter, exactly as in `regesta.validate`. So the BnF/Louvre acceptance
+   *criteria* are a knob, not a blocker on building the mechanism.
+
+   Two directions, one mechanism: a *target* profile (Linked Art) checks the WEMI
+   projection's fitness to serialise; a *source* profile (INTERMARC) checks the
+   record's own native fields. Both run over the projected record — the native
+   `:intermarc/*` assertions survive projection — so the mechanism is uniform.
 
    This is deliberately **not** the strict official-schema validation: that lives,
    test-only, in `regesta.eval.linked-art-conformance-test`, which validates our
@@ -123,9 +129,63 @@
      :message "no stable identifier (ARK / :canon/identifier) for an identified_by Identifier"
      :conformant? has-identifier?}]})
 
+;; ---------------------------------------------------------------------------
+;; The BnF INTERMARC (bibliographic) profile — the public kitcat field model
+;;
+;; Source-side conformance: does an INTERMARC bibliographic record carry the
+;; fields the BnF requires? The checks read the native `:intermarc/*` assertions
+;; (which survive projection), grounded in what real BnF SRU records carry —
+;; f001/f003/f245 are near-universal (the bibliographic essentials), f100 is
+;; record-type-dependent (0/30 on periodicals, so never an error), and a present
+;; 100 heading is nearly always authority-linked (the Transition-bibliographique
+;; discipline). As with Linked Art, the *exact* mandatory set is the BnF's private
+;; acceptance criteria — the `policy` knob — not baked in here. Targets the
+;; bibliographic spoke (`--from intermarc`); authority records are a separate kind.
+;; ---------------------------------------------------------------------------
+
+(defn- has-field?
+  "The record carries at least one assertion under native predicate `pred`."
+  [record pred]
+  (boolean (some #(= pred (:predicate %)) (:assertions record))))
+
+(def intermarc-profile
+  "BnF INTERMARC (bibliographic) — the field requirements of a BnF bibliographic
+   record, grounded in the public kitcat field model. Two hard essentials (a 001
+   control number, a 245 title), three BnF expectations (the 003 ARK, an
+   authority-linked 100 heading — Transition bibliographique, a 260 date), and the
+   145 Work-link as a FRBRisation-readiness hint."
+  {:id    :intermarc
+   :label "BnF INTERMARC (bibliographic)"
+   :checks
+   [{:id :control-number
+     :severity :error
+     :message "no 001 control number (f001) — the mandatory record identifier"
+     :conformant? #(has-field? % :intermarc/f001)}
+    {:id :title
+     :severity :error
+     :message "no 245 $a title (f245_a) — mandatory for a bibliographic record"
+     :conformant? #(has-field? % :intermarc/f245_a)}
+    {:id :persistent-identifier
+     :severity :warning
+     :message "no 003 ARK (f003) — the BnF persistent identifier"
+     :conformant? #(has-field? % :intermarc/f003)}
+    {:id :heading-authority-linked
+     :severity :warning
+     :message "a 100 personal-name heading (f100_a) carries no $3 authority link (f100_3) — Transition bibliographique (ADR 0018)"
+     :conformant? #(or (not (has-field? % :intermarc/f100_a)) (has-field? % :intermarc/f100_3))}
+    {:id :publication-date
+     :severity :warning
+     :message "no 260 $d publication date (f260_d)"
+     :conformant? #(has-field? % :intermarc/f260_d)}
+    {:id :work-authority-link
+     :severity :info
+     :message "no 145 $3 Work-authority link (f145_3) — not FRBRisable to a shared Work (ADR 0016)"
+     :conformant? #(has-field? % :intermarc/f145_3)}]})
+
 (def profiles
   "The institutional profiles the conformance mechanism ships."
-  {:linked-art linked-art-profile})
+  {:linked-art linked-art-profile
+   :intermarc  intermarc-profile})
 
 ;; ---------------------------------------------------------------------------
 ;; Run
