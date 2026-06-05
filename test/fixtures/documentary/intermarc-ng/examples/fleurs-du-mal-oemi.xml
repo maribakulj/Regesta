@@ -8,11 +8,26 @@
      real 145 $3 of the BnF Baudelaire record) are real; the Work ARK is synthetic. -->
 <mxc:collection xmlns:mxc="info:lc/xmlns/marcxchange-v2">
 
+  <mxc:record format="INTERMARC-NG" type="Person" id="ark:/12148/cb11890582">
+    <mxc:leader>00000n   2200000   45  </mxc:leader>
+    <mxc:controlfield tag="001">ark:/12148/cb11890582</mxc:controlfield>
+    <mxc:datafield tag="100" ind1=" " ind2=" ">
+      <mxc:subfield code="1">ISNI0000000121221863</mxc:subfield>
+      <mxc:subfield code="a">Baudelaire</mxc:subfield>
+      <mxc:subfield code="m">Charles</mxc:subfield>
+      <mxc:subfield code="d">1821-1867</mxc:subfield>
+    </mxc:datafield>
+  </mxc:record>
+
   <mxc:record format="INTERMARC-NG" type="Work" id="ark:/12148/cb11947964w">
     <mxc:leader>00000n   2200000   45  </mxc:leader>
     <mxc:controlfield tag="001">ark:/12148/cb11947964w</mxc:controlfield>
     <mxc:datafield tag="150" ind1=" " ind2=" ">
       <mxc:subfield code="a">Les fleurs du mal</mxc:subfield>
+    </mxc:datafield>
+    <mxc:datafield tag="700" ind1=" " ind2=" ">
+      <mxc:subfield code="3">ark:/12148/cb11890582</mxc:subfield>
+      <mxc:subfield code="4">0070</mxc:subfield>
     </mxc:datafield>
   </mxc:record>
 

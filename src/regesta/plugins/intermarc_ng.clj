@@ -29,8 +29,11 @@
    records to test against. The OEMI relation/label codes are the kitcat manual's;
    the record-level entity-type encoding (the `type` attribute here) is the one
    synthetic convention, to be reconciled with a real native export when available.
-   Agents, subjects and finer attributes are a later slice."
+   Agents (Person entity-records + the `700 A pour créateur` relation) are read and
+   surface as the identified Linked Art creator; subjects (`6xx`) and finer
+   attributes are a later slice."
   (:require [clojure.data.xml :as xml]
+            [clojure.string :as str]
             [regesta.model :as model]
             [regesta.plugins.marcxml :as marcxml]))
 
@@ -77,47 +80,95 @@
 
 (defn- ark->iri [ark] (str "http://data.bnf.fr/" ark))
 
+(defn- isni->uri
+  "ISNI authority URI from a `100 $1` value like \"ISNI0000000121221863\"."
+  [isni]
+  (str "https://isni.org/isni/" (str/replace (str isni) #"[^0-9X]" "")))
+
+(defn- person-name
+  "The Person access point (`100 $a` surname + `$m` forename) as \"Surname, Forename\"."
+  [record-elem]
+  (let [a (first-sub record-elem "100" "a")
+        m (first-sub record-elem "100" "m")]
+    (when a (if m (str a ", " m) a))))
+
 ;; --- ingest -----------------------------------------------------------------
 
 (defn ingest
   "Parse an INTERMARC-NG marcxchange `xml-string` (a corpus of entity-records) into
-   a one-element vector holding a single IR record: one LRMoo entity per NG entity-
-   record, plus the OEMI relations (`7xx $3`) as `:lrmoo/*` assertions between them.
+   a one-element vector holding a single IR record:
+   - one LRMoo entity per OEMI entity-record (Œuvre/Expression/Manifestation/Item),
+     with its `7xx $3` fundamental relations as `:lrmoo/*` assertions;
+   - one `:crm/E21_Person` per Person entity-record (ISNI `:iri` from `100 $1`), and
+     each `700 A pour créateur $3` as a record-level `:canon/agent` (the controlled
+     name) — so the Linked Art export carries the *identified* creator;
+   - a floor projection of the Manifestation (`:canon/title`, `:canon/identifier`),
+     so the entity graph also converts to the floor targets (DC/MARC21/…).
+
    `opts` may carry `:record-id` for the graph record id."
   [xml-string opts]
   (let [prov  (model/provenance {:pass :import})
+        rid   (or (:record-id opts) :intermarc-ng/graph)
         recs  (record-elems xml-string)
-        ;; one entity per typed record, keyed by its ARK (what relation $3 points to)
-        ents  (for [r recs
-                    :let [ark  (marcxml/attr r "id")
-                          kind (type->kind (marcxml/attr r "type"))]
+        wemi  (for [r recs
+                    :let [ark (marcxml/attr r "id") kind (type->kind (marcxml/attr r "type"))]
                     :when (and ark kind)]
-                {:elem r :ark ark :kind kind
-                 :id   (model/mint-entity-id kind ark)
-                 :iri  (ark->iri ark)})
-        by-ark (into {} (map (juxt :ark identity)) ents)
-        entities (for [e ents]
-                   (model/entity {:id (:id e) :kind (:kind e) :iri (:iri e) :provenance prov}))
-        labels   (for [e ents
-                       :let [lbl (first-sub (:elem e) (label-tag (:kind e)) "a")]
-                       :when lbl]
-                   (model/assertion {:subject (:id e) :predicate :lrmoo/R33_has_string
-                                     :value lbl :status :asserted :provenance prov}))
-        links    (for [e   ents
-                       [tag {:keys [pred flip?]}] relation-tag
-                       f   (datafields (:elem e) tag)
-                       :let [tgt (get by-ark (subfield f "3"))]
-                       :when tgt
-                       :let [[s o] (if flip? [(:id tgt) (:id e)] [(:id e) (:id tgt)])]]
-                   (model/assertion {:subject s :predicate pred :value (model/reference o)
-                                     :status :asserted :provenance prov}))]
-    [(model/record {:id         (or (:record-id opts) :intermarc-ng/graph)
+                {:elem r :ark ark :kind kind :id (model/mint-entity-id kind ark)})
+        persons (for [r recs
+                      :let [ark (marcxml/attr r "id")]
+                      :when (and ark (= "Person" (marcxml/attr r "type")))]
+                  {:ark ark :id (model/mint-entity-id :crm/E21_Person ark)
+                   :name (person-name r) :iri (some-> (first-sub r "100" "1") isni->uri)})
+        wemi-by-ark   (into {} (map (juxt :ark :id)) wemi)
+        person-by-ark (into {} (map (juxt :ark identity)) persons)
+        entities (concat
+                  (for [c wemi]
+                    (model/entity {:id (:id c) :kind (:kind c) :iri (ark->iri (:ark c)) :provenance prov}))
+                  (for [p persons]
+                    (model/entity (cond-> {:id (:id p) :kind :crm/E21_Person :provenance prov}
+                                    (:iri p) (assoc :iri (:iri p))))))
+        labels (for [c wemi
+                     :let [lbl (first-sub (:elem c) (label-tag (:kind c)) "a")] :when lbl]
+                 (model/assertion {:subject (:id c) :predicate :lrmoo/R33_has_string
+                                   :value lbl :status :asserted :provenance prov}))
+        links (for [c   wemi
+                    [tag {:keys [pred flip?]}] relation-tag
+                    f   (datafields (:elem c) tag)
+                    :let [tgt (wemi-by-ark (subfield f "3"))] :when tgt
+                    :let [[s o] (if flip? [tgt (:id c)] [(:id c) tgt])]]
+                (model/assertion {:subject s :predicate pred :value (model/reference o)
+                                  :status :asserted :provenance prov}))
+        creators (for [c wemi
+                       f (datafields (:elem c) "700")
+                       :let [p (person-by-ark (subfield f "3"))] :when (and p (:name p))]
+                   (model/assertion {:subject rid :predicate :canon/agent
+                                     :value (:name p) :status :asserted :provenance prov}))
+        manif (first (filter #(= :lrmoo/F3_Manifestation (:kind %)) wemi))
+        floor (when manif
+                (cond-> [(model/assertion {:subject rid :predicate :canon/identifier
+                                           :value (:ark manif) :provenance prov})]
+                  (first-sub (:elem manif) "245" "a")
+                  (conj (model/assertion {:subject rid :predicate :canon/title
+                                          :value (first-sub (:elem manif) "245" "a") :provenance prov}))))]
+    [(model/record {:id         rid
                     :kind       :intermarc-ng/graph
                     :entities   (vec entities)
-                    :assertions (vec (concat labels links))})]))
+                    :assertions (vec (concat labels links creators floor))})]))
 
 (defn importer
   "ADR 0007 importer: `(fn [opts source] -> {:records [...] :diagnostics []})`."
   [opts source]
   {:records     (ingest source opts)
    :diagnostics []})
+
+(def plugin
+  "INTERMARC-NG entity-relation importer plugin (ADR 0007/0019). No `:mapping`: the
+   importer emits the LRMoo entities/relations and the floor projection directly,
+   so the `:normalize` phase has nothing to do (the WEMI view is *read*, not
+   inferred)."
+  {:plugin/spec-version 1
+   :id                  :regesta/intermarc-ng
+   :input-format        :xml
+   :mapping             []
+   :importer            importer
+   :doc                 "INTERMARC-NG (BnF NOEMI) entity-relation importer — OEMI entity-records onto the LRMoo view, agents + a Manifestation floor projection."})

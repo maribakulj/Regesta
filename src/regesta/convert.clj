@@ -40,13 +40,16 @@
 (def ^:private to-pivots
   "Source format -> the projection that lifts a normalised record to WEMI.
    INTERMARC takes the *enriched* `frbrise` rung (the 145 $3 authority link) and
-   then mints its authority-identified agent; the rest take the floor `project`.
-   Every spoke normalises to `:canon/*` first (in `to-wemi`)."
-  {:intermarc (comp frbrise/with-identified-agent frbrise/frbrise)
-   :dc        project/project
-   :marc21    project/project
-   :mods      project/project
-   :iiif      project/project})
+   then mints its authority-identified agent; INTERMARC-NG is already an entity-
+   relation graph, so its importer builds the WEMI view and the projection is
+   `identity` (ADR 0019); the floor spokes take `project`. Every spoke normalises
+   to `:canon/*` first (in `to-wemi`)."
+  {:intermarc    (comp frbrise/with-identified-agent frbrise/frbrise)
+   :intermarc-ng identity        ; the WEMI graph is read by the importer, not projected
+   :dc           project/project
+   :marc21       project/project
+   :mods         project/project
+   :iiif         project/project})
 
 (defn- crm-only-losses [record]
   (concat (crm/crm-only-losses record) (export/export-losses record)))

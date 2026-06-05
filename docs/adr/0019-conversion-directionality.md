@@ -99,9 +99,11 @@ not carry — the same principle as the floor spokes.
   INTERMARC-NG → LRMoo/CRM is the least-lossy conversion in the system (both ends
   LRM-aligned) and probably the flagship BnF case. `regesta.plugins.intermarc-ng`
   implements it: NG entity-records (Œuvre/Expression/Manifestation) → LRMoo entities,
-  the OEMI `7xx $3` relations → R3/R4/R7, reusing the `marcxml` core; it round-trips
-  NG → LRMoo → CRM → LRMoo losslessly (`intermarc-ng-test`). The hub, the LRMoo view
-  and the CRM/LA/RDF exporters are unchanged — exactly as predicted.
+  the OEMI `7xx $3` relations → R3/R4/R7, reusing the `marcxml` core; agents (Person
+  records + `700 A pour créateur`) surface as the identified Linked Art creator, and
+  it is a **first-class `convert` source** (`:intermarc-ng`, projection `identity`).
+  It round-trips NG → LRMoo → CRM → LRMoo losslessly (`intermarc-ng-test`). The hub,
+  the LRMoo view and the CRM/LA/RDF exporters are unchanged — exactly as predicted.
 - **Honest data limit.** The format is the public **kitcat INTERMARC-NG manual**
   (codes, OEMI relations, access points are real). But public BnF SRU does not yet
   serve **native** NG entity exports (they live in NOEMI, behind manual transfer), so

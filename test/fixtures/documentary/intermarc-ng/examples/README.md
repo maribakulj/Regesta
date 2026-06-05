@@ -9,10 +9,12 @@ FRBRisation inference — the WEMI distinctions are given).
 
 ## `fleurs-du-mal-oemi.xml` — SYNTHETIC, spec-faithful
 
-Three OEMI entity-records of *Les Fleurs du mal* — a Work, its Expression, its
-Manifestation — linked by **740 Matérialise** (Manifestation → Expression) and
-**750 Réalise** (Expression → Œuvre). On import this becomes
-`F1_Work —R3→ F2_Expression ←R4— F3_Manifestation`, the exact shape `frbrise`
+Four entity-records of *Les Fleurs du mal* — a Work, its Expression, its
+Manifestation, and the **Person** Baudelaire — linked by **740 Matérialise**
+(Manifestation → Expression), **750 Réalise** (Expression → Œuvre) and **700 A pour
+créateur** (Work → Baudelaire). On import this becomes
+`F1_Work —R3→ F2_Expression ←R4— F3_Manifestation` with an identified
+`:crm/E21_Person` creator (ISNI from `100 $1`) — the exact shape `frbrise`
 synthesises, but *read* rather than inferred.
 
 | NG (kitcat manual)                | LRMoo |
@@ -22,6 +24,8 @@ synthesises, but *read* rather than inferred.
 | `730 Exemplifie $3`               | `R7_exemplifies` (F5→F3) |
 | `740 Matérialise $3`              | `R4_embodies` (F3→F2) |
 | `750 Réalise $3`                  | `R3_is_realised_in` (F1→F2, flipped) |
+| Person `100 $a/$m/$1`             | `:crm/E21_Person` (name + ISNI `:iri`) |
+| `700 A pour créateur $3`          | `:canon/agent` (→ Linked Art `created_by`) |
 
 ### Why synthetic, and what is real
 
