@@ -31,8 +31,8 @@ decision from being read as shipped code (an audit honesty rule).
 | [0015](./0015-loss-model.md) | Loss model: unit, edges, categories, metric | Accepted (partially implemented — see ADR) |
 | [0016](./0016-frbrisation.md) | FRBRisation: synthesizing WEMI, identity, and reconciliation | Accepted (partially implemented; scale layer in 0018) |
 | [0017](./0017-entity-representation.md) | Synthesized entity representation (entities on records) | Accepted |
-| [0018](./0018-entity-resolution-at-scale.md) | Entity resolution at scale: reconcile-to-authority, equivalence as assertion, revisability | Proposed |
-| [0019](./0019-conversion-directionality.md) | Conversion directionality: spokes bidirectional, hub a target, CRM→LRM a downcast | Proposed |
+| [0018](./0018-entity-resolution-at-scale.md) | Entity resolution at scale: reconcile-to-authority, equivalence as assertion, revisability | Accepted (partially implemented — see ADR) |
+| [0019](./0019-conversion-directionality.md) | Conversion directionality: spokes bidirectional, hub a target, CRM→LRM a downcast | Accepted (partially implemented — see ADR) |
 
 ## Template
 
