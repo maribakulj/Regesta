@@ -256,16 +256,17 @@
 
 (defn- substitute
   "Walk `template`, replacing every variable symbol with its bound value.
-   Unbound variables cause an exception."
+   Tests a binding's *presence*, not its truth (via `find`, as `position-match`
+   does), so a variable legitimately bound to `false` or `nil` substitutes to that
+   value; only a genuinely *absent* binding raises."
   [bindings template]
   (walk/postwalk
    (fn [x]
      (if (variable? x)
-       (let [[_ bound] (find bindings x)]
-         (if bound
-           bound
-           (throw (ex-info "Unbound variable in produce template"
-                           {:variable x :bindings bindings}))))
+       (if-let [[_ bound] (find bindings x)]
+         bound
+         (throw (ex-info "Unbound variable in produce template"
+                         {:variable x :bindings bindings})))
        x))
    template))
 
