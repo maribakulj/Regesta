@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SYNTHETIC INTERMARC-NG corpus (see README.md): three OEMI entity-records of
+     "Les Fleurs du mal", linked by the fundamental relations 740 (Matérialise) and
+     750 (Réalise), each by the $3 identifier of the entity in relation. The field
+     codes (150/140/245 access points; 730/740/750 OEMI relations) are the kitcat
+     INTERMARC-NG manual's; the record-level `type` attribute is the one synthetic
+     convention. ARKs cb44496975d (Manifestation) and cb11947965 (Expression, the
+     real 145 $3 of the BnF Baudelaire record) are real; the Work ARK is synthetic. -->
+<mxc:collection xmlns:mxc="info:lc/xmlns/marcxchange-v2">
+
+  <mxc:record format="INTERMARC-NG" type="Work" id="ark:/12148/cb11947964w">
+    <mxc:leader>00000n   2200000   45  </mxc:leader>
+    <mxc:controlfield tag="001">ark:/12148/cb11947964w</mxc:controlfield>
+    <mxc:datafield tag="150" ind1=" " ind2=" ">
+      <mxc:subfield code="a">Les fleurs du mal</mxc:subfield>
+    </mxc:datafield>
+  </mxc:record>
+
+  <mxc:record format="INTERMARC-NG" type="Expression" id="ark:/12148/cb11947965v">
+    <mxc:leader>00000n   2200000   45  </mxc:leader>
+    <mxc:controlfield tag="001">ark:/12148/cb11947965v</mxc:controlfield>
+    <mxc:datafield tag="140" ind1=" " ind2=" ">
+      <mxc:subfield code="a">Les fleurs du mal (texte, français)</mxc:subfield>
+    </mxc:datafield>
+    <mxc:datafield tag="750" ind1=" " ind2=" ">
+      <mxc:subfield code="3">ark:/12148/cb11947964w</mxc:subfield>
+    </mxc:datafield>
+  </mxc:record>
+
+  <mxc:record format="INTERMARC-NG" type="Manifestation" id="ark:/12148/cb44496975d">
+    <mxc:leader>00000n   2200000   45  </mxc:leader>
+    <mxc:controlfield tag="001">ark:/12148/cb44496975d</mxc:controlfield>
+    <mxc:datafield tag="245" ind1="1" ind2=" ">
+      <mxc:subfield code="a">Les fleurs du mal</mxc:subfield>
+      <mxc:subfield code="f">Charles Baudelaire</mxc:subfield>
+    </mxc:datafield>
+    <mxc:datafield tag="740" ind1=" " ind2=" ">
+      <mxc:subfield code="3">ark:/12148/cb11947965v</mxc:subfield>
+    </mxc:datafield>
+  </mxc:record>
+
+</mxc:collection>

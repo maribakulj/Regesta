@@ -233,7 +233,13 @@ bidirectional, the hub is a target, and CRM→LRM is a *downcast* that succeeds 
 when the F-typing survives, demonstrated by a CRM→LRMoo round-trip
 (`lrmoo.crm-import`): our additive `:crm` recovers F1/F2/F3 losslessly, our pure
 `:crm-only` collapses at `E73` into `:ambiguity-collapsed` (the loss the
-down-projection reported is exactly what the up-projection cannot recover); the D7
+down-projection reported is exactly what the up-projection cannot recover); the
+**entity-relation spoke** that ADR 0019 reserved is built —
+`regesta.plugins.intermarc-ng` reads BnF INTERMARC-NG OEMI entity-records (the
+NOEMI / Transition-bibliographique format) graph→graph onto the LRMoo view
+(Œuvre/Expression/Manifestation → F1/F2/F3, `740/750 $3` → R4/R3), serialises through
+the existing CRM/LA/RDF exporters and round-trips back, validated on a spec-faithful
+synthetic corpus (native NG data is not yet public); the D7
 commit policy (`:asserted` ⇔ proof, else `:proposed`;
 `:certified-only?` export); three measured evals (C2 fidelity, showcase
 boundary, OpenLibrary ER) corroborating the recall ceiling on independent data;

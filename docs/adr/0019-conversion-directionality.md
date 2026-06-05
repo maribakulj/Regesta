@@ -95,14 +95,19 @@ not carry — the same principle as the floor spokes.
 - **Demonstrated.** `crm-import/recover` round-trips our `:crm` to F1/F2/F3
   losslessly and collapses our `:crm-only` at `E73` into `:ambiguity-collapsed` —
   the rule is tested on real output, with zero external data.
-- **The E-R spoke seam is real and reserved.** INTERMARC-NG → LRMoo/CRM is the
-  least-lossy conversion in the system (both ends LRM-aligned) and is probably the
-  flagship BnF case. It needs only a new *kind* of importer (graph reader → entities
-  + relations); the hub, the LRMoo view, and the CRM/LA/RDF exporters are unchanged.
-- **Blocked on data, honestly.** Building/verifying the INTERMARC-NG importer needs
-  real INTERMARC-NG samples + its serialisation spec, which are not public
-  (`test/fixtures/documentary/intermarc-ng/examples/` is empty). The mechanism is
-  proven (this ADR); only the concrete parser awaits the data.
+- **The E-R spoke seam is real and reserved — and now built (spec-faithful).**
+  INTERMARC-NG → LRMoo/CRM is the least-lossy conversion in the system (both ends
+  LRM-aligned) and probably the flagship BnF case. `regesta.plugins.intermarc-ng`
+  implements it: NG entity-records (Œuvre/Expression/Manifestation) → LRMoo entities,
+  the OEMI `7xx $3` relations → R3/R4/R7, reusing the `marcxml` core; it round-trips
+  NG → LRMoo → CRM → LRMoo losslessly (`intermarc-ng-test`). The hub, the LRMoo view
+  and the CRM/LA/RDF exporters are unchanged — exactly as predicted.
+- **Honest data limit.** The format is the public **kitcat INTERMARC-NG manual**
+  (codes, OEMI relations, access points are real). But public BnF SRU does not yet
+  serve **native** NG entity exports (they live in NOEMI, behind manual transfer), so
+  the importer is validated on a **spec-faithful synthetic** corpus, not real native
+  records. The one synthetic convention is the record-level entity-type encoding;
+  when a native export appears, only the fixture changes, not the importer.
 
 ## Alternatives considered
 
@@ -120,8 +125,9 @@ not carry — the same principle as the floor spokes.
 
 ## What this ADR does not decide
 
-- The INTERMARC-NG serialisation specifics and its vocabulary→LRMoo mapping (await
-  sample data + spec).
+- The remaining INTERMARC-NG vocabulary beyond the OEMI core (agents/`51x`,
+  subjects, finer attributes) and the exact native entity-type encoding — pending a
+  real native export; the OEMI Work/Expression/Manifestation core is built.
 - Whether/when Linked Art and INTERMARC gain their second direction (priority calls,
   scheduled by value).
 - Heuristics for downcasting *flattened* CRM (a curation/inference problem, ADR 0015

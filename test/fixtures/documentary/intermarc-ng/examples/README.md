@@ -1,0 +1,40 @@
+# INTERMARC-NG examples — the entity-relation spoke (ADR 0019)
+
+INTERMARC-NG is the BnF's NOEMI / Transition-bibliographique production format: not
+a flat documentary record but a **graph of entity-records** (Œuvre / Expression /
+Manifestation / Item / agents…), linked by the fundamental `7xx` relations whose
+`$3` carries the identifier of the entity in relation. `regesta.plugins.intermarc-ng`
+imports it **graph → graph** straight onto the LRMoo view (no string floor, no
+FRBRisation inference — the WEMI distinctions are given).
+
+## `fleurs-du-mal-oemi.xml` — SYNTHETIC, spec-faithful
+
+Three OEMI entity-records of *Les Fleurs du mal* — a Work, its Expression, its
+Manifestation — linked by **740 Matérialise** (Manifestation → Expression) and
+**750 Réalise** (Expression → Œuvre). On import this becomes
+`F1_Work —R3→ F2_Expression ←R4— F3_Manifestation`, the exact shape `frbrise`
+synthesises, but *read* rather than inferred.
+
+| NG (kitcat manual)                | LRMoo |
+|-----------------------------------|-------|
+| record entity type                | `F1_Work … F5_Item` |
+| `150/140/245 $a` access points    | `R33_has_string` (label) |
+| `730 Exemplifie $3`               | `R7_exemplifies` (F5→F3) |
+| `740 Matérialise $3`              | `R4_embodies` (F3→F2) |
+| `750 Réalise $3`                  | `R3_is_realised_in` (F1→F2, flipped) |
+
+### Why synthetic, and what is real
+
+The **format** (field codes, OEMI relations, access points) is the public **kitcat
+INTERMARC-NG manual** (the `bnfintermarcng` drop, `kitcat_interMARC_NG/`). But public
+BnF SRU / Z39.50 **do not yet serve native NG entity exports** — they still diffuse
+*classic* INTERMARC/UNIMARC/Dublin Core (the native NG lives in NOEMI, behind manual
+transfer). So there are **no real native NG records** to test against yet.
+
+This fixture is therefore spec-faithful but hand-built. What is real: the field/
+relation **codes** are the manual's, and the ARKs `cb44496975d` (Manifestation) and
+`cb11947965` (Expression — the actual `145 $3` of the BnF Baudelaire record) are
+real catalogue identifiers. The one synthetic **convention** is the record-level
+entity-type encoding (here the `type` attribute), to be reconciled with a real
+native export when one is available — at which point only this fixture changes, not
+the importer's logic.
