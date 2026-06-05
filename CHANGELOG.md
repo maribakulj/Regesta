@@ -16,6 +16,21 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Added
 
+- `regesta.curate` — the ADR 0005 repair-application / curation engine, the
+  last dataless WP-8 gap. A pure function over a record's *pending* assertions
+  (`:proposed`/`:needs-review`): a curator `(fn [assertion] -> :accept | :reject
+  | :review)` resolves each into the workflow family (`:accepted` / `:rejected`
+  / `:needs-review`), leaving every in-force or already-resolved assertion
+  untouched. Named policies (`accept-all`, `reject-all`, `flag-all`,
+  `accept-when`) are ordinary decision functions, so an ADR 0018 promotion guard
+  composes (`accept-when` accepts only the proposals safe to commit, routes the
+  rest to review). The returned transition log is the audit record — the
+  Provenance schema is deliberately left unchanged. Surfaced as the CLI verb
+  `apply-repairs <input> --from <fmt> [--policy flag|accept|reject]`, which
+  curates the `:proposed` WEMI claims a real conversion emits (the DC/MARC21
+  string-key inference). Supersession of a replaced in-force assertion is
+  documented as out of scope (it needs replacement semantics the proposals do
+  not yet carry).
 - Sprint 6: canonical vocabulary plugin (`regesta.plugins.canonical`).
   Ships the eight `:canon/*` documentary predicates from ADR 0003
   §Decision as data, with a `documentary?` membership predicate, plus

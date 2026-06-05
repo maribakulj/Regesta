@@ -127,3 +127,31 @@
   (testing "a missing file is an exit-2, not a crash"
     (is (= 2 (:exit (cli/run ["inspect" "/no/such/file.xml" "--from" "marc21"]))))
     (is (= 2 (:exit (cli/run ["reconcile" marc21]))))))         ; missing --from
+
+;; --- apply-repairs (curate the inferred :proposed claims, ADR 0005) ----------
+
+(deftest apply-repairs-curates-the-proposed-claims
+  (testing "DC --policy accept: the four string-key WEMI proposals are accepted"
+    (let [{:keys [exit out]} (cli/run ["apply-repairs" dc "--from" "dc" "--policy" "accept"])]
+      (is (= 0 exit))
+      (is (str/includes? out "4 proposals curated"))
+      (is (str/includes? out "4 accepted"))
+      (is (str/includes? out "proposed → accepted"))))
+  (testing "the default policy is the conservative flag (route to needs-review, none accepted)"
+    (let [{:keys [exit out]} (cli/run ["apply-repairs" dc "--from" "dc"])]
+      (is (= 0 exit))
+      (is (str/includes? out "(flag)"))
+      (is (str/includes? out "4 needs-review"))))
+  (testing "MARC21 (two records): eight proposals curated"
+    (let [{:keys [exit out]} (cli/run ["apply-repairs" marc21 "--from" "marc21" "--policy" "reject"])]
+      (is (= 0 exit))
+      (is (str/includes? out "8 proposals curated"))
+      (is (str/includes? out "8 rejected")))))
+
+(deftest apply-repairs-guards-its-inputs
+  (testing "an unknown --policy exits 2"
+    (let [{:keys [exit err]} (cli/run ["apply-repairs" dc "--from" "dc" "--policy" "bogus"])]
+      (is (= 2 exit))
+      (is (str/includes? err "unknown --policy"))))
+  (testing "a missing --from exits 2"
+    (is (= 2 (:exit (cli/run ["apply-repairs" dc]))))))

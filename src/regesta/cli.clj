@@ -5,24 +5,28 @@
    `validate` runs the canonical rules and exits non-zero on failure; `report`,
    `inspect` and `reconcile` are read-only verbs that write to **stdout**.
 
-     regesta convert   <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
-     regesta validate  <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
-     regesta report    <input-file> --from <fmt> --to <fmt> [--record-id <id>]
-     regesta inspect   <input-file> --from <fmt> [--record-id <id>]
-     regesta reconcile <input-file> --from <fmt> [--record-id <id>]
+     regesta convert       <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
+     regesta validate      <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
+     regesta report        <input-file> --from <fmt> --to <fmt> [--record-id <id>]
+     regesta inspect       <input-file> --from <fmt> [--record-id <id>]
+     regesta reconcile     <input-file> --from <fmt> [--record-id <id>]
+     regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
      regesta formats
      regesta --help
 
-   - `report`    — the X→Y loss report alone (the auditor's view), no document.
-   - `inspect`   — what the source parses to: the canonical floor + minted WEMI/
-                   agent entities (the developer's view).
-   - `reconcile` — cross-record agent reconciliation by authority id (ADR 0018).
+   - `report`        — the X→Y loss report alone (the auditor's view), no document.
+   - `inspect`       — what the source parses to: the canonical floor + minted
+                       WEMI/agent entities (the developer's view).
+   - `reconcile`     — cross-record agent reconciliation by authority id (ADR 0018).
+   - `apply-repairs` — curate the `:proposed` claims a pipeline run emits (ADR 0005):
+                       accept / reject / flag-for-review the inferred WEMI proposals.
 
    `run` is pure — it parses args, does the work and returns `{:exit :out :err}`
    without printing or exiting — so tests drive it directly; `-main` is the thin
    shell that prints the streams and calls `System/exit`."
   (:require [clojure.string :as str]
             [regesta.convert :as convert]
+            [regesta.curate :as curate]
             [regesta.diagnostics :as dx]
             [regesta.loss-report :as lr]
             [regesta.reconcile :as reconcile]
@@ -34,17 +38,19 @@
    ["regesta — documentary-metadata conversion through the LRMoo pivot"
     ""
     "Usage:"
-    "  regesta convert   <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
-    "  regesta validate  <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
-    "  regesta report    <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
-    "  regesta inspect   <input-file> --from <fmt> [--record-id <id>]"
-    "  regesta reconcile <input-file> --from <fmt> [--record-id <id>]"
+    "  regesta convert       <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
+    "  regesta validate      <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
+    "  regesta report        <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
+    "  regesta inspect       <input-file> --from <fmt> [--record-id <id>]"
+    "  regesta reconcile     <input-file> --from <fmt> [--record-id <id>]"
+    "  regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
     "  regesta formats          list the supported source and target formats"
     "  regesta --help"
     ""
     "  --from        source format (a spoke)"
     "  --to          target serialisation (convert, report)"
-    "  --policy      validate failure policy: errors-only (default), errors-and-warnings, strict, never"
+    "  --policy      validate: errors-only (default), errors-and-warnings, strict, never"
+    "                apply-repairs: flag (default), accept, reject"
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
     "  --out         write the output to a file instead of stdout (convert)"
     ""
@@ -52,7 +58,8 @@
     "validate writes the diagnostics report to stderr and exits non-zero on failure;"
     "report writes the X→Y loss report to stdout (no document);"
     "inspect writes what the source parses to (the canonical floor + minted entities) to stdout;"
-    "reconcile writes the cross-record agent reconciliation (by authority id) to stdout."]))
+    "reconcile writes the cross-record agent reconciliation (by authority id) to stdout;"
+    "apply-repairs curates the inferred :proposed claims (ADR 0005) and writes the outcome to stdout."]))
 
 (defn- parse-args
   "Parse `args` into {:command :positional [..] :flags {str str} :help?}.
@@ -233,6 +240,32 @@
                  :out  (reconcile/format-agent-reconciliation (reconcile/reconcile-agents records))
                  :err  ""})))))
 
+(def ^:private repair-policies
+  "apply-repairs --policy values → curation decision functions (ADR 0005). `flag`
+   is the conservative default: route every proposal to human review, none
+   auto-committed."
+  {"flag"   curate/flag-all
+   "accept" curate/accept-all
+   "reject" curate/reject-all})
+
+(defn- do-apply-repairs
+  "Curate the `:proposed` claims a pipeline run emits (ADR 0005): run the source to
+   WEMI, then accept / reject / flag every pending proposal per `--policy` (default
+   `flag`). Writes the curation outcome to stdout. Honest when a record carries no
+   proposals (e.g. an authority-linked Work): reports nothing to curate."
+  [{:strs [from record-id policy]} input]
+  (let [{:keys [err from source opts]} (read-source from input record-id "apply-repairs")
+        policy-label (or policy "flag")
+        decide       (repair-policies policy-label)]
+    (cond
+      err          {:exit 2 :out "" :err err}
+      (nil? decide) {:exit 2 :out ""
+                     :err (str "unknown --policy " policy-label " (use flag|accept|reject)\n\n" usage)}
+      :else
+      (guard #(let [{:keys [records]} (convert/to-wemi from opts source)
+                    result            (curate/curate records decide)]
+                {:exit 0 :out (curate/format-curation result policy-label) :err ""})))))
+
 (defn run
   "Pure CLI core: parse `args`, run the command, return `{:exit :out :err}`.
    Never prints, never exits."
@@ -248,6 +281,7 @@
       (= command "report")      (do-report flags (first positional))
       (= command "inspect")     (do-inspect flags (first positional))
       (= command "reconcile")   (do-reconcile flags (first positional))
+      (= command "apply-repairs") (do-apply-repairs flags (first positional))
       :else                     {:exit 2 :out "" :err (str "unknown command: " command "\n\n" usage)})))
 
 (defn -main [& args]
