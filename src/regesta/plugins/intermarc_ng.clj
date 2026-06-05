@@ -29,9 +29,10 @@
    records to test against. The OEMI relation/label codes are the kitcat manual's;
    the record-level entity-type encoding (the `type` attribute here) is the one
    synthetic convention, to be reconciled with a real native export when available.
-   Agents (Person entity-records + the `700 A pour créateur` relation) are read and
-   surface as the identified Linked Art creator; subjects (`6xx`) and finer
-   attributes are a later slice."
+   Agents (Person entity-records + the `700 A pour créateur` relation) surface as the
+   identified Linked Art creator, and subjects (`92x` vedette matière → a Concept /
+   Place entity, `:crm/P129_is_about`) reach the CRM graph; collectivities, events
+   and finer attributes are a later slice."
   (:require [clojure.data.xml :as xml]
             [clojure.string :as str]
             [regesta.model :as model]
@@ -51,6 +52,20 @@
    :lrmoo/F2_Expression    "140"
    :lrmoo/F3_Manifestation "245"
    :lrmoo/F5_Item          "200"})
+
+(def ^:private subject-type->kind
+  "Subject entity types → their CIDOC-CRM class (the subject is a first-class
+   entity, the Work `P129_is_about` it)."
+  {"Concept" :crm/E55_Type
+   "Place"   :crm/E53_Place})
+
+(def ^:private subject-label-tag
+  {:crm/E55_Type "166"     ; 166 Point d'accès autorisé pour un Concept
+   :crm/E53_Place "170"})  ; 17x Point d'accès autorisé pour un lieu
+
+(def ^:private subject-heading-tags
+  "The 92x vedette-matière fields whose `$3` links the holder to a subject entity."
+  ["920" "921" "922" "925" "926" "927"])
 
 (def ^:private relation-tag
   "Fundamental OEMI relation field → `{:pred LRMoo-R-property :flip?}`. `:flip?`
@@ -119,14 +134,21 @@
                       :when (and ark (= "Person" (marcxml/attr r "type")))]
                   {:ark ark :id (model/mint-entity-id :crm/E21_Person ark)
                    :name (person-name r) :iri (some-> (first-sub r "100" "1") isni->uri)})
-        wemi-by-ark   (into {} (map (juxt :ark :id)) wemi)
-        person-by-ark (into {} (map (juxt :ark identity)) persons)
+        subjects (for [r recs
+                       :let [ark (marcxml/attr r "id") kind (subject-type->kind (marcxml/attr r "type"))]
+                       :when (and ark kind)]
+                   {:elem r :ark ark :kind kind :id (model/mint-entity-id kind ark)})
+        wemi-by-ark    (into {} (map (juxt :ark :id)) wemi)
+        person-by-ark  (into {} (map (juxt :ark identity)) persons)
+        subject-by-ark (into {} (map (juxt :ark identity)) subjects)
         entities (concat
                   (for [c wemi]
                     (model/entity {:id (:id c) :kind (:kind c) :iri (ark->iri (:ark c)) :provenance prov}))
                   (for [p persons]
                     (model/entity (cond-> {:id (:id p) :kind :crm/E21_Person :provenance prov}
-                                    (:iri p) (assoc :iri (:iri p))))))
+                                    (:iri p) (assoc :iri (:iri p)))))
+                  (for [s subjects]
+                    (model/entity {:id (:id s) :kind (:kind s) :iri (ark->iri (:ark s)) :provenance prov})))
         labels (for [c wemi
                      :let [lbl (first-sub (:elem c) (label-tag (:kind c)) "a")] :when lbl]
                  (model/assertion {:subject (:id c) :predicate :lrmoo/R33_has_string
@@ -143,6 +165,15 @@
                        :let [p (person-by-ark (subfield f "3"))] :when (and p (:name p))]
                    (model/assertion {:subject rid :predicate :canon/agent
                                      :value (:name p) :status :asserted :provenance prov}))
+        subject-labels (for [s subjects
+                             :let [lbl (first-sub (:elem s) (subject-label-tag (:kind s)) "a")] :when lbl]
+                         (model/assertion {:subject (:id s) :predicate :crm/P190_has_symbolic_content
+                                           :value lbl :status :asserted :provenance prov}))
+        subject-links (for [c wemi
+                            f (mapcat #(datafields (:elem c) %) subject-heading-tags)
+                            :let [s (subject-by-ark (subfield f "3"))] :when s]
+                        (model/assertion {:subject (:id c) :predicate :crm/P129_is_about
+                                          :value (model/reference (:id s)) :status :asserted :provenance prov}))
         manif (first (filter #(= :lrmoo/F3_Manifestation (:kind %)) wemi))
         floor (when manif
                 (cond-> [(model/assertion {:subject rid :predicate :canon/identifier
@@ -153,7 +184,7 @@
     [(model/record {:id         rid
                     :kind       :intermarc-ng/graph
                     :entities   (vec entities)
-                    :assertions (vec (concat labels links creators floor))})]))
+                    :assertions (vec (concat labels links creators subject-labels subject-links floor))})]))
 
 (defn importer
   "ADR 0007 importer: `(fn [opts source] -> {:records [...] :diagnostics []})`."

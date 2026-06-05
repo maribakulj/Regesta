@@ -26,6 +26,13 @@ synthesises, but *read* rather than inferred.
 | `750 Réalise $3`                  | `R3_is_realised_in` (F1→F2, flipped) |
 | Person `100 $a/$m/$1`             | `:crm/E21_Person` (name + ISNI `:iri`) |
 | `700 A pour créateur $3`          | `:canon/agent` (→ Linked Art `created_by`) |
+| Concept `166 $a` / Place `170 $a` | `:crm/E55_Type` / `:crm/E53_Place` (subject entity) |
+| `92x` vedette matière `$3`        | `:crm/P129_is_about` (Work → subject) |
+
+The fixture's fourth/fifth entity-records are Baudelaire (Person) and the RAMEAU
+concept *Poésie française* (Concept), linked from the Work by `700` and `926`. The
+RDF/CRM export now carries the **whole** entity graph — agent + subject, not just
+the WEMI chain.
 
 ### Why synthetic, and what is real
 

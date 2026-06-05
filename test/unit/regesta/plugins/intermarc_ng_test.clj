@@ -113,3 +113,21 @@
                        "HumanMadeObject"))
     (is (str/includes? (:output (convert/convert {:from :intermarc-ng :to :crm-only :source fixture}))
                        "E73_Information_Object"))))
+
+(def ^:private concept-iri "http://data.bnf.fr/ark:/12148/cb11933776c")
+
+(deftest subjects-and-agents-reach-the-crm-graph
+  (testing "the Concept vedette-matière record becomes a :crm/E55_Type subject entity"
+    (let [rec (import1)]
+      (is (= :crm/E55_Type (some #(when (= concept-iri (:iri %)) (:kind %)) (:entities rec))))
+      (testing "the Work P129_is_about the Concept (92x $3 → the subject entity)"
+        (let [work-id (some #(when (= work-iri (:iri %)) (:id %)) (:entities rec))]
+          (is (some #(and (= work-id (:subject %)) (= :crm/P129_is_about (:predicate %)))
+                    (:assertions rec)))))))
+  (testing "NG → CRM RDF now carries the whole entity graph — agent + subject, not just WEMI"
+    (let [nt (crm/->ntriples (import1))]
+      (is (str/includes? nt "E21_Person"))            ; the agent is now typed in RDF/CRM
+      (is (str/includes? nt baudelaire-isni))
+      (is (str/includes? nt "E55_Type"))              ; the subject concept
+      (is (str/includes? nt "P129_is_about"))         ; Work → subject
+      (is (str/includes? nt "Poésie française")))))   ; the concept label (P190)

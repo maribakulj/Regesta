@@ -19,6 +19,14 @@
     </mxc:datafield>
   </mxc:record>
 
+  <mxc:record format="INTERMARC-NG" type="Concept" id="ark:/12148/cb11933776c">
+    <mxc:leader>00000n   2200000   45  </mxc:leader>
+    <mxc:controlfield tag="001">ark:/12148/cb11933776c</mxc:controlfield>
+    <mxc:datafield tag="166" ind1=" " ind2=" ">
+      <mxc:subfield code="a">Poésie française</mxc:subfield>
+    </mxc:datafield>
+  </mxc:record>
+
   <mxc:record format="INTERMARC-NG" type="Work" id="ark:/12148/cb11947964w">
     <mxc:leader>00000n   2200000   45  </mxc:leader>
     <mxc:controlfield tag="001">ark:/12148/cb11947964w</mxc:controlfield>
@@ -28,6 +36,10 @@
     <mxc:datafield tag="700" ind1=" " ind2=" ">
       <mxc:subfield code="3">ark:/12148/cb11890582</mxc:subfield>
       <mxc:subfield code="4">0070</mxc:subfield>
+    </mxc:datafield>
+    <mxc:datafield tag="926" ind1=" " ind2=" ">
+      <mxc:subfield code="3">ark:/12148/cb11933776c</mxc:subfield>
+      <mxc:subfield code="a">Poésie française</mxc:subfield>
     </mxc:datafield>
   </mxc:record>
 
