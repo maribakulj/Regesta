@@ -56,6 +56,12 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
   namespace, or a `.` in any record-id or predicate segment. Predicate
   *names* may still contain hyphens. This enforces ADR 0012's injectivity
   preconditions at construction, so a minted id always round-trips.
+- `regesta.rules` produce-template substitution no longer treats a variable
+  bound to `false` or `nil` as unbound. `substitute` tested a binding's truth
+  instead of its presence, so a legitimately falsey-bound `:produce` variable
+  raised "Unbound variable in produce template"; it now distinguishes presence
+  from truth (`find` + `if-let`, as `position-match` does). Latent (no current
+  rule binds a falsey value) and guarded against regression by a behavioural test.
 
 ### Changed
 

@@ -626,3 +626,43 @@
                                  :value true}}}
         out  (first (run rule (book-record :id :r/q)))]
     (is (= :proposed (get-in out [:value :status])))))
+
+;; ---------------------------------------------------------------------------
+;; Produce template substitution distinguishes presence from truth
+;; ---------------------------------------------------------------------------
+
+(deftest produce-preserves-false-and-nil-bound-values
+  ;; A variable legitimately bound by normal matching to a *falsey* value (false
+  ;; or nil) must reach the produced assertion as that value — `substitute` must
+  ;; test a binding's *presence*, not its *truth*. Exercised through the public
+  ;; compile-rule / apply-rule path (no access to the private `substitute`).
+  (letfn [(copy-out [v]
+            (let [rec  (model/record
+                        {:id :rec/a :kind :test
+                         :assertions [(model/assertion {:subject :rec/a
+                                                        :predicate :flag/v
+                                                        :value v})]})
+                  rule {:id :rule/copy :phase :normalize
+                        :match '[[?s :flag/v ?v]]
+                        :produce {:assert {:subject '?s :predicate :out/copy :value '?v}}}]
+              (->> (run rule rec)
+                   (filter #(= :out/copy (get-in % [:value :predicate])))
+                   first)))]
+    (testing "a variable bound to false is substituted as false (not treated as unbound)"
+      (let [out (copy-out false)]
+        (is (= :assertion (:kind out)))
+        (is (false? (get-in out [:value :value])))))
+    (testing "a variable bound to nil is substituted as nil"
+      (let [out (copy-out nil)]
+        (is (= :assertion (:kind out)))
+        (is (nil? (get-in out [:value :value])))))
+    (testing "a genuinely unbound :produce variable is still rejected (at compile time)"
+      ;; substitute's runtime "Unbound variable in produce template" guard is kept
+      ;; unchanged; for data-form rules it is preempted by the compile-time
+      ;; bound-variable check, so an unbound produce var never reaches production.
+      (is (thrown-with-msg?
+           clojure.lang.ExceptionInfo #"unbound"
+           (rules/compile-rule
+            {:id :rule/bad :phase :normalize
+             :match '[[?s :flag/v ?v]]
+             :produce {:assert {:subject '?s :predicate :out/x :value '?missing}}}))))))
