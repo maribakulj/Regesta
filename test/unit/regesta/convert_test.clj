@@ -9,6 +9,7 @@
 (def ^:private fixtures
   {:intermarc    "test/fixtures/documentary/intermarc/sru/intermarcXchange/bib-flaubert-madame-bovary-start1-max30.xml"
    :intermarc-ng "test/fixtures/documentary/intermarc-ng/examples/fleurs-du-mal-oemi.xml"
+   :unimarc      "test/fixtures/documentary/unimarc/sru/bnf-sru-verne-unimarc.xml"
    :dc           "test/fixtures/documentary/dublin-core/w3c_dc_example1.xml"
    :marc21       "test/fixtures/documentary/marc21/marcxml/loc_collection.xml"
    :mods         "test/fixtures/documentary/mods/loc_mods_book.xml"
@@ -17,8 +18,8 @@
 (defn- src [k] (slurp (fixtures k)))
 
 (deftest every-spoke-reaches-the-rdf-pivot
-  (testing "all six importers convert to the LRMoo N-Triples pivot"
-    (doseq [from [:intermarc :intermarc-ng :dc :marc21 :mods :iiif]]
+  (testing "all seven importers convert to the LRMoo N-Triples pivot"
+    (doseq [from [:intermarc :intermarc-ng :unimarc :dc :marc21 :mods :iiif]]
       (let [{:keys [output records loss]}
             (cv/convert {:from from :to :ntriples :source (src from)
                          :opts (if (= from :dc) {:record-id :dc/x} {})})]
@@ -68,7 +69,7 @@
     (is (str/includes? (:report r) "import edge"))))
 
 (deftest rejects-unknown-formats
-  (is (= #{:intermarc :intermarc-ng :dc :marc21 :mods :iiif} (cv/source-formats)))
+  (is (= #{:intermarc :intermarc-ng :unimarc :dc :marc21 :mods :iiif} (cv/source-formats)))
   (is (contains? (cv/target-formats) :linked-art))
   (is (thrown? Exception (cv/convert {:from :bogus :to :ntriples :source "x"})))
   (is (thrown? Exception (cv/convert {:from :dc :to :bogus :source "x" :opts {:record-id :r}}))))

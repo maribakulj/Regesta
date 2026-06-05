@@ -46,6 +46,7 @@
    to `:canon/*` first (in `to-wemi`)."
   {:intermarc    (comp frbrise/with-identified-agent frbrise/frbrise)
    :intermarc-ng identity        ; the WEMI graph is read by the importer, not projected
+   :unimarc      project/project
    :dc           project/project
    :marc21       project/project
    :mods         project/project
