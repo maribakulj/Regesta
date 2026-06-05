@@ -92,5 +92,16 @@ correctly yields 0 records, not a parse failure.)
   asserted.
 - **Caveat retained.** The C2 score is high because gold and input share one BnF
   signal; it is a transcription check, not evidence of inference. Independent
-  evaluation of bridging will need a gold that is *not* derived from `f145`/
-  `workManifested` (e.g. hand-labelled or cross-source).
+  evaluation of bridging needs a gold that is *not* derived from `f145`.
+- **Bridging now measured (partially)** — `regesta.eval.bridging-test`,
+  `test/fixtures/er-gold/bridging/`. data.bnf `workManifested` grouped Regesta's own
+  manifestation ARKs; the records **without** `f145` are the non-circular test (the
+  gold is not a re-serialisation of a link they carry — they map to data.bnf
+  `temp-work` URIs). On that subset, exact `(author + title)` clustering bridges
+  **P = R = 1.0** (12 records, *Mon grand-père* ×3 + *Souvenirs d'un matelot* ×3 —
+  identical-title editions). The f145-bearing Bovary set is a circular control that
+  exhibits the variant-title recall ceiling (28 editions → 7 title-clusters, R 0.45).
+  Honest limit: the independent subset is small and its multi-edition Works share an
+  exact title, so it confirms precision + exact-title bridging but does not yet
+  stress variant-title recall on an independent gold — the broad clean Work gold
+  ADR 0018 says does not exist in open sources.
