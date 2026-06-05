@@ -6,7 +6,7 @@
    This is the namespace that wires the parts the rest of the system built and the
    convergence capstone proved compose: the five importers, the two projection
    rungs (INTERMARC's enriched `frbrise`, the floor `project` for the others), and
-   the eight exporters. `convert` returns the output string plus the conversion
+   the ten exporters. `convert` returns the output string plus the conversion
    loss report, in one call.
 
    Loss is collected at three points and merged: import-edge (a spoke's
@@ -19,6 +19,7 @@
             [regesta.loss-report :as lr]
             [regesta.plugins :as plug]
             [regesta.plugins.dc.export :as dc-export]
+            [regesta.plugins.iiif.export :as iiif-export]
             [regesta.plugins.intermarc.frbrise :as frbrise]
             [regesta.plugins.lrmoo.crm :as crm]
             [regesta.plugins.lrmoo.export :as export]
@@ -26,6 +27,7 @@
             [regesta.plugins.lrmoo.project :as project]
             [regesta.plugins.mapping :as mapping]
             [regesta.plugins.marc21.export :as marc21-export]
+            [regesta.plugins.mods.export :as mods-export]
             [regesta.runtime :as runtime]
             [regesta.spokes :as spokes]))
 
@@ -38,13 +40,17 @@
 (def ^:private to-pivots
   "Source format -> the projection that lifts a normalised record to WEMI.
    INTERMARC takes the *enriched* `frbrise` rung (the 145 $3 authority link) and
-   then mints its authority-identified agent; the rest take the floor `project`.
-   Every spoke normalises to `:canon/*` first (in `to-wemi`)."
-  {:intermarc (comp frbrise/with-identified-agent frbrise/frbrise)
-   :dc        project/project
-   :marc21    project/project
-   :mods      project/project
-   :iiif      project/project})
+   then mints its authority-identified agent; INTERMARC-NG is already an entity-
+   relation graph, so its importer builds the WEMI view and the projection is
+   `identity` (ADR 0019); the floor spokes take `project`. Every spoke normalises
+   to `:canon/*` first (in `to-wemi`)."
+  {:intermarc    (comp frbrise/with-identified-agent frbrise/frbrise)
+   :intermarc-ng identity        ; the WEMI graph is read by the importer, not projected
+   :unimarc      project/project
+   :dc           project/project
+   :marc21       project/project
+   :mods         project/project
+   :iiif         project/project})
 
 (defn- crm-only-losses [record]
   (concat (crm/crm-only-losses record) (export/export-losses record)))
@@ -60,7 +66,9 @@
    :crm-only   {:render crm/->crm-only-ntriples      :losses crm-only-losses}
    :linked-art {:render linked-art/->jsonld          :losses linked-art/export-losses}
    :dc         {:render dc-export/->dc-xml           :losses dc-export/export-losses}
-   :marc21     {:render marc21-export/->marcxml      :losses marc21-export/export-losses}})
+   :marc21     {:render marc21-export/->marcxml      :losses marc21-export/export-losses}
+   :mods       {:render mods-export/->mods-xml       :losses mods-export/export-losses}
+   :iiif       {:render iiif-export/->json           :losses iiif-export/export-losses}})
 
 (defn source-formats [] (spokes/source-formats))
 (defn target-formats [] (set (keys exporters)))
@@ -69,7 +77,7 @@
 ;; Pipeline
 ;; ---------------------------------------------------------------------------
 
-(defn- to-wemi
+(defn to-wemi
   "Import `source` through `spoke`, normalise to the canonical floor, then project
    each record to WEMI by the appropriate rung — INTERMARC's enriched `frbrise`
    (via the 145 $3 link) or the floor `project`. Both run normalize first, so

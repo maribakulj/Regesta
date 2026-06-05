@@ -18,6 +18,10 @@
 - Revised: 2026-05-30 — §Open V2 "cross-plugin `:mapping/id` uniqueness"
   resolved in code: `compile-mappings` rejects a batch whose rules derive
   the same compiled rule id (post-Sprint-5 audit cleanup).
+- Revised: 2026-06-04 — the §Alternatives "composite mappings" rejection
+  reopened and adopted as the bounded `:mapping/combine` form (a vector
+  `:mapping/from` joined by a separator), replacing the bespoke
+  `intermarc/with-agent-name` subfield-recombine pre-pass.
 
 ## Context
 
@@ -207,9 +211,23 @@ not a runtime one.
   plugin), and importers reading a plugin can't easily distinguish
   "actual rule" from "trivial mapping".
 - **Composite mappings (multiple `:from` predicates → one `:to`).**
-  Rejected for V1: leaks toward joining and ordering across source
-  fields, which is the rule layer's job. Plugins that need
-  composition write a normalize-phase rule.
+  Originally rejected for V1: "leaks toward joining and ordering across
+  source fields, which is the rule layer's job; plugins that need
+  composition write a normalize-phase rule." **Reopened and adopted
+  (2026-06-04)** as the bounded `:mapping/combine` form: `:mapping/from`
+  may be an ordered *vector* of predicates whose values are joined by a
+  required separator string into one `:to` value (subfields absent are
+  skipped — no dangling separator). The trigger was concrete: recombining
+  catalogue subfields the parser split (INTERMARC `100 $a` surname + `$m`
+  forename → "Surname, Forename"; a title + its GMD `$h`) was being done
+  by a bespoke normalize-phase pre-pass (`intermarc/with-agent-name`),
+  exactly the boilerplate the rejection assumed was rare. A declarative
+  combine removes it. The scope stays bounded — a *static* ordered join
+  with one separator, not arbitrary joining/conditionals — so the
+  "ordering across fields is the rule layer's job" concern holds for
+  anything richer; that still writes a rule. A `:combine` ⇔ vector-`:from`
+  biconditional and a "qualifier cannot apply to a combine" guard keep the
+  closed schema honest.
 - **Multiplicity: collapse-by-default to a single value.** Rejected:
   silently drops information. The IR was designed (ADR 0001) to
   represent multiplicity natively; the mapping must not erase it.

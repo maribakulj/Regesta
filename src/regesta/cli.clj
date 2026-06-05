@@ -2,12 +2,21 @@
   "Command-line entry point (WP-8) — the last step from library to runnable tool.
    `convert` runs a source document through the LRMoo pivot to a target
    serialisation (document to **stdout**, ADR 0015 loss report to **stderr**);
-   `validate` runs the canonical rules and exits non-zero on failure.
+   `validate` runs the canonical rules and exits non-zero on failure; `report`,
+   `inspect` and `reconcile` are read-only verbs that write to **stdout**.
 
-     regesta convert  <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
-     regesta validate <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
+     regesta convert   <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
+     regesta validate  <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
+     regesta report    <input-file> --from <fmt> --to <fmt> [--record-id <id>]
+     regesta inspect   <input-file> --from <fmt> [--record-id <id>]
+     regesta reconcile <input-file> --from <fmt> [--record-id <id>]
      regesta formats
      regesta --help
+
+   - `report`    — the X→Y loss report alone (the auditor's view), no document.
+   - `inspect`   — what the source parses to: the canonical floor + minted WEMI/
+                   agent entities (the developer's view).
+   - `reconcile` — cross-record agent reconciliation by authority id (ADR 0018).
 
    `run` is pure — it parses args, does the work and returns `{:exit :out :err}`
    without printing or exiting — so tests drive it directly; `-main` is the thin
@@ -16,6 +25,7 @@
             [regesta.convert :as convert]
             [regesta.diagnostics :as dx]
             [regesta.loss-report :as lr]
+            [regesta.reconcile :as reconcile]
             [regesta.validate :as validate]))
 
 (def ^:private usage
@@ -24,19 +34,25 @@
    ["regesta — documentary-metadata conversion through the LRMoo pivot"
     ""
     "Usage:"
-    "  regesta convert  <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
-    "  regesta validate <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
+    "  regesta convert   <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
+    "  regesta validate  <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
+    "  regesta report    <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
+    "  regesta inspect   <input-file> --from <fmt> [--record-id <id>]"
+    "  regesta reconcile <input-file> --from <fmt> [--record-id <id>]"
     "  regesta formats          list the supported source and target formats"
     "  regesta --help"
     ""
     "  --from        source format (a spoke)"
-    "  --to          target serialisation (convert)"
+    "  --to          target serialisation (convert, report)"
     "  --policy      validate failure policy: errors-only (default), errors-and-warnings, strict, never"
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
     "  --out         write the output to a file instead of stdout (convert)"
     ""
     "convert writes the document to stdout, the loss report to stderr;"
-    "validate writes the diagnostics report to stderr and exits non-zero on failure."]))
+    "validate writes the diagnostics report to stderr and exits non-zero on failure;"
+    "report writes the X→Y loss report to stdout (no document);"
+    "inspect writes what the source parses to (the canonical floor + minted entities) to stdout;"
+    "reconcile writes the cross-record agent reconciliation (by authority id) to stdout."]))
 
 (defn- parse-args
   "Parse `args` into {:command :positional [..] :flags {str str} :help?}.
@@ -123,6 +139,100 @@
       (catch Exception e
         {:exit 2 :out "" :err (str "error: " (.getMessage e))}))))
 
+;; --- shared source reading + error guard (report / inspect / reconcile) -----
+
+(defn- read-source
+  "Validate `from` + `input` for the read-only verbs. Returns `{:err msg}` on a
+   problem, else `{:from kw :source str :opts {…}}` ready to feed convert/to-wemi."
+  [from input record-id verb]
+  (cond
+    (not (and from input))
+    {:err (str verb " needs <input-file> --from <fmt>\n\n" usage)}
+
+    (not (.exists (java.io.File. ^String input)))
+    {:err (str "input file not found: " input)}
+
+    :else
+    (let [rid (cond record-id    (->record-id record-id)
+                    (= from "dc") (keyword "doc" (file-stem input))
+                    :else         nil)]
+      {:from   (keyword from)
+       :source (slurp input)
+       :opts   (cond-> {} rid (assoc :record-id rid))})))
+
+(defn- guard
+  "Run `thunk`, mapping the two expected exception shapes to an exit-2 result —
+   the catch the convert/validate verbs use, shared by the read-only verbs."
+  [thunk]
+  (try (thunk)
+       (catch clojure.lang.ExceptionInfo e
+         {:exit 2 :out "" :err (str "error: " (.getMessage e) " " (pr-str (ex-data e)))})
+       (catch Exception e
+         {:exit 2 :out "" :err (str "error: " (.getMessage e))})))
+
+(defn- do-report
+  "The auditor's verb: the X→Y loss report to stdout, no converted document."
+  [{:strs [from to record-id]} input]
+  (let [{:keys [err] :as r} (read-source from input record-id "report")]
+    (cond
+      err      {:exit 2 :out "" :err err}
+      (not to) {:exit 2 :out "" :err (str "report needs --to <fmt>\n\n" usage)}
+      :else
+      (guard #(let [{:keys [report records]} (convert/convert-report (assoc r :to (keyword to)))]
+                {:exit 0
+                 :out  (str report "\n(" records " record" (when (not= 1 records) "s") ")")
+                 :err  ""})))))
+
+(defn- canon-floor
+  "The record's own `:canon/*` string assertions, grouped by predicate."
+  [record]
+  (->> (:assertions record)
+       (filter #(and (= (:id record) (:subject %))
+                     (= "canon" (namespace (:predicate %)))
+                     (string? (:value %))))
+       (group-by :predicate)))
+
+(defn- format-inspect [records ingest]
+  (str/join
+   "\n"
+   (cons (str (count records) " record" (when (not= 1 (count records)) "s")
+              (when (seq ingest)
+                (str ", " (count ingest) " ingest diagnostic"
+                     (when (not= 1 (count ingest)) "s")))
+              ":")
+         (for [r records]
+           (let [floor (canon-floor r)
+                 ents  (map #(subs (str (:kind %)) 1) (:entities r))]
+             (str "\n" (:id r) "  (" (subs (str (:kind r)) 1) ")\n"
+                  (str/join "\n"
+                            (for [[p vs] (sort-by str floor)]
+                              (str "    " p "  " (str/join " | " (map :value vs)))))
+                  (when (seq ents)
+                    (str "\n    entities: " (str/join " " ents)))))))))
+
+(defn- do-inspect
+  "The developer's verb: what the source parses to — the canonical floor and the
+   minted WEMI/agent entities — to stdout. No target, no conversion."
+  [{:strs [from record-id]} input]
+  (let [{:keys [err from source opts]} (read-source from input record-id "inspect")]
+    (if err
+      {:exit 2 :out "" :err err}
+      (guard #(let [{:keys [records ingest]} (convert/to-wemi from opts source)]
+                {:exit 0 :out (format-inspect records ingest) :err ""})))))
+
+(defn- do-reconcile
+  "Cross-record agent reconciliation (ADR 0018, by authority id) to stdout. Real
+   for INTERMARC, whose 100 $1 ISNI mints identified agents; other spokes report
+   no authority-identified agents (honest, not an error)."
+  [{:strs [from record-id]} input]
+  (let [{:keys [err from source opts]} (read-source from input record-id "reconcile")]
+    (if err
+      {:exit 2 :out "" :err err}
+      (guard #(let [{:keys [records]} (convert/to-wemi from opts source)]
+                {:exit 0
+                 :out  (reconcile/format-agent-reconciliation (reconcile/reconcile-agents records))
+                 :err  ""})))))
+
 (defn run
   "Pure CLI core: parse `args`, run the command, return `{:exit :out :err}`.
    Never prints, never exits."
@@ -135,6 +245,9 @@
                                            (fmt-line "to:   " (convert/target-formats)))}
       (= command "convert")     (do-convert flags (first positional))
       (= command "validate")    (do-validate flags (first positional))
+      (= command "report")      (do-report flags (first positional))
+      (= command "inspect")     (do-inspect flags (first positional))
+      (= command "reconcile")   (do-reconcile flags (first positional))
       :else                     {:exit 2 :out "" :err (str "unknown command: " command "\n\n" usage)})))
 
 (defn -main [& args]

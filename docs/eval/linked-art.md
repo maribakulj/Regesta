@@ -76,11 +76,21 @@ with the same ISNI already mint the same agent id by content).
 
 ## Honest scope (V1)
 
-- A Linked Art-**profile** serialisation; **not** validated against a Linked Art
-  processor or shape (no JSON-LD framing/expansion round-trip).
-- `created_by` is emitted only when a `:canon/agent` is present — i.e. for the
-  floor spokes (DC, MARC21, MODS). INTERMARC's creator lives in `:intermarc/f100_a`
-  and is not lifted to `:canon/agent`, so its Linked Art output omits the creator.
+- A Linked Art-**profile** serialisation, now validated with the **real**
+  draft-2020-12 validator (`com.networknt/json-schema-validator`, a test-only dep
+  from Maven Central) against the official `$ref`-resolved schema set, in
+  `regesta.eval.linked-art-conformance-test`. Honest calibration: that schema is
+  *stricter than real Linked Art* (it models `carries`/`part_of` as id-only refs and
+  is `additionalProperties:false`), so even Getty's own Mona Lisa example fails it.
+  Our output is **cleaner** than that example — zero root-level errors, the only
+  deviations being `additionalProperties` on the embedded Expression under
+  `/carries` (no `type`/`const`/`required`/`format` errors). The remaining
+  institutional piece (a **Louvre-specific** profile / acceptance criteria) is the
+  only part that still needs a partnership.
+- `created_by` is emitted whenever a `:canon/agent` is present — **all five spokes
+  now populate it** (INTERMARC via the controlled `100`; DC/MARC21/MODS via their
+  mappings). When the agent carries an authority id (INTERMARC's ISNI) the `Person`
+  carries it as `id` (see *Identified agents* above); otherwise it is label-only.
 - Dates, relations and native predicates are not expressed; they are reported as
   export-edge loss (ADR 0015).
 - A `subject_of` link to the IIIF *manifest* (vs `representation` of the image) is

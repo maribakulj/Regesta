@@ -675,3 +675,88 @@
           record (record-with :native/x ["v"])
           {enr :record} (runtime/run-phase record [cr] :normalize)]
       (is (= 1 (count (runtime/assertions-by-rule enr :rule.from-mapping/x)))))))
+
+;; ---------------------------------------------------------------------------
+;; Combine — multi-source `:from` joined by `:mapping/combine` (subfield recombine)
+;; ---------------------------------------------------------------------------
+
+(defn- record-of
+  "Build a record from a map of `{predicate value}` (one assertion each)."
+  [pred->val]
+  (model/record
+   {:id         :record/r1
+    :kind       :test
+    :assertions (mapv (fn [[p v]] (model/assertion {:subject :record/r1 :predicate p :value v}))
+                      pred->val)}))
+
+(def ^:private combine-mapping
+  {:mapping/id      :map/agent
+   :mapping/from    [:native/surname :native/forename]
+   :mapping/combine ", "
+   :mapping/to      :canon/agent})
+
+(deftest schema-combine-cross-field-invariants
+  (testing "a vector :from with a :combine separator is valid"
+    (is (mapping/valid-mapping? combine-mapping)))
+  (testing ":combine without a vector :from is rejected (and vice versa)"
+    (is (not (mapping/valid-mapping? (assoc minimal-mapping :mapping/combine ", "))))      ; single + combine
+    (is (not (mapping/valid-mapping? (dissoc combine-mapping :mapping/combine)))))          ; vector, no sep
+  (testing "a qualifier cannot apply to a combine (vector :from)"
+    (is (not (mapping/valid-mapping?
+              (assoc combine-mapping :mapping/qualifier {:from :native/lang :as :canon/lang}))))))
+
+(deftest combine-joins-subfields-in-order
+  (testing "100 $a + $m -> \"Surname, Forename\" (the INTERMARC agent case)"
+    (let [cr    (mapping/compile-mapping combine-mapping stdlib)
+          rec   (record-of {:native/surname "Flaubert" :native/forename "Gustave"})
+          prods (rules/apply-rule cr rec)
+          asrts (mapv :value prods)]
+      (is (= [:assertion] (mapv :kind prods)))
+      (is (= [:canon/agent] (mapv :predicate asrts)))
+      (is (= ["Flaubert, Gustave"] (mapv :value asrts)))
+      (is (every? #(= :record/r1 (:subject %)) asrts)))))
+
+(deftest combine-skips-absent-subfields-no-dangling-separator
+  (testing "only the surname present -> just \"Flaubert\", no trailing separator"
+    (let [cr  (mapping/compile-mapping combine-mapping stdlib)
+          ps  (rules/apply-rule cr (record-of {:native/surname "Flaubert"}))]
+      (is (= ["Flaubert"] (mapv #(:value (:value %)) ps)))))
+  (testing "only the forename present -> just \"Gustave\""
+    (let [cr (mapping/compile-mapping combine-mapping stdlib)
+          ps (rules/apply-rule cr (record-of {:native/forename "Gustave"}))]
+      (is (= ["Gustave"] (mapv #(:value (:value %)) ps))))))
+
+(deftest combine-with-an-empty-separator-and-a-space
+  (testing "title + GMD with a single-space separator (245 $a + $h)"
+    (let [m  {:mapping/id :map/title :mapping/from [:native/a :native/h]
+              :mapping/combine " " :mapping/to :canon/title :mapping/transform [:trim]}
+          cr (mapping/compile-mapping m stdlib)
+          ps (rules/apply-rule cr (record-of {:native/a "The Great Ray Charles"
+                                              :native/h "[sound recording]"}))]
+      (is (= ["The Great Ray Charles [sound recording]"] (mapv #(:value (:value %)) ps))))))
+
+(deftest combine-runs-the-transform-chain-on-the-joined-value
+  (testing "the chain applies to the join (trim of a padded combination)"
+    (let [m  (assoc combine-mapping :mapping/transform [:trim])
+          cr (mapping/compile-mapping m stdlib)
+          ps (rules/apply-rule cr (record-of {:native/surname "  Hugo" :native/forename "Victor  "}))]
+      (is (= ["Hugo, Victor"] (mapv #(:value (:value %)) ps))))))
+
+(deftest combine-on-empty-when-no-subfield-present
+  (testing "neither subfield present -> :skip yields nothing"
+    (let [cr (mapping/compile-mapping combine-mapping stdlib)]
+      (is (empty? (rules/apply-rule cr (empty-record))))))
+  (testing ":on-empty :default fires when no source is present"
+    (let [m  (assoc combine-mapping :mapping/on-empty :default :mapping/default "Anon")
+          cr (mapping/compile-mapping m stdlib)
+          ps (rules/apply-rule cr (empty-record))]
+      (is (= ["Anon"] (mapv #(:value (:value %)) ps))))))
+
+(deftest combine-integrates-through-the-runtime
+  (testing "a combine rule populates the canonical predicate via run-phase"
+    (let [cr (mapping/compile-mapping combine-mapping stdlib)
+          {enr :record} (runtime/run-phase
+                         (record-of {:native/surname "Verne" :native/forename "Jules"})
+                         [cr] :normalize)]
+      (is (some #(and (= :canon/agent (:predicate %)) (= "Verne, Jules" (:value %)))
+                (:assertions enr))))))

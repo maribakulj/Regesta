@@ -222,13 +222,25 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 | WP-1 substrate (minting, loss diagnostic) | ✅ |
 | WP-2 LRMoo plugin + view | ✅ |
 | WP-3 FRBRisation (INTERMARC; clustering = id-collision; loss) | ✅ |
-| WP-4 spokes | ◐ — **5 importers in ✅**: INTERMARC-SRU, MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **2 round-trips ✅** (DC + MARC21↔floor, loss measured, id-stable & idempotent); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** (N-Triples · Turtle · JSON-LD, LRMoo + CRM views); **Linked Art profile out ✅** (museum/Louvre target — F3→HumanMadeObject carries F2→LinguisticObject part_of F1→PropositionalObject, mapping verified vs the official examples, `docs/eval/linked-art.md`); **MODS/IIIF round-trip not built; MARC21↔LRMoo at the *floor* level, neither it nor Linked Art conformance-checked** |
+| WP-4 spokes | ◐ — **7 importers in ✅**: INTERMARC-SRU, **INTERMARC-NG** (entity-relation, ADR 0019), **UNIMARC** (BnF diffusion — the MARC family complete), MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **4 round-trips ✅** (DC + MARC21 + MODS + IIIF ↔ floor — every floor spoke now round-trips; loss measured, id-stable & idempotent; INTERMARC is import-only by design, the rich-pivot source); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** (N-Triples · Turtle · JSON-LD, LRMoo + CRM views); **Linked Art profile out ✅** (museum/Louvre target — F3→HumanMadeObject carries F2→LinguisticObject part_of F1→PropositionalObject, mapping verified vs the official examples, `docs/eval/linked-art.md`); **Linked Art now validated against the official draft-2020-12 schema** (real `networknt` validator, `$ref`-resolved — DoD #4: our roots are schema-valid, our only deviations are `additionalProperties` from embedding, *cleaner* than Getty's own Mona Lisa example which the strict schema also rejects); both LoC XSLT oracles in (MARC→DC differential, MARC→MODS convergence); **MARC21↔LRMoo at the *floor* level** |
 | WP-5 loss-aware report | ✅ (cross-edge double-count fixed in remediation R3) |
-| WP-8 CLI | ◐ — `regesta convert` / **`validate`** (canonical rules, policy-driven non-zero exit) / `formats` (`regesta.cli`, `:run` alias) over the conversion assembly; conformance subcommand not built |
+| WP-8 CLI | ◐ — `regesta convert` / **`validate`** (canonical rules, policy-driven non-zero exit) / **`report`** (X→Y loss report alone) / **`inspect`** (the parsed canonical floor + minted WEMI/agent entities) / **`reconcile`** (cross-record agent reconciliation by authority id, ADR 0018) / `formats` (`regesta.cli`, `:run` alias) over the conversion assembly; **`apply-repairs` not built** (needs the ADR 0005 repair-application engine — only the `:repair` phase + `Repair` model exist, no curation step); conformance subcommand not built |
 | WP-6 conformance · WP-7 scale · WP-9 release | ✗ |
 
 Also delivered beyond the original WPs: ADR 0018 (entity resolution at scale,
-*Proposed*); the D7 commit policy (`:asserted` ⇔ proof, else `:proposed`;
+*Proposed*); **ADR 0019 (conversion directionality, *Proposed*)** — spokes are
+bidirectional, the hub is a target, and CRM→LRM is a *downcast* that succeeds only
+when the F-typing survives, demonstrated by a CRM→LRMoo round-trip
+(`lrmoo.crm-import`): our additive `:crm` recovers F1/F2/F3 losslessly, our pure
+`:crm-only` collapses at `E73` into `:ambiguity-collapsed` (the loss the
+down-projection reported is exactly what the up-projection cannot recover); the
+**entity-relation spoke** that ADR 0019 reserved is built —
+`regesta.plugins.intermarc-ng` reads BnF INTERMARC-NG OEMI entity-records (the
+NOEMI / Transition-bibliographique format) graph→graph onto the LRMoo view
+(Œuvre/Expression/Manifestation → F1/F2/F3, `740/750 $3` → R4/R3), serialises through
+the existing CRM/LA/RDF exporters and round-trips back, validated on a spec-faithful
+synthetic corpus (native NG data is not yet public); the D7
+commit policy (`:asserted` ⇔ proof, else `:proposed`;
 `:certified-only?` export); three measured evals (C2 fidelity, showcase
 boundary, OpenLibrary ER) corroborating the recall ceiling on independent data;
 and a **multi-spoke convergence capstone** — INTERMARC + MARC21 + Dublin Core +
@@ -236,7 +248,7 @@ MODS in one registry reaching one LRMoo pivot with one unified loss report, and
 the three floor formats (DC, MARC21, MODS) content-converging on the same Work id
 (the hub property); the **Linked Art profile export** (museum/Louvre, mapping
 verified vs the official examples); and the **`regesta.convert` assembly** — the
-institution-facing keystone wiring the 5 importers × 8 target serialisations
+institution-facing keystone wiring the 7 importers × 10 target serialisations
 through one pivot in a single call, returning the output plus the ADR 0015 loss
 report over every edge. It also forced spoke mapping-ids to be globally distinctive
 (the compiler keys rule ids on the name portion, ADR 0009), so the spokes are

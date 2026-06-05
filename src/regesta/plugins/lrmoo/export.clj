@@ -10,10 +10,13 @@
    render that one seq — N-Triples (canonical, line-based), Turtle (prefixed,
    grouped by subject) and compacted JSON-LD (web-native) — so the CRM
    down-projection and any future view reuse them by augmenting the seq first.
-   Only `:lrmoo/*` predicates are exported by this slice; canonical/native
-   predicates serialise once their own IRI mappings land. Wiring this into the
-   LRMoo plugin map's `:exporter` is a later assembly step (kept out here to avoid
-   a cycle with the vocabulary namespace)."
+   The view exports the `:lrmoo/*` WEMI vocabulary **and** the `:crm/*` predicates
+   the rich graph carries (typing CRM entities — agents `E21_Person`, subjects
+   `E55_Type`/`E53_Place` — and their relations, e.g. `:crm/P129_is_about`), so the
+   full entity graph reaches RDF, not just the WEMI chain; canonical/native
+   predicates remain export loss until their own IRI mappings land. Wiring this into
+   the LRMoo plugin map's `:exporter` is a later assembly step (kept out here to
+   avoid a cycle with the vocabulary namespace)."
   (:require [clojure.data.json :as json]
             [clojure.string :as str]
             [regesta.diagnostics :as dx]
@@ -21,6 +24,7 @@
             [regesta.plugins.lrmoo :as lrmoo]))
 
 (def rdf-type "http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
+(def crm-base "http://www.cidoc-crm.org/cidoc-crm/")
 
 (defn entity-iri
   "Fallback IRI for an entity id, used when the entity carries no authority
@@ -39,8 +43,29 @@
   [record]
   (into {} (keep (fn [e] (when-let [i (:iri e)] [(:id e) i]))) (:entities record)))
 
-(defn- lrmoo-predicate? [p]
-  (and (keyword? p) (= "lrmoo" (namespace p))))
+(defn- crm-term?
+  "True for a `:crm/*` keyword (a CIDOC-CRM class or property)."
+  [x]
+  (and (keyword? x) (= "crm" (namespace x))))
+
+(defn- viewable-predicate?
+  "Predicates the RDF view expresses: the LRMoo WEMI vocabulary *and* the CIDOC-CRM
+   predicates the rich graph carries (e.g. `:crm/P129_is_about` for a subject). The
+   floor (`:canon/*`) and native (`:intermarc/*`) predicates are still export loss."
+  [p]
+  (and (keyword? p) (contains? #{"lrmoo" "crm"} (namespace p))))
+
+(defn- term-iri
+  "IRI of an `:lrmoo/*` or `:crm/*` term (class or property)."
+  [k]
+  (if (crm-term? k) (str crm-base (name k)) (lrmoo/iri k)))
+
+(defn- typed-kind?
+  "True if entity kind `k` is one the RDF view types — an LRMoo WEMI class or any
+   CIDOC-CRM class (so agents `E21_Person`, subjects `E55_Type`/`E53_Place`, … are
+   typed, not just F1–F5)."
+  [k]
+  (or (lrmoo/entity-kind? k) (crm-term? k)))
 
 (defn triples
   "The LRMoo view of `record` as RDF triples. Each WEMI entity is typed to its
@@ -57,13 +82,13 @@
          iri     (fn [id] (or (get idx id) (entity-iri id)))
          as      (cond->> (:assertions record)
                    certified-only? (filterv model/asserted?))
-         lrmoo-as (filterv #(lrmoo-predicate? (:predicate %)) as)
+         view-as (filterv #(viewable-predicate? (:predicate %)) as)
          refd    (when certified-only?
                    (into #{} (mapcat (fn [a]
                                        (cons (:subject a)
                                              (when (model/reference-value? (:value a))
                                                [(:value/target (:value a))])))
-                                     lrmoo-as)))
+                                     view-as)))
          ;; an entity is certified if a determinate id (an authority :iri, e.g. an
          ;; ARK) fixes it, or a certified claim references it — so a titleless ARK
          ;; Manifestation is kept, but a string-key Work (no iri, only :proposed
@@ -72,12 +97,12 @@
                    certified-only? (filterv #(or (:iri %) (contains? refd (:id %)))))]
      (concat
       (for [e ents
-            :when (lrmoo/entity-kind? (:kind e))]
-        [(iri (:id e)) rdf-type {:iri (lrmoo/iri (:kind e))}])
-      (for [a lrmoo-as]
+            :when (typed-kind? (:kind e))]
+        [(iri (:id e)) rdf-type {:iri (term-iri (:kind e))}])
+      (for [a view-as]
         (let [v (:value a)]
           [(iri (:subject a))
-           (lrmoo/iri (:predicate a))
+           (term-iri (:predicate a))
            (if (model/reference-value? v)
              {:iri (iri (:value/target v))}
              {:lit v})]))))))
@@ -199,7 +224,7 @@
    diagnostic per distinct dropped predicate per subject, `:edge :export`."
   [record]
   (->> (:assertions record)
-       (remove #(lrmoo-predicate? (:predicate %)))
+       (remove #(viewable-predicate? (:predicate %)))
        (map (juxt :subject :predicate))
        distinct
        (mapv (fn [[subject pred]]

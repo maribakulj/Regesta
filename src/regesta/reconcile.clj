@@ -13,8 +13,17 @@
 
    The output is the agent *store* — distinct agents, each with the records that
    mention it — not a rewrite of the records; merging records onto a shared agent
-   node is a downstream step."
-  (:require [clojure.string :as str]))
+   node is a downstream step.
+
+   The fuzzy tier (ADR 0018 decisions 3/4) is `propose-agent-links`: for agents
+   that have only a *name* (no authority id), it proposes equivalences to an
+   authority pool by name similarity — always `:proposed` (never `:asserted`,
+   D7), confidence-scored and revisable. A match is `:certifiable?` only when the
+   authority entry carries a determinate id; a perfect name match to an id-less
+   entry (the Victor Hugo *metro station*) can never be promoted."
+  (:require [clojure.set :as set]
+            [clojure.string :as str]
+            [regesta.text :as text]))
 
 (defn- agent-label
   "The record's controlled agent name (`:canon/agent`), used as the reconciled
@@ -67,3 +76,51 @@
                 " (by authority id):")
            (for [{:keys [label iri mentions]} agents]
              (str "  " (or label "?") "  <" iri ">  ×" mentions))))))
+
+;; ---------------------------------------------------------------------------
+;; Fuzzy tier (ADR 0018 decisions 3/4) — name → authority *proposals*
+;; ---------------------------------------------------------------------------
+
+(defn- tokens
+  "Normalised token set of a name (`text/norm` then split on whitespace)."
+  [s]
+  (set (remove str/blank? (str/split (text/norm s) #" "))))
+
+(defn- jaccard [a b]
+  (let [u (count (set/union a b))]
+    (if (pos? u) (/ (double (count (set/intersection a b))) u) 0.0)))
+
+(defn- name-score
+  "Best token-set similarity of `name` against a candidate's preferred label and
+   its variants — order- and partial-tolerant (\"Gustave Flaubert\" ~ \"Flaubert,
+   Gustave\"; \"Balzac\" ~ a \"Balzac\" variant)."
+  [name candidate]
+  (let [nt (tokens name)]
+    (apply max 0.0 (map #(jaccard nt (tokens %))
+                        (remove str/blank? (cons (:label candidate) (:variants candidate)))))))
+
+(defn propose-agent-links
+  "Fuzzy tier (ADR 0018 d.3/4): for each free agent `name` (no authority id),
+   propose equivalences to entries of the `authority` pool — `[{:id :label
+   :variants [..]}]` — whose label/variants match by token-set similarity ≥
+   `threshold` (default 0.5). Returns proposals sorted by score desc:
+
+     {:name :authority-id :authority-label :score :certifiable? :status :proposed}
+
+   Every proposal is `:proposed` — never `:asserted` (D7). `:certifiable?` is true
+   only when the matched entry has a determinate `:id`; a high-scoring match to an
+   id-less entry can never be promoted (the metro-station guard)."
+  ([names authority] (propose-agent-links names authority 0.5))
+  ([names authority threshold]
+   (->> (for [name names
+              cand authority
+              :let [score (name-score name cand)]
+              :when (>= score threshold)]
+          {:name            name
+           :authority-id    (:id cand)
+           :authority-label (:label cand)
+           :score           score
+           :certifiable?    (boolean (:id cand))
+           :status          :proposed})
+        (sort-by (comp - :score))
+        vec)))

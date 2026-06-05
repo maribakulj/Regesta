@@ -10,16 +10,20 @@
   (:require [regesta.plugins.dc :as dc]
             [regesta.plugins.iiif :as iiif]
             [regesta.plugins.intermarc :as intermarc]
+            [regesta.plugins.intermarc-ng :as intermarc-ng]
             [regesta.plugins.marc21 :as marc21]
-            [regesta.plugins.mods :as mods]))
+            [regesta.plugins.mods :as mods]
+            [regesta.plugins.unimarc :as unimarc]))
 
 (def plugins
   "Source format keyword → its ADR 0007 importer plugin."
-  {:intermarc intermarc/plugin
-   :dc        dc/plugin
-   :marc21    marc21/plugin
-   :mods      mods/plugin
-   :iiif      iiif/plugin})
+  {:intermarc    intermarc/plugin
+   :intermarc-ng intermarc-ng/plugin
+   :unimarc      unimarc/plugin
+   :marc21       marc21/plugin
+   :dc           dc/plugin
+   :mods         mods/plugin
+   :iiif         iiif/plugin})
 
 (defn source-formats
   "The set of supported source format keywords."

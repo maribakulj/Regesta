@@ -81,3 +81,49 @@
         (finally (.delete (java.io.File. path))))))
   (testing "validate needs --from"
     (is (= 2 (:exit (cli/run ["validate" marc21]))))))
+
+;; --- report / inspect / reconcile (read-only verbs) -------------------------
+
+(def ^:private intermarc
+  "test/fixtures/documentary/intermarc/sru/intermarcXchange/bnf-sru-victor-hugo-50.xml")
+
+(deftest report-emits-the-loss-report-only
+  (testing "report MARC21 -> DC: the loss report to stdout, no converted document"
+    (let [{:keys [exit out]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc"])]
+      (is (= 0 exit))
+      (is (str/includes? out "Loss report"))
+      (is (str/includes? out "by category"))
+      (is (str/includes? out "2 records"))
+      (is (not (str/includes? out "<dc:title")))))          ; the document is NOT emitted
+  (testing "report needs --to"
+    (let [{:keys [exit err]} (cli/run ["report" marc21 "--from" "marc21"])]
+      (is (= 2 exit))
+      (is (str/includes? err "report needs --to")))))
+
+(deftest inspect-shows-the-floor-and-the-minted-entities
+  (testing "inspect MARC21: the canonical floor and the WEMI entities per record"
+    (let [{:keys [exit out]} (cli/run ["inspect" marc21 "--from" "marc21"])]
+      (is (= 0 exit))
+      (is (str/includes? out "2 records"))
+      (is (str/includes? out ":marc/r5637241"))
+      (is (str/includes? out ":canon/title"))
+      (is (str/includes? out "The Great Ray Charles"))
+      (is (str/includes? out "entities:"))
+      (is (str/includes? out "lrmoo/F1_Work")))))
+
+(deftest reconcile-groups-agents-by-authority-id
+  (testing "reconcile INTERMARC (Victor Hugo 50): agents reconciled by ISNI"
+    (let [{:keys [exit out]} (cli/run ["reconcile" intermarc "--from" "intermarc"])]
+      (is (= 0 exit))
+      (is (str/includes? out "reconciled to"))
+      (is (str/includes? out "distinct agent"))
+      (is (str/includes? out "isni.org"))))
+  (testing "reconcile MARC21: honest 'none' (no authority-identified agents on the floor)"
+    (let [{:keys [exit out]} (cli/run ["reconcile" marc21 "--from" "marc21"])]
+      (is (= 0 exit))
+      (is (str/includes? out "no authority-identified agents")))))
+
+(deftest read-only-verbs-validate-their-inputs
+  (testing "a missing file is an exit-2, not a crash"
+    (is (= 2 (:exit (cli/run ["inspect" "/no/such/file.xml" "--from" "marc21"]))))
+    (is (= 2 (:exit (cli/run ["reconcile" marc21]))))))         ; missing --from

@@ -30,7 +30,8 @@
    rule layer from minting them), so the qualified-mapping compiler
    assumes the fragments already exist on the record at `:normalize`
    time."
-  (:require [malli.core :as m]
+  (:require [clojure.string :as str]
+            [malli.core :as m]
             [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.plugins.transforms :as tx]
@@ -58,12 +59,19 @@
    [:as   :keyword]])
 
 (def MappingRule
-  "Malli schema for one mapping rule, per ADR 0009 §Decision."
+  "Malli schema for one mapping rule, per ADR 0009 §Decision.
+
+   `:mapping/from` is either a single source predicate (the flat rename) or a
+   *vector* of predicates to **combine** — their values on a subject are joined, in
+   order, by the required `:mapping/combine` separator, into one canonical value
+   (e.g. INTERMARC `100 $a` + `$m` → \"Surname, Forename\"; a title + its GMD `$h`).
+   This recombines subfields the parser split, without a bespoke pre-pass."
   [:and
    [:map {:closed true}
     [:mapping/id         :keyword]
-    [:mapping/from       :keyword]
+    [:mapping/from       [:or :keyword [:vector {:min 1} :keyword]]]
     [:mapping/to         :keyword]
+    [:mapping/combine    {:optional true} :string]
     [:mapping/transform  {:optional true} [:vector :keyword]]
     [:mapping/qualifier  {:optional true} Qualifier]
     [:mapping/on-empty   {:optional true} [:enum :skip :diagnostic :default]]
@@ -76,7 +84,17 @@
          ":mapping/on-empty :default ⇔ :mapping/default (both or neither)"}
     (fn [m]
       (= (= :default (:mapping/on-empty m))
-         (contains? m :mapping/default)))]])
+         (contains? m :mapping/default)))]
+   [:fn {:error/message
+         ":mapping/combine ⇔ :mapping/from is a vector (a combine needs a separator, and vice versa)"}
+    (fn [m]
+      (= (vector? (:mapping/from m))
+         (contains? m :mapping/combine)))]
+   [:fn {:error/message
+         ":mapping/qualifier requires a single-keyword :mapping/from (it cannot qualify a combine)"}
+    (fn [m]
+      (or (not (contains? m :mapping/qualifier))
+          (keyword? (:mapping/from m))))]])
 
 (defn valid-mapping?
   "True if `mapping-rule` conforms to the MappingRule schema."
@@ -231,6 +249,10 @@
    `mapping-rule` is already schema-validated."
   [mapping-rule transforms-stdlib]
   (let [from       (:mapping/from mapping-rule)
+        multi?     (vector? from)
+        from-preds (if multi? from [from])
+        from-set   (set from-preds)
+        sep        (:mapping/combine mapping-rule)
         to         (:mapping/to mapping-rule)
         chain      (get mapping-rule :mapping/transform [])
         transform  (tx/compose transforms-stdlib chain)
@@ -294,17 +316,52 @@
                           {:subject record-id :predicate to :value default
                            :confidence confidence :rule-id rule-id})]))
 
+        ;; Combine: for a subject, gather each `from` predicate's (first primitive)
+        ;; value in `from-preds` order, join the present ones with `sep`, then run
+        ;; the transform chain on the joined string. Absent subfields are skipped
+        ;; (no dangling separator); the join is the only place the chain sees a
+        ;; multi-source value, so the `:coerced`/`:transform-failed` accounting
+        ;; mirrors the single-source path.
+        emit-combine
+        (fn [s triples]
+          (let [parts  (for [fp from-preds
+                             :let [v (some (fn [[s2 p2 v2]]
+                                             (when (and (= s2 s) (= p2 fp)
+                                                        (model/primitive-value? v2))
+                                               v2))
+                                           triples)]
+                             :when (some? v)]
+                         (str v))
+                joined (when (seq parts) (str/join sep parts))]
+            (when joined
+              (let [v' (if (empty? chain) joined (transform joined))]
+                (if (some? v')
+                  (cond-> [(assertion-production
+                            {:subject s :predicate to :value v'
+                             :confidence confidence :rule-id rule-id})]
+                    (and lossy? (not= v' joined))
+                    (conj (coerced-production
+                           {:subject s :from (first from-preds) :chain chain :rule-id rule-id})))
+                  [(diagnostic-production
+                    {:severity :info :code :transform-failed
+                     :subject s :rule-id rule-id
+                     :message (transform-failed-message chain joined)})])))))
+
         runner
         (fn run [record]
-          (let [triples      (rules/record-triples record)
-                from-matches (filterv (fn [[_ p _]] (= p from)) triples)
-                base-prods   (if (seq from-matches)
-                               (into [] (mapcat emit-rename-match) from-matches)
-                               (emit-on-empty (:id record)))]
-            (if qualifier
-              (let [qual-matches (filterv (fn [[_ p _]] (= p q-from)) triples)]
-                (into base-prods (keep emit-qualifier-match) qual-matches))
-              base-prods)))]
+          (let [triples (rules/record-triples record)]
+            (if multi?
+              (let [subjects (distinct (keep (fn [[s p _]] (when (from-set p) s)) triples))
+                    prods    (into [] (mapcat #(emit-combine % triples) subjects))]
+                (if (seq prods) prods (emit-on-empty (:id record))))
+              (let [from-matches (filterv (fn [[_ p _]] (= p from)) triples)
+                    base-prods   (if (seq from-matches)
+                                   (into [] (mapcat emit-rename-match) from-matches)
+                                   (emit-on-empty (:id record)))]
+                (if qualifier
+                  (let [qual-matches (filterv (fn [[_ p _]] (= p q-from)) triples)]
+                    (into base-prods (keep emit-qualifier-match) qual-matches))
+                  base-prods)))))]
     (rules/compiled-rule {:id rule-id :phase :normalize :doc doc :runner runner})))
 
 ;; ---------------------------------------------------------------------------
