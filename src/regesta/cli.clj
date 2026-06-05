@@ -11,6 +11,7 @@
      regesta inspect       <input-file> --from <fmt> [--record-id <id>]
      regesta reconcile     <input-file> --from <fmt> [--record-id <id>]
      regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
+     regesta conformance   <input-file> --from <fmt> --profile <p> [--policy <p>] [--record-id <id>]
      regesta formats
      regesta --help
 
@@ -20,11 +21,14 @@
    - `reconcile`     — cross-record agent reconciliation by authority id (ADR 0018).
    - `apply-repairs` — curate the `:proposed` claims a pipeline run emits (ADR 0005):
                        accept / reject / flag-for-review the inferred WEMI proposals.
+   - `conformance`   — check the WEMI projection against an institutional profile
+                       (WP-6); exits non-zero under the acceptance-threshold policy.
 
    `run` is pure — it parses args, does the work and returns `{:exit :out :err}`
    without printing or exiting — so tests drive it directly; `-main` is the thin
    shell that prints the streams and calls `System/exit`."
   (:require [clojure.string :as str]
+            [regesta.conformance :as conformance]
             [regesta.convert :as convert]
             [regesta.curate :as curate]
             [regesta.diagnostics :as dx]
@@ -44,12 +48,14 @@
     "  regesta inspect       <input-file> --from <fmt> [--record-id <id>]"
     "  regesta reconcile     <input-file> --from <fmt> [--record-id <id>]"
     "  regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
+    "  regesta conformance   <input-file> --from <fmt> --profile <p> [--policy <p>] [--record-id <id>]"
     "  regesta formats          list the supported source and target formats"
     "  regesta --help"
     ""
     "  --from        source format (a spoke)"
     "  --to          target serialisation (convert, report)"
-    "  --policy      validate: errors-only (default), errors-and-warnings, strict, never"
+    "  --profile     conformance profile: linked-art"
+    "  --policy      validate / conformance: errors-only (default), errors-and-warnings, strict, never"
     "                apply-repairs: flag (default), accept, reject"
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
     "  --out         write the output to a file instead of stdout (convert)"
@@ -59,7 +65,8 @@
     "report writes the X→Y loss report to stdout (no document);"
     "inspect writes what the source parses to (the canonical floor + minted entities) to stdout;"
     "reconcile writes the cross-record agent reconciliation (by authority id) to stdout;"
-    "apply-repairs curates the inferred :proposed claims (ADR 0005) and writes the outcome to stdout."]))
+    "apply-repairs curates the inferred :proposed claims (ADR 0005) and writes the outcome to stdout;"
+    "conformance reports profile diagnostics to stderr and exits non-zero under the acceptance policy."]))
 
 (defn- parse-args
   "Parse `args` into {:command :positional [..] :flags {str str} :help?}.
@@ -266,6 +273,36 @@
                     result            (curate/curate records decide)]
                 {:exit 0 :out (curate/format-curation result policy-label) :err ""})))))
 
+(defn- profile-names []
+  (str/join " " (sort (map name (keys conformance/profiles)))))
+
+(defn- do-conformance
+  "Check the WEMI projection against an institutional `--profile` (WP-6). Writes the
+   profile diagnostics report + a CONFORMANT/NON-CONFORMANT verdict to stderr and
+   exits non-zero when the acceptance `--policy` is breached (mirrors validate)."
+  [{:strs [from record-id profile policy]} input]
+  (let [{:keys [err from source opts]} (read-source from input record-id "conformance")
+        prof (some-> profile keyword conformance/profiles)]
+    (cond
+      err           {:exit 2 :out "" :err err}
+      (not profile) {:exit 2 :out "" :err (str "conformance needs --profile <p> (have: "
+                                               (profile-names) ")\n\n" usage)}
+      (nil? prof)   {:exit 2 :out "" :err (str "unknown --profile " profile " (have: "
+                                               (profile-names) ")\n\n" usage)}
+      :else
+      (guard #(let [pol (if policy (keyword policy) :errors-only)
+                    {:keys [records diagnostics summary failed? label]}
+                    (conformance/conformance {:from from :source source :opts opts
+                                              :profile prof :policy pol})
+                    verdict (str (if failed? "NON-CONFORMANT" "CONFORMANT")
+                                 " — " label " — " records " record" (when (not= 1 records) "s") ", "
+                                 (get-in summary [:by-severity :error]) " error(s), "
+                                 (get-in summary [:by-severity :warning]) " warning(s) "
+                                 "[policy " (name pol) "]")]
+                {:exit (if failed? 1 0)
+                 :out  ""
+                 :err  (if (seq diagnostics) (str (dx/format-report diagnostics) "\n" verdict) verdict)})))))
+
 (defn run
   "Pure CLI core: parse `args`, run the command, return `{:exit :out :err}`.
    Never prints, never exits."
@@ -282,6 +319,7 @@
       (= command "inspect")     (do-inspect flags (first positional))
       (= command "reconcile")   (do-reconcile flags (first positional))
       (= command "apply-repairs") (do-apply-repairs flags (first positional))
+      (= command "conformance") (do-conformance flags (first positional))
       :else                     {:exit 2 :out "" :err (str "unknown command: " command "\n\n" usage)})))
 
 (defn -main [& args]

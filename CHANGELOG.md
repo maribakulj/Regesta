@@ -16,6 +16,22 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Added
 
+- `regesta.conformance` — the WP-6 conformance mechanism + the first
+  institutional profile (Linked Art / Louvre). A profile is a named set of
+  checks expressed as ordinary diagnostics (ADR 0001) over a projected WEMI
+  record; the report is those diagnostics filtered to the profile, plus a
+  pass/fail verdict under the shared failure policy — mirroring
+  `regesta.validate` one rung up (the mechanism an institution gates a *target
+  conversion* on). Dataless by construction: the checks encode the public Linked
+  Art object model (a HumanMadeObject root with a name as the hard requirements;
+  the carried Expression, its Work, and an authority-identified creator as
+  richness warnings; an identifier hint), and the only institution-specific
+  input is the acceptance *threshold* — the `policy` knob. Surfaced as the CLI
+  verb `conformance <input> --from <fmt> --profile linked-art [--policy <p>]`,
+  which exits non-zero when the threshold is breached. This is **not** the strict
+  official-schema validation (that stays a test-only eval against the draft-2020-12
+  Linked Art schema); a profile is the institution's requirement set, some of it
+  stricter than the schema (the identified creator), some looser.
 - `regesta.curate` — the ADR 0005 repair-application / curation engine, the
   last dataless WP-8 gap. A pure function over a record's *pending* assertions
   (`:proposed`/`:needs-review`): a curator `(fn [assertion] -> :accept | :reject

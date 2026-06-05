@@ -155,3 +155,36 @@
       (is (str/includes? err "unknown --policy"))))
   (testing "a missing --from exits 2"
     (is (= 2 (:exit (cli/run ["apply-repairs" dc]))))))
+
+;; --- conformance (institutional profile check, WP-6) ------------------------
+
+(deftest conformance-checks-against-a-profile
+  (testing "MARC21 vs Linked Art: conformant under errors-only (only richness warnings)"
+    (let [{:keys [exit err]} (cli/run ["conformance" marc21 "--from" "marc21" "--profile" "linked-art"])]
+      (is (= 0 exit))
+      (is (str/includes? err "CONFORMANT"))
+      (is (not (str/includes? err "NON-CONFORMANT")))
+      (is (str/includes? err "Linked Art (Louvre)"))
+      (is (str/includes? err "creator-identified"))))
+  (testing "raising the acceptance threshold makes the warnings non-conformant (exit 1)"
+    (let [{:keys [exit err]} (cli/run ["conformance" marc21 "--from" "marc21"
+                                       "--profile" "linked-art" "--policy" "errors-and-warnings"])]
+      (is (= 1 exit))
+      (is (str/includes? err "NON-CONFORMANT")))))
+
+(deftest conformance-fails-a-titleless-record-and-guards-its-inputs
+  (testing "a titleless DC record fails the name requirement (exit 1)"
+    (let [path (str (System/getProperty "java.io.tmpdir") "/regesta-conf-" (System/nanoTime) ".xml")]
+      (try
+        (spit path "<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:creator>Anon</dc:creator></metadata>")
+        (let [{:keys [exit err]} (cli/run ["conformance" path "--from" "dc" "--profile" "linked-art"])]
+          (is (= 1 exit))
+          (is (str/includes? err "NON-CONFORMANT"))
+          (is (str/includes? err "has-name")))
+        (finally (.delete (java.io.File. path))))))
+  (testing "a missing --profile exits 2 with the available set"
+    (let [{:keys [exit err]} (cli/run ["conformance" marc21 "--from" "marc21"])]
+      (is (= 2 exit))
+      (is (str/includes? err "needs --profile"))))
+  (testing "an unknown --profile exits 2"
+    (is (= 2 (:exit (cli/run ["conformance" marc21 "--from" "marc21" "--profile" "bogus"]))))))
