@@ -1,6 +1,8 @@
 # 0018 — Entity resolution at scale: reconcile-to-authority, equivalence as assertion, revisability
 
-- Status: Proposed
+- Status: Accepted (partially implemented — the certified + fuzzy agent tiers are
+  landed; the equivalence-verdict store and the live-reconciliation yield are
+  deferred, see below)
 - Date: 2026-06-02
 - Partially implemented (2026-06-04): the **certified tier** of decisions 1 and 5
   — reconcile *to an authority*, by a determinate id, never pairwise — is real for

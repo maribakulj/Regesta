@@ -1,6 +1,8 @@
 # 0019 — Conversion directionality: spokes are bidirectional, the hub is a target, and CRM→LRM is a downcast
 
-- Status: Proposed
+- Status: Accepted (partially implemented — the directionality rule, the CRM→LRM
+  downcast round-trip, and the INTERMARC-NG entity-relation spoke are landed;
+  validated on a spec-faithful synthetic corpus pending native NG data)
 - Date: 2026-06-04
 - Builds on: ADR 0013 (LRMoo rich pivot — the hub), ADR 0015 (loss model — the
   receipt of irreversibility), ADR 0016 (FRBRisation — the inference path), ADR 0017

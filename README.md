@@ -366,12 +366,21 @@ use at flagship institutions. The detailed plan lives in
 [`docs/roadmap-v1.md`](./docs/roadmap-v1.md): dependency-ordered work packages
 (WP-0…WP-9) over an honest ~18–24-month horizon. The decisions behind it are in
 [`docs/wp0-decisions.md`](./docs/wp0-decisions.md); the architecture is fixed by
-ADRs [0013](./docs/adr/0013-lrmoo-rich-pivot.md)–[0016](./docs/adr/0016-frbrisation.md).
+ADRs [0013](./docs/adr/0013-lrmoo-rich-pivot.md)–[0019](./docs/adr/0019-conversion-directionality.md).
 
 The hub-and-spoke shape: spoke importers / exporters (MARC21 · UNIMARC ·
-INTERMARC · Dublin Core · IIIF · CIDOC-CRM / Linked Art) ↔ the **assertion IR
-(ground truth)** ↔ a **derived, typed LRMoo view** (a plugin, never the core).
-Every conversion emits a measurable loss report.
+INTERMARC · **INTERMARC-NG** · Dublin Core · MODS · IIIF · CIDOC-CRM / Linked Art)
+↔ the **assertion IR (ground truth)** ↔ a **derived, typed LRMoo view** (a plugin,
+never the core). Every conversion emits a measurable loss report.
+
+As of 2026-06, **seven source spokes reach the LRMoo pivot and project to ten
+targets**: the full MARC family (MARC21 / INTERMARC / UNIMARC) plus the
+INTERMARC-NG **entity-relation** spoke (graph→graph, no inference — ADR 0019) and
+DC / MODS / IIIF; targets span RDF (N-Triples · Turtle · JSON-LD), CIDOC-CRM,
+Linked Art (validated against the official draft-2020-12 schema) and the floor
+formats. Directionality follows role — spokes are bidirectional, the hub is a
+target, and CRM→LRM is a *downcast* (ADR 0019). See
+[`docs/roadmap-v1.md`](./docs/roadmap-v1.md) for the live work-package state.
 
 **Scope reversal.** The original plan (below) deliberately deferred IIIF,
 CIDOC CRM, Linked Art, and **deduplication**. The redefinition pulls them in:
