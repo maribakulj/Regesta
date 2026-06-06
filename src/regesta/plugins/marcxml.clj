@@ -13,9 +13,9 @@
    namespace — URI-encoded or aliased — is irrelevant. Predicate *names* are
    prefixed `f` (`:marc21/f245_a`): a keyword name may not start with a digit and
    an un-prefixed `:marc21/245_a` would not round-trip through EDN (ADR 0001)."
-  (:require [clojure.data.xml :as xml]
-            [clojure.string :as str]
-            [regesta.model :as model]))
+  (:require [clojure.string :as str]
+            [regesta.model :as model]
+            [regesta.xml :as rx]))
 
 (defn local-name
   "Local name (namespace stripped) of an XML element, or nil for a non-element."
@@ -100,7 +100,7 @@
    Each record's fields become native `:ns/f*` assertions via `field-assertions`.
    Eager (whole tree); `stream-records` is the bounded variant for large dumps."
   [xml-string {:keys [record?] :as policies}]
-  (->> (xml/parse-str xml-string)
+  (->> (rx/parse-str xml-string)
        elements
        (filter record?)
        (mapv #(build-record policies %))))
@@ -117,7 +117,7 @@
    SRU-nested pages are small and use `parse-records`. Measured bounded
    (`docs/eval/scale.md`)."
   [readable {:keys [record?] :as policies}]
-  (->> (:content (xml/parse readable))
+  (->> (:content (rx/parse readable))
        (filter record?)
        (map #(build-record policies %))))
 

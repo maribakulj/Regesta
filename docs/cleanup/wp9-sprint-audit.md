@@ -114,9 +114,11 @@ future-spoke seeds *or* dead weight. Two honest options:
   provenance so they are re-fetchable.
 
 ## 4. Beyond this audit — the rest of WP-9
-After keep/delete/modify lands: the plugin-trust **security statement**
-(ADR 0010 trust-on-require vs institutional deployment / `SECURITY.md`),
-edge-case + golden tests, loss-report UX, and the **v1.0.0** cut.
+After keep/delete/modify lands: the **security statement** — plugin-trust model
+(ADR 0010 trust-on-require vs institutional deployment) plus XML input hardening
+(DTD refusal closing billion-laughs / XXE; **landed** in `SECURITY.md` +
+`regesta.xml`) — then edge-case + golden tests, loss-report UX, and the
+**v1.0.0** cut.
 
 ---
 

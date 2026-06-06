@@ -209,8 +209,10 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 ### WP-9 — Hardening & release
 - **Goal:** ship V1.
 - **Deliverables:** edge cases, golden tests on real data, docs, loss-report
-  UX, a security statement on the plugin trust model (ADR 0010 trust-on-require
-  vs institutional deployment), `v1.0.0`.
+  UX, a security statement covering the plugin trust model (ADR 0010
+  trust-on-require vs institutional deployment) **and** XML input hardening
+  (DTD refusal — closes billion-laughs / XXE; landed, see `SECURITY.md`),
+  `v1.0.0`.
 - **Depends on:** all.
 - **Gate:** the Definition of Done (§ 8).
 

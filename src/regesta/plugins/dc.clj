@@ -45,9 +45,9 @@
      identifiers here are arbitrary URLs/strings).
    - Import only; a canonical→DC exporter is a later slice.
    - Element-level only; DC Terms refinements / encoding schemes are out of scope."
-  (:require [clojure.data.xml :as data-xml]
-            [regesta.diagnostics :as dx]
-            [regesta.plugins.shape :as shape]))
+  (:require [regesta.diagnostics :as dx]
+            [regesta.plugins.shape :as shape]
+            [regesta.xml :as rx]))
 
 ;; ---------------------------------------------------------------------------
 ;; Namespaces
@@ -151,7 +151,7 @@
                          "from the filename).")
                     {:spoke :dc :record-id record-id})))
   (let [s      (source->string source-in)
-        root   (-> (data-xml/parse-str s) (shape/rewrite-tags aliases))
+        root   (-> (rx/parse-str s) (shape/rewrite-tags aliases))
         record (shape/ingest-xml root mapping
                                  {:record-id record-id
                                   :kind      (or kind :document)

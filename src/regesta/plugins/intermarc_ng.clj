@@ -33,10 +33,10 @@
    identified Linked Art creator, and subjects (`92x` vedette matière → a Concept /
    Place entity, `:crm/P129_is_about`) reach the CRM graph; collectivities, events
    and finer attributes are a later slice."
-  (:require [clojure.data.xml :as xml]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [regesta.model :as model]
-            [regesta.plugins.marcxml :as marcxml]))
+            [regesta.plugins.marcxml :as marcxml]
+            [regesta.xml :as rx]))
 
 (def ^:private type->kind
   "INTERMARC-NG record entity type → LRMoo WEMI class."
@@ -79,7 +79,7 @@
 
 (defn- record-elems [xml-string]
   (filter #(= "record" (marcxml/local-name %))
-          (marcxml/elements (xml/parse-str xml-string))))
+          (marcxml/elements (rx/parse-str xml-string))))
 
 (defn- datafields [record-elem tag]
   (filter #(and (= "datafield" (marcxml/local-name %)) (= tag (marcxml/attr % "tag")))

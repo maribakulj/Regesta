@@ -183,6 +183,22 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   (provisional — no consumer yet, still callable). Tracked in
   `docs/cleanup/remediation-pass.md`.
 
+### Security
+
+- **XML input hardening (WP-9).** All XML importers now parse through a single
+  façade, `regesta.xml`, which **refuses DTDs** (`:support-dtd false`) instead of
+  calling `clojure.data.xml` directly. This closes a real `billion laughs`
+  entity-expansion denial of service: `clojure.data.xml` expands internal
+  general entities with no size bound and the JDK's `entityExpansionLimit` does
+  not fire through its StAX path (verified — a small nested-entity payload
+  expanded unbounded). Refusing DTDs also removes any DTD-borne XXE surface
+  (external `SYSTEM`/`PUBLIC` entities were already unresolved by data.xml;
+  `:supporting-external-entities false` is now pinned for defence in depth). No
+  fixture or supported format uses a DTD, so the policy is total. Wired across
+  MARC-XML (and its INTERMARC/UNIMARC/INTERMARC-NG dialects), MODS, Dublin Core
+  and the generic shape adapter; pinned by `regesta.xml-test` on both the eager
+  and streaming parse paths; documented in `SECURITY.md` (Hardening).
+
 ### Earlier in this line
 
 - Property-based tests covering rule-engine determinism, triple-view
