@@ -24,15 +24,6 @@
     :input-format        format
     :importer            (fn [_opts _src] {:records [] :diagnostics []})}))
 
-(defn- make-exporter-plugin
-  ([id]
-   (make-exporter-plugin id :json-ld))
-  ([id format]
-   {:plugin/spec-version 1
-    :id                  id
-    :output-format       format
-    :exporter            (fn [_opts _recs] {:output nil :diagnostics []})}))
-
 ;; ---------------------------------------------------------------------------
 ;; Plugin schema
 ;; ---------------------------------------------------------------------------
@@ -139,40 +130,6 @@
               (plug/register (make-importer-plugin :plugin/a))
               (plug/register (make-importer-plugin :plugin/b)))]
     (is (= #{:plugin/a :plugin/b} (plug/registered-ids r)))))
-
-;; ---------------------------------------------------------------------------
-;; Queries: plugins-for-format / importers-for / exporters-for
-;; ---------------------------------------------------------------------------
-
-(deftest plugins-for-format-filters
-  (let [r (-> plug/empty-registry
-              (plug/register (make-importer-plugin :plugin/xml1 :xml))
-              (plug/register (make-importer-plugin :plugin/xml2 :xml))
-              (plug/register (make-importer-plugin :plugin/json :json)))]
-    (is (= 2 (count (plug/plugins-for-format r :xml))))
-    (is (= 1 (count (plug/plugins-for-format r :json))))
-    (is (= 0 (count (plug/plugins-for-format r :csv))))))
-
-(deftest importers-for-one-arg-filters-by-importer-presence
-  (let [r (-> plug/empty-registry
-              (plug/register (make-importer-plugin :plugin/imp))
-              (plug/register (make-exporter-plugin :plugin/exp)))]
-    (is (= 1 (count (plug/importers-for r))))
-    (is (= :plugin/imp (:id (first (plug/importers-for r)))))))
-
-(deftest importers-for-two-arg-filters-by-format
-  (let [r (-> plug/empty-registry
-              (plug/register (make-importer-plugin :plugin/xml :xml))
-              (plug/register (make-importer-plugin :plugin/json :json)))]
-    (is (= 1 (count (plug/importers-for r :xml))))
-    (is (= :plugin/xml (:id (first (plug/importers-for r :xml)))))))
-
-(deftest exporters-for-two-arg-filters-by-output-format
-  (let [r (-> plug/empty-registry
-              (plug/register (make-exporter-plugin :plugin/jl :json-ld))
-              (plug/register (make-exporter-plugin :plugin/turtle :turtle)))]
-    (is (= 1 (count (plug/exporters-for r :json-ld))))
-    (is (= :plugin/jl (:id (first (plug/exporters-for r :json-ld)))))))
 
 ;; ---------------------------------------------------------------------------
 ;; Queries: all-rules / all-mappings
@@ -315,24 +272,12 @@
         (is (re-find #"Transform name collision" (ex-message ex)))
         (is (= {:trim :core} (:already-from (ex-data ex))))))))
 
-(deftest effective-predicates-and-transforms-accessors
+(deftest effective-transforms-accessor
   (let [r (plug/register plug/empty-registry
                          (assoc minimal-plugin
-                                :predicates {'p1 (fn [_ _] true)}
                                 :transforms {:tx (fn [v] v)}))]
-    (is (contains? (plug/effective-predicates r) 'p1))
-    (is (contains? (plug/effective-predicates r) 'absent?))
     (is (contains? (plug/effective-transforms r) :tx))
     (is (contains? (plug/effective-transforms r) :trim))))
-
-(deftest predicate-source-identifies-contributor
-  (let [r (plug/register plug/empty-registry
-                         (assoc minimal-plugin
-                                :id :plugin/p1
-                                :predicates {'plugin-pred? (fn [_ _] true)}))]
-    (is (= :core           (plug/predicate-source r 'absent?)))
-    (is (= :plugin/p1      (plug/predicate-source r 'plugin-pred?)))
-    (is (nil?              (plug/predicate-source r 'unknown?)))))
 
 (deftest transform-source-identifies-contributor
   (let [r (plug/register plug/empty-registry
@@ -344,101 +289,7 @@
     (is (nil?         (plug/transform-source r :unknown)))))
 
 ;; ---------------------------------------------------------------------------
-;; :input-format dispatch (M2.B)
+;; Spoke dispatch (the production path) lives in `regesta.spokes` (a plain
+;; `format → plugin` map) and `regesta.convert` / `regesta.validate`, not in
+;; this registry; there is no dispatch surface to unit-test here.
 ;; ---------------------------------------------------------------------------
-
-(defn- importer-plugin
-  "Build an importer plugin with the given id, format, and optional
-   :matches? function."
-  ([id format]
-   (importer-plugin id format nil))
-  ([id format matches-fn]
-   (cond-> {:plugin/spec-version 1
-            :id                  id
-            :input-format        format
-            :importer            (fn [_opts _src] {:records [] :diagnostics []})}
-     matches-fn (assoc :matches? matches-fn))))
-
-(def ^:private dummy-source {:source/kind :string :source/value "x"})
-
-(deftest select-importer-using-plugin-bypasses-dispatch
-  (let [r (-> plug/empty-registry
-              (plug/register (importer-plugin :plugin/xml-a :xml))
-              (plug/register (importer-plugin :plugin/xml-b :xml)))]
-    (is (= :plugin/xml-a
-           (:id (plug/select-importer r {:format       :xml
-                                         :source       dummy-source
-                                         :using-plugin :plugin/xml-a}))))))
-
-(deftest select-importer-using-plugin-rejects-unknown
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                        #"not in registry"
-                        (plug/select-importer plug/empty-registry
-                                              {:format :xml
-                                               :using-plugin :plugin/ghost}))))
-
-(deftest select-importer-using-plugin-rejects-without-importer
-  (let [exporter-only {:plugin/spec-version 1
-                       :id :plugin/exp-only
-                       :exporter (fn [_ _] nil)}
-        r             (plug/register plug/empty-registry exporter-only)]
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                          #"no importer"
-                          (plug/select-importer r {:format :xml
-                                                   :using-plugin :plugin/exp-only})))))
-
-(deftest select-importer-zero-candidates
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                        #"No importer plugin matched"
-                        (plug/select-importer plug/empty-registry
-                                              {:format :xml :source dummy-source}))))
-
-(deftest select-importer-single-candidate
-  (let [r (plug/register plug/empty-registry
-                         (importer-plugin :plugin/only :xml))]
-    (is (= :plugin/only
-           (:id (plug/select-importer r {:format :xml :source dummy-source}))))))
-
-(deftest select-importer-multiple-candidates-without-matches-is-error
-  (let [r (-> plug/empty-registry
-              (plug/register (importer-plugin :plugin/xml-a :xml))
-              (plug/register (importer-plugin :plugin/xml-b :xml)))]
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                          #"ambiguous"
-                          (plug/select-importer r {:format :xml :source dummy-source})))))
-
-(deftest select-importer-matches-filter-narrows-to-one
-  (let [r (-> plug/empty-registry
-              (plug/register (importer-plugin :plugin/specific :xml
-                                              (fn [_ _] true)))
-              (plug/register (importer-plugin :plugin/generic :xml
-                                              (fn [_ _] false))))]
-    (is (= :plugin/specific
-           (:id (plug/select-importer r {:format :xml :source dummy-source}))))))
-
-(deftest select-importer-matches-all-false-is-zero-candidates
-  (let [r (-> plug/empty-registry
-              (plug/register (importer-plugin :plugin/a :xml (fn [_ _] false)))
-              (plug/register (importer-plugin :plugin/b :xml (fn [_ _] false))))]
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                          #"No importer plugin matched"
-                          (plug/select-importer r {:format :xml :source dummy-source})))))
-
-(deftest select-importer-matches-multiple-true-still-ambiguous
-  (let [r (-> plug/empty-registry
-              (plug/register (importer-plugin :plugin/a :xml (fn [_ _] true)))
-              (plug/register (importer-plugin :plugin/b :xml (fn [_ _] true))))]
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                          #"ambiguous"
-                          (plug/select-importer r {:format :xml :source dummy-source})))))
-
-(deftest select-importer-mixes-matches-and-no-matches
-  (testing "plugin without :matches? stays eligible; one with :matches? returning true also stays"
-    (let [r (-> plug/empty-registry
-                (plug/register (importer-plugin :plugin/specific :xml
-                                                (fn [_ _] true)))
-                (plug/register (importer-plugin :plugin/fallback :xml)))]
-      (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                            #"ambiguous"
-                            (plug/select-importer r {:format :xml :source dummy-source}))
-          "two eligible plugins is an error per ADR 0007"))))

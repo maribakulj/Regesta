@@ -134,40 +134,8 @@
   (set (keys registry)))
 
 ;; ---------------------------------------------------------------------------
-;; Queries
-;;
-;; Inert query helpers — they describe what the registry contains, they
-;; do not select a single plugin for execution. Format dispatch (the
-;; "exactly one eligible" rule per ADR 0007) lives in M2.B alongside
-;; the `:requires` graph.
+;; Rule + mapping pooling
 ;; ---------------------------------------------------------------------------
-
-(defn plugins-for-format
-  "Return the vector of plugins whose `:input-format` equals `format`.
-   Order is unspecified — callers needing deterministic order should
-   sort by `:id`."
-  [registry format]
-  (filterv #(= format (:input-format %)) (vals registry)))
-
-(defn importers-for
-  "Return plugins that declare an `:importer`. With one arg, every
-   importer plugin. With two args, every importer plugin whose
-   `:input-format` matches."
-  ([registry]
-   (filterv :importer (vals registry)))
-  ([registry format]
-   (filterv (every-pred :importer #(= format (:input-format %)))
-            (vals registry))))
-
-(defn exporters-for
-  "Return plugins that declare an `:exporter`. With one arg, every
-   exporter plugin. With two args, every exporter plugin whose
-   `:output-format` matches."
-  ([registry]
-   (filterv :exporter (vals registry)))
-  ([registry format]
-   (filterv (every-pred :exporter #(= format (:output-format %)))
-            (vals registry))))
 
 (defn all-rules
   "Concatenate the `:rules` of every plugin in `registry`. Each rule
@@ -241,8 +209,8 @@
    ex-info naming the contributors involved.
 
    The maps returned are plain (no metadata). The merge bookkeeping is
-   internal; use `predicate-source` / `transform-source` to ask which
-   contributor owns a given entry."
+   internal; use `transform-source` to ask which contributor owns a
+   given transform."
   [registry]
   (let [pred-contribs (cons [core-source rules/predicate-stdlib]
                             (plugin-contributions registry :predicates))
@@ -251,43 +219,18 @@
     {:predicates (with-meta (merge-no-conflicts pred-contribs "Predicate") nil)
      :transforms (with-meta (merge-no-conflicts tx-contribs "Transform")  nil)}))
 
-(defn effective-predicates
-  "Return the effective predicate stdlib as a `{symbol → fn}` map.
-   Convenience accessor over `effective-stdlib`."
-  [registry]
-  (:predicates (effective-stdlib registry)))
-
 (defn effective-transforms
   "Return the effective transform stdlib as a `{keyword → fn}` map.
    Convenience accessor over `effective-stdlib`."
   [registry]
   (:transforms (effective-stdlib registry)))
 
-(defn predicate-source
-  "Return the contributor of the predicate `sym` in the registry's
-   effective stdlib: `:core` for a built-in, the plugin id for a
-   plugin contribution, or `nil` if `sym` is not defined.
-
-   For registries that contain colliding contributions, the answer
-   reflects scan order and should not be trusted — call
-   `effective-stdlib` first to surface conflicts."
-  [registry sym]
-  (cond
-    (contains? rules/predicate-stdlib sym)
-    core-source
-
-    :else
-    (some (fn [plugin]
-            (when (contains? (:predicates plugin) sym)
-              (:id plugin)))
-          (vals registry))))
-
 (defn transform-source
   "Return the contributor of the transform `kw` in the registry's
    effective stdlib: `:core` for a built-in, the plugin id for a
    plugin contribution, or `nil` if `kw` is not defined.
 
-   Same trust caveat as `predicate-source`."
+   Same trust caveat as `effective-stdlib`."
   [registry kw]
   (cond
     (contains? tx/core-transforms kw)
@@ -298,63 +241,3 @@
             (when (contains? (:transforms plugin) kw)
               (:id plugin)))
           (vals registry))))
-
-;; ---------------------------------------------------------------------------
-;; :input-format dispatch (ADR 0007)
-;;
-;; Resolution order:
-;;   1. Explicit `:using-plugin` always wins.
-;;   2. Otherwise, gather importer plugins whose `:input-format` matches.
-;;   3. Filter through each candidate's `:matches?` (plugins without
-;;      `:matches?` stay eligible without sniffing).
-;;   4. Exactly one plugin must remain. Zero or 2+ is a hard error.
-;;
-;; Silent first-wins resolution is explicitly rejected by ADR 0007 —
-;; ambiguous dispatch surfaces as an error naming the candidates.
-;; ---------------------------------------------------------------------------
-
-(defn- importer? [plugin] (some? (:importer plugin)))
-
-(defn- matches-eligible?
-  "Apply `:matches?` if present; eligible by default if absent."
-  [plugin opts source]
-  (if-let [m? (:matches? plugin)]
-    (boolean (m? opts source))
-    true))
-
-(defn select-importer
-  "Resolve which importer plugin to use for a given source per ADR 0007
-   §Input-format dispatch.
-
-   `ctx` is a map:
-
-     :format        (required) input-format keyword to dispatch on
-     :source                   source map passed to `:matches?`
-     :opts                     opts map passed to `:matches?`
-     :using-plugin             explicit plugin id; bypasses dispatch
-
-   Returns the selected plugin. Throws ex-info if zero or two-plus
-   plugins remain eligible after the `:matches?` filter, or if
-   `:using-plugin` names an unknown plugin or one without an
-   `:importer`."
-  [registry {:keys [format source opts using-plugin]}]
-  (if using-plugin
-    (let [plugin (lookup registry using-plugin)]
-      (cond
-        (nil? plugin)
-        (throw (ex-info "Explicitly-selected plugin not in registry"
-                        {:using-plugin using-plugin}))
-        (not (importer? plugin))
-        (throw (ex-info "Explicitly-selected plugin has no importer"
-                        {:using-plugin using-plugin}))
-        :else plugin))
-    (let [candidates (importers-for registry format)
-          eligible   (filterv #(matches-eligible? % opts source) candidates)]
-      (case (count eligible)
-        0 (throw (ex-info "No importer plugin matched the source"
-                          {:format     format
-                           :candidates (mapv :id candidates)}))
-        1 (first eligible)
-        (throw (ex-info "Multiple importer plugins matched (ambiguous)"
-                        {:format   format
-                         :eligible (mapv :id eligible)}))))))

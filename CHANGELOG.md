@@ -231,6 +231,19 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   ingestion, fragments, the `xml:lang` qualifier and the `:trim` reconciliation
   stay fully covered by `dc-test` and the XML half of `shape-test`.
 
+- **Plugin registry trimmed to its used surface.** Removed the unused
+  `:input-format` dispatch (`select-importer` + the `:matches?` sniffing and
+  "exactly one eligible" rule) — the production spoke dispatch is the
+  `regesta.spokes` `format → plugin` map, not this registry — together with the
+  test-only query helpers (`plugins-for-format`, `importers-for`,
+  `exporters-for`) and the dead predicate-side stdlib accessors
+  (`effective-predicates`, `predicate-source`): no plugin declares
+  `:predicates`, so they had nothing to resolve. Kept: the Plugin schema,
+  `register` / `unregister` / `lookup` / `registered-ids`, rule/mapping pooling
+  (`all-rules` / `all-mappings`), the `effective-stdlib` merge with its
+  collision detection, and `effective-transforms` / `transform-source` (the live
+  transform side).
+
 ### Security
 
 - **XML input hardening (WP-9).** All XML importers now parse through a single
