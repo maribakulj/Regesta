@@ -232,8 +232,9 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 | WP-9 release | ✗ |
 
 Also delivered beyond the original WPs: ADR 0018 (entity resolution at scale,
-*Proposed*); **ADR 0019 (conversion directionality, *Proposed*)** — spokes are
-bidirectional, the hub is a target, and CRM→LRM is a *downcast* that succeeds only
+*Accepted, partially implemented*); **ADR 0019 (conversion directionality,
+*Accepted, partially implemented*)** — spokes are bidirectional, the hub is a
+target, and CRM→LRM is a *downcast* that succeeds only
 when the F-typing survives, demonstrated by a CRM→LRMoo round-trip
 (`lrmoo.crm-import`): our additive `:crm` recovers F1/F2/F3 losslessly, our pure
 `:crm-only` collapses at `E73` into `:ambiguity-collapsed` (the loss the
