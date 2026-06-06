@@ -105,3 +105,11 @@ correctly yields 0 records, not a parse failure.)
   exact title, so it confirms precision + exact-title bridging but does not yet
   stress variant-title recall on an independent gold — the broad clean Work gold
   ADR 0018 says does not exist in open sources.
+- **Variant-title recall now stressed on an independent gold** —
+  [`bibr-frbrisation.md`](./bibr-frbrisation.md), `regesta.eval.bibr-frbrisation-test`.
+  The third-party **BIB-R** FRBRization benchmark (CC BY-NC, no `f145` dependence)
+  supplies the broad, hand-curated MARC→FRBR gold the bullet above lacked: 560
+  records whose gold Works unify transcribed-title variants/translations/abridgements.
+  Over the title-joinable subset (362 / 560), Regesta's floor key scores **P = 1.000,
+  R = 0.775** — precision-first with a *measured* title-variant recall gap (112 missed
+  pairs), corroborating the ceiling on a third corpus rather than asserting it.

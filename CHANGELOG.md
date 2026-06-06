@@ -16,6 +16,20 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Added
 
+- Independent FRBRisation eval against the third-party **BIB-R** benchmark
+  (`regesta.eval.bibr-frbrisation-test`, `test/fixtures/bibr-gold/`,
+  `docs/eval/bibr-frbrisation.md`). BIB-R ("Benchmark of FRBRization solutions",
+  bib-r.github.io, CC BY-NC) is a hand-curated MARC→FRBR/RDA gold with no
+  dependence on the BnF `f145` link — the non-circular gold `frbrisation-fidelity.md`
+  §3 called for, and a third corpus for ADR 0018's recall ceiling. Regesta ingests
+  the 560 MARCXML records, clusters by minted F1 Work, and is scored pairwise against
+  the gold Work grouping (records joined by normalised title): **P = 1.000,
+  R = 0.775, F1 = 0.873** over the joinable subset (362 / 560 — the join coverage is
+  asserted as a first-class number, since the MARC `001`s share no identifier with
+  the gold's title-slug URIs). Precision-first with a *measured* title-variant recall
+  gap, on a gold owing nothing to `f145`. The gold grouping is derived from the
+  benchmark's FRBR RDF (provenance in the fixture README); the input is committed
+  gzipped to respect repo footprint.
 - `regesta.conformance` — the WP-6 conformance mechanism + three institutional
   profiles (Linked Art / Louvre, BnF INTERMARC, IIIF Presentation 3.0). A profile
   is a named set of checks expressed as ordinary diagnostics (ADR 0001) over a
