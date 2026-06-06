@@ -27,34 +27,17 @@
    a record is an `<mxc:record>` (a `record` carrying the `id` ARK, vs the SRU
    `<srw:record>` wrapper that has none), its id is `:bnf/<cb-number>`, and its
    `:kind` comes from the `type` attribute."
-  (:require [clojure.string :as str]
-            [regesta.plugins.marcxml :as marcxml]))
-
-(defn- mxc-record?
-  "True for an `<mxc:record>` (local name `record` carrying the `id` ARK),
-   distinguishing it from the SRU `<srw:record>` wrapper, which has none."
-  [elem]
-  (and (= "record" (marcxml/local-name elem)) (some? (marcxml/attr elem "id"))))
-
-(defn- record-id-from-ark
-  "`:bnf/<cb-number>` from an ARK like \"ark:/12148/cb304403926\"."
-  [ark]
-  (keyword "bnf" (last (str/split ark #"/"))))
+  (:require [regesta.plugins.marcxml :as marcxml]))
 
 ;; ---------------------------------------------------------------------------
 ;; Public API + plugin
 ;; ---------------------------------------------------------------------------
 
 (defn- policies
-  "The MARCXML family policies for the INTERMARC spoke (shared by `ingest`/`stream`)."
+  "The MARCXChange family policies for the INTERMARC spoke (shared by
+   `ingest`/`stream`); INTERMARC and UNIMARC differ only in the `ns`."
   [opts]
-  {:ns        "intermarc"
-   :record?   mxc-record?
-   :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
-   :kind      (fn [e] (or (:kind opts)
-                          (keyword "intermarc"
-                                   (str/lower-case (or (marcxml/attr e "type") "record")))))
-   :source    (fn [e] (marcxml/attr e "id"))})
+  (marcxml/mxc-policies "intermarc" opts))
 
 (defn ingest
   "Parse an InterMARCXChange `xml-string` into a vector of Records carrying native

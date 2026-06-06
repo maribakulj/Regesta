@@ -14,6 +14,7 @@
    prefixed `f` (`:marc21/f245_a`): a keyword name may not start with a digit and
    an un-prefixed `:marc21/245_a` would not round-trip through EDN (ADR 0001)."
   (:require [clojure.data.xml :as xml]
+            [clojure.string :as str]
             [regesta.model :as model]))
 
 (defn local-name
@@ -119,3 +120,34 @@
   (->> (:content (xml/parse readable))
        (filter record?)
        (map #(build-record policies %))))
+
+;; ---------------------------------------------------------------------------
+;; MARCXChange (BnF) family policies — shared by INTERMARC and UNIMARC, which
+;; differ only in their predicate/kind namespace. (MARC21slim has a different
+;; record shape and supplies its own policies.)
+;; ---------------------------------------------------------------------------
+
+(defn- mxc-record?
+  "True for an `<mxc:record>` — a `record` element carrying an `id` ARK — as opposed
+   to the SRU `<srw:record>` wrapper, which has none."
+  [elem]
+  (and (= "record" (local-name elem)) (some? (attr elem "id"))))
+
+(defn- record-id-from-ark
+  "`:bnf/<cb-number>` from an ARK like \"ark:/12148/cb304403926\"."
+  [ark]
+  (keyword "bnf" (last (str/split ark #"/"))))
+
+(defn mxc-policies
+  "The `parse-records`/`stream-records` policies for a BnF MARCXChange spoke under
+   predicate/kind namespace `ns` (a string): a record is an `<mxc:record>`, its id is
+   `:bnf/<cb-number>` from the ARK, its `:kind` is `(keyword ns (lower-case type))`
+   (or `opts`'s `:kind`), and its `:source` is the ARK. INTERMARC and UNIMARC differ
+   only in `ns`."
+  [ns opts]
+  {:ns        ns
+   :record?   mxc-record?
+   :record-id (fn [e] (record-id-from-ark (attr e "id")))
+   :kind      (fn [e] (or (:kind opts)
+                          (keyword ns (str/lower-case (or (attr e "type") "record")))))
+   :source    (fn [e] (attr e "id"))})

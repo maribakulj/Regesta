@@ -27,30 +27,13 @@
    (`1xx`), series (`4xx`) and physical description (`215`) have no floor home and
    are dropped — the MARC analogue of the other spokes' report-at-ingest loss,
    surfaced by the round-trip exporters."
-  (:require [clojure.string :as str]
-            [regesta.plugins.marcxml :as marcxml]))
-
-(defn- mxc-record?
-  "True for an `<mxc:record>` (local name `record` carrying the `id` ARK), the BnF
-   SRU bibliographic/authority record, vs the `<srw:record>` wrapper (no `id`)."
-  [elem]
-  (and (= "record" (marcxml/local-name elem)) (some? (marcxml/attr elem "id"))))
-
-(defn- record-id-from-ark
-  "`:bnf/<cb-number>` from an ARK like \"ark:/12148/cb39508046q\"."
-  [ark]
-  (keyword "bnf" (last (str/split ark #"/"))))
+  (:require [regesta.plugins.marcxml :as marcxml]))
 
 (defn- policies
-  "The MARCXML family policies for the UNIMARC spoke (shared by `ingest`/`stream`)."
+  "The MARCXChange family policies for the UNIMARC spoke (shared by `ingest`/`stream`);
+   UNIMARC and INTERMARC differ only in the `ns`."
   [opts]
-  {:ns        "unimarc"
-   :record?   mxc-record?
-   :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
-   :kind      (fn [e] (or (:kind opts)
-                          (keyword "unimarc"
-                                   (str/lower-case (or (marcxml/attr e "type") "record")))))
-   :source    (fn [e] (marcxml/attr e "id"))})
+  (marcxml/mxc-policies "unimarc" opts))
 
 (defn ingest
   "Parse a UNIMARC MARCXChange `xml-string` into a vector of Records with native
