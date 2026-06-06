@@ -1,6 +1,6 @@
 (ns regesta.runtime-test
   "Tests for the rule execution engine: phase filtering, production merging,
-   multi-cycle execution, pipeline runs, and trace queries."
+   single-pass phase execution, and pipeline runs."
   (:require [clojure.test :refer [deftest is testing]]
             [regesta.model :as model]
             [regesta.rules :as rules]
@@ -141,35 +141,35 @@
     (is (= 2 (count (:diagnostics out))))))
 
 ;; ---------------------------------------------------------------------------
-;; run-phase-once
+;; run-phase — a single pass over one phase's rules (ADR 0004/0020)
 ;; ---------------------------------------------------------------------------
 
-(deftest run-phase-once-no-rules-is-identity
+(deftest run-phase-no-rules-is-identity
   (let [r (book :r/a :title "T")
-        {:keys [record productions]} (rt/run-phase-once r [] :validate)]
+        {:keys [record productions]} (rt/run-phase r [] :validate)]
     (is (= r record))
     (is (empty? productions))))
 
-(deftest run-phase-once-skips-wrong-phase
+(deftest run-phase-skips-wrong-phase
   (let [r   (book :r/b)
         rs  (compile-many [tag-rule])
-        {:keys [record productions]} (rt/run-phase-once r rs :validate)]
+        {:keys [record productions]} (rt/run-phase r rs :validate)]
     (is (= r record))
     (is (empty? productions))))
 
-(deftest run-phase-once-merges-productions
+(deftest run-phase-merges-productions
   (let [r   (book :r/c)
         rs  (compile-many [tag-rule])
-        {:keys [record productions]} (rt/run-phase-once r rs :normalize)]
+        {:keys [record productions]} (rt/run-phase r rs :normalize)]
     (is (= 1 (count productions)))
     (is (= 1 (count (:assertions record))))
     (is (= :canon/seen (-> record :assertions first :predicate)))
     (is (= :rule/tag  (-> record :assertions first :provenance :rule)))))
 
-(deftest run-phase-once-multi-rule
+(deftest run-phase-multi-rule
   (let [r   (book :r/d)
         rs  (compile-many [tag-rule title-required-rule])
-        {:keys [record productions]} (rt/run-phase-once r rs :validate)]
+        {:keys [record productions]} (rt/run-phase r rs :validate)]
     ;; Only title-required applies in :validate; tag-rule is :normalize.
     (is (= 1 (count productions)))
     (is (= :diagnostic (:kind (first productions))))
@@ -177,76 +177,39 @@
     (is (= :validate (get-in (first productions) [:value :provenance :pass])))
     (is (= 1 (count (:diagnostics record))))))
 
-;; ---------------------------------------------------------------------------
-;; run-phase with cycles
-;; ---------------------------------------------------------------------------
-
-(deftest run-phase-default-cycles-is-one
-  (let [r   (book :r/e)
-        rs  (compile-many [tag-rule])
+(deftest run-phase-is-a-single-pass
+  ;; A phase fires every matching rule once against the record as it entered
+  ;; the phase; a rule does not observe facts another rule produced in the
+  ;; same pass (ADR 0020 — no multi-cycle iteration). Chaining is expressed
+  ;; across phases, not within one.
+  (let [produce-x {:id :rule/produce-x
+                   :phase :normalize
+                   :match '[[?r :meta/kind :book]
+                            (absent? ?r :canon/x)]
+                   :produce {:assert {:subject '?r :predicate :canon/x :value 1}}}
+        consume-x {:id :rule/consume-x
+                   :phase :normalize
+                   :match '[[?r :canon/x ?v]]
+                   :produce {:assert {:subject '?r :predicate :canon/x-seen :value true}}}
+        r         (book :r/i)
+        rs        (compile-many [produce-x consume-x])
         {:keys [record]} (rt/run-phase r rs :normalize)]
-    (is (= 1 (count (:assertions record))))))
+    (is (some #(= :canon/x (:predicate %)) (:assertions record))
+        "produce-x fires")
+    (is (not-any? #(= :canon/x-seen (:predicate %)) (:assertions record))
+        "consume-x does not see produce-x's same-pass output")))
 
-(deftest run-phase-zero-cycles-is-identity
-  (let [r   (book :r/f)
-        rs  (compile-many [tag-rule])
-        {:keys [record productions]} (rt/run-phase r rs :normalize {:cycles 0})]
-    (is (= r record))
-    (is (empty? productions))))
-
-(deftest run-phase-cycles-trace-vs-merged
-  ;; Under ADR 0008, identical productions deduplicate at merge. tag-rule
-  ;; has no guard, so it fires once per cycle and produces three trace
-  ;; entries; the record retains a single deduplicated assertion.
-  (let [r   (book :r/g)
-        rs  (compile-many [tag-rule])
-        {:keys [record productions]} (rt/run-phase r rs :normalize {:cycles 3})]
-    (is (= 3 (count productions))
-        "production trace records every firing")
+(deftest run-phase-dedups-same-fact-from-two-rules
+  ;; ADR 0008 survives the single-pass move: two rules deriving the same
+  ;; [subject predicate value status] in one pass leave two trace entries
+  ;; but a single merged assertion.
+  (let [tag-again (assoc tag-rule :id :rule/tag-again)
+        rs        (compile-many [tag-rule tag-again])
+        {:keys [record productions]} (rt/run-phase (book :r/g) rs :normalize)]
+    (is (= 2 (count productions))
+        "trace records both firings")
     (is (= 1 (count (:assertions record)))
         "merge dedups identical assertions (ADR 0008)")))
-
-(deftest run-phase-multi-cycle-validation-is-idempotent
-  ;; title-required on a title-absent record: regardless of cycle count,
-  ;; the diagnostic appears exactly once on the merged record. Pre-ADR-0008
-  ;; this test asserted the opposite (one duplicate per cycle).
-  (let [r   (book :r/h)
-        rs  (compile-many [title-required-rule])
-        {:keys [record]} (rt/run-phase r rs :validate {:cycles 3})]
-    (is (= 1 (count (:diagnostics record)))
-        "identical diagnostics dedup at merge (ADR 0008)")))
-
-(deftest run-phase-sees-new-productions-from-previous-cycle
-  ;; An infer rule that reacts to an assertion produced by a normalize
-  ;; rule — but since they're in different phases, we exercise the
-  ;; within-phase visibility by chaining two rules in the same phase.
-  (let [produce-x   {:id :rule/produce-x
-                     :phase :normalize
-                     :match '[[?r :meta/kind :book]
-                              (absent? ?r :canon/x)]
-                     :produce {:assert {:subject '?r
-                                        :predicate :canon/x
-                                        :value 1}}}
-        consume-x   {:id :rule/consume-x
-                     :phase :normalize
-                     :match '[[?r :canon/x ?v]]
-                     :produce {:assert {:subject '?r
-                                        :predicate :canon/x-seen
-                                        :value true}}}
-        r           (book :r/i)
-        rs          (compile-many [produce-x consume-x])
-        {:keys [record]} (rt/run-phase r rs :normalize {:cycles 2})]
-    (is (some #(= :canon/x       (:predicate %)) (:assertions record)))
-    (is (some #(= :canon/x-seen  (:predicate %)) (:assertions record)))))
-
-(deftest run-phase-rejects-over-max-cycles
-  (is (thrown? clojure.lang.ExceptionInfo
-               (rt/run-phase (book :r/j) [] :normalize
-                             {:cycles (inc rt/max-cycles)}))))
-
-(deftest run-phase-rejects-negative-cycles
-  (is (thrown? clojure.lang.ExceptionInfo
-               (rt/run-phase (book :r/k) [] :normalize {:cycles -1}))))
 
 ;; ---------------------------------------------------------------------------
 ;; run-pipeline
@@ -260,17 +223,6 @@
         {:keys [record]} (rt/run-pipeline r rs pipeline)]
     (is (some #(= :canon/seen              (:predicate %)) (:assertions record)))
     (is (some #(= :canon/normalized-title  (:predicate %)) (:assertions record)))))
-
-(deftest run-pipeline-honors-cycles
-  ;; tag-rule fires once per cycle but the merged record carries a single
-  ;; deduplicated assertion (ADR 0008). The cycle count is observable via
-  ;; the production trace, not by counting assertions.
-  (let [r        (book :r/q)
-        rs       (compile-many [tag-rule])
-        pipeline [{:phase :normalize :cycles 3}]
-        {:keys [record productions]} (rt/run-pipeline r rs pipeline)]
-    (is (= 3 (count productions)))
-    (is (= 1 (count (:assertions record))))))
 
 (deftest run-pipeline-validates-shape
   (is (thrown? clojure.lang.ExceptionInfo
@@ -329,14 +281,14 @@
                           :code (keyword (str "check-" i))
                           :subject '?r}}})
 
-(deftest exit-gate-twenty-rules-fifty-plus-productions
+(deftest exit-gate-fifty-plus-rules-all-traceable
   (let [rs       (compile-many (concat
-                                (map synthetic-rule (range 15))
+                                (map synthetic-rule (range 50))
                                 (map synthetic-validator (range 5))))
-        _        (is (= 20 (count rs)) "20 compiled rules")
+        _        (is (= 55 (count rs)) "55 compiled rules")
         r        (book :r/gate)
-        pipeline [{:phase :normalize :cycles 3}
-                  {:phase :validate  :cycles 1}]
+        pipeline [{:phase :normalize}
+                  {:phase :validate}]
         {:keys [record productions]} (rt/run-pipeline r rs pipeline)]
     (testing "At least 50 productions in total (exit gate)"
       (is (>= (count productions) 50)))
@@ -349,6 +301,6 @@
     (testing "Every rule that fired is attributable in provenance"
       (let [fired-rules (set (map #(get-in % [:provenance :rule])
                                   (concat (:assertions record) (:diagnostics record))))]
-        ;; 15 tag-rules each produce 3 assertions (3 cycles), 5 validators
-        ;; each produce 1 diagnostic. All 20 must appear.
-        (is (= 20 (count fired-rules)))))))
+        ;; 50 tag-rules each produce 1 assertion, 5 validators each produce
+        ;; 1 diagnostic — a single pass. All 55 must appear.
+        (is (= 55 (count fired-rules)))))))

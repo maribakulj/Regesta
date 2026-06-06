@@ -98,12 +98,16 @@ See [ADR 0002](./docs/adr/0002-edn-as-dsl.md).
 A run is a sequence of phases:
 
 ```
-ingest → normalize → validate → infer → repair → project
+ingest → normalize → validate → infer → repair
 ```
 
-Each phase is a pure transformation `IR → IR + diagnostics`. Phases run a
-declared number of times (default 1); no implicit fixpoint in V1. See
-[ADR 0004](./docs/adr/0004-fixed-passes-over-fixpoint.md).
+Each phase is a pure transformation `IR → IR + diagnostics`, run as a single
+pass — every matching rule fires once; there is no multi-cycle iteration or
+implicit fixpoint in V1. See
+[ADR 0004](./docs/adr/0004-fixed-passes-over-fixpoint.md) (superseded by
+[ADR 0020](./docs/adr/0020-single-pass-and-retire-project-phase.md)).
+Projection to target formats is performed by exporters after the pipeline,
+not as a pipeline phase.
 
 ### Vocabulary layering
 
@@ -139,9 +143,10 @@ core's internals; they interact only through the model API and the rule DSL.
 
 A validation failure is not an exception — it is a `Diagnostic` attached to
 its subject, carried alongside the data through the pipeline. A diagnostic
-may suggest zero or more `Repair` operations. Repairs remain `:proposed` and
-are never applied automatically in V1; the `apply-repairs` command surfaces
-them for human acceptance or rejection. See
+may suggest zero or more `Repair` operations; these are produced in the
+**`:repair` phase**. Repairs remain `:proposed` and are never applied
+automatically in V1; the `apply-repairs` command surfaces them for human
+acceptance or rejection. See
 [ADR 0005](./docs/adr/0005-status-model.md) for the status model.
 
 ---

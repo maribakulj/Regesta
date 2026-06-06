@@ -21,8 +21,8 @@
      call arbitrary Clojure functions.
 
    Production actions: `:assert`, `:diagnostic`, `:repair`, `:entity` (mint a
-   synthesized subject — ADR 0014/0017). `:retract` and `:project-intent` are
-   planned future additions."
+   synthesized subject — ADR 0014/0017). A `:retract` / `:supersede` family is
+   a planned future addition (ADR 0008)."
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [clojure.walk :as walk]
@@ -381,7 +381,7 @@
 (def Rule
   [:map
    [:id :keyword]
-   [:phase [:enum :ingest :normalize :validate :infer :repair :project]]
+   [:phase [:enum :ingest :normalize :validate :infer :repair]]
    [:match [:vector MatchClause]]
    [:produce Produce]
    [:doc {:optional true} :string]])

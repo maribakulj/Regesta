@@ -195,6 +195,16 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
 
 ### Changed
 
+- **Phases are now a single pass (ADR 0020, supersedes ADR 0004).** Each phase
+  fires every matching rule once against the record as it entered the phase;
+  multi-cycle execution is gone. `run-phase` loses its `{:cycles N}` options
+  arity (and `run-phase-once` folds into it); `run-pipeline` / `PhaseSpec` no
+  longer accept a `:cycles` key. Intra-phase chaining (rule B reacting to rule
+  A's output) is now expressed across phases, not by re-running one. Dedup at
+  merge (ADR 0008) is retained — it now collapses same-fact productions from
+  two rules in a single pass. No pipeline used `:cycles`, so callers are
+  unaffected.
+
 - Post-Sprint-5 audit cleanup (no feature change): documentation and config
   reconciled with the tree (removed the phantom `dev.clj` / `resources`
   references); a test now guards that the core never depends on
@@ -203,6 +213,16 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   `docs/cleanup/remediation-pass.md`.
 
 ### Removed
+
+- **The `:project` pipeline phase and multi-cycle execution (`:cycles`)** —
+  both dormant (ADR 0020). `:project` appeared in every phase enum but was
+  targeted by no rule: projection to the ten targets is done by exporters
+  after the pipeline, and canonical→WEMI runs in `:infer`. `:cycles` (with
+  `max-cycles` and `validate-cycles!`) drove a multi-pass loop no pipeline
+  ever requested. The phase enum is now
+  `:ingest :normalize :validate :infer :repair`. The `:repair` phase stays
+  and is newly documented (ADR 0020, README, the `Phase` schema). `clj-kondo`
+  and `cljfmt` stay clean.
 
 - **Substrate right-sizing (no behaviour change): dead code with no production
   consumer.** Removed the `:requires` dependency-graph machinery from

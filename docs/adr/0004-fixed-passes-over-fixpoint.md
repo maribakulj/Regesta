@@ -1,6 +1,8 @@
 # 0004 — Fixed passes in V1, fixpoint deferred
 
-- Status: Accepted
+- Status: Superseded by [ADR 0020](./0020-single-pass-and-retire-project-phase.md)
+  — phases are now a single pass (`:cycles` removed) and the `:project`
+  phase is retired. The "no fixpoint in V1" posture below still holds.
 - Date: 2026-04-17
 
 ## Context

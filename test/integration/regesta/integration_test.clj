@@ -280,15 +280,15 @@
 ;; ---------------------------------------------------------------------------
 
 (deftest productions-trace-counts-firings-not-merged-facts
-  ;; tag-seen fires once per cycle. With cycles 1 (default) and dedup at
-  ;; merge, the production trace has 1 entry but the record has 1 dedup'd
-  ;; assertion. Keeping cycles at 1 keeps this trivial; the meaningful
-  ;; test is below with cycles 3.
-  (let [pipeline-3-cycles [{:phase :normalize :cycles 3}]
-        result (rt/run-pipeline complete-book compiled-rules pipeline-3-cycles)]
+  ;; Two rules deriving the same fact in a single normalize pass: the
+  ;; production trace records both firings, but dedup-at-merge (ADR 0008)
+  ;; collapses them to one :canon/seen assertion on the record.
+  (let [tag-seen-again (assoc tag-seen :id :rule/tag-seen-again)
+        rs     (mapv rules/compile-rule [tag-seen tag-seen-again])
+        result (rt/run-phase complete-book rs :normalize)]
     (testing "trace records every firing"
-      (is (= 3 (count (:productions result))))
-      (is (every? #(= :rule/tag-seen (get-in % [:value :provenance :rule]))
+      (is (= 2 (count (:productions result))))
+      (is (every? #(= :canon/seen (get-in % [:value :predicate]))
                   (:productions result))))
     (testing "record carries one deduplicated assertion (ADR 0008)"
       (is (= 1 (count (filterv #(= :canon/seen (:predicate %))

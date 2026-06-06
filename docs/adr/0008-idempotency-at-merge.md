@@ -1,10 +1,14 @@
 # 0008 — Idempotency at merge
 
-- Status: Accepted
+- Status: Accepted (amended by [ADR 0020](./0020-single-pass-and-retire-project-phase.md))
 - Date: 2026-04-25
 - Supersedes: ADR 0004 *partially* — the fixed-passes-without-dedup
   posture. The "no fixpoint detection in V1" position from ADR 0004
   still holds.
+- Amended by: ADR 0020 — `:cycles` (multi-cycle execution) is removed.
+  The dedup-at-merge decision below **stands**: with single-pass phases it
+  now serves *within-pass* convergence (two rules deriving the same fact
+  collapse to one) rather than cross-cycle convergence.
 
 ## Context
 

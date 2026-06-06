@@ -57,8 +57,13 @@
   [:enum :error :warning :info])
 
 (def Phase
-  "The six phases of the pipeline. See ADR 0004."
-  [:enum :ingest :normalize :validate :infer :repair :project])
+  "The five phases of the pipeline: ingest → normalize → validate → infer →
+   repair (ADR 0004, ADR 0020). `:infer` and `:repair` emit proposals
+   (ADR 0005); the `:repair` phase additionally carries repair operations
+   that `apply-repairs` surfaces for human curation — never auto-applied in
+   V1. Projection to target formats is done by exporters after the pipeline,
+   not as a phase."
+  [:enum :ingest :normalize :validate :infer :repair])
 
 (def Status
   (into [:enum] statuses))
