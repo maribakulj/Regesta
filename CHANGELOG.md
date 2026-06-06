@@ -18,6 +18,17 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
 
 ### Added
 
+- **Machine-readable loss report** (WP-9, loss-report UX) — `regesta report …
+  --format edn` emits the raw `conversion-report` map (ADR 0015) instead of the
+  human text: the complete per-edge / per-category / **per-source-field** account
+  (not the text view's top-8 truncation), pretty-printed and lossless (namespaced
+  keywords intact, e.g. `#:canon{:date 2}`). This is the auditor's machine
+  surface — run-to-run diffs, CI loss thresholds, dashboards. `--format text`
+  (the default) is unchanged; an unknown `--format` exits 2. JSON is deliberately
+  not offered: it would silently flatten namespaced keywords (`:marc21/f650_a` →
+  `"f650_a"`, colliding `:by-category` keys) and corrupt the audit data
+  (`regesta.cli-test`).
+
 - **Streaming conversion** (WP-7 / DoD #6) — `regesta.convert/convert-stream`
   converts a reducible/lazy record stream in **constant working set**: it `reduce`s
   one record at a time, emits each rendered document via a callback, and folds a

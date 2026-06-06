@@ -28,6 +28,7 @@
    without printing or exiting — so tests drive it directly; `-main` is the thin
    shell that prints the streams and calls `System/exit`."
   (:require [clojure.java.io :as io]
+            [clojure.pprint :as pprint]
             [clojure.string :as str]
             [regesta.conformance :as conformance]
             [regesta.convert :as convert]
@@ -46,7 +47,7 @@
     "  regesta convert       <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
     "  regesta convert       <input-file> --from <marc-fmt> --to <fmt> --stream --out <file>"
     "  regesta validate      <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
-    "  regesta report        <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
+    "  regesta report        <input-file> --from <fmt> --to <fmt> [--format text|edn] [--record-id <id>]"
     "  regesta inspect       <input-file> --from <fmt> [--record-id <id>]"
     "  regesta reconcile     <input-file> --from <fmt> [--record-id <id>]"
     "  regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
@@ -62,10 +63,11 @@
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
     "  --out         write the output to a file instead of stdout (convert)"
     "  --stream      convert in bounded memory, streaming a large flat MARC dump to --out (WP-7)"
+    "  --format      report output: text (default) or edn (the raw loss-report map, ADR 0015)"
     ""
     "convert writes the document to stdout, the loss report to stderr;"
     "validate writes the diagnostics report to stderr and exits non-zero on failure;"
-    "report writes the X→Y loss report to stdout (no document);"
+    "report writes the X→Y loss report to stdout (no document; --format edn for the raw map);"
     "inspect writes what the source parses to (the canonical floor + minted entities) to stdout;"
     "reconcile writes the cross-record agent reconciliation (by authority id) to stdout;"
     "apply-repairs curates the inferred :proposed claims (ADR 0005) and writes the outcome to stdout;"
@@ -243,16 +245,24 @@
           (when-let [t @tmp] (when (.exists t) (.delete t))))))))
 
 (defn- do-report
-  "The auditor's verb: the X→Y loss report to stdout, no converted document."
-  [{:strs [from to record-id]} input]
-  (let [{:keys [err] :as r} (read-source from input record-id "report")]
+  "The auditor's verb: the X→Y loss report to stdout, no converted document.
+   `--format text` (default) renders the human report; `--format edn` emits the
+   raw conversion-report map (ADR 0015), pretty-printed — the machine-readable
+   form for audit tooling, run-to-run diffs and CI loss thresholds."
+  [{:strs [from to record-id] :as flags} input]
+  (let [{:keys [err] :as r} (read-source from input record-id "report")
+        fmt (or (get flags "format") "text")]
     (cond
       err      {:exit 2 :out "" :err err}
       (not to) {:exit 2 :out "" :err (str "report needs --to <fmt>\n\n" usage)}
+      (not (#{"text" "edn"} fmt))
+      {:exit 2 :out "" :err (str "report --format must be 'text' or 'edn' (got " (pr-str fmt) ")")}
       :else
-      (guard #(let [{:keys [report records]} (convert/convert-report (assoc r :to (keyword to)))]
+      (guard #(let [{:keys [report records loss]} (convert/convert-report (assoc r :to (keyword to)))]
                 {:exit 0
-                 :out  (str report "\n(" records " record" (when (not= 1 records) "s") ")")
+                 :out  (case fmt
+                         "edn"  (with-out-str (pprint/pprint (assoc loss :records records)))
+                         "text" (str report "\n(" records " record" (when (not= 1 records) "s") ")"))
                  :err  ""})))))
 
 (defn- canon-floor

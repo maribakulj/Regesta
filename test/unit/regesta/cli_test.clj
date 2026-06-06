@@ -2,7 +2,8 @@
   "Tests for the CLI core `run` (pure: returns {:exit :out :err}, no print/exit).
    Exercises the happy paths, the format listing, the default record-id, file
    output, and the error exits."
-  (:require [clojure.string :as str]
+  (:require [clojure.edn :as edn]
+            [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [regesta.cli :as cli]))
 
@@ -103,6 +104,21 @@
     (let [{:keys [exit err]} (cli/run ["report" marc21 "--from" "marc21"])]
       (is (= 2 exit))
       (is (str/includes? err "report needs --to")))))
+
+(deftest report-format-edn-emits-the-raw-machine-readable-map
+  (testing "report --format edn: a parseable conversion-report map, no prose"
+    (let [{:keys [exit out]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc" "--format" "edn"])
+          m (edn/read-string out)]
+      (is (= 0 exit))
+      (is (map? m))
+      (is (contains? m :by-category))                     ; the structured account, not prose
+      (is (contains? m :by-edge))
+      (is (= 2 (:records m)))
+      (is (not (str/includes? out "Loss report")))))      ; the text rendering is suppressed
+  (testing "report --format rejects an unknown format"
+    (let [{:keys [exit err]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc" "--format" "xml"])]
+      (is (= 2 exit))
+      (is (str/includes? err "must be")))))
 
 (deftest inspect-shows-the-floor-and-the-minted-entities
   (testing "inspect MARC21: the canonical floor and the WEMI entities per record"
