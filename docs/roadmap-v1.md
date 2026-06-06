@@ -200,7 +200,7 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 - **Gate:** a realistic corpus processed within a stated time/memory budget.
 
 ### WP-8 — CLI / packaging / DX
-- **Goal:** drive everything from `regesta.app`.
+- **Goal:** drive everything from the CLI (`regesta.cli`).
 - **Deliverables:** `convert`, `validate`, `report` (loss), `conformance`,
   `apply-repairs`; packaging for institutional deployment.
 - **Depends on:** WP-4, WP-5, WP-6.
@@ -209,12 +209,14 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 ### WP-9 — Hardening & release
 - **Goal:** ship V1.
 - **Deliverables:** edge cases, golden tests on real data, docs, loss-report
-  UX, a security statement on the plugin trust model (ADR 0010 trust-on-require
-  vs institutional deployment), `v1.0.0`.
+  UX, a security statement covering the plugin trust model (ADR 0010
+  trust-on-require vs institutional deployment) **and** XML input hardening
+  (DTD refusal — closes billion-laughs / XXE; landed, see `SECURITY.md`),
+  `v1.0.0`.
 - **Depends on:** all.
 - **Gate:** the Definition of Done (§ 8).
 
-### Current state (2026-06-03)
+### Current state (2026-06-06)
 
 | WP | status |
 |----|--------|
@@ -224,14 +226,15 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
 | WP-3 FRBRisation (INTERMARC; clustering = id-collision; loss) | ✅ |
 | WP-4 spokes | ◐ — **7 importers in ✅**: INTERMARC-SRU, **INTERMARC-NG** (entity-relation, ADR 0019), **UNIMARC** (BnF diffusion — the MARC family complete), MARC21 (MARCXML), Dublin Core, MODS (nested), IIIF Presentation 3.0 (JSON); **4 round-trips ✅** (DC + MARC21 + MODS + IIIF ↔ floor — every floor spoke now round-trips; loss measured, id-stable & idempotent; INTERMARC is import-only by design, the rich-pivot source); shared `marcxml` core; 4-spoke convergence capstone; canonical→WEMI floor ✅; **RDF out in all three serialisations ✅** (N-Triples · Turtle · JSON-LD, LRMoo + CRM views); **Linked Art profile out ✅** (museum/Louvre target — F3→HumanMadeObject carries F2→LinguisticObject part_of F1→PropositionalObject, mapping verified vs the official examples, `docs/eval/linked-art.md`); **Linked Art now validated against the official draft-2020-12 schema** (real `networknt` validator, `$ref`-resolved — DoD #4: our roots are schema-valid, our only deviations are `additionalProperties` from embedding, *cleaner* than Getty's own Mona Lisa example which the strict schema also rejects); both LoC XSLT oracles in (MARC→DC differential, MARC→MODS convergence); **MARC21↔LRMoo at the *floor* level** |
 | WP-5 loss-aware report | ✅ (cross-edge double-count fixed in remediation R3) |
-| WP-8 CLI | ◐ — `regesta convert` / **`validate`** (canonical rules, policy-driven non-zero exit) / **`report`** (X→Y loss report alone) / **`inspect`** (the parsed canonical floor + minted WEMI/agent entities) / **`reconcile`** (cross-record agent reconciliation by authority id, ADR 0018) / **`apply-repairs`** (curate the inferred `:proposed` claims — the ADR 0005 repair-application engine `regesta.curate`: a pure decision function resolves each pending proposal to `:accepted`/`:rejected`/`:needs-review`; `flag`/`accept`/`reject` policies compose an ADR 0018 promotion guard) / **`conformance`** (check the WEMI projection against an institutional profile — WP-6 mechanism `regesta.conformance`; exits non-zero under the acceptance-threshold policy) / `formats` (`regesta.cli`, `:run` alias) over the conversion assembly |
+| WP-8 CLI | ✅ — `regesta convert` / **`validate`** (canonical rules, policy-driven non-zero exit) / **`report`** (X→Y loss report alone) / **`inspect`** (the parsed canonical floor + minted WEMI/agent entities) / **`reconcile`** (cross-record agent reconciliation by authority id, ADR 0018) / **`apply-repairs`** (curate the inferred `:proposed` claims — the ADR 0005 repair-application engine `regesta.curate`: a pure decision function resolves each pending proposal to `:accepted`/`:rejected`/`:needs-review`; `flag`/`accept`/`reject` policies compose an ADR 0018 promotion guard) / **`conformance`** (check the WEMI projection against an institutional profile — WP-6 mechanism `regesta.conformance`; exits non-zero under the acceptance-threshold policy) / `formats` (`regesta.cli`, `:run` alias) over the conversion assembly |
 | WP-6 conformance | ◐ — **mechanism + three profiles ✅** (`regesta.conformance`: institutional profiles as diagnostic check sets over the projected record, policy-gated by the acceptance threshold; `regesta conformance --profile <linked-art\|intermarc\|iiif>`). One mechanism, two directions: the **Linked Art / Louvre** and **IIIF Presentation 3.0** *target* profiles check the projection's fitness to serialise (LA: HumanMadeObject root + name + the WEMI chain + identified creator; IIIF: a label, a Canvas-bearing digital object, a dereferenceable HTTP id — a real IIIF manifest is fully conformant); the **BnF INTERMARC** *source* profile checks a bibliographic record's native `:intermarc/*` fields (001/245 essentials, 003 ARK, an authority-linked 100 heading — Transition bibliographique, 260 date, 145 Work-link hint), grounded on real BnF SRU records. Dataless slice done; **institutional *certification*** (a passing report on real BnF/Louvre samples against their private acceptance criteria — DoD #5) stays partnership-gated (§ 7). The strict official-schema LA validation remains a separate test-only eval. |
 | WP-7 scale | ◐ — **streaming end-to-end + budget ✅** (`regesta.convert/convert-stream` + lazy input). Per-record conversion is stateless — Work convergence is id-collision, not a global pass (ADR 0008) — so a record stream folds a bounded loss report in constant working set (**100 000 records in a 512 MB heap, ~70 MB**, output/loss byte-identical to batch). **Input now streams too** for the MARC family: `marcxml/stream-records` pull-parses a Reader into a lazy record seq (plugin `:stream-importer` on MARC21/INTERMARC/UNIMARC), surfaced as `regesta convert … --stream --out`. End-to-end: a **97 MB / 56 000-record flat dump → 64 MB N-Triples in a 256 MB heap, ~33 MB used**, where the eager path OOMs (`docs/eval/scale.md`). Remaining (bounded by construction): SRU pages stay eager (small, stream at page granularity), non-MARC single-record formats don't stream; the live-reconciliation/store rung (roadmap §10) is post-V1. |
 | WP-9 release | ✗ |
 
 Also delivered beyond the original WPs: ADR 0018 (entity resolution at scale,
-*Proposed*); **ADR 0019 (conversion directionality, *Proposed*)** — spokes are
-bidirectional, the hub is a target, and CRM→LRM is a *downcast* that succeeds only
+*Accepted, partially implemented*); **ADR 0019 (conversion directionality,
+*Accepted, partially implemented*)** — spokes are bidirectional, the hub is a
+target, and CRM→LRM is a *downcast* that succeeds only
 when the F-typing survives, demonstrated by a CRM→LRMoo round-trip
 (`lrmoo.crm-import`): our additive `:crm` recovers F1/F2/F3 losslessly, our pure
 `:crm-only` collapses at `E73` into `:ambiguity-collapsed` (the loss the

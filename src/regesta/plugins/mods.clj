@@ -48,10 +48,10 @@
      `<modsCollection>`); id from `:record-id`, else `recordInfo/recordIdentifier`,
      else the first top-level `identifier`.
    - Import only; element-level core, no DCMI/relatedItem structure."
-  (:require [clojure.data.xml :as data-xml]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [regesta.diagnostics :as dx]
-            [regesta.model :as model]))
+            [regesta.model :as model]
+            [regesta.xml :as rx]))
 
 ;; ---------------------------------------------------------------------------
 ;; XML tree navigation (MODS is nested)
@@ -191,7 +191,7 @@
                           {:source source}))))
 
 (defn- mods-elements [xml-string]
-  (filter #(= "mods" (local-name %)) (elements (data-xml/parse-str xml-string))))
+  (filter #(= "mods" (local-name %)) (elements (rx/parse-str xml-string))))
 
 (defn- record-of [opts mods]
   (let [rid (record-id-of opts mods)]

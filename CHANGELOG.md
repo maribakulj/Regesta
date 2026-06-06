@@ -11,10 +11,31 @@ release is cut, that section is renamed to the version and date and a fresh
 
 ## [Unreleased]
 
-The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
-(Dublin Core plugin) is the next milestone.
+The pre-1.0 development line. The Sprint 0–6 substrate and the rich-pivot
+work packages WP-0…WP-8 are landed (seven spokes → the LRMoo pivot → ten
+targets, loss-aware; conformance; streaming; the full CLI). WP-9
+(hardening + release) is in progress; see `docs/roadmap-v1.md`.
 
 ### Added
+
+- **Machine-readable loss report** (WP-9, loss-report UX) — `regesta report …
+  --format edn` emits the raw `conversion-report` map (ADR 0015) instead of the
+  human text: the complete per-edge / per-category / **per-source-field** account
+  (not the text view's top-8 truncation), pretty-printed and lossless (namespaced
+  keywords intact, e.g. `#:canon{:date 2}`). This is the auditor's machine
+  surface — run-to-run diffs, CI loss thresholds, dashboards. `--format text`
+  (the default) is unchanged; an unknown `--format` exits 2. **`--format json`**
+  emits the same map for non-Clojure audit tooling, with every keyword — map key
+  *and* vector element — rendered as a **namespace-qualified** string
+  (`:canon/date` → `"canon/date"`), so the source-field keys that data.json's
+  default `name` key-fn would otherwise collide stay distinct (`regesta.cli-test`).
+
+- **Degenerate-input hardening** (WP-9) — `convert` now emits a stderr warning
+  when a parse yields **0 records** (a wrong `--from`, or the wrong file), so a
+  silent exit-0 that writes an empty output no longer masquerades as success.
+  Exit stays 0 — an empty collection is legal, so this warns rather than fails.
+  Malformed input (truncated / non-XML) already exits 2 with a parse error
+  rather than crashing; both contracts are now pinned by `regesta.cli-test`.
 
 - **Streaming conversion** (WP-7 / DoD #6) — `regesta.convert/convert-stream`
   converts a reducible/lazy record stream in **constant working set**: it `reduce`s
@@ -180,6 +201,22 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
   `regesta.plugins.*`; `regesta.plugins/topo-order` is marked `^:no-doc`
   (provisional — no consumer yet, still callable). Tracked in
   `docs/cleanup/remediation-pass.md`.
+
+### Security
+
+- **XML input hardening (WP-9).** All XML importers now parse through a single
+  façade, `regesta.xml`, which **refuses DTDs** (`:support-dtd false`) instead of
+  calling `clojure.data.xml` directly. This closes a real `billion laughs`
+  entity-expansion denial of service: `clojure.data.xml` expands internal
+  general entities with no size bound and the JDK's `entityExpansionLimit` does
+  not fire through its StAX path (verified — a small nested-entity payload
+  expanded unbounded). Refusing DTDs also removes any DTD-borne XXE surface
+  (external `SYSTEM`/`PUBLIC` entities were already unresolved by data.xml;
+  `:supporting-external-entities false` is now pinned for defence in depth). No
+  fixture or supported format uses a DTD, so the policy is total. Wired across
+  MARC-XML (and its INTERMARC/UNIMARC/INTERMARC-NG dialects), MODS, Dublin Core
+  and the generic shape adapter; pinned by `regesta.xml-test` on both the eager
+  and streaming parse paths; documented in `SECURITY.md` (Hardening).
 
 ### Earlier in this line
 

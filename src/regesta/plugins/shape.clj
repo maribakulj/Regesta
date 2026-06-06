@@ -98,8 +98,8 @@
      attribute, etc.). Silent skip in V1; revisit if a plugin author
      reports confusion."
   (:require [clojure.data.json :as json]
-            [clojure.data.xml :as data-xml]
-            [regesta.model :as model]))
+            [regesta.model :as model]
+            [regesta.xml :as rx]))
 
 ;; ---------------------------------------------------------------------------
 ;; Mapping inspection
@@ -565,7 +565,7 @@
            :input-format        :xml
            :mapping             mapping
            :importer            (fn [{:keys [record-id kind source] :as _opts} src]
-                                  (let [parsed     (data-xml/parse-str src)
+                                  (let [parsed     (rx/parse-str src)
                                         rewritten  (rewrite-tags parsed (or aliases {}))
                                         record     (ingest-xml rewritten mapping
                                                                {:record-id record-id

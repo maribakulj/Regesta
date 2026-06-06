@@ -112,10 +112,12 @@ The core ships only a **structural vocabulary** (`:meta/id`, `:meta/kind`,
 knows nothing about documentary content.
 
 A separate, optional plugin — `regesta.plugins.canonical` — provides a
-**documentary vocabulary** (`:canon/title`, `:canon/identifier`, `:canon/agent`,
-`:canon/date`, `:canon/relation`, `:canon/note`, `:canon/digital-object`,
-`:canon/loss-marker`) that format plugins can map toward for cross-source rules
-and projection.
+**documentary vocabulary** (`:canon/title`, `:canon/uniform-title`,
+`:canon/identifier`, `:canon/agent`, `:canon/date`, `:canon/relation`,
+`:canon/note`, `:canon/digital-object`, `:canon/loss-marker`) that format plugins
+can map toward for cross-source rules and projection. The set grows only by
+justified need — `:canon/uniform-title` (the cataloguer's controlled work title)
+was added for FRBRisation Work-key bridging.
 
 This split keeps the core authentically agnostic while still enabling
 commensurability when it is wanted. See
@@ -147,29 +149,32 @@ them for human acceptance or rejection. See
 ## Architecture at a glance
 
 ```
-           ┌──────────────────────────────────────────────────────┐
-           │                     regesta.app                     │
-           │      CLI, config, batch I/O — no business logic      │
-           └──────────────────────┬───────────────────────────────┘
-                                  │
-           ┌──────────────────────▼──────────────────────┐
-           │              regesta.runtime               │
-           │  pipeline · pass execution · diagnostics    │
-           └───────┬─────────────────────┬───────────────┘
-                   │                     │
-         ┌─────────▼────────┐   ┌────────▼─────────┐
-         │  regesta.rules  │   │ regesta.model   │
-         │  DSL compiler    │   │  IR, vocabulary  │
-         └─────────┬────────┘   └────────▲─────────┘
-                   │                     │
-         ┌─────────▼─────────────────────┴─────────┐
-         │             regesta.plugins             │
-         │      format-specific plugins live here  │
-         └─────────────────────────────────────────┘
+   ┌───────────────────────────────────────────────────────────────┐
+   │  regesta.cli  ·  convert · validate · conformance · curate     │
+   │       command-line + the conversion / loss-report assembly      │
+   └────────────────────────────┬──────────────────────────────────┘
+                                │
+   ┌────────────────────────────▼──────────────────────────────────┐
+   │                        regesta.runtime                         │
+   │             pipeline · pass execution · diagnostics            │
+   └────────┬───────────────────────────────────────┬──────────────┘
+            │                                       │
+  ┌─────────▼────────┐                     ┌────────▼─────────┐
+  │  regesta.rules   │                     │  regesta.model   │
+  │   DSL compiler   │                     │  IR · vocabulary │
+  └─────────┬────────┘                     └────────▲─────────┘
+            │                                       │
+  ┌─────────▼───────────────────────────────────────┴─────────────┐
+  │  regesta.plugins  —  spoke importers/exporters (MARC21 ·        │
+  │  UNIMARC · INTERMARC · INTERMARC-NG · Dublin Core · MODS ·      │
+  │  IIIF) and the derived, typed LRMoo pivot view + its            │
+  │  serialisers (RDF · CIDOC-CRM · Linked Art · the floor formats) │
+  └────────────────────────────────────────────────────────────────┘
 ```
 
 Rules and plugins flow **into** the runtime. Data flows **out** through the IR.
-The core never knows any external schema.
+The core never knows any external schema; the rich LRMoo view is a *derived*
+plugin (ADR 0013), never the core.
 
 ---
 
@@ -179,18 +184,35 @@ The core never knows any external schema.
 .
 ├── deps.edn                 # Clojure deps and aliases
 ├── src/regesta/
-│   ├── model.clj            # Canonical IR (Sprint 1)
-│   ├── rules.clj            # Rule DSL + compiler (Sprint 2)
-│   ├── runtime.clj          # Execution engine (Sprint 3)
-│   ├── diagnostics.clj      # Diagnostic API (Sprint 4)
-│   ├── plugins.clj          # Plugin protocol (Sprint 5+)
-│   └── app.clj              # CLI and application shell (stub; Sprint 10)
+│   ├── model.clj            # Canonical IR (assertions, entities, fragments)
+│   ├── rules.clj            # Rule DSL + compiler
+│   ├── runtime.clj          # Pass-pipeline execution engine
+│   ├── diagnostics.clj      # Diagnostic + loss API
+│   ├── text.clj             # Shared normalisation for identity/clustering keys
+│   ├── plugins.clj          # Plugin protocol + registry
+│   ├── plugins/             # canonical · transforms · mapping · shape;
+│   │                        #   spokes: marc21 · unimarc · intermarc[-ng] ·
+│   │                        #   marcxml · dc · mods · iiif (+ *.export);
+│   │                        #   lrmoo/ (pivot view · project · crm · linked-art ·
+│   │                        #   export · crm-import) · intermarc/frbrise
+│   ├── spokes.clj           # Source-spoke registry
+│   ├── convert.clj          # Conversion assembly (source → pivot → target + loss)
+│   ├── validate.clj         # Validation gate
+│   ├── conformance.clj      # Institutional-profile conformance (WP-6)
+│   ├── curate.clj           # apply-repairs / curation engine (ADR 0005)
+│   ├── reconcile.clj        # Cross-record agent reconciliation (ADR 0018)
+│   ├── loss-report.clj      # Conversion loss report (ADR 0015)
+│   └── cli.clj              # Command-line entry point (all verbs)
 ├── test/
-│   ├── unit/regesta/        # Fast, hermetic, mirrored to src/
+│   ├── unit/regesta/        # Fast, hermetic, mirrored to src/ (+ eval/ measurements)
 │   ├── property/regesta/    # Generative invariants (test.check + malli.generator)
-│   └── integration/regesta/ # Multi-layer end-to-end scenarios
+│   ├── integration/regesta/ # Multi-layer end-to-end scenarios
+│   └── junit/regesta/       # JUnit XML runner (CI)
 ├── docs/
-│   └── adr/                 # Architecture Decision Records
+│   ├── adr/                 # Architecture Decision Records (0001–0019)
+│   ├── eval/                # Measured evals (FRBRisation, BIB-R, scale, …)
+│   ├── cleanup/             # Audit + remediation passes
+│   └── roadmap-v1.md        # The work-package roadmap + Definition of Done
 ├── .github/workflows/ci.yml # Lint, format, test on every push
 ├── .clj-kondo/config.edn    # Linter config
 ├── .cljfmt.edn              # Formatter config
@@ -210,15 +232,35 @@ ADR 0012), and the canonical vocabulary plugin (`regesta.plugins.canonical`).
 **V1 has since been redefined** (2026) around a rich, **loss-aware** pivot
 grounded in **LRMoo** (the object-oriented IFLA LRM, a CIDOC-CRM extension), for
 production use across the full IIIF ↔ MARC family ↔ museum range. The Sprint 0–6
-substrate is preserved; the redefinition reopens what comes next — see the
-Roadmap below and [`docs/roadmap-v1.md`](./docs/roadmap-v1.md).
+substrate is preserved as-is; the redefinition is an *extension*, not a rewrite.
 
-**WP-0 (design lock) is complete:** the load-bearing decisions are settled
-([`docs/wp0-decisions.md`](./docs/wp0-decisions.md)), four foundational ADRs are
-written ([0013](./docs/adr/0013-lrmoo-rich-pivot.md)–[0016](./docs/adr/0016-frbrisation.md)),
-and throwaway spikes on **real BnF INTERMARC** data validated the hardest piece,
-FRBRisation, end to end
-([`docs/wp0-spike-findings.md`](./docs/wp0-spike-findings.md)).
+Against the work-package plan ([`docs/roadmap-v1.md`](./docs/roadmap-v1.md)), as of
+2026-06 the engineering is largely landed:
+
+- **WP-0…WP-5, WP-8 done** — design lock + FRBRisation spike, substrate
+  extensions, the LRMoo pivot + derived view, FRBRisation (cross-record Work
+  clustering by id-collision, plus uniform-title bridging), the loss-aware report,
+  and the full CLI (`convert · validate · report · inspect · reconcile ·
+  apply-repairs · conformance · formats`).
+- **WP-4 spokes** — seven importers (the MARC family + INTERMARC-NG + DC/MODS/IIIF)
+  reach the pivot and project to ten targets (RDF · CIDOC-CRM · Linked Art ·
+  the floor formats); four floor round-trips; Linked Art validated against the
+  official draft-2020-12 schema.
+- **WP-6 conformance** — the mechanism + three profiles (Linked Art / IIIF / BnF
+  INTERMARC); institutional *certification* on real samples is partnership-gated.
+- **WP-7 scale** — streaming end-to-end in constant memory (a 97 MB flat MARC dump
+  converts in a 256 MB heap); true millions-scale is data-gated.
+- **WP-9 (hardening + release)** — in progress: XML input hardened against
+  entity-expansion (`billion laughs`) and XXE (DTDs refused, `regesta.xml` +
+  [`SECURITY.md`](./SECURITY.md)); a machine-readable loss report
+  (`report --format edn`) for audit tooling; degenerate-input handling (a wrong
+  `--from` warns instead of silently producing nothing). Remaining: further
+  edge/golden coverage and the `v1.0.0` cut.
+
+FRBRisation fidelity is measured, not asserted — on real BnF data and an
+independent third-party benchmark; see [`docs/eval/`](./docs/eval/). The honest
+remaining gates are real institutional acceptance criteria and a real at-scale
+corpus ([`docs/roadmap-v1.md`](./docs/roadmap-v1.md) §7).
 
 ---
 
@@ -230,20 +272,30 @@ FRBRisation, end to end
 - Clojure CLI (https://clojure.org/guides/install_clojure)
 - clj-kondo and cljfmt (installed via `:lint` / `:fmt` aliases)
 
-### Convert (CLI)
+### CLI
 
 ```bash
 # Convert a source document to a target serialisation through the LRMoo pivot.
 # The converted document goes to stdout; the loss report (ADR 0015) to stderr.
 clojure -M:run convert path/to/record.xml --from marc21 --to linked-art
 
+# Stream a large flat MARC dump in bounded memory, writing to a file (WP-7).
+clojure -M:run convert big.xml --from marc21 --to ntriples --stream --out out.nt
+
 # Validate against the canonical rules; exits non-zero on failure (CI gate).
 clojure -M:run validate path/to/record.xml --from marc21 --policy errors-and-warnings
 
+# Check an institutional profile (WP-6); non-zero under the acceptance threshold.
+clojure -M:run conformance path/to/record.xml --from intermarc --profile intermarc
+
+# Other verbs: report (X→Y loss only) · inspect (the parsed floor + minted entities)
+#   · reconcile (agents by authority id, ADR 0018) · apply-repairs (curate :proposed)
+clojure -M:run report path/to/record.xml --from marc21 --to dc
+
 # List the supported source and target formats
 clojure -M:run formats
-#  from: dc iiif intermarc marc21 mods
-#  to:   crm crm-only dc jsonld linked-art marc21 ntriples turtle
+#  from: dc iiif intermarc intermarc-ng marc21 mods unimarc
+#  to:   crm crm-only dc iiif jsonld linked-art marc21 mods ntriples turtle
 ```
 
 (In a Clojars-restricted sandbox, prepend `:sandbox` — `clojure -M:sandbox:run …`.)

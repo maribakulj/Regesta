@@ -14,6 +14,35 @@ project's trust model assumes you trust the plugins you load (see
 ADR 0010). Sandboxing of plugin code is explicitly out of scope for
 V1.
 
+## Hardening
+
+### XML input parsing
+
+Every XML importer — MARC-XML and its INTERMARC / UNIMARC /
+INTERMARC-NG dialects, MODS, Dublin Core, and the generic shape
+adapter — parses through a single façade, `regesta.xml`, and never
+calls `clojure.data.xml` directly. That façade **refuses DTDs**
+(`:support-dtd false`), which closes two holes in the underlying
+parser's defaults:
+
+- **Entity-expansion denial of service (`billion laughs`).**
+  `clojure.data.xml` expands internal general entities with no size
+  bound, and the JDK's `jdk.xml.entityExpansionLimit` does *not* fire
+  through its StAX path — verified: a small nested-entity payload
+  expands unbounded in memory. Refusing DTDs removes the vehicle
+  entirely; a `<!DOCTYPE …>` now throws before any entity is declared.
+- **XML external entity (XXE) injection.** `clojure.data.xml` does not
+  resolve external `SYSTEM`/`PUBLIC` identifiers, so there is no
+  file-disclosure or SSRF surface even without this change. Refusing
+  DTDs removes the vehicle a second way, and
+  `:supporting-external-entities false` is pinned for defence in depth.
+
+No Regesta fixture or supported format legitimately uses a DTD, so the
+policy is total rather than per-format. `regesta.xml-test` pins the
+behaviour: benign XML parses unchanged, while billion-laughs and
+external-entity payloads are rejected on both the eager and the
+streaming (WP-7) parse paths.
+
 ## Reporting a vulnerability
 
 **Please do not open a public GitHub issue for a suspected security
@@ -55,8 +84,11 @@ Post-1.0 the supported-versions table will be filled in here.
 These are *not* considered vulnerabilities for the purposes of this
 policy:
 
-- Resource exhaustion from a deliberately enormous input. Regesta is a
-  batch tool; input sizes are an operational concern.
+- Resource exhaustion from a deliberately enormous *input* (e.g. a
+  multi-gigabyte file). Regesta is a batch tool; raw input size is an
+  operational concern. Note the distinction: *amplification* attacks —
+  a small input that **expands** hugely, such as XML entity expansion —
+  are in scope and are handled (see Hardening → XML input parsing).
 - A registered plugin's misbehavior. The trust model is documented in
   ADR 0010 — registering a plugin is granting it execution.
 - Issues in dependencies. Forward those to the upstream project. We

@@ -20,6 +20,22 @@ URL). Keep that file as the attribution record.
 | `ead/`, `eac-cpf/`, `mads/` | EAD 2002 + EAD3, EAC-CPF, MADS | archival / authority spokes |
 | `mets/`, `gallica/` | METS, Gallica ALTO + plain text | digitisation / structure |
 
+## Spoke status — which of these have an importer
+
+**Built spokes (these fixtures are exercised by tests):** MARC21 (`marc21/`),
+INTERMARC (`intermarc/sru/`), UNIMARC (`unimarc/sru/`), Dublin Core
+(`dublin-core/`), MODS (`mods/`), IIIF (`iiif/`), INTERMARC-NG (`intermarc-ng/`).
+
+**Future-work seeds — no importer yet, read by no test, kept deliberately:**
+`ead/`, `eac-cpf/`, `mads/`, `mets/`, `gallica/` (ALTO + text), `bnf-rdf/`, the
+INTERMARC ISO-2709 `.not` binaries (`intermarc/iso2709_*` — the MARCXChange parser
+reads the **XML** form; ISO-2709 has no reader), and the reference vocabularies
+`lrm/lrmoo/` + `cidoc-crm/` (the pivot ontologies — consumed conceptually, not
+imported as records). These are gathered third-party samples for prospective
+spokes; the WP-9 audit ([`../../../docs/cleanup/wp9-sprint-audit.md`](../../../docs/cleanup/wp9-sprint-audit.md))
+chose to keep them as seeds rather than prune them — they break nothing and are
+re-fetchable from `MANIFEST.tsv`.
+
 ## Licensing (respect upstream terms)
 
 - **BnF** (`intermarc/`, `bnf-rdf/`, `gallica/`) — Licence Ouverte / Etalab

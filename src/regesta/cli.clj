@@ -27,7 +27,9 @@
    `run` is pure — it parses args, does the work and returns `{:exit :out :err}`
    without printing or exiting — so tests drive it directly; `-main` is the thin
    shell that prints the streams and calls `System/exit`."
-  (:require [clojure.java.io :as io]
+  (:require [clojure.data.json :as json]
+            [clojure.java.io :as io]
+            [clojure.pprint :as pprint]
             [clojure.string :as str]
             [regesta.conformance :as conformance]
             [regesta.convert :as convert]
@@ -46,7 +48,7 @@
     "  regesta convert       <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
     "  regesta convert       <input-file> --from <marc-fmt> --to <fmt> --stream --out <file>"
     "  regesta validate      <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
-    "  regesta report        <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
+    "  regesta report        <input-file> --from <fmt> --to <fmt> [--format text|edn|json] [--record-id <id>]"
     "  regesta inspect       <input-file> --from <fmt> [--record-id <id>]"
     "  regesta reconcile     <input-file> --from <fmt> [--record-id <id>]"
     "  regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
@@ -62,10 +64,11 @@
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
     "  --out         write the output to a file instead of stdout (convert)"
     "  --stream      convert in bounded memory, streaming a large flat MARC dump to --out (WP-7)"
+    "  --format      report output: text (default), edn or json (the raw loss-report map, ADR 0015)"
     ""
     "convert writes the document to stdout, the loss report to stderr;"
     "validate writes the diagnostics report to stderr and exits non-zero on failure;"
-    "report writes the X→Y loss report to stdout (no document);"
+    "report writes the X→Y loss report to stdout (no document; --format edn|json for the raw map);"
     "inspect writes what the source parses to (the canonical floor + minted entities) to stdout;"
     "reconcile writes the cross-record agent reconciliation (by authority id) to stdout;"
     "apply-repairs curates the inferred :proposed claims (ADR 0005) and writes the outcome to stdout;"
@@ -97,6 +100,17 @@
 
 (defn- fmt-line [label fs] (str label (str/join " " (sort (map name fs)))))
 
+(defn- zero-records-note
+  "A stderr warning appended when a parse yields no records — almost always a
+   wrong `--from` or wrong file rather than a legitimately empty collection
+   (which would also be 0, so this stays a warning, not an error). Empty string
+   when records > 0, so the happy path is untouched."
+  [records from input]
+  (if (zero? records)
+    (str "\nwarning: 0 records parsed from " input
+         " — is --from " from " correct for this file?")
+    ""))
+
 (defn- do-convert [{:strs [from to record-id out]} input]
   (cond
     (not (and from to input))
@@ -116,7 +130,8 @@
                                      :opts   (cond-> {} rid (assoc :record-id rid))})
             report (str (lr/format-conversion-report (:loss result))
                         "\n(" (:records result) " record"
-                        (when (not= 1 (:records result)) "s") " converted)")]
+                        (when (not= 1 (:records result)) "s") " converted)"
+                        (zero-records-note (:records result) from input))]
         (if out
           (do (spit out (:output result)) {:exit 0 :out "" :err (str "wrote " out "\n" report)})
           {:exit 0 :out (:output result) :err report}))
@@ -233,7 +248,8 @@
             {:exit 0 :out ""
              :err  (str "wrote " out " — " (:records res) " record" (when (not= 1 (:records res)) "s")
                         " streamed (bounded memory)\n"
-                        (lr/format-conversion-report (:loss res)))}
+                        (lr/format-conversion-report (:loss res))
+                        (zero-records-note (:records res) from input))}
             {:exit 2 :out "" :err (str "error: could not move streamed output to " out)}))
         (catch clojure.lang.ExceptionInfo e
           {:exit 2 :out "" :err (str "error: " (.getMessage e) " " (pr-str (ex-data e)))})
@@ -242,17 +258,42 @@
         (finally
           (when-let [t @tmp] (when (.exists t) (.delete t))))))))
 
+(defn- jsonable
+  "Render a value as JSON-safe data for the loss report: every keyword — whether a
+   map key or a vector element — becomes a **namespace-qualified** string
+   (`:canon/date` → `\"canon/date\"`). data.json's default key-fn is `name`, which
+   drops the namespace and would collide distinct source fields; qualifying keeps
+   them distinct, matching the EDN form."
+  [x]
+  (cond
+    (keyword? x)    (subs (str x) 1)
+    (map? x)        (into {} (map (fn [[k v]] [(jsonable k) (jsonable v)])) x)
+    (sequential? x) (mapv jsonable x)
+    :else           x))
+
 (defn- do-report
-  "The auditor's verb: the X→Y loss report to stdout, no converted document."
-  [{:strs [from to record-id]} input]
-  (let [{:keys [err] :as r} (read-source from input record-id "report")]
+  "The auditor's verb: the X→Y loss report to stdout, no converted document.
+   `--format text` (default) renders the human report; `--format edn` emits the
+   raw conversion-report map (ADR 0015), pretty-printed; `--format json` emits the
+   same map as JSON with namespace-qualified keys — the machine-readable forms for
+   audit tooling, run-to-run diffs and CI loss thresholds (EDN for Clojure
+   consumers, JSON for everything else)."
+  [{:strs [from to record-id] :as flags} input]
+  (let [{:keys [err] :as r} (read-source from input record-id "report")
+        fmt (or (get flags "format") "text")]
     (cond
       err      {:exit 2 :out "" :err err}
       (not to) {:exit 2 :out "" :err (str "report needs --to <fmt>\n\n" usage)}
+      (not (#{"text" "edn" "json"} fmt))
+      {:exit 2 :out "" :err (str "report --format must be 'text', 'edn' or 'json' (got " (pr-str fmt) ")")}
       :else
-      (guard #(let [{:keys [report records]} (convert/convert-report (assoc r :to (keyword to)))]
+      (guard #(let [{:keys [report records loss]} (convert/convert-report (assoc r :to (keyword to)))]
                 {:exit 0
-                 :out  (str report "\n(" records " record" (when (not= 1 records) "s") ")")
+                 :out  (case fmt
+                         "edn"  (with-out-str (pprint/pprint (assoc loss :records records)))
+                         "json" (str (json/write-str (jsonable (assoc loss :records records))
+                                                     :escape-slash false) "\n")
+                         "text" (str report "\n(" records " record" (when (not= 1 records) "s") ")"))
                  :err  ""})))))
 
 (defn- canon-floor

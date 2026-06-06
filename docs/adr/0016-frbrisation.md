@@ -177,7 +177,7 @@ slice is built. Honest current state, so the design is not read as shipped:
     link) are `:asserted`; the name-string-creator Work and the whole canonical
     floor projection stay `:proposed`; the export ships the certified subgraph via
     `:certified-only?`. (Threshold is the *evidence type*, not a numeric score.)
-- **Not built** (decided here; the scale layer is ADR 0018, Proposed):
+- **Not built** (decided here; the scale layer is ADR 0018):
   - the **pluggable resolver seam** (§1 / §4) — identity is a *direct* call to
     `mint-entity-id`, not a swappable resolver; the hash is the only resolver;
   - the **authority-anchored resolver**, the pinned **authority snapshot** (§2),

@@ -2,7 +2,9 @@
   "Tests for the CLI core `run` (pure: returns {:exit :out :err}, no print/exit).
    Exercises the happy paths, the format listing, the default record-id, file
    output, and the error exits."
-  (:require [clojure.string :as str]
+  (:require [clojure.data.json :as json]
+            [clojure.edn :as edn]
+            [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [regesta.cli :as cli]))
 
@@ -103,6 +105,62 @@
     (let [{:keys [exit err]} (cli/run ["report" marc21 "--from" "marc21"])]
       (is (= 2 exit))
       (is (str/includes? err "report needs --to")))))
+
+(deftest report-format-edn-emits-the-raw-machine-readable-map
+  (testing "report --format edn: a parseable conversion-report map, no prose"
+    (let [{:keys [exit out]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc" "--format" "edn"])
+          m (edn/read-string out)]
+      (is (= 0 exit))
+      (is (map? m))
+      (is (contains? m :by-category))                     ; the structured account, not prose
+      (is (contains? m :by-edge))
+      (is (= 2 (:records m)))
+      (is (not (str/includes? out "Loss report")))))      ; the text rendering is suppressed
+  (testing "report --format rejects an unknown format"
+    (let [{:keys [exit err]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc" "--format" "xml"])]
+      (is (= 2 exit))
+      (is (str/includes? err "must be")))))
+
+(deftest report-format-json-is-valid-and-namespace-preserving
+  (testing "report --format json: valid JSON, the same account as edn,"
+    (let [{:keys [exit out]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc" "--format" "json"])
+          m (json/read-str out)]                            ; parses back, so it is valid JSON
+      (is (= 0 exit))
+      (is (map? m))
+      (is (= 2 (get m "records")))
+      (is (contains? m "by-category"))
+      (is (contains? m "by-edge"))
+      (is (not (str/includes? out "Loss report")))          ; no prose, like edn
+      (testing "namespaces survive on both keys and vector values (no collisions)"
+        ;; data.json's default key-fn is `name`, which would drop the namespace;
+        ;; the report qualifies them, so :canon/date -> \"canon/date\", not \"date\".
+        (is (every? #(str/starts-with? % "canon/") (get m "source-fields")))
+        (is (every? #(str/includes? % "/")
+                    (keys (get-in m ["by-edge" "import" "by-source-field"]))))))))
+
+;; --- degenerate-input handling (WP-9 hardening) -----------------------------
+
+(def ^:private mods "test/fixtures/documentary/mods/loc_mods_book.xml")
+
+(deftest convert-warns-when-zero-records-parsed
+  (testing "wrong --from (MODS fed as marc21) yields 0 records — a loud warning,"
+    (testing "not a silent exit-0 success that writes nothing"
+      (let [{:keys [exit out err]} (cli/run ["convert" mods "--from" "marc21" "--to" "dc"])]
+        (is (= 0 exit))                                     ; empty parse is legal — warn, don't fail
+        (is (= "" out))                                     ; nothing was produced
+        (is (str/includes? err "0 records parsed"))
+        (is (str/includes? err "--from marc21"))))))        ; actionable: points at the likely cause
+
+(deftest convert-fails-cleanly-on-malformed-input
+  (testing "garbage input exits 2 with a parse error, never an unhandled crash"
+    (let [f (java.io.File/createTempFile "regesta-malformed-" ".xml")]
+      (try
+        (spit f "this is not xml {{")
+        (let [{:keys [exit out err]} (cli/run ["convert" (str f) "--from" "marc21" "--to" "dc"])]
+          (is (= 2 exit))
+          (is (= "" out))
+          (is (str/includes? err "error")))
+        (finally (.delete f))))))
 
 (deftest inspect-shows-the-floor-and-the-minted-entities
   (testing "inspect MARC21: the canonical floor and the WEMI entities per record"
