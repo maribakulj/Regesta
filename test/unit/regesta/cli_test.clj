@@ -120,6 +120,30 @@
       (is (= 2 exit))
       (is (str/includes? err "must be")))))
 
+;; --- degenerate-input handling (WP-9 hardening) -----------------------------
+
+(def ^:private mods "test/fixtures/documentary/mods/loc_mods_book.xml")
+
+(deftest convert-warns-when-zero-records-parsed
+  (testing "wrong --from (MODS fed as marc21) yields 0 records — a loud warning,"
+    (testing "not a silent exit-0 success that writes nothing"
+      (let [{:keys [exit out err]} (cli/run ["convert" mods "--from" "marc21" "--to" "dc"])]
+        (is (= 0 exit))                                     ; empty parse is legal — warn, don't fail
+        (is (= "" out))                                     ; nothing was produced
+        (is (str/includes? err "0 records parsed"))
+        (is (str/includes? err "--from marc21"))))))        ; actionable: points at the likely cause
+
+(deftest convert-fails-cleanly-on-malformed-input
+  (testing "garbage input exits 2 with a parse error, never an unhandled crash"
+    (let [f (java.io.File/createTempFile "regesta-malformed-" ".xml")]
+      (try
+        (spit f "this is not xml {{")
+        (let [{:keys [exit out err]} (cli/run ["convert" (str f) "--from" "marc21" "--to" "dc"])]
+          (is (= 2 exit))
+          (is (= "" out))
+          (is (str/includes? err "error")))
+        (finally (.delete f))))))
+
 (deftest inspect-shows-the-floor-and-the-minted-entities
   (testing "inspect MARC21: the canonical floor and the WEMI entities per record"
     (let [{:keys [exit out]} (cli/run ["inspect" marc21 "--from" "marc21"])]

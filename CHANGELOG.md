@@ -29,6 +29,13 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   `"f650_a"`, colliding `:by-category` keys) and corrupt the audit data
   (`regesta.cli-test`).
 
+- **Degenerate-input hardening** (WP-9) — `convert` now emits a stderr warning
+  when a parse yields **0 records** (a wrong `--from`, or the wrong file), so a
+  silent exit-0 that writes an empty output no longer masquerades as success.
+  Exit stays 0 — an empty collection is legal, so this warns rather than fails.
+  Malformed input (truncated / non-XML) already exits 2 with a parse error
+  rather than crashing; both contracts are now pinned by `regesta.cli-test`.
+
 - **Streaming conversion** (WP-7 / DoD #6) — `regesta.convert/convert-stream`
   converts a reducible/lazy record stream in **constant working set**: it `reduce`s
   one record at a time, emits each rendered document via a callback, and folds a

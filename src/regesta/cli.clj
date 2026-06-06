@@ -99,6 +99,17 @@
 
 (defn- fmt-line [label fs] (str label (str/join " " (sort (map name fs)))))
 
+(defn- zero-records-note
+  "A stderr warning appended when a parse yields no records — almost always a
+   wrong `--from` or wrong file rather than a legitimately empty collection
+   (which would also be 0, so this stays a warning, not an error). Empty string
+   when records > 0, so the happy path is untouched."
+  [records from input]
+  (if (zero? records)
+    (str "\nwarning: 0 records parsed from " input
+         " — is --from " from " correct for this file?")
+    ""))
+
 (defn- do-convert [{:strs [from to record-id out]} input]
   (cond
     (not (and from to input))
@@ -118,7 +129,8 @@
                                      :opts   (cond-> {} rid (assoc :record-id rid))})
             report (str (lr/format-conversion-report (:loss result))
                         "\n(" (:records result) " record"
-                        (when (not= 1 (:records result)) "s") " converted)")]
+                        (when (not= 1 (:records result)) "s") " converted)"
+                        (zero-records-note (:records result) from input))]
         (if out
           (do (spit out (:output result)) {:exit 0 :out "" :err (str "wrote " out "\n" report)})
           {:exit 0 :out (:output result) :err report}))
@@ -235,7 +247,8 @@
             {:exit 0 :out ""
              :err  (str "wrote " out " — " (:records res) " record" (when (not= 1 (:records res)) "s")
                         " streamed (bounded memory)\n"
-                        (lr/format-conversion-report (:loss res)))}
+                        (lr/format-conversion-report (:loss res))
+                        (zero-records-note (:records res) from input))}
             {:exit 2 :out "" :err (str "error: could not move streamed output to " out)}))
         (catch clojure.lang.ExceptionInfo e
           {:exit 2 :out "" :err (str "error: " (.getMessage e) " " (pr-str (ex-data e)))})
