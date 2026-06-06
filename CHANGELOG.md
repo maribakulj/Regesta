@@ -27,6 +27,13 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
   title fall back to the transcribed title (unchanged behaviour). Measured on the
   independent BIB-R gold: recall **0.775 → 0.823** at **no precision cost** (still
   1.000) — `docs/eval/bibr-frbrisation.md`.
+  Wired across the floor family: MARC 240 `$a`, **UNIMARC 500 `$a`** (titre
+  uniforme — on real BnF data it unifies the French editions and the German
+  translation of one work into a single Work), and **MODS `<titleInfo
+  type="uniform">`** (also round-tripped back on export). The MODS change is a
+  latent-bug fix too: a uniform `titleInfo` was previously conflated into
+  `:canon/title`; it now maps to `:canon/uniform-title`. (Dublin Core has no uniform
+  title; INTERMARC keeps its richer `145 $3` authority-link rung.)
 - Independent FRBRisation eval against the third-party **BIB-R** benchmark
   (`regesta.eval.bibr-frbrisation-test`, `test/fixtures/bibr-gold/`,
   `docs/eval/bibr-frbrisation.md`). BIB-R ("Benchmark of FRBRization solutions",

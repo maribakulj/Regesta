@@ -42,6 +42,7 @@
    `abstract`/`note` onto `:canon/note`; export emits the generic element and
    reports the collapse (see ns doc). Ordered for a deterministic serialisation."
   [[:canon/title          "<titleInfo><title>"        "</title></titleInfo>"]
+   [:canon/uniform-title  "<titleInfo type=\"uniform\"><title>" "</title></titleInfo>"]
    [:canon/agent          "<name><namePart>"          "</namePart></name>"]          ; publisher also -> agent
    [:canon/date           "<originInfo><dateIssued>"   "</dateIssued></originInfo>"]
    [:canon/identifier     "<identifier>"               "</identifier>"]
