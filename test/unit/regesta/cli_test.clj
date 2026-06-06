@@ -251,4 +251,9 @@
         (let [{:keys [exit]} (cli/run ["convert" bad "--from" "marc21" "--to" "ntriples" "--stream" "--out" out])]
           (is (= 2 exit))
           (is (not (.exists (java.io.File. out)))))      ; no partial file left behind
-        (finally (.delete (java.io.File. bad)) (.delete (java.io.File. out)))))))
+        (finally (.delete (java.io.File. bad)) (.delete (java.io.File. out))))))
+  (testing "a bad --out directory fails cleanly (exit 2), not with an uncaught crash"
+    (let [{:keys [exit err]} (cli/run ["convert" marc21 "--from" "marc21" "--to" "ntriples"
+                                       "--stream" "--out" "/no/such/regesta-dir/out.nt"])]
+      (is (= 2 exit))
+      (is (str/includes? err "error:")))))
