@@ -250,7 +250,12 @@ Against the work-package plan ([`docs/roadmap-v1.md`](./docs/roadmap-v1.md)), as
   INTERMARC); institutional *certification* on real samples is partnership-gated.
 - **WP-7 scale** — streaming end-to-end in constant memory (a 97 MB flat MARC dump
   converts in a 256 MB heap); true millions-scale is data-gated.
-- **WP-9 (hardening + release)** — in progress (this is part of it).
+- **WP-9 (hardening + release)** — in progress: XML input hardened against
+  entity-expansion (`billion laughs`) and XXE (DTDs refused, `regesta.xml` +
+  [`SECURITY.md`](./SECURITY.md)); a machine-readable loss report
+  (`report --format edn`) for audit tooling; degenerate-input handling (a wrong
+  `--from` warns instead of silently producing nothing). Remaining: further
+  edge/golden coverage and the `v1.0.0` cut.
 
 FRBRisation fidelity is measured, not asserted — on real BnF data and an
 independent third-party benchmark; see [`docs/eval/`](./docs/eval/). The honest
