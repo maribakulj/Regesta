@@ -217,6 +217,20 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   injectivity guards are unchanged. Tests for the removed code were deleted with
   it; `clj-kondo` and `cljfmt` stay clean.
 
+- **Shape adapter reduced to its production path (XML only).** The generic shape
+  adapter shipped JSON-LD *and* XML walkers plus `shape-json-plugin` /
+  `shape-xml-plugin` factories, but no production spoke used them: Dublin Core
+  (the sole consumer) inlines `rewrite-tags` + `ingest-xml` directly, and IIIF —
+  the only JSON spoke — parses with `clojure.data.json`, not the shape JSON
+  walker. Removed the JSON walker (`ingest-json` and its helpers) and both
+  factories; `regesta.plugins.shape` no longer requires `regesta.xml` or
+  `clojure.data.json`. The cross-format JSON↔XML equivalence (ADR 0012) was a
+  tested-but-unused promise; its unit/integration tests were removed (the
+  redundant `shape-integration-test` deleted; the `canonical` and
+  `universal-pivot` integration tests rewritten to inline XML plugins). XML
+  ingestion, fragments, the `xml:lang` qualifier and the `:trim` reconciliation
+  stay fully covered by `dc-test` and the XML half of `shape-test`.
+
 ### Security
 
 - **XML input hardening (WP-9).** All XML importers now parse through a single
