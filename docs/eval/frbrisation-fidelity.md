@@ -110,6 +110,7 @@ correctly yields 0 records, not a parse failure.)
   The third-party **BIB-R** FRBRization benchmark (CC BY-NC, no `f145` dependence)
   supplies the broad, hand-curated MARC→FRBR gold the bullet above lacked: 560
   records whose gold Works unify transcribed-title variants/translations/abridgements.
-  Over the title-joinable subset (362 / 560), Regesta's floor key scores **P = 1.000,
-  R = 0.775** — precision-first with a *measured* title-variant recall gap (112 missed
-  pairs), corroborating the ceiling on a third corpus rather than asserting it.
+  Over the title-joinable subset (362 / 560), Regesta scores **P = 1.000** with
+  **uniform-title bridging lifting recall 0.775 → 0.823** (MARC 240 →
+  `:canon/uniform-title`, the named "D-series" step, built here at no precision cost) —
+  the recall ceiling measured *and* partly closed on a third corpus, not just asserted.

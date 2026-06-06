@@ -61,6 +61,40 @@
       (testing "a different creator is a different Work"
         (is (not= (:id (first (view/works a))) (:id (first (view/works c)))))))))
 
+(deftest uniform-title-bridges-transcribed-variants-to-one-work
+  (testing "two editions with different transcribed titles but the same uniform title cluster to one Work"
+    (let [a (project/project (canon :record/a :canon/agent "Jean de La Fontaine"
+                                    :canon/title "Fables"
+                                    :canon/uniform-title "Les fables de La Fontaine"))
+          b (project/project (canon :record/b :canon/agent "Jean de La Fontaine"
+                                    :canon/title "Les plus belles fables"
+                                    :canon/uniform-title "Les fables de La Fontaine"))]
+      (is (= (:id (first (view/works a))) (:id (first (view/works b)))))          ; same Work (bridged)
+      (testing "the Manifestation keeps its transcribed title; the Work carries the uniform title"
+        (let [manif (:id (first (view/manifestations a)))
+              work  (:id (first (view/works a)))]
+          (is (some #(and (= manif (:subject %)) (= :lrmoo/R33_has_string (:predicate %))
+                          (= "Fables" (:value %)))
+                    (:assertions a)))
+          (is (some #(and (= work (:subject %)) (= :lrmoo/R33_has_string (:predicate %))
+                          (= "Les fables de La Fontaine" (:value %)))
+                    (:assertions a)))))))
+  (testing "without a uniform title the key falls back to the transcribed title — variants split (the gap bridging closes)"
+    (let [a (project/project (canon :record/a :canon/agent "Hugo" :canon/title "Les Misérables"))
+          b (project/project (canon :record/b :canon/agent "Hugo" :canon/title "Les Misérables : texte intégral"))]
+      (is (not= (:id (first (view/works a))) (:id (first (view/works b)))))))
+  (testing "the same transcribed title under different uniform titles are different Works"
+    (let [a (project/project (canon :record/a :canon/agent "X" :canon/title "Contes"
+                                    :canon/uniform-title "Contes de Perrault"))
+          b (project/project (canon :record/b :canon/agent "X" :canon/title "Contes"
+                                    :canon/uniform-title "Contes de Grimm"))]
+      (is (not= (:id (first (view/works a))) (:id (first (view/works b)))))))
+  (testing "uniform-title is a mapped field — not reported as dropped loss"
+    (let [r      (project/project (canon :record/u :canon/agent "Hugo" :canon/title "X"
+                                         :canon/uniform-title "Y"))
+          fields (set (map #(get-in % [:detail :loss/source-field]) (dx/losses (:diagnostics r))))]
+      (is (not (contains? fields :canon/uniform-title))))))
+
 (deftest reads-a-title-that-lives-on-a-qualified-fragment
   (testing "the projection finds the title literal whether flat or on a fragment (shape+mapping shape)"
     (let [r (model/record

@@ -24,18 +24,22 @@ independent WEMI grouping.
 ## 1. What Regesta does here, and what the gold demands
 
 - **Regesta** projects flat MARC21 by the *floor* rung (`lrmoo.project`): the Work
-  key is `agent + norm(transcribed 245 title)`, and a Work is minted only when a
-  creator is present. So Regesta groups two records iff they share a creator **and**
-  a normalised transcribed title.
+  key is `agent + norm(uniform title when present, else transcribed 245 title)`, and
+  a Work is minted only when a creator is present. The **uniform-title bridging** (the
+  MARC 240 step → `:canon/uniform-title`, ADR 0003 growth) is what lets two editions
+  with *different* transcribed titles but the *same* uniform title cluster to one
+  Work.
 - **The gold** groups by the cataloguer's *uniform* Work (its work URIs are
-  author+uniform-title slugs). It therefore unifies **transcribed-title variants**,
+  author+uniform-title slugs). It unifies **transcribed-title variants**,
   translations and integral/abridged editions of one Work — e.g. La Fontaine's
   *Fables* across `Fables`, *Les plus belles fables*, *Fables, livres I–VII…*; an
   article variant *Le capitaine Fracasse* / *Capitaine Fracasse*; a French/Spanish
   translation pair.
 
-The gap between the two is exactly the **title-variant recall** that the floor key
-cannot recover — measured here on an independent corpus.
+The remaining gap is the **title-variant recall** the bridging still cannot reach —
+where the uniform title is itself inconsistent across editions (La Fontaine's *Fables*
+carries three different uniform titles in this catalogue) or absent — measured here on
+an independent corpus.
 
 ## 2. Result
 
@@ -44,17 +48,20 @@ with no creator are singletons). Gold: the BIB-R Work grouping. Records are join
 the gold **by normalised title**, unambiguous titles only. Scored pairwise over the
 joined records.
 
-| joined | tp | fp | fn | precision | recall | F1 |
-|-------:|---:|---:|---:|----------:|-------:|----:|
-| **362 / 560** | 385 | 0 | 112 | **1.000** | **0.775** | **0.873** |
+| key | joined | tp | fp | fn | precision | recall | F1 |
+|-----|-------:|---:|---:|---:|----------:|-------:|----:|
+| transcribed title only | 362 / 560 | 385 | 0 | 112 | 1.000 | 0.775 | 0.873 |
+| **+ uniform-title bridging** | 362 / 560 | 409 | 0 | 88 | **1.000** | **0.823** | **0.903** |
 
-- **Precision = 1.000.** Regesta never false-merges two distinct gold Works — the
-  `agent + norm-title` key is conservative (consistent with every prior eval).
-- **Recall = 0.775.** Of the gold's same-Work pairs, the floor key recovers ~78 %;
-  the 112 missed pairs are the title variants the gold unifies and a transcribed key
-  cannot. Higher than Bovary's 0.43 (this children's-literature catalogue repeats
+- **Precision = 1.000, before and after.** Regesta never false-merges two distinct
+  gold Works — the `agent + norm-title` key is conservative, and bridging on the
+  uniform title introduced **no** false merge (consistent with every prior eval).
+- **Recall 0.775 → 0.823.** Uniform-title bridging recovers 24 more same-Work pairs
+  (fn 112 → 88) at no precision cost: the named "D-series" recall step, measured. The
+  residual 88 missed pairs are editions whose uniform title is itself inconsistent or
+  absent. Higher than Bovary's 0.43 (this children's-literature catalogue repeats
   exact titles across editions far more than the 28 heterogeneous Bovary editions),
-  lower than 1.0 — the ceiling is real and corpus-dependent.
+  still below 1.0 — the ceiling is real and corpus-dependent.
 
 ## 3. Honest scope — the join, stated not hidden
 
@@ -69,14 +76,15 @@ gold resolves unambiguously.
 
 ## 4. Bilan
 
-- **Corroborated, independently.** P = 1.0, R ≈ 0.78 on a third corpus with a gold
-  that owes nothing to `f145`: precision-first with a real title-variant recall gap.
-  This is the independent evidence `frbrisation-fidelity.md` §3 asked for, and it
-  agrees with the ADR 0018 thesis — the embedded authority link (or a uniform-title
-  bridge) is what recall beyond exact-title needs; the floor cannot invent it.
-- **Bounded by the join, not by the model.** The 65 % coverage is a property of
-  aligning two catalogues with no shared identifier, not of the projection. A future
-  run with an id-aligned gold (or a uniform-title bridge on the system side) would
-  raise both coverage and the achievable recall.
+- **Corroborated, independently — and acted on.** P = 1.0, R = 0.82 on a third
+  corpus with a gold that owes nothing to `f145`: precision-first, and the
+  uniform-title bridge ADR 0018 names as the recall lever is now *built and measured*
+  (0.775 → 0.823 here), not just hypothesised. The floor still cannot invent a
+  grouping the source did not carry — where the uniform title is inconsistent or
+  absent, recall stops.
+- **Bounded by the data, not by the model.** The residual recall gap is the
+  catalogue's own uniform-title inconsistency; the 65 % join coverage is a property
+  of aligning two catalogues with no shared identifier. An id-aligned gold, or
+  cleaner uniform titles, would raise both — neither is a projection limitation.
 - **Data credit.** BIB-R (bib-r.github.io), CC BY-NC; used here for non-commercial
   evaluation with attribution.

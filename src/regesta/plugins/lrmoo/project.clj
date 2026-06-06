@@ -72,34 +72,45 @@
 
 (defn- wemi-productions
   "WEMI productions from the canonical floor: Manifestation always; Expression
-   when a title is present (the minimal connector); Work when a creator is too."
+   when a title is present (the minimal connector); Work when a creator is too.
+
+   Uniform-title bridging (the FRBRisation recall step, ADR 0003 growth): the
+   Manifestation keeps the *transcribed* `:canon/title`, but the Work/Expression
+   identity key — and their R33 string — use the *uniform* title
+   (`:canon/uniform-title`, e.g. MARC 240) when the record carries one. So two
+   editions whose transcribed titles differ but whose uniform title agrees mint the
+   *same* Work id and cluster (measured: `docs/eval/bibr-frbrisation.md`). Records
+   with no uniform title fall back to the transcribed title — unchanged behaviour."
   [record]
-  (let [rid   (:id record)
-        prov  (model/provenance {:pass :infer :derivation [rid]})
-        manif (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
-        title (title-of record)
-        agent (first-literal record :canon/agent)]
+  (let [rid        (:id record)
+        prov       (model/provenance {:pass :infer :derivation [rid]})
+        manif      (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
+        title      (title-of record)
+        work-title (or (first-literal record :canon/uniform-title) title)
+        agent      (first-literal record :canon/agent)]
     (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
-      ;; the Manifestation's own title is transcription -> certified (D7);
-      ;; the string-key Expression/Work below are inference -> :proposed.
-      title (conj (assert-prod manif :lrmoo/R33_has_string title prov :asserted))
-      title (into (let [wkey (str (or agent "") "|" (text/norm title))
-                        expr (model/mint-entity-id :lrmoo/F2_Expression wkey)
-                        work (when agent (model/mint-entity-id :lrmoo/F1_Work wkey))]
-                    ;; F1 and F2 minted from the same key are distinct ids: the
-                    ;; kind is part of the content hash (`mint-entity-id`).
-                    (cond-> [(entity-prod expr :lrmoo/F2_Expression prov)
-                             (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov)
-                             (assert-prod expr :lrmoo/R33_has_string title prov)]
-                      work (into [(entity-prod work :lrmoo/F1_Work prov)
-                                  (assert-prod work :lrmoo/R3_is_realised_in (model/reference expr) prov)
-                                  (assert-prod work :lrmoo/R33_has_string title prov)])))))))
+      ;; the Manifestation's own *transcribed* title is transcription -> certified
+      ;; (D7); the Work/Expression below are string-key inference -> :proposed, and
+      ;; key on the uniform title when present.
+      title      (conj (assert-prod manif :lrmoo/R33_has_string title prov :asserted))
+      work-title (into (let [wkey (str (or agent "") "|" (text/norm work-title))
+                             expr (model/mint-entity-id :lrmoo/F2_Expression wkey)
+                             work (when agent (model/mint-entity-id :lrmoo/F1_Work wkey))]
+                         ;; F1 and F2 minted from the same key are distinct ids: the
+                         ;; kind is part of the content hash (`mint-entity-id`).
+                         (cond-> [(entity-prod expr :lrmoo/F2_Expression prov)
+                                  (assert-prod manif :lrmoo/R4_embodies (model/reference expr) prov)
+                                  (assert-prod expr :lrmoo/R33_has_string work-title prov)]
+                           work (into [(entity-prod work :lrmoo/F1_Work prov)
+                                       (assert-prod work :lrmoo/R3_is_realised_in (model/reference expr) prov)
+                                       (assert-prod work :lrmoo/R33_has_string work-title prov)])))))))
 
 (def mapped-source-fields
   "Canonical predicates the WEMI projection represents. Every other `:canon/*`
    assertion a record carries is reported as loss (ADR 0015)."
-  #{:canon/title    ; -> R33 strings (Manifestation / Expression / Work)
-    :canon/agent})  ; -> F1_Work key (creator)
+  #{:canon/title          ; -> R33 strings (Manifestation / Expression / Work)
+    :canon/uniform-title  ; -> Work/Expression key + R33 (uniform-title bridging)
+    :canon/agent})        ; -> F1_Work key (creator)
 
 (defn- source-fields
   "Distinct `:canon/*` predicates the record carries, excluding the in-graph

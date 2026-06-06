@@ -16,6 +16,17 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Added
 
+- **Uniform-title bridging** — the FRBRisation recall step the fidelity doc names
+  ("D-series"). A ninth canonical predicate `:canon/uniform-title` (ADR 0003 growth
+  discipline: the cataloguer's controlled work title, distinct from the transcribed
+  `:canon/title`), mapped from MARC 240 `$a` (and emitted back on export, so the
+  round-trip stays lossless). The floor projection (`lrmoo.project`) now keys the
+  Work/Expression on the uniform title when a record carries one — so editions whose
+  *transcribed* titles differ but whose *uniform* title agrees mint the same Work and
+  cluster; the Manifestation keeps its transcribed title. Records without a uniform
+  title fall back to the transcribed title (unchanged behaviour). Measured on the
+  independent BIB-R gold: recall **0.775 → 0.823** at **no precision cost** (still
+  1.000) — `docs/eval/bibr-frbrisation.md`.
 - Independent FRBRisation eval against the third-party **BIB-R** benchmark
   (`regesta.eval.bibr-frbrisation-test`, `test/fixtures/bibr-gold/`,
   `docs/eval/bibr-frbrisation.md`). BIB-R ("Benchmark of FRBRization solutions",

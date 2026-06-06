@@ -3,10 +3,12 @@
 
    Two things live here, both as plain data:
 
-   1. The `:canon/*` documentary vocabulary — the eight predicates that
+   1. The `:canon/*` documentary vocabulary — the predicates that
       format plugins (Dublin Core, MARC, CIDOC, …) map their native
       terms onto so cross-source rules, validation, and projection can
-      operate on a commensurable layer (ADR 0003 §Decision).
+      operate on a commensurable layer (ADR 0003 §Decision). The V1 set of
+      eight has grown by one — `:canon/uniform-title` (see below) — under
+      ADR 0003's growth discipline.
    2. The first validation rules over that layer. Sprint 5 stood up the
       ingest → normalize path (native source → `:canon/*` assertions);
       this plugin closes the loop by *enforcing* the canonical layer —
@@ -20,9 +22,10 @@
    Qualifiers ride on fragments (ADR 0011), not on new top-level
    predicates. `:canon/lang` is the first such case: it is a qualifier
    coord on a fragment, minted by the shape adapter and renamed by
-   qualified mappings (ADR 0009 §Qualifier). ADR 0003's documentary set
-   is exactly eight predicates and `:canon/lang` is not among them — it
-   is absent from `documentary-vocabulary` by design, not by omission.
+   qualified mappings (ADR 0009 §Qualifier). `:canon/lang` is *not* a
+   documentary predicate — it is absent from `documentary-vocabulary` by
+   design, not by omission. A *uniform title*, by contrast, is documentary
+   (it names what the work is), so it earns a predicate, not a fragment coord.
 
    ## The core stays vocabulary-blind
 
@@ -47,13 +50,21 @@
 ;; ---------------------------------------------------------------------------
 
 (def documentary-vocabulary
-  "The eight canonical documentary predicates listed in ADR 0003
-   §Decision.
+  "The canonical documentary predicates (ADR 0003 §Decision, grown by discipline).
 
    Each names *what* is described; qualifiers such as `:canon/lang` are
    excluded by design — they ride on fragments (ADR 0011), see the
-   namespace doc."
+   namespace doc.
+
+   `:canon/uniform-title` is the ninth, added 2026-06-06 under the growth
+   discipline for a concrete, measured use case: the cataloguer's controlled
+   work title (MARC 240, MODS/UNIMARC uniform title) is the FRBRisation Work key
+   that unifies an edition's transcribed-title variants — the floor projection
+   keys the Work on it when present, raising recall against an independent gold
+   (`docs/eval/bibr-frbrisation.md`). It describes *what the work is*, distinct
+   from `:canon/title` (the manifestation's transcribed title)."
   #{:canon/title
+    :canon/uniform-title
     :canon/identifier
     :canon/agent
     :canon/date

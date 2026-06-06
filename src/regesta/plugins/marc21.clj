@@ -23,6 +23,7 @@
    | MARC21                                  | canonical            |
    |-----------------------------------------|----------------------|
    | `245 $a`                                | `:canon/title`       |
+   | `240 $a`                                | `:canon/uniform-title` |
    | `100/110/111 $a`, `700/710 $a`          | `:canon/agent`       |
    | `260/264 $c`                            | `:canon/date`        |
    | `010/020/022/035 $a`                    | `:canon/identifier`  |
@@ -71,6 +72,8 @@
    the identifier flavours); that under-specification is the floor's, surfaced as
    loss when the pivot is projected to a role-aware target."
   [{:mapping/id :map/marc21-title :mapping/from :marc21/f245_a :mapping/to :canon/title
+    :mapping/transform [:trim]}
+   {:mapping/id :map/marc21-uniform-240 :mapping/from :marc21/f240_a :mapping/to :canon/uniform-title
     :mapping/transform [:trim]}
    {:mapping/id :map/marc21-author-100 :mapping/from :marc21/f100_a :mapping/to :canon/agent
     :mapping/transform [:trim]}

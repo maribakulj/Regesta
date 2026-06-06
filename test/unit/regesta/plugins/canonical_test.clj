@@ -15,15 +15,17 @@
 ;; Documentary vocabulary
 ;; ---------------------------------------------------------------------------
 
-(deftest documentary-vocabulary-is-the-adr-0003-eight
-  (testing "exactly the eight documentary predicates from ADR 0003 §Decision"
-    (is (= #{:canon/title :canon/identifier :canon/agent :canon/date
-             :canon/relation :canon/note :canon/digital-object :canon/loss-marker}
+(deftest documentary-vocabulary-is-the-adr-0003-set
+  (testing "exactly the documentary predicates from ADR 0003 §Decision (eight + the disciplined uniform-title addition)"
+    (is (= #{:canon/title :canon/uniform-title :canon/identifier :canon/agent
+             :canon/date :canon/relation :canon/note :canon/digital-object :canon/loss-marker}
            canonical/documentary-vocabulary))
-    (is (= 8 (count canonical/documentary-vocabulary)))))
+    (is (= 9 (count canonical/documentary-vocabulary))))
+  (testing "uniform-title is documentary (the work's controlled title), distinct from the transcribed title"
+    (is (canonical/documentary? :canon/uniform-title))))
 
 (deftest lang-is-not-a-documentary-predicate
-  (testing ":canon/lang is a fragment qualifier (ADR 0011), not a ninth documentary predicate"
+  (testing ":canon/lang is a fragment qualifier (ADR 0011), not a documentary predicate"
     (is (not (contains? canonical/documentary-vocabulary :canon/lang)))
     (is (not (canonical/documentary? :canon/lang)))))
 

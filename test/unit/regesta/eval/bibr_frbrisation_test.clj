@@ -12,12 +12,14 @@
    hand-curated MARC → FRBR/RDA gold with zero dependence on any link Regesta reads.
 
    What it measures: Regesta projects flat MARC21 to WEMI by the *floor* rung
-   (`lrmoo.project`), whose Work key is `agent + norm(transcribed-245-title)` — a
-   Work is minted only when a creator is present. The BIB-R gold groups by the
-   cataloguer's *uniform* work (its work URIs are author+uniform-title slugs), so it
-   groups transcribed-title **variants**, translations and integral/abridged
-   editions under one Work. So this is a genuine, non-circular recall test: where the
-   gold unifies title variants, the floor's transcribed-title key cannot.
+   (`lrmoo.project`), whose Work key is `agent + norm(uniform-title when present,
+   else transcribed-245-title)` — a Work is minted only when a creator is present.
+   The BIB-R gold groups by the cataloguer's *uniform* work (its work URIs are
+   author+uniform-title slugs), so it unifies transcribed-title **variants**,
+   translations and integral/abridged editions under one Work. So this is a genuine,
+   non-circular recall test of the uniform-title bridging (the MARC 240 step):
+   where editions of one Work share a uniform title, the key now unifies them; the
+   residual gap is the uniform titles that are themselves inconsistent or absent.
 
    Honest scope (stated, not hidden): the MARC `001`s carry no link to the gold's
    title-slug URIs, so records are joined to the gold **by normalised title**, and a
@@ -128,10 +130,11 @@
   (testing "Regesta never false-merges distinct gold Works (precision = 1.0)"
     (is (= 1.0 (:precision metric))
         (str "metric=" metric)))
-  (testing "recall is bounded below 1.0 — the floor key splits the gold's title variants"
+  (testing "recall is bounded below 1.0 — uniform-title bridging lifts it, variants remain"
     ;; The non-circular finding: P=1.0, R<1.0 on a third corpus independent of f145,
-    ;; corroborating ADR 0018's recall ceiling. Measured R=0.775 (385 tp, 112 fn);
-    ;; pinned to a band around it so a regression in the projection key is caught.
-    (is (< 0.74 (:recall metric) 0.81)
+    ;; corroborating ADR 0018's recall ceiling. Uniform-title bridging (MARC 240)
+    ;; raised R from 0.775 to 0.823 (409 tp, 88 fn) at no precision cost; pinned to a
+    ;; band around the measured value so a regression in the projection key is caught.
+    (is (< 0.80 (:recall metric) 0.86)
         (str "metric=" metric))
-    (is (pos? (:fn metric)))))                              ; the gold really does unify variants the key splits
+    (is (pos? (:fn metric)))))                              ; uniform titles are themselves inconsistent/absent for the rest
