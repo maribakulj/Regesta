@@ -247,13 +247,16 @@
             (str "diagnostic count grew on rerun for " (:id r)))))))
 
 ;; ---------------------------------------------------------------------------
-;; Trace and aggregations across the whole batch
+;; Provenance and aggregations across the whole batch
 ;; ---------------------------------------------------------------------------
 
 (deftest trace-names-every-rule-that-fired
   (let [outs   (final-records)
-        traced (into #{} (mapcat #(map :rule (rt/trace %)) outs))]
-    (testing "every authored rule appears at least once in the batch trace"
+        traced (into #{} (mapcat (fn [r]
+                                   (map #(get-in % [:provenance :rule])
+                                        (concat (:assertions r) (:diagnostics r))))
+                                 outs))]
+    (testing "every authored rule appears at least once in the batch provenance"
       (is (contains? traced :rule/tag-seen))
       (is (contains? traced :rule/title-required))
       (is (contains? traced :rule/infer-french))

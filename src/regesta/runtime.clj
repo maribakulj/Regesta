@@ -174,44 +174,7 @@
                        {:cycles (get spec :cycles 1)})]
         (recur record (into all-prod productions) more)))))
 
-;; ---------------------------------------------------------------------------
-;; Trace queries
-;;
-;; Every merged assertion and diagnostic carries a provenance map with the
-;; rule and pass that produced it. These helpers surface that data.
-;; ---------------------------------------------------------------------------
-
-(defn assertions-by-rule
-  "Return assertions in `record` whose provenance names the given rule."
-  [record rule-id]
-  (filterv #(= rule-id (get-in % [:provenance :rule]))
-           (:assertions record)))
-
-(defn diagnostics-by-rule
-  "Return diagnostics in `record` whose provenance names the given rule."
-  [record rule-id]
-  (filterv #(= rule-id (get-in % [:provenance :rule]))
-           (:diagnostics record)))
-
-(defn productions-by-phase
-  "Return every assertion and diagnostic in `record` whose provenance
-   attributes it to the given phase."
-  [record phase]
-  {:assertions  (filterv #(= phase (get-in % [:provenance :pass]))
-                         (:assertions record))
-   :diagnostics (filterv #(= phase (get-in % [:provenance :pass]))
-                         (:diagnostics record))})
-
-(defn trace
-  "Summary of every rule that touched the record, with counts.
-   Returns `[{:rule ... :assertions N :diagnostics M} ...]`, sorted by
-   rule id."
-  [record]
-  (let [a-by      (group-by #(get-in % [:provenance :rule]) (:assertions record))
-        d-by      (group-by #(get-in % [:provenance :rule]) (:diagnostics record))
-        rule-ids  (into (sorted-set) (concat (keys a-by) (keys d-by)))]
-    (for [rid rule-ids
-          :when rid]
-      {:rule        rid
-       :assertions  (count (get a-by rid))
-       :diagnostics (count (get d-by rid))})))
+;; Provenance is carried on every merged assertion and diagnostic
+;; (`[:provenance :rule]` / `[:provenance :pass]`, set by the rule compiler).
+;; Callers that need to filter or summarise by rule/phase read those keys
+;; directly — there is no production consumer for a dedicated trace API.

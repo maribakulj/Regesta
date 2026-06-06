@@ -244,6 +244,14 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   collision detection, and `effective-transforms` / `transform-source` (the live
   transform side).
 
+- **Runtime trace-query helpers removed.** `trace`, `assertions-by-rule`,
+  `diagnostics-by-rule` and `productions-by-phase` were a read-side API over the
+  provenance the runtime stamps, with no production consumer. The provenance
+  itself is unchanged — every merged assertion/diagnostic still carries
+  `[:provenance :rule]` and `[:provenance :pass]` — and the few tests that
+  verified attribution now read those keys directly, so the contract stays
+  covered without the helper layer.
+
 ### Security
 
 - **XML input hardening (WP-9).** All XML importers now parse through a single

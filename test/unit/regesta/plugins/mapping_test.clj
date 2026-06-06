@@ -670,11 +670,12 @@
       (is (some #(= :canon/tagged (:predicate %))  (:assertions enr))))))
 
 (deftest compiled-mapping-trace-mentions-rule-id
-  (testing "provenance from a mapping is queryable by rule id"
+  (testing "provenance from a mapping names its derived rule id"
     (let [cr     (mapping/compile-mapping minimal-mapping stdlib)
           record (record-with :native/x ["v"])
           {enr :record} (runtime/run-phase record [cr] :normalize)]
-      (is (= 1 (count (runtime/assertions-by-rule enr :rule.from-mapping/x)))))))
+      (is (= 1 (count (filter #(= :rule.from-mapping/x (get-in % [:provenance :rule]))
+                              (:assertions enr))))))))
 
 ;; ---------------------------------------------------------------------------
 ;; Combine — multi-source `:from` joined by `:mapping/combine` (subfield recombine)

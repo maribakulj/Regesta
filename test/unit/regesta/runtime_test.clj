@@ -278,41 +278,30 @@
                                 [{:phase :unknown-phase}]))))
 
 ;; ---------------------------------------------------------------------------
-;; Trace queries
+;; Provenance attribution: every production names its rule and phase
 ;; ---------------------------------------------------------------------------
 
-(deftest trace-surfaces-rule-attribution
+(deftest provenance-names-the-producing-rule-and-phase
   (let [r        (book :r/t :title "T")
         rs       (compile-many [tag-rule title-required-rule normalize-title-rule])
         pipeline [{:phase :normalize} {:phase :validate}]
         {:keys [record]} (rt/run-pipeline r rs pipeline)
-        tr       (rt/trace record)
-        by-rule  (into {} (map (juxt :rule identity) tr))]
-    (is (contains? by-rule :rule/tag))
-    (is (contains? by-rule :rule/normalize-title))
-    (is (= 1 (get-in by-rule [:rule/tag :assertions])))))
-
-(deftest assertions-by-rule-filters
-  (let [r   (book :r/u)
-        rs  (compile-many [tag-rule])
-        {:keys [record]} (rt/run-phase r rs :normalize)]
-    (is (= 1 (count (rt/assertions-by-rule record :rule/tag))))
-    (is (empty? (rt/assertions-by-rule record :rule/other)))))
-
-(deftest diagnostics-by-rule-filters
-  (let [r   (book :r/v)
-        rs  (compile-many [title-required-rule])
-        {:keys [record]} (rt/run-phase r rs :validate)]
-    (is (= 1 (count (rt/diagnostics-by-rule record :rule/title-required))))
-    (is (empty? (rt/diagnostics-by-rule record :rule/other)))))
-
-(deftest productions-by-phase
-  (let [r        (book :r/w :title "X")
-        rs       (compile-many [tag-rule normalize-title-rule])
-        pipeline [{:phase :normalize} {:phase :validate}]
-        {:keys [record]} (rt/run-pipeline r rs pipeline)]
-    (is (= 1 (count (:assertions (rt/productions-by-phase record :normalize)))))
-    (is (= 1 (count (:assertions (rt/productions-by-phase record :validate)))))))
+        rule-of  (fn [items] (frequencies (map #(get-in % [:provenance :rule]) items)))
+        a-by     (rule-of (:assertions record))]
+    (testing "assertions carry the rule that produced them"
+      (is (contains? a-by :rule/tag))
+      (is (contains? a-by :rule/normalize-title))
+      (is (= 1 (get a-by :rule/tag))))
+    (testing "a single :normalize rule yields one assertion attributed to it"
+      (let [{:keys [record]} (rt/run-phase (book :r/u) (compile-many [tag-rule]) :normalize)]
+        (is (= 1 (count (filter #(= :rule/tag (get-in % [:provenance :rule]))
+                                (:assertions record)))))))
+    (testing "a :validate rule attributes its diagnostic by rule and phase"
+      (let [{:keys [record]} (rt/run-phase (book :r/v) (compile-many [title-required-rule]) :validate)
+            d (first (:diagnostics record))]
+        (is (= 1 (count (:diagnostics record))))
+        (is (= :rule/title-required (get-in d [:provenance :rule])))
+        (is (= :validate (get-in d [:provenance :pass])))))))
 
 ;; ---------------------------------------------------------------------------
 ;; Exit-gate integration test: 20 rules, 50+ productions, every production
@@ -357,8 +346,9 @@
     (testing "Every produced diagnostic names its rule in provenance"
       (is (every? #(some? (get-in % [:provenance :rule]))
                   (:diagnostics record))))
-    (testing "Trace lists every rule that fired"
-      (let [traced-rules (set (map :rule (rt/trace record)))]
+    (testing "Every rule that fired is attributable in provenance"
+      (let [fired-rules (set (map #(get-in % [:provenance :rule])
+                                  (concat (:assertions record) (:diagnostics record))))]
         ;; 15 tag-rules each produce 3 assertions (3 cycles), 5 validators
         ;; each produce 1 diagnostic. All 20 must appear.
-        (is (= 20 (count traced-rules)))))))
+        (is (= 20 (count fired-rules)))))))
