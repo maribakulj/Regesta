@@ -41,19 +41,29 @@
   [ark]
   (keyword "bnf" (last (str/split ark #"/"))))
 
+(defn- policies
+  "The MARCXML family policies for the UNIMARC spoke (shared by `ingest`/`stream`)."
+  [opts]
+  {:ns        "unimarc"
+   :record?   mxc-record?
+   :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
+   :kind      (fn [e] (or (:kind opts)
+                          (keyword "unimarc"
+                                   (str/lower-case (or (marcxml/attr e "type") "record")))))
+   :source    (fn [e] (marcxml/attr e "id"))})
+
 (defn ingest
   "Parse a UNIMARC MARCXChange `xml-string` into a vector of Records with native
    `:unimarc/*` assertions. `opts` may carry `:kind` (else from the record `type`)."
   [xml-string opts]
-  (marcxml/parse-records
-   xml-string
-   {:ns        "unimarc"
-    :record?   mxc-record?
-    :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
-    :kind      (fn [e] (or (:kind opts)
-                           (keyword "unimarc"
-                                    (str/lower-case (or (marcxml/attr e "type") "record")))))
-    :source    (fn [e] (marcxml/attr e "id"))}))
+  (marcxml/parse-records xml-string (policies opts)))
+
+(defn stream
+  "Streaming importer (WP-7): a **lazy** record seq from a MARCXChange `readable`
+   (a flat `<mxc:collection>` dump; SRU pages are small and use `ingest`). The
+   caller manages the reader and consumes lazily — bounded (`docs/eval/scale.md`)."
+  [opts readable]
+  (marcxml/stream-records readable (policies opts)))
 
 (defn- source->string [source]
   (cond
@@ -114,4 +124,5 @@
    :input-format        :xml
    :mapping             mapping
    :importer            importer
+   :stream-importer     stream                          ; WP-7 lazy record seq from a Reader
    :doc                 "UNIMARC (BnF diffusion) importer — fields/subfields as :unimarc/* assertions; bibliographic subset mapped to the canonical floor."})

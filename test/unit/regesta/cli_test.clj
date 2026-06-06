@@ -209,3 +209,31 @@
       (is (str/includes? err "CONFORMANT"))
       (is (not (str/includes? err "NON-CONFORMANT")))
       (is (str/includes? err "IIIF Presentation 3.0")))))
+
+;; --- convert --stream (WP-7 bounded-memory streaming) -----------------------
+
+(deftest convert-stream-writes-bounded-output-to-out
+  (testing "convert --stream lazily parses and writes the document to --out"
+    (let [path (str (System/getProperty "java.io.tmpdir") "/regesta-stream-" (System/nanoTime) ".nt")]
+      (try
+        (let [{:keys [exit out err]} (cli/run ["convert" marc21 "--from" "marc21"
+                                               "--to" "ntriples" "--stream" "--out" path])
+              written (slurp path)]
+          (is (= 0 exit))
+          (is (= "" out))                                   ; document went to the file, not :out
+          (is (str/includes? err "streamed"))
+          (is (str/includes? err "Loss report"))
+          (is (str/includes? written "lrmoo/F3_Manifestation"))
+          (is (str/includes? written "The Great Ray Charles")))
+        (finally (.delete (java.io.File. path)))))))
+
+(deftest convert-stream-guards-its-inputs
+  (testing "--stream requires --out"
+    (let [{:keys [exit err]} (cli/run ["convert" marc21 "--from" "marc21" "--to" "ntriples" "--stream"])]
+      (is (= 2 exit))
+      (is (str/includes? err "requires --out"))))
+  (testing "--stream rejects a non-streamable spoke (Dublin Core is not a flat dump)"
+    (let [{:keys [exit err]} (cli/run ["convert" dc "--from" "dc" "--to" "ntriples"
+                                       "--stream" "--out" "/tmp/regesta-x.nt"])]
+      (is (= 2 exit))
+      (is (str/includes? err "not supported")))))

@@ -73,6 +73,27 @@
 (defn source-formats [] (spokes/source-formats))
 (defn target-formats [] (set (keys exporters)))
 
+(defn- spoke-streamer [from]
+  (and (contains? spokes/plugins from) (:stream-importer (spokes/plugin from))))
+
+(defn streamable? [from] (boolean (spoke-streamer from)))
+
+(defn streamable-sources
+  "Source spokes whose importer can stream from a Reader (WP-7) — the MARC family."
+  []
+  (into (sorted-set) (filter streamable?) (source-formats)))
+
+(defn stream-source
+  "A **lazy** record seq for streamable spoke `from`, read from `readable` (a
+   Reader) — the WP-7 bounded-memory input. The caller must keep `readable` open
+   during consumption (e.g. `with-open`) and feed the seq to `convert-stream`
+   (which `reduce`s it without retaining the head). Throws if `from` cannot stream."
+  [from opts readable]
+  (if-let [si (spoke-streamer from)]
+    (si opts readable)
+    (throw (ex-info "Spoke has no streaming importer"
+                    {:from from :streamable (streamable-sources)}))))
+
 ;; ---------------------------------------------------------------------------
 ;; Pipeline
 ;; ---------------------------------------------------------------------------

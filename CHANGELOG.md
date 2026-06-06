@@ -28,9 +28,20 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
   one genuinely O(N) figure (`:distinct-losses`, batch-only). Measured budget:
   **100 000 records (MARC21→N-Triples) in a 512 MB heap, ~70 MB used, throughput
   flat ~4 000 rec/s**, the loss accumulator's footprint invariant in N
-  (`docs/eval/scale.md`, `regesta.convert-stream-test`). Remaining bound (stated):
-  the per-document XML parse is eager, so a single multi-GB file is document-bounded
-  — a lazy per-format parser and a CLI `--stream` verb are the documented follow-ups.
+  (`docs/eval/scale.md`, `regesta.convert-stream-test`).
+- **Lazy input parse + CLI `--stream`** (WP-7, the one-giant-file story closed for
+  the MARC family). `marcxml/stream-records` pull-parses a `Reader`
+  (`data.xml/parse`) into a **lazy** record seq — bounded to one record at a time —
+  wired as a plugin `:stream-importer` on MARC21 / INTERMARC / UNIMARC
+  (`convert/streamable?` / `stream-source`) and surfaced as `regesta convert <in>
+  --from <marc-fmt> --to <fmt> --stream --out <file>`, which writes the document
+  incrementally in bounded memory. End-to-end: a **97 MB / 56 000-record flat MARC
+  dump → 64 MB N-Triples in a 256 MB heap, ~33 MB used**, where the eager
+  `parse-str` path OOMs. Bounded by construction to the *flat-collection* shape
+  (direct children — a deep tree-seq retains ancestors); SRU pages are small and stay
+  eager (stream at page granularity), and the non-MARC single-record spokes don't
+  stream (`--stream` rejects them with the streamable set). A new optional plugin key
+  `:stream-importer` (`regesta.plugins` schema).
 - **Uniform-title bridging** — the FRBRisation recall step the fidelity doc names
   ("D-series"). A ninth canonical predicate `:canon/uniform-title` (ADR 0003 growth
   discipline: the cataloguer's controlled work title, distinct from the transcribed

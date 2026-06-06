@@ -45,21 +45,31 @@
 ;; Public API + plugin
 ;; ---------------------------------------------------------------------------
 
+(defn- policies
+  "The MARCXML family policies for the INTERMARC spoke (shared by `ingest`/`stream`)."
+  [opts]
+  {:ns        "intermarc"
+   :record?   mxc-record?
+   :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
+   :kind      (fn [e] (or (:kind opts)
+                          (keyword "intermarc"
+                                   (str/lower-case (or (marcxml/attr e "type") "record")))))
+   :source    (fn [e] (marcxml/attr e "id"))})
+
 (defn ingest
   "Parse an InterMARCXChange `xml-string` into a vector of Records carrying native
    `:intermarc/*` assertions. `opts` may carry `:kind` (else derived from each
    record's `type`). The controlled author is recombined from the 100 subfields by
    the `:map/intermarc-agent` combine mapping, not by a pre-pass."
   [xml-string opts]
-  (marcxml/parse-records
-   xml-string
-   {:ns        "intermarc"
-    :record?   mxc-record?
-    :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
-    :kind      (fn [e] (or (:kind opts)
-                           (keyword "intermarc"
-                                    (str/lower-case (or (marcxml/attr e "type") "record")))))
-    :source    (fn [e] (marcxml/attr e "id"))}))
+  (marcxml/parse-records xml-string (policies opts)))
+
+(defn stream
+  "Streaming importer (WP-7): a **lazy** record seq from a MARCXChange `readable`
+   (a flat `<mxc:collection>` dump; SRU pages are small and use `ingest`). The
+   caller manages the reader and consumes lazily — bounded (`docs/eval/scale.md`)."
+  [opts readable]
+  (marcxml/stream-records readable (policies opts)))
 
 (defn- source->string
   "Accept either a raw string or an ADR 0007 tagged source map."
@@ -111,4 +121,5 @@
    :input-format        :xml
    :mapping             mapping
    :importer            importer
+   :stream-importer     stream                          ; WP-7 lazy record seq from a Reader
    :doc                 "INTERMARC-SRU (InterMARCXChange) importer — fields/subfields as :intermarc/* assertions; bibliographic core mapped to the canonical floor."})

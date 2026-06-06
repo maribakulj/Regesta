@@ -5,6 +5,7 @@
    of:
 
    - an `:importer` (external source → IR records),
+   - a `:stream-importer` (a `Reader` → a *lazy* record seq, for WP-7 streaming),
    - an `:exporter` (IR records → external output),
    - `:rules` — rule-DSL data, schema in `regesta.rules` (ADR 0002),
    - a `:mapping` — data-shaped sugar over rules (ADR 0009),
@@ -53,6 +54,7 @@
    ;; code surface (functions; closures cannot be deeply introspected,
    ;; so the schema checks only that they are callable)
    [:importer {:optional true} fn?]
+   [:stream-importer {:optional true} fn?]   ; WP-7: (opts readable) -> lazy record seq
    [:exporter {:optional true} fn?]
    [:matches? {:optional true} fn?]
 

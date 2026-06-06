@@ -50,26 +50,54 @@ clojure -J-Xmx512m -M:sandbox:test/unit -n regesta.convert-stream-test
 (Numbers are machine-relative; the committed tests assert the *properties* —
 streamed == batch, bounded footprint, large-corpus completion — not wall-clock.)
 
-## Honest scope — the remaining bound
+## Lazy input parse — the one-giant-file story (now closed for the MARC family)
 
-- **Input parsing is eager per document.** The spoke importers parse a whole document
-  (`data.xml/parse-str` builds the tree) before yielding records, so a *single
-  multi-GB file* is still bounded by that document. The realistic BnF scale story —
-  millions of records arriving as many SRU pages / files — streams at **document
-  granularity**: import a page, stream it through `convert-stream`, discard it,
-  repeat, in constant memory. True single-file streaming needs a lazy/pull XML parse
-  per format (`data.xml/parse` over a Reader); it is the documented follow-up.
-- **No CLI `--stream` verb yet.** `convert-stream` is the library seam; wiring it to
-  the CLI (write to stdout/file incrementally) is low-risk but waits on the lazy input
-  parse above, so the CLI does not over-promise constant memory on one giant file.
-- **Distinct-loss dedup is batch-only** (above) — by design, the one O(N) metric.
+The input parse is no longer eager for the MARC family. `marcxml/stream-records`
+pull-parses a `Reader` (`data.xml/parse`) and yields the root collection's records as
+a **lazy** seq — each record realised, built and released as it is consumed — so a
+single large *flat* MARCXML dump streams in bounded memory. It is wired as a plugin
+`:stream-importer` on MARC21 / INTERMARC / UNIMARC (`convert/streamable?`,
+`convert/stream-source`) and surfaced as the CLI verb:
+
+```
+regesta convert <big.xml> --from marc21 --to ntriples --stream --out <file>
+```
+
+**End-to-end CLI measurement** (the 56 000-record / 97 MB flat dump → N-Triples,
+**`-Xmx256m`**):
+
+| path | result |
+|------|--------|
+| batch (`parse-str`, eager) | **OOM** at 256 MB |
+| `convert --stream` (lazy) | 56 000 records → 64 MB output, **~33 MB used**, ~21 s |
+
+The eager path cannot load the file in 256 MB; the streaming path converts it using
+~33 MB. That is the one-giant-file story, closed for the format family where it
+matters (the BnF's MARC dumps).
+
+The committed tests assert the *properties* (lazy seq, streamed records == the eager
+importer's records, the streamable set is the MARC family); the 97 MB measurement is
+reproducible with the snippet above on a generated dump.
+
+## Honest scope — what is still bounded
+
+- **Direct-children only / SRU pages stay eager.** `stream-records` reads the root
+  collection's *direct* children (the bounded pattern — a deep tree-seq retains
+  ancestors). So it streams **flat** dump collections; SRU responses (records nested
+  under `srw:record/recordData`) are small pages and use the eager `ingest`, streamed
+  at **page granularity** if a corpus spans many pages.
+- **Non-MARC spokes don't stream.** Dublin Core / MODS / IIIF are single- or
+  few-record formats (no flat-collection dump shape); `--stream` rejects them with the
+  streamable set, rather than pretend.
+- **Distinct-loss dedup is batch-only** — by design, the one O(N) metric.
 
 ## Bilan
 
-- **Done.** Per-record conversion is stateless and streams in constant working set;
-  100 000 records in a 512 MB heap, throughput flat, loss report bounded and
-  byte-identical to batch (minus the deliberate O(N) figure). The id-collision design
-  is what makes this hold — the converter streams, a store deduplicates.
-- **Bounded by input parse, not by the model.** The remaining memory bound is the
-  eager per-document XML parse, addressable with a lazy parser per format; the scale
-  property of the conversion itself is in hand.
+- **Done.** Per-record conversion is stateless and streams in constant working set
+  (100 000 records folded in a 512 MB heap), and the **input** now streams too for the
+  MARC family: a 97 MB flat dump converts in ~33 MB via the CLI where the eager path
+  OOMs. The id-collision design is what makes the whole pipeline stream — the converter
+  emits, a store deduplicates by id.
+- **Bounded only where it should be.** What remains eager (SRU pages, non-MARC
+  single-record formats) is small by construction; the scale path — large MARC dumps —
+  is streamed end to end.

@@ -27,7 +27,8 @@
    `run` is pure — it parses args, does the work and returns `{:exit :out :err}`
    without printing or exiting — so tests drive it directly; `-main` is the thin
    shell that prints the streams and calls `System/exit`."
-  (:require [clojure.string :as str]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [regesta.conformance :as conformance]
             [regesta.convert :as convert]
             [regesta.curate :as curate]
@@ -43,6 +44,7 @@
     ""
     "Usage:"
     "  regesta convert       <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
+    "  regesta convert       <input-file> --from <marc-fmt> --to <fmt> --stream --out <file>"
     "  regesta validate      <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
     "  regesta report        <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
     "  regesta inspect       <input-file> --from <fmt> [--record-id <id>]"
@@ -59,6 +61,7 @@
     "                apply-repairs: flag (default), accept, reject"
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
     "  --out         write the output to a file instead of stdout (convert)"
+    "  --stream      convert in bounded memory, streaming a large flat MARC dump to --out (WP-7)"
     ""
     "convert writes the document to stdout, the loss report to stderr;"
     "validate writes the diagnostics report to stderr and exits non-zero on failure;"
@@ -79,6 +82,7 @@
       (let [a (first as)]
         (cond
           (#{"--help" "-h"} a)      (recur (rest as) (assoc m :help? true))
+          (#{"--stream"} a)         (recur (rest as) (assoc-in m [:flags "stream"] true)) ; boolean
           (str/starts-with? a "--") (recur (drop 2 as) (assoc-in m [:flags (subs a 2)] (second as)))
           (:command m)              (recur (rest as) (update m :positional (fnil conj []) a))
           :else                     (recur (rest as) (assoc m :command a)))))))
@@ -183,6 +187,42 @@
          {:exit 2 :out "" :err (str "error: " (.getMessage e) " " (pr-str (ex-data e)))})
        (catch Exception e
          {:exit 2 :out "" :err (str "error: " (.getMessage e))})))
+
+(defn- do-convert-stream
+  "Streaming convert (WP-7): lazily parse the input and write each rendered document
+   to `--out` incrementally, in bounded memory (the whole corpus is never
+   materialised). Requires a streamable spoke (the MARC family) and `--out` (the
+   document sink — like the batch `--out`, this writes a file). The loss report is
+   returned in `:err`."
+  [{:strs [from to record-id out]} input]
+  (cond
+    (not (and from to input))
+    {:exit 2 :out "" :err (str "convert --stream needs <input-file> --from <fmt> --to <fmt> --out <file>\n\n" usage)}
+
+    (not out)
+    {:exit 2 :out "" :err "convert --stream requires --out <file> (the streamed document sink)"}
+
+    (not (.exists (java.io.File. ^String input)))
+    {:exit 2 :out "" :err (str "input file not found: " input)}
+
+    (not (convert/streamable? (keyword from)))
+    {:exit 2 :out "" :err (str "--stream is not supported for " from
+                               " (streamable: " (str/join " " (map name (convert/streamable-sources))) ")")}
+
+    :else
+    (guard
+     #(let [fromk (keyword from)
+            opts  (cond-> {} record-id (assoc :record-id (->record-id record-id)))
+            res   (with-open [r (io/reader input)
+                              w (io/writer out)]
+                    (convert/convert-stream
+                     {:from fromk :to (keyword to)
+                      :records (convert/stream-source fromk opts r)}
+                     (fn [doc] (.write w doc) (.write w "\n"))))]
+        {:exit 0 :out ""
+         :err  (str "wrote " out " — " (:records res) " record" (when (not= 1 (:records res)) "s")
+                    " streamed (bounded memory)\n"
+                    (lr/format-conversion-report (:loss res)))}))))
 
 (defn- do-report
   "The auditor's verb: the X→Y loss report to stdout, no converted document."
@@ -313,7 +353,9 @@
       (= command "formats")     {:exit 0 :out ""
                                  :err (str (fmt-line "from: " (convert/source-formats)) "\n"
                                            (fmt-line "to:   " (convert/target-formats)))}
-      (= command "convert")     (do-convert flags (first positional))
+      (= command "convert")     (if (get flags "stream")
+                                  (do-convert-stream flags (first positional))
+                                  (do-convert flags (first positional)))
       (= command "validate")    (do-validate flags (first positional))
       (= command "report")      (do-report flags (first positional))
       (= command "inspect")     (do-inspect flags (first positional))

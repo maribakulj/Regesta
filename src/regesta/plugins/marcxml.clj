@@ -77,6 +77,17 @@
 
       nil)))
 
+(defn- build-record
+  "Construct one IR Record from a record `elem` per the family `policies`
+   (`:ns :record-id :kind :source`)."
+  [{:keys [ns record-id kind source]} elem]
+  (let [rid (record-id elem)]
+    (model/record
+     {:id         rid
+      :kind       (kind elem)
+      :source     (when source (source elem))
+      :assertions (vec (mapcat #(field-assertions ns rid %) (:content elem)))})))
+
 (defn parse-records
   "Parse a MARCXML `xml-string` into a vector of IR Records. The caller supplies
    the family policies as fns of the record element:
@@ -85,15 +96,26 @@
      `:record-id` the Record id;
      `:kind`      the Record `:kind`;
      `:source`    (optional) the Record `:source`.
-   Each record's fields become native `:ns/f*` assertions via `field-assertions`."
-  [xml-string {:keys [ns record? record-id kind source]}]
+   Each record's fields become native `:ns/f*` assertions via `field-assertions`.
+   Eager (whole tree); `stream-records` is the bounded variant for large dumps."
+  [xml-string {:keys [record?] :as policies}]
   (->> (xml/parse-str xml-string)
        elements
        (filter record?)
-       (mapv (fn [elem]
-               (let [rid (record-id elem)]
-                 (model/record
-                  {:id         rid
-                   :kind       (kind elem)
-                   :source     (when source (source elem))
-                   :assertions (vec (mapcat #(field-assertions ns rid %) (:content elem)))}))))))
+       (mapv #(build-record policies %))))
+
+(defn stream-records
+  "Lazily parse a MARCXML `readable` (a `Reader`/`InputStream`) into a **lazy** seq
+   of IR Records — the root collection's **direct children** matching `:record?` —
+   in memory bounded by one record at a time (pull-parsed: each record is realised,
+   built and released as the seq is consumed). Same policies as `parse-records`.
+
+   The caller MUST keep `readable` open for the whole consumption (e.g. via
+   `with-open`) and must not retain the seq head (a `reduce`/`run!` is fine). For
+   the flat-collection *dump* shape, where records are direct children of the root;
+   SRU-nested pages are small and use `parse-records`. Measured bounded
+   (`docs/eval/scale.md`)."
+  [readable {:keys [record?] :as policies}]
+  (->> (:content (xml/parse readable))
+       (filter record?)
+       (map #(build-record policies %))))

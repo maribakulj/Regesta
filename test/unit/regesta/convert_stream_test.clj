@@ -61,3 +61,18 @@
                (convert/convert-stream {:from :bogus :to :ntriples :records raw} (fn [_]))))
   (is (thrown? clojure.lang.ExceptionInfo
                (convert/convert-stream {:from :marc21 :to :bogus :records raw} (fn [_])))))
+
+(deftest stream-source-yields-the-same-records-lazily
+  (testing "lazy stream-source over a Reader equals the eager importer's records"
+    (with-open [r (io/reader (java.util.zip.GZIPInputStream.
+                              (io/input-stream "test/fixtures/bibr-gold/bibrcat_marc21.xml.gz")))]
+      (let [streamed (convert/stream-source :marc21 {} r)]
+        (is (not (vector? streamed)))                    ; a lazy seq, not a materialised vector
+        (is (= raw (vec streamed)))))))                  ; same 560 records as the eager importer
+
+(deftest streamable-sources-are-the-marc-family
+  (is (= #{:marc21 :intermarc :unimarc} (set (convert/streamable-sources))))
+  (is (convert/streamable? :marc21))
+  (is (not (convert/streamable? :dc)))                   ; flat-shape spokes do not stream
+  (is (thrown? clojure.lang.ExceptionInfo
+               (convert/stream-source :dc {} (java.io.StringReader. "<x/>")))))
