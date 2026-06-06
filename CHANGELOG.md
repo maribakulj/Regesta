@@ -16,26 +16,30 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Added
 
-- `regesta.conformance` — the WP-6 conformance mechanism + two institutional
-  profiles (Linked Art / Louvre, and BnF INTERMARC). A profile is a named set of
-  checks expressed as ordinary diagnostics (ADR 0001) over a projected record;
-  the report is those diagnostics filtered to the profile, plus a pass/fail
-  verdict under the shared failure policy — mirroring `regesta.validate` one rung
-  up. Dataless by construction: the checks encode a **public** model, and the only
-  institution-specific input is the acceptance *threshold* (the `policy` knob).
-  Two directions, one mechanism. The **Linked Art (Louvre)** *target* profile
-  checks the WEMI projection's fitness to serialise (a HumanMadeObject root with a
-  name as hard requirements; the carried Expression, its Work, an
-  authority-identified creator as richness warnings). The **BnF INTERMARC**
-  *source* profile checks a bibliographic record's own native `:intermarc/*` fields
-  (a 001 control number and a 245 title as essentials; the 003 ARK, an
-  authority-linked 100 heading — Transition bibliographique — and a 260 date as
-  expectations; the 145 Work-link as a FRBRisation-readiness hint), grounded in
-  what real BnF SRU records carry. Surfaced as the CLI verb `conformance <input>
-  --from <fmt> --profile <linked-art|intermarc> [--policy <p>]`, exiting non-zero
-  when the threshold is breached. This is **not** the strict official-schema
-  validation (that stays a test-only eval against the draft-2020-12 Linked Art
-  schema); a profile is the institution's requirement set, some of it stricter
+- `regesta.conformance` — the WP-6 conformance mechanism + three institutional
+  profiles (Linked Art / Louvre, BnF INTERMARC, IIIF Presentation 3.0). A profile
+  is a named set of checks expressed as ordinary diagnostics (ADR 0001) over a
+  projected record; the report is those diagnostics filtered to the profile, plus
+  a pass/fail verdict under the shared failure policy — mirroring
+  `regesta.validate` one rung up. Dataless by construction: the checks encode a
+  **public** model, and the only institution-specific input is the acceptance
+  *threshold* (the `policy` knob). Two directions, one mechanism. The **Linked Art
+  (Louvre)** *target* profile checks the WEMI projection's fitness to serialise (a
+  HumanMadeObject root with a name as hard requirements; the carried Expression,
+  its Work, an authority-identified creator as richness warnings); the **IIIF
+  Presentation 3.0** *target* profile checks fitness to produce a Manifest (a label
+  as the one hard requirement; a Canvas-bearing digital object and a dereferenceable
+  HTTP id as warnings — a real IIIF manifest is fully conformant, a bibliographic
+  record is flagged as having nothing to present). The **BnF INTERMARC** *source*
+  profile checks a bibliographic record's own native `:intermarc/*` fields (a 001
+  control number and a 245 title as essentials; the 003 ARK, an authority-linked
+  100 heading — Transition bibliographique — and a 260 date as expectations; the
+  145 Work-link as a FRBRisation-readiness hint), grounded in what real BnF SRU
+  records carry. Surfaced as the CLI verb `conformance <input> --from <fmt>
+  --profile <linked-art|intermarc|iiif> [--policy <p>]`, exiting non-zero when the
+  threshold is breached. This is **not** the strict official-schema validation
+  (that stays a test-only eval against the draft-2020-12 Linked Art schema); a
+  profile is the institution's requirement set, some of it stricter
   than the schema, some looser.
 - `regesta.curate` — the ADR 0005 repair-application / curation engine, the
   last dataless WP-8 gap. A pure function over a record's *pending* assertions

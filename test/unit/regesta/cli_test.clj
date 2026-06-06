@@ -8,6 +8,7 @@
 
 (def ^:private marc21 "test/fixtures/documentary/marc21/marcxml/loc_collection.xml")
 (def ^:private dc "test/fixtures/documentary/dublin-core/w3c_dc_example1.xml")
+(def ^:private iiif-manifest "test/fixtures/documentary/iiif/manifest_book_simple.json")
 
 (deftest converts-and-reports
   (testing "convert MARC21 -> Linked Art: output to :out, loss report to :err"
@@ -200,3 +201,11 @@
       (is (not (str/includes? err "NON-CONFORMANT")))
       (is (str/includes? err "BnF INTERMARC"))
       (is (str/includes? err "heading-authority-linked")))))
+
+(deftest conformance-supports-the-iiif-profile
+  (testing "a real IIIF manifest vs the IIIF Presentation 3.0 profile: fully conformant"
+    (let [{:keys [exit err]} (cli/run ["conformance" iiif-manifest "--from" "iiif" "--profile" "iiif"])]
+      (is (= 0 exit))
+      (is (str/includes? err "CONFORMANT"))
+      (is (not (str/includes? err "NON-CONFORMANT")))
+      (is (str/includes? err "IIIF Presentation 3.0")))))

@@ -27,7 +27,8 @@
    requirements are stricter than the schema (an identified creator), some looser —
    answering 'is this good enough for THIS target?', filtered and policy-gated, in
    the project's own diagnostics vocabulary."
-  (:require [regesta.convert :as convert]
+  (:require [clojure.string :as str]
+            [regesta.convert :as convert]
             [regesta.diagnostics :as dx]
             [regesta.model :as model]
             [regesta.plugins.lrmoo.view :as view]))
@@ -182,14 +183,53 @@
      :message "no 145 $3 Work-authority link (f145_3) — not FRBRisable to a shared Work (ADR 0016)"
      :conformant? #(has-field? % :intermarc/f145_3)}]})
 
+;; ---------------------------------------------------------------------------
+;; The IIIF Presentation 3.0 profile — the public IIIF presentation model
+;;
+;; A *target* profile, like Linked Art: does the projection yield a conformant
+;; IIIF Presentation 3.0 Manifest? IIIF describes a *digitised object*, so its
+;; floor is the narrowest spoke — title → `label`, identifier/source → the
+;; Manifest `id`, digital-object → the Canvases, note → `summary`
+;; (`regesta.plugins.iiif.export`). The checks read those canonical fields; the
+;; distinctive signal is the digital object (a Canvas to present).
+;; ---------------------------------------------------------------------------
+
+(defn- canon-strings
+  "String values on `record` under canonical predicate `pred`."
+  [record pred]
+  (keep #(when (and (= pred (:predicate %)) (string? (:value %))) (:value %)) (:assertions record)))
+
+(defn- http-uri?
+  [s]
+  (and (string? s) (or (str/starts-with? s "http://") (str/starts-with? s "https://"))))
+
+(def iiif-profile
+  "IIIF Presentation 3.0 — the museum/library digital-presentation target. A label
+   is the one hard requirement (P3 mandates it on a Manifest); the presentable
+   content (≥1 Canvas, from a digital object) and a dereferenceable HTTP(S) id are
+   the expectations that separate a real digitised-object Manifest from a bare
+   bibliographic record."
+  {:id    :iiif
+   :label "IIIF Presentation 3.0"
+   :checks
+   [{:id :label
+     :severity :error
+     :message "no title (:canon/title) — a IIIF Manifest requires a label"
+     :conformant? #(seq (canon-strings % :canon/title))}
+    {:id :has-canvas
+     :severity :warning
+     :message "no digital object (:canon/digital-object) — the Manifest has no Canvas to present"
+     :conformant? #(seq (canon-strings % :canon/digital-object))}
+    {:id :dereferenceable-id
+     :severity :warning
+     :message "no HTTP(S) URI for the Manifest id (:source / :canon/identifier) — IIIF ids must be dereferenceable"
+     :conformant? #(or (http-uri? (:source %)) (boolean (some http-uri? (canon-strings % :canon/identifier))))}]})
+
 (def profiles
   "The institutional profiles the conformance mechanism ships."
   {:linked-art linked-art-profile
-   :intermarc  intermarc-profile})
-
-;; ---------------------------------------------------------------------------
-;; Run
-;; ---------------------------------------------------------------------------
+   :intermarc  intermarc-profile
+   :iiif       iiif-profile})
 
 (defn conformance
   "Run institutional `profile` over `source` (source spoke `from`): import →

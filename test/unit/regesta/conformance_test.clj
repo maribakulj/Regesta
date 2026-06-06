@@ -144,3 +144,58 @@
       (let [{:keys [failed? diagnostics]} (run "bib-periodiques-start1-max30.xml")]
         (is (false? failed?))
         (is (zero? (n diagnostics :conformance.intermarc/heading-authority-linked)))))))
+
+;; ---------------------------------------------------------------------------
+;; The IIIF Presentation 3.0 profile — over the canonical floor
+;; ---------------------------------------------------------------------------
+
+(defn- iiif-rec
+  "A record with `source` (or none) and the given canonical [predicate value] fields."
+  [source fields]
+  (cond-> (model/record {:id :m/iiif :kind :test
+                         :assertions (mapv (fn [[p v]] (model/assertion {:subject :m/iiif :predicate p :value v}))
+                                           fields)})
+    source (assoc :source source)))
+
+(deftest iiif-label-is-the-hard-requirement
+  (testing "a record with no title fails the label check (the one IIIF error)"
+    (let [errs (filter #(= :error (:severity %))
+                       (conf/check-record conf/iiif-profile (model/record {:id :m/bare :kind :test})))]
+      (is (= #{"label"} (codes errs))))))
+
+(deftest iiif-canvas-and-id-discriminate
+  (let [check #(codes (conf/check-record conf/iiif-profile %))]
+    (testing "a digitised manifest (title + http id + a digital object) is fully conformant"
+      (is (empty? (conf/check-record conf/iiif-profile
+                                     (iiif-rec "https://ex.org/manifest.json"
+                                               [[:canon/title "A Book"] [:canon/digital-object "https://ex.org/i.jpg"]])))))
+    (testing "no digital object warns has-canvas (nothing to present)"
+      (is (contains? (check (iiif-rec "https://ex.org/manifest.json" [[:canon/title "A Book"]])) "has-canvas")))
+    (testing "a non-HTTP id warns dereferenceable-id"
+      (is (contains? (check (iiif-rec "5637241" [[:canon/title "A Book"] [:canon/digital-object "https://ex.org/i.jpg"]]))
+                     "dereferenceable-id")))
+    (testing "an HTTP :canon/identifier satisfies the id check even when :source is not a URI"
+      (is (not (contains? (check (iiif-rec nil [[:canon/title "T"] [:canon/digital-object "https://ex.org/i.jpg"]
+                                                [:canon/identifier "https://ex.org/id"]]))
+                          "dereferenceable-id"))))))
+
+(deftest iiif-profile-on-real-manifests-and-bibliographic-records
+  (testing "a real IIIF manifest is fully conformant — zero diagnostics"
+    (let [{:keys [failed? diagnostics records]}
+          (conf/conformance {:from :iiif :profile conf/iiif-profile
+                             :source (slurp "test/fixtures/documentary/iiif/manifest_book_simple.json")})]
+      (is (= 1 records))
+      (is (false? failed?))
+      (is (empty? diagnostics))))
+  (testing "MARC21 records are conformant-with-warnings — bare ids, one with no canvas"
+    (let [{:keys [failed? diagnostics]}
+          (conf/conformance {:from :marc21 :profile conf/iiif-profile :source (slurp marc21)})]
+      (is (false? failed?))
+      (is (= 2 (count (filter #(= :conformance.iiif/dereferenceable-id (:code %)) diagnostics))))
+      (is (= 1 (count (filter #(= :conformance.iiif/has-canvas (:code %)) diagnostics))))))
+  (testing "a titleless record fails the label requirement"
+    (let [src "<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:creator>Anon</dc:creator></metadata>"
+          {:keys [failed? diagnostics]}
+          (conf/conformance {:from :dc :source src :opts {:record-id :doc/untitled} :profile conf/iiif-profile})]
+      (is (true? failed?))
+      (is (some #(= :conformance.iiif/label (:code %)) diagnostics)))))
