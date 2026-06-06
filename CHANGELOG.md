@@ -195,12 +195,82 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
 
 ### Changed
 
+- **Phases are now a single pass (ADR 0020, supersedes ADR 0004).** Each phase
+  fires every matching rule once against the record as it entered the phase;
+  multi-cycle execution is gone. `run-phase` loses its `{:cycles N}` options
+  arity (and `run-phase-once` folds into it); `run-pipeline` / `PhaseSpec` no
+  longer accept a `:cycles` key. Intra-phase chaining (rule B reacting to rule
+  A's output) is now expressed across phases, not by re-running one. Dedup at
+  merge (ADR 0008) is retained — it now collapses same-fact productions from
+  two rules in a single pass. No pipeline used `:cycles`, so callers are
+  unaffected.
+
 - Post-Sprint-5 audit cleanup (no feature change): documentation and config
   reconciled with the tree (removed the phantom `dev.clj` / `resources`
   references); a test now guards that the core never depends on
   `regesta.plugins.*`; `regesta.plugins/topo-order` is marked `^:no-doc`
   (provisional — no consumer yet, still callable). Tracked in
   `docs/cleanup/remediation-pass.md`.
+
+### Removed
+
+- **The `:project` pipeline phase and multi-cycle execution (`:cycles`)** —
+  both dormant (ADR 0020). `:project` appeared in every phase enum but was
+  targeted by no rule: projection to the ten targets is done by exporters
+  after the pipeline, and canonical→WEMI runs in `:infer`. `:cycles` (with
+  `max-cycles` and `validate-cycles!`) drove a multi-pass loop no pipeline
+  ever requested. The phase enum is now
+  `:ingest :normalize :validate :infer :repair`. The `:repair` phase stays
+  and is newly documented (ADR 0020, README, the `Phase` schema). `clj-kondo`
+  and `cljfmt` stay clean.
+
+- **Substrate right-sizing (no behaviour change): dead code with no production
+  consumer.** Removed the `:requires` dependency-graph machinery from
+  `regesta.plugins` — `requires-graph`, `validate-requires!`, `topo-order` and
+  the private Kahn topological sort. It was documentary-only (it isolated
+  nothing — no stdlib visibility or rule pools depended on it) and the real
+  spoke dispatch is the `regesta.spokes` map; it was exercised only by its own
+  unit tests. This resolves the provisional `^:no-doc topo-order` note above by
+  removal rather than deprecation. Also removed `regesta.model/parse-fragment-id`,
+  the inverse fragment-id decoder: fragments are minted by the shape adapter and
+  never decoded back, so it had no caller — `mint-fragment-id` and its
+  injectivity guards are unchanged. Tests for the removed code were deleted with
+  it; `clj-kondo` and `cljfmt` stay clean.
+
+- **Shape adapter reduced to its production path (XML only).** The generic shape
+  adapter shipped JSON-LD *and* XML walkers plus `shape-json-plugin` /
+  `shape-xml-plugin` factories, but no production spoke used them: Dublin Core
+  (the sole consumer) inlines `rewrite-tags` + `ingest-xml` directly, and IIIF —
+  the only JSON spoke — parses with `clojure.data.json`, not the shape JSON
+  walker. Removed the JSON walker (`ingest-json` and its helpers) and both
+  factories; `regesta.plugins.shape` no longer requires `regesta.xml` or
+  `clojure.data.json`. The cross-format JSON↔XML equivalence (ADR 0012) was a
+  tested-but-unused promise; its unit/integration tests were removed (the
+  redundant `shape-integration-test` deleted; the `canonical` and
+  `universal-pivot` integration tests rewritten to inline XML plugins). XML
+  ingestion, fragments, the `xml:lang` qualifier and the `:trim` reconciliation
+  stay fully covered by `dc-test` and the XML half of `shape-test`.
+
+- **Plugin registry trimmed to its used surface.** Removed the unused
+  `:input-format` dispatch (`select-importer` + the `:matches?` sniffing and
+  "exactly one eligible" rule) — the production spoke dispatch is the
+  `regesta.spokes` `format → plugin` map, not this registry — together with the
+  test-only query helpers (`plugins-for-format`, `importers-for`,
+  `exporters-for`) and the dead predicate-side stdlib accessors
+  (`effective-predicates`, `predicate-source`): no plugin declares
+  `:predicates`, so they had nothing to resolve. Kept: the Plugin schema,
+  `register` / `unregister` / `lookup` / `registered-ids`, rule/mapping pooling
+  (`all-rules` / `all-mappings`), the `effective-stdlib` merge with its
+  collision detection, and `effective-transforms` / `transform-source` (the live
+  transform side).
+
+- **Runtime trace-query helpers removed.** `trace`, `assertions-by-rule`,
+  `diagnostics-by-rule` and `productions-by-phase` were a read-side API over the
+  provenance the runtime stamps, with no production consumer. The provenance
+  itself is unchanged — every merged assertion/diagnostic still carries
+  `[:provenance :rule]` and `[:provenance :pass]` — and the few tests that
+  verified attribution now read those keys directly, so the contract stays
+  covered without the helper layer.
 
 ### Security
 

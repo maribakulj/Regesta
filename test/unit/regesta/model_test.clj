@@ -436,72 +436,15 @@
                           (model/mint-fragment-id :record/r1 [:dc/title.x 0])))))
 
 (deftest mint-fragment-id-allows-hyphen-in-names
-  ;; Hyphens are ambiguous only in *namespaces*. Names may carry them — parse
-  ;; splits a predicate on its first hyphen, so the ns/name boundary stays
-  ;; unambiguous and the id round-trips. Guards against over-restricting.
-  (testing "hyphen in a predicate name is accepted and round-trips"
-    (let [frag (model/mint-fragment-id :record/r1 [:dc/alternative-title 0])]
-      (is (= {:record-id :record/r1 :locator [:dc/alternative-title 0]}
-             (model/parse-fragment-id frag)))))
-  (testing "hyphens in the record-id are accepted and round-trip"
-    (let [frag (model/mint-fragment-id :my-rec/r-1 [:dc/title 0])]
-      (is (= {:record-id :my-rec/r-1 :locator [:dc/title 0]}
-             (model/parse-fragment-id frag))))))
-
-(deftest parse-fragment-id-worked-examples
-  (testing "single-level"
-    (is (= {:record-id :record/r42 :locator [:dc/title 0]}
-           (model/parse-fragment-id :frag/record.r42.dc-title.0))))
-  (testing "nested"
-    (is (= {:record-id :record/obj1 :locator [:crm/P108 0 :crm/P14 0]}
-           (model/parse-fragment-id :frag/record.obj1.crm-P108.0.crm-P14.0))))
-  (testing "predicate name with hyphen (namespace hyphen-free)"
-    (is (= {:record-id :record/r1 :locator [:foo/bar-baz 0]}
-           (model/parse-fragment-id :frag/record.r1.foo-bar-baz.0)))))
-
-(deftest parse-fragment-id-rejects-non-frag-keywords
-  (testing "non-keyword input rejected"
-    (is (thrown? clojure.lang.ExceptionInfo
-                 (model/parse-fragment-id "frag/record.r.dc-title.0"))))
-  (testing "non-:frag namespace rejected"
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                          #":frag-namespaced"
-                          (model/parse-fragment-id :record/r42))))
-  (testing "structurally too short rejected"
-    (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                          #"Malformed fragment id"
-                          (model/parse-fragment-id :frag/record.r42.dc-title)))))
-
-(deftest mint-parse-roundtrip
-  (testing "mint then parse recovers the original record-id and locator (hyphen-free namespaces)"
-    (doseq [[record-id locator] [[:record/r42        [:dc/title 0]]
-                                 [:record/r42        [:dc/title 1]]
-                                 [:record/obj1       [:crm/P108 0 :crm/P14 0]]
-                                 [:my-plugin/abc-123 [:ns/pred 7]]
-                                 [:record/r1         [:foo/bar-baz 0]]]]
-      (let [frag-id (model/mint-fragment-id record-id locator)
-            parsed  (model/parse-fragment-id frag-id)]
-        (is (= record-id (:record-id parsed))
-            (str "record-id round-trips for " frag-id))
-        (is (= locator (:locator parsed))
-            (str "locator round-trips for " frag-id))))))
-
-(deftest parse-fragment-id-rejects-odd-locator-length
-  ;; A well-formed locator has even length: alternating predicate and
-  ;; index. Five-part ids like `:frag/r.r1.dc-title.0.extra` leave the
-  ;; locator-parts at length 3 and must be rejected — not silently
-  ;; truncated.
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                        #"odd length"
-                        (model/parse-fragment-id :frag/record.r1.dc-title.0.dangling))))
-
-(deftest parse-fragment-id-rejects-predicate-segment-without-hyphen
-  ;; A predicate segment is `ns-name`; if the hyphen is missing, the
-  ;; encoded predicate cannot be split into namespace/name. Must throw
-  ;; rather than yield a half-formed keyword.
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo
-                        #"predicate segment"
-                        (model/parse-fragment-id :frag/record.r1.bareword.0))))
+  ;; Hyphens are ambiguous only in the *namespace* of a locator predicate (the
+  ;; ns/name separator in a fragment id). Predicate names — and the record-id —
+  ;; may carry them. Guards against over-restricting.
+  (testing "a hyphen in a predicate name is accepted"
+    (is (= :frag/record.r1.dc-alternative-title.0
+           (model/mint-fragment-id :record/r1 [:dc/alternative-title 0]))))
+  (testing "hyphens in the record-id are accepted"
+    (is (= :frag/my-rec.r-1.dc-title.0
+           (model/mint-fragment-id :my-rec/r-1 [:dc/title 0])))))
 
 ;; ---------------------------------------------------------------------------
 ;; Provenance and Fragment constructors

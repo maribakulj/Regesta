@@ -57,8 +57,13 @@
   [:enum :error :warning :info])
 
 (def Phase
-  "The six phases of the pipeline. See ADR 0004."
-  [:enum :ingest :normalize :validate :infer :repair :project])
+  "The five phases of the pipeline: ingest → normalize → validate → infer →
+   repair (ADR 0004, ADR 0020). `:infer` and `:repair` emit proposals
+   (ADR 0005); the `:repair` phase additionally carries repair operations
+   that `apply-repairs` surfaces for human curation — never auto-applied in
+   V1. Projection to target formats is done by exporters after the pipeline,
+   not as a phase."
+  [:enum :ingest :normalize :validate :infer :repair])
 
 (def Status
   (into [:enum] statuses))
@@ -218,43 +223,6 @@
   (let [record-prefix (str (namespace record-id) "." (name record-id))
         segments      (mapv encode-locator-segment locator)]
     (keyword "frag" (str/join "." (cons record-prefix segments)))))
-
-(defn parse-fragment-id
-  "Inverse of `mint-fragment-id`. Parses a fragment id into
-   `{:record-id ... :locator [...]}` per ADR 0012.
-
-   The parse is exact for every id produced by `mint-fragment-id`: that
-   constructor rejects the inputs that would make decoding ambiguous (a
-   '-' in a predicate namespace, a '.' anywhere), so a minted id always
-   round-trips. Hand-built `:frag` keywords that bypass the constructor
-   and violate those rules may decode to an approximation that should
-   not be treated as authoritative.
-
-   Throws ex-info if `frag-id` is not a `:frag`-namespaced keyword or
-   is structurally malformed."
-  [frag-id]
-  (when-not (and (keyword? frag-id) (= "frag" (namespace frag-id)))
-    (throw (ex-info "Not a fragment id (must be a :frag-namespaced keyword)"
-                    {:frag-id frag-id})))
-  (let [parts (str/split (name frag-id) #"\.")]
-    (when (< (count parts) 4)
-      (throw (ex-info "Malformed fragment id (need record-ns, record-name, predicate, index)"
-                      {:frag-id frag-id :parts parts})))
-    (let [[record-ns record-name & locator-parts] parts]
-      (when (odd? (count locator-parts))
-        (throw (ex-info "Malformed fragment id (locator has odd length)"
-                        {:frag-id frag-id})))
-      (let [locator (into []
-                          (mapcat (fn [[pred-str idx-str]]
-                                    (let [[pred-ns pred-name] (str/split pred-str #"-" 2)]
-                                      (when-not pred-name
-                                        (throw (ex-info "Malformed predicate segment in fragment id"
-                                                        {:frag-id frag-id :segment pred-str})))
-                                      [(keyword pred-ns pred-name)
-                                       (Long/parseLong idx-str)])))
-                          (partition 2 locator-parts))]
-        {:record-id (keyword record-ns record-name)
-         :locator   locator}))))
 
 (defn mint-entity-id
   "Construct a content-based identifier for a synthesized entity. Returns a

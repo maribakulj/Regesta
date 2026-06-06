@@ -2,13 +2,12 @@
   "End-to-end ingest → normalize → validate → report for the canonical
    vocabulary plugin (ADR 0003).
 
-   Sprint 5's `shape-integration-test` proved ingest → normalize (native
-   source → `:canon/*` assertions). This test carries the chain through
-   the two surfaces Sprint 6 adds — validation and the diagnostics
-   report:
+   A Dublin Core XML record carries the chain through the surfaces
+   Sprint 6 adds — validation and the diagnostics report:
 
-     raw JSON
-       → shape importer        (regesta.plugins.shape)
+     raw XML
+       → shape importer        (rewrite-tags + ingest-xml, wired inline
+                                 the way regesta.plugins.dc does)
        → native-vocabulary Record
        → :normalize rules       (compiled from :mapping, ADR 0009)
        → :validate rules        (regesta.plugins.canonical)
@@ -17,9 +16,7 @@
    The whole pipeline is registry-driven: the `:normalize` rules come
    from `plugins/all-mappings` and the `:validate` rules from
    `plugins/all-rules`, so the registry is the single source of truth a
-   real CLI would compile from. Every component is production code; the
-   only thing this test stands in for is the not-yet-built CLI entry
-   point (`regesta validate`).
+   real CLI would compile from. Every component is production code.
 
    See ADR 0003 (canonical layer), ADR 0007 (plugins as data), ADR 0009
    (mapping schema)."
@@ -32,7 +29,8 @@
             [regesta.plugins.mapping :as mapping]
             [regesta.plugins.shape :as shape]
             [regesta.rules :as rules]
-            [regesta.runtime :as runtime]))
+            [regesta.runtime :as runtime]
+            [regesta.xml :as rx]))
 
 ;; ---------------------------------------------------------------------------
 ;; Fixtures
@@ -41,6 +39,8 @@
 ;; predicates, so a record can carry an identifier yet still lack a
 ;; title — the case `title-required` exists to catch.
 ;; ---------------------------------------------------------------------------
+
+(def ^:private dc-uri "http://purl.org/dc/elements/1.1/")
 
 (def biblio-mapping
   [{:mapping/id        :map/title
@@ -51,11 +51,32 @@
     :mapping/from :dc/identifier
     :mapping/to   :canon/identifier}])
 
-(def titled-json
-  "{\"dc:title\": \" Les Misérables \", \"dc:identifier\": \"MS-001\"}")
+(defn- xml-importer
+  "An inline Dublin Core XML importer, wired the way `regesta.plugins.dc`
+   does (rewrite-tags + ingest-xml), so the test drives a real ingest
+   path through its own flat mapping."
+  [mapping]
+  (fn [{:keys [record-id kind]} src]
+    {:records     [(shape/ingest-xml (shape/rewrite-tags (rx/parse-str src) {:dc dc-uri})
+                                     mapping
+                                     {:record-id record-id :kind (or kind :biblio)})]
+     :diagnostics []}))
 
-(def untitled-json
-  "{\"dc:identifier\": \"MS-002\"}")
+(def biblio-plugin
+  {:plugin/spec-version 1
+   :id                  :plugin/biblio-xml
+   :input-format        :xml
+   :mapping             biblio-mapping
+   :importer            (xml-importer biblio-mapping)})
+
+(def titled-xml
+  (str "<record xmlns:dc=\"" dc-uri "\">"
+       "<dc:title> Les Misérables </dc:title>"
+       "<dc:identifier>MS-001</dc:identifier>"
+       "</record>"))
+
+(def untitled-xml
+  (str "<record xmlns:dc=\"" dc-uri "\"><dc:identifier>MS-002</dc:identifier></record>"))
 
 ;; ---------------------------------------------------------------------------
 ;; Registry-driven pipeline
@@ -66,8 +87,7 @@
    `:normalize` rules derive from the former's `:mapping`, `:validate`
    rules from the latter's `:rules`."
   (-> plugins/empty-registry
-      (plugins/register (shape/shape-json-plugin {:id      :plugin/biblio-json
-                                                  :mapping biblio-mapping}))
+      (plugins/register biblio-plugin)
       (plugins/register canonical/plugin)))
 
 (def pipeline [{:phase :normalize} {:phase :validate}])
@@ -81,12 +101,12 @@
           (rules/compile-rules (plugins/all-rules registry)))))
 
 (defn- ingest+run
-  "Ingest one JSON document through the registry's importer under
+  "Ingest one XML document through the registry's importer under
    `record-id`, run the normalize+validate pipeline, and return the
    enriched record."
-  [record-id json-src]
-  (let [importer          (:importer (plugins/lookup registry :plugin/biblio-json))
-        {:keys [records]} (importer {:record-id record-id :kind :biblio} json-src)
+  [record-id xml-src]
+  (let [importer          (:importer (plugins/lookup registry :plugin/biblio-xml))
+        {:keys [records]} (importer {:record-id record-id :kind :biblio} xml-src)
         record            (first records)]
     (:record (runtime/run-pipeline record (compiled-rules) pipeline))))
 
@@ -95,7 +115,7 @@
 ;; ---------------------------------------------------------------------------
 
 (deftest titled-record-normalizes-and-passes-validation
-  (let [record (ingest+run :record/titled titled-json)]
+  (let [record (ingest+run :record/titled titled-xml)]
     (testing "normalize produced a trimmed canonical title and an identifier"
       (let [titles (model/assertions-for record :canon/title)]
         (is (= 1 (count titles)))
@@ -114,7 +134,7 @@
 ;; ---------------------------------------------------------------------------
 
 (deftest untitled-record-triggers-validation-diagnostic
-  (let [record (ingest+run :record/untitled untitled-json)]
+  (let [record (ingest+run :record/untitled untitled-xml)]
     (testing "normalize produced the identifier but no title"
       (is (= 1 (count (model/assertions-for record :canon/identifier))))
       (is (empty? (model/assertions-for record :canon/title))))
@@ -134,8 +154,8 @@
 ;; ---------------------------------------------------------------------------
 
 (deftest diagnostics-report-and-failure-policy
-  (let [records [(ingest+run :record/titled titled-json)
-                 (ingest+run :record/untitled untitled-json)]
+  (let [records [(ingest+run :record/titled titled-xml)
+                 (ingest+run :record/untitled untitled-xml)]
         all     (diag/collect-many records)]
     (testing "one warning across the two-record batch"
       (is (= 1 (count all)))

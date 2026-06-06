@@ -64,9 +64,4 @@
       (is (= 1 (count (:entities once))))
       (is (= (:entities once) (:entities twice)))
       (is (= 1 (count (:assertions once))))
-      (is (= (:assertions once) (:assertions twice)))))
-  (testing "multiple cycles in one run also mint exactly once"
-    (let [rule (minting-rule "x|y")
-          {:keys [record]} (runtime/run-phase (model/record {:id :record/r1 :kind :book})
-                                              [rule] :infer {:cycles 3})]
-      (is (= 1 (count (:entities record)))))))
+      (is (= (:assertions once) (:assertions twice))))))
