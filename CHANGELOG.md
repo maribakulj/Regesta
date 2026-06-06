@@ -16,6 +16,21 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Added
 
+- **Streaming conversion** (WP-7 / DoD #6) — `regesta.convert/convert-stream`
+  converts a reducible/lazy record stream in **constant working set**: it `reduce`s
+  one record at a time, emits each rendered document via a callback, and folds a
+  loss report bounded by the distinct fields/categories/edges (not the record
+  count), via a new `regesta.loss-report` fold (`empty-acc`/`accumulate`/
+  `finalize`). Sound because Work convergence is id-collision, not a global pass
+  (ADR 0008), so per-record conversion has no cross-record state — the converter
+  streams its triples, a downstream store deduplicates by id (roadmap §10). The
+  streamed output and loss report are byte-identical to batch `convert`, minus the
+  one genuinely O(N) figure (`:distinct-losses`, batch-only). Measured budget:
+  **100 000 records (MARC21→N-Triples) in a 512 MB heap, ~70 MB used, throughput
+  flat ~4 000 rec/s**, the loss accumulator's footprint invariant in N
+  (`docs/eval/scale.md`, `regesta.convert-stream-test`). Remaining bound (stated):
+  the per-document XML parse is eager, so a single multi-GB file is document-bounded
+  — a lazy per-format parser and a CLI `--stream` verb are the documented follow-ups.
 - **Uniform-title bridging** — the FRBRisation recall step the fidelity doc names
   ("D-series"). A ninth canonical predicate `:canon/uniform-title` (ADR 0003 growth
   discipline: the cataloguer's controlled work title, distinct from the transcribed

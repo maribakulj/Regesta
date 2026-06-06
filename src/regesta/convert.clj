@@ -77,6 +77,14 @@
 ;; Pipeline
 ;; ---------------------------------------------------------------------------
 
+(defn- compiled-mappings
+  "The compiled normalize mappings for spoke `from` (the spoke's own mappings +
+   transforms). Pure of the source — compile once, reuse per record."
+  [from]
+  (let [reg (plug/register plug/empty-registry (spokes/plugin from))]
+    (mapping/compile-mappings (plug/all-mappings reg)
+                              (plug/effective-transforms reg))))
+
 (defn to-wemi
   "Import `source` through `spoke`, normalise to the canonical floor, then project
    each record to WEMI by the appropriate rung — INTERMARC's enriched `frbrise`
@@ -87,9 +95,7 @@
   (let [plugin   (spokes/plugin from)
         to-pivot (to-pivots from)
         {:keys [records diagnostics]} ((:importer plugin) opts source)
-        reg      (plug/register plug/empty-registry plugin)
-        compiled (mapping/compile-mappings (plug/all-mappings reg)
-                                           (plug/effective-transforms reg))]
+        compiled (compiled-mappings from)]
     {:ingest  diagnostics
      :records (mapv #(to-pivot (:record (runtime/run-phase % compiled :normalize))) records)}))
 
@@ -122,3 +128,44 @@
   [request]
   (let [{:keys [loss] :as result} (convert request)]
     (assoc result :report (lr/format-conversion-report loss))))
+
+(defn convert-stream
+  "Streaming conversion (WP-7 / DoD #6): convert a reducible/seq `records` source —
+   raw imported records of spoke `from` — to target `to`, calling `(emit doc)` with
+   each rendered non-blank document and folding a **bounded** loss report. Returns
+   `{:records N :loss <conversion-report>}`.
+
+   Constant memory in the corpus size: unlike `convert`/`to-wemi` (which `mapv` the
+   whole corpus into a vector), this `reduce`s the record stream, holding one record
+   at a time plus a loss accumulator bounded by the distinct fields/categories/edges
+   (`regesta.loss-report/accumulate`), never by N. It is sound to stream because the
+   Work-id convergence across records is carried by the content-derived ids
+   (ADR 0008), not by a global clustering pass — per-record conversion has no
+   cross-record state (roadmap §10, 'converter → store': Regesta streams the triples,
+   a store deduplicates by id).
+
+   Edge scope: folds the per-record **projection** and **export** edges. Import-edge
+   (report-at-ingest) loss is the importer's separate output; a caller that wants it
+   in the same report folds the importer's `:diagnostics` too (the MARC-family
+   importers report none). The streamed report's per-edge / per-category / per-field
+   counts equal the batch report's; only `:distinct-losses` (O(N)) is batch-only.
+   Throws on an unknown `from`/`to`."
+  [{:keys [from to records]} emit]
+  (when-not (contains? spokes/plugins from)
+    (throw (ex-info "Unknown source format" {:from from :supported (source-formats)})))
+  (when-not (contains? exporters to)
+    (throw (ex-info "Unknown target format" {:to to :supported (target-formats)})))
+  (let [to-pivot (to-pivots from)
+        compiled (compiled-mappings from)
+        {:keys [render losses]} (exporters to)
+        result   (reduce
+                  (fn [{:keys [n acc]} raw]
+                    (let [wemi (to-pivot (:record (runtime/run-phase raw compiled :normalize)))
+                          doc  (render wemi)]
+                      (when-not (str/blank? doc) (emit doc))
+                      {:n   (inc n)
+                       :acc (lr/accumulate acc (concat (dx/collect wemi) (losses wemi)))}))
+                  {:n 0 :acc lr/empty-acc}
+                  records)]
+    {:records (:n result)
+     :loss    (lr/finalize (:acc result) {:records (:n result)})}))
