@@ -24,10 +24,11 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   (not the text view's top-8 truncation), pretty-printed and lossless (namespaced
   keywords intact, e.g. `#:canon{:date 2}`). This is the auditor's machine
   surface — run-to-run diffs, CI loss thresholds, dashboards. `--format text`
-  (the default) is unchanged; an unknown `--format` exits 2. JSON is deliberately
-  not offered: it would silently flatten namespaced keywords (`:marc21/f650_a` →
-  `"f650_a"`, colliding `:by-category` keys) and corrupt the audit data
-  (`regesta.cli-test`).
+  (the default) is unchanged; an unknown `--format` exits 2. **`--format json`**
+  emits the same map for non-Clojure audit tooling, with every keyword — map key
+  *and* vector element — rendered as a **namespace-qualified** string
+  (`:canon/date` → `"canon/date"`), so the source-field keys that data.json's
+  default `name` key-fn would otherwise collide stay distinct (`regesta.cli-test`).
 
 - **Degenerate-input hardening** (WP-9) — `convert` now emits a stderr warning
   when a parse yields **0 records** (a wrong `--from`, or the wrong file), so a

@@ -2,7 +2,8 @@
   "Tests for the CLI core `run` (pure: returns {:exit :out :err}, no print/exit).
    Exercises the happy paths, the format listing, the default record-id, file
    output, and the error exits."
-  (:require [clojure.edn :as edn]
+  (:require [clojure.data.json :as json]
+            [clojure.edn :as edn]
             [clojure.string :as str]
             [clojure.test :refer [deftest is testing]]
             [regesta.cli :as cli]))
@@ -119,6 +120,23 @@
     (let [{:keys [exit err]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc" "--format" "xml"])]
       (is (= 2 exit))
       (is (str/includes? err "must be")))))
+
+(deftest report-format-json-is-valid-and-namespace-preserving
+  (testing "report --format json: valid JSON, the same account as edn,"
+    (let [{:keys [exit out]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc" "--format" "json"])
+          m (json/read-str out)]                            ; parses back, so it is valid JSON
+      (is (= 0 exit))
+      (is (map? m))
+      (is (= 2 (get m "records")))
+      (is (contains? m "by-category"))
+      (is (contains? m "by-edge"))
+      (is (not (str/includes? out "Loss report")))          ; no prose, like edn
+      (testing "namespaces survive on both keys and vector values (no collisions)"
+        ;; data.json's default key-fn is `name`, which would drop the namespace;
+        ;; the report qualifies them, so :canon/date -> \"canon/date\", not \"date\".
+        (is (every? #(str/starts-with? % "canon/") (get m "source-fields")))
+        (is (every? #(str/includes? % "/")
+                    (keys (get-in m ["by-edge" "import" "by-source-field"]))))))))
 
 ;; --- degenerate-input handling (WP-9 hardening) -----------------------------
 
