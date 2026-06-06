@@ -91,3 +91,32 @@
     (doseq [spoke (convert/streamable-sources)]
       (testing (str spoke " importer emits no import-edge loss")
         (is (empty? (:diagnostics ((:importer (spokes/plugin spoke)) {} (fixtures spoke)))))))))
+
+(deftest convert-stream-over-a-real-reader-matches-batch
+  (testing "streaming end-to-end from a real Reader (lazy pull-parse, not a pre-imported vector) equals batch"
+    (with-open [r (io/reader (java.util.zip.GZIPInputStream.
+                              (io/input-stream "test/fixtures/bibr-gold/bibrcat_marc21.xml.gz")))]
+      (let [n     (atom 0)
+            res   (convert/convert-stream {:from :marc21 :to :ntriples
+                                           :records (convert/stream-source :marc21 {} r)}
+                                          (fn [_] (swap! n inc)))
+            batch (convert/convert {:from :marc21 :to :ntriples :source marc-src})]
+        (is (= 560 (:records res) @n))
+        (is (= (dissoc (:loss batch) :distinct-losses) (:loss res)))))))   ; same loss via the Reader path
+
+(deftest convert-stream-pulls-a-large-corpus-from-a-real-reader
+  (testing "a flat dump larger than any fixture streams from a real Reader (lazy parse at scale)"
+    (let [blocks (re-seq #"(?s)<marc:record>.*?</marc:record>" marc-src)
+          path   (str (System/getProperty "java.io.tmpdir") "/regesta-bigmarc-" (System/nanoTime) ".xml")]
+      (try
+        (with-open [w (io/writer path)]
+          (.write w "<marc:collection xmlns:marc=\"http://www.loc.gov/MARC21/slim\">")
+          (dotimes [_ 10] (doseq [b blocks] (.write w b)))            ; 10 × 560 = 5600 records
+          (.write w "</marc:collection>"))
+        (with-open [r (io/reader path)]
+          (let [n   (atom 0)
+                res (convert/convert-stream {:from :marc21 :to :ntriples
+                                             :records (convert/stream-source :marc21 {} r)}
+                                            (fn [_] (swap! n inc)))]
+            (is (= 5600 (:records res) @n))))
+        (finally (.delete (java.io.File. path)))))))
