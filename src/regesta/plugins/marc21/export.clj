@@ -32,6 +32,7 @@
    collapsed onto each multi-source canonical predicate at import; export picks
    one tag back (the most generic) and reports the collapse (see ns doc)."
   [[:canon/title          "245" "a"]
+   [:canon/uniform-title  "240" "a"]
    [:canon/agent          "700" "a"]    ; 100/110/111/710 also -> agent (role lost)
    [:canon/date           "260" "c"]    ; 264 also -> date
    [:canon/identifier     "010" "a"]    ; 020/022/035 also -> identifier

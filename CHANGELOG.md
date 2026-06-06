@@ -16,6 +16,104 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Added
 
+- **Streaming conversion** (WP-7 / DoD #6) — `regesta.convert/convert-stream`
+  converts a reducible/lazy record stream in **constant working set**: it `reduce`s
+  one record at a time, emits each rendered document via a callback, and folds a
+  loss report bounded by the distinct fields/categories/edges (not the record
+  count), via a new `regesta.loss-report` fold (`empty-acc`/`accumulate`/
+  `finalize`). Sound because Work convergence is id-collision, not a global pass
+  (ADR 0008), so per-record conversion has no cross-record state — the converter
+  streams its triples, a downstream store deduplicates by id (roadmap §10). The
+  streamed output and loss report are byte-identical to batch `convert`, minus the
+  one genuinely O(N) figure (`:distinct-losses`, batch-only). Measured budget:
+  **100 000 records (MARC21→N-Triples) in a 512 MB heap, ~70 MB used, throughput
+  flat ~4 000 rec/s**, the loss accumulator's footprint invariant in N
+  (`docs/eval/scale.md`, `regesta.convert-stream-test`).
+- **Lazy input parse + CLI `--stream`** (WP-7, the one-giant-file story closed for
+  the MARC family). `marcxml/stream-records` pull-parses a `Reader`
+  (`data.xml/parse`) into a **lazy** record seq — bounded to one record at a time —
+  wired as a plugin `:stream-importer` on MARC21 / INTERMARC / UNIMARC
+  (`convert/streamable?` / `stream-source`) and surfaced as `regesta convert <in>
+  --from <marc-fmt> --to <fmt> --stream --out <file>`, which writes the document
+  incrementally in bounded memory. End-to-end: a **97 MB / 56 000-record flat MARC
+  dump → 64 MB N-Triples in a 256 MB heap, ~33 MB used**, where the eager
+  `parse-str` path OOMs. Bounded by construction to the *flat-collection* shape
+  (direct children — a deep tree-seq retains ancestors); SRU pages are small and stay
+  eager (stream at page granularity), and the non-MARC single-record spokes don't
+  stream (`--stream` rejects them with the streamable set). A new optional plugin key
+  `:stream-importer` (`regesta.plugins` schema).
+- **Uniform-title bridging** — the FRBRisation recall step the fidelity doc names
+  ("D-series"). A ninth canonical predicate `:canon/uniform-title` (ADR 0003 growth
+  discipline: the cataloguer's controlled work title, distinct from the transcribed
+  `:canon/title`), mapped from MARC 240 `$a` (and emitted back on export, so the
+  round-trip stays lossless). The floor projection (`lrmoo.project`) now keys the
+  Work/Expression on the uniform title when a record carries one — so editions whose
+  *transcribed* titles differ but whose *uniform* title agrees mint the same Work and
+  cluster; the Manifestation keeps its transcribed title. Records without a uniform
+  title fall back to the transcribed title (unchanged behaviour). Measured on the
+  independent BIB-R gold: recall **0.775 → 0.823** at **no precision cost** (still
+  1.000) — `docs/eval/bibr-frbrisation.md`.
+  Wired across the floor family: MARC 240 `$a`, **UNIMARC 500 `$a`** (titre
+  uniforme — on real BnF data it unifies the French editions and the German
+  translation of one work into a single Work), and **MODS `<titleInfo
+  type="uniform">`** (also round-tripped back on export). The MODS change is a
+  latent-bug fix too: a uniform `titleInfo` was previously conflated into
+  `:canon/title`; it now maps to `:canon/uniform-title`. (Dublin Core has no uniform
+  title; INTERMARC keeps its richer `145 $3` authority-link rung.)
+- Independent FRBRisation eval against the third-party **BIB-R** benchmark
+  (`regesta.eval.bibr-frbrisation-test`, `test/fixtures/bibr-gold/`,
+  `docs/eval/bibr-frbrisation.md`). BIB-R ("Benchmark of FRBRization solutions",
+  bib-r.github.io, CC BY-NC) is a hand-curated MARC→FRBR/RDA gold with no
+  dependence on the BnF `f145` link — the non-circular gold `frbrisation-fidelity.md`
+  §3 called for, and a third corpus for ADR 0018's recall ceiling. Regesta ingests
+  the 560 MARCXML records, clusters by minted F1 Work, and is scored pairwise against
+  the gold Work grouping (records joined by normalised title): **P = 1.000,
+  R = 0.775, F1 = 0.873** over the joinable subset (362 / 560 — the join coverage is
+  asserted as a first-class number, since the MARC `001`s share no identifier with
+  the gold's title-slug URIs). Precision-first with a *measured* title-variant recall
+  gap, on a gold owing nothing to `f145`. The gold grouping is derived from the
+  benchmark's FRBR RDF (provenance in the fixture README); the input is committed
+  gzipped to respect repo footprint.
+- `regesta.conformance` — the WP-6 conformance mechanism + three institutional
+  profiles (Linked Art / Louvre, BnF INTERMARC, IIIF Presentation 3.0). A profile
+  is a named set of checks expressed as ordinary diagnostics (ADR 0001) over a
+  projected record; the report is those diagnostics filtered to the profile, plus
+  a pass/fail verdict under the shared failure policy — mirroring
+  `regesta.validate` one rung up. Dataless by construction: the checks encode a
+  **public** model, and the only institution-specific input is the acceptance
+  *threshold* (the `policy` knob). Two directions, one mechanism. The **Linked Art
+  (Louvre)** *target* profile checks the WEMI projection's fitness to serialise (a
+  HumanMadeObject root with a name as hard requirements; the carried Expression,
+  its Work, an authority-identified creator as richness warnings); the **IIIF
+  Presentation 3.0** *target* profile checks fitness to produce a Manifest (a label
+  as the one hard requirement; a Canvas-bearing digital object and a dereferenceable
+  HTTP id as warnings — a real IIIF manifest is fully conformant, a bibliographic
+  record is flagged as having nothing to present). The **BnF INTERMARC** *source*
+  profile checks a bibliographic record's own native `:intermarc/*` fields (a 001
+  control number and a 245 title as essentials; the 003 ARK, an authority-linked
+  100 heading — Transition bibliographique — and a 260 date as expectations; the
+  145 Work-link as a FRBRisation-readiness hint), grounded in what real BnF SRU
+  records carry. Surfaced as the CLI verb `conformance <input> --from <fmt>
+  --profile <linked-art|intermarc|iiif> [--policy <p>]`, exiting non-zero when the
+  threshold is breached. This is **not** the strict official-schema validation
+  (that stays a test-only eval against the draft-2020-12 Linked Art schema); a
+  profile is the institution's requirement set, some of it stricter
+  than the schema, some looser.
+- `regesta.curate` — the ADR 0005 repair-application / curation engine, the
+  last dataless WP-8 gap. A pure function over a record's *pending* assertions
+  (`:proposed`/`:needs-review`): a curator `(fn [assertion] -> :accept | :reject
+  | :review)` resolves each into the workflow family (`:accepted` / `:rejected`
+  / `:needs-review`), leaving every in-force or already-resolved assertion
+  untouched. Named policies (`accept-all`, `reject-all`, `flag-all`,
+  `accept-when`) are ordinary decision functions, so an ADR 0018 promotion guard
+  composes (`accept-when` accepts only the proposals safe to commit, routes the
+  rest to review). The returned transition log is the audit record — the
+  Provenance schema is deliberately left unchanged. Surfaced as the CLI verb
+  `apply-repairs <input> --from <fmt> [--policy flag|accept|reject]`, which
+  curates the `:proposed` WEMI claims a real conversion emits (the DC/MARC21
+  string-key inference). Supersession of a replaced in-force assertion is
+  documented as out of scope (it needs replacement semantics the proposals do
+  not yet carry).
 - Sprint 6: canonical vocabulary plugin (`regesta.plugins.canonical`).
   Ships the eight `:canon/*` documentary predicates from ADR 0003
   §Decision as data, with a `documentary?` membership predicate, plus
@@ -47,6 +145,17 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Fixed
 
+- Self-review remediation of this line's WP-6/7 work: (1) the WEMI projection's
+  loss accounting (`lrmoo.project` `language-losses`/`ambiguity-losses`) now keys
+  on the same `work-title` condition that decides whether an Expression is minted
+  (a new `work-title-of`), so a uniform-title-only record no longer under-reports
+  language loss nor falsely reports `:ambiguity-collapsed` (latent — introduced by
+  uniform-title bridging; guarded by a test). (2) `regesta.convert/convert-stream`
+  via the CLI now writes `--out` atomically (temp file + rename), so a mid-stream
+  parse error leaves no partial output, matching the batch path. (3)
+  `curate/format-curation` tolerates a single-record `curate-record` result (no
+  `:summary`) instead of NPE-ing. Plus docstring honesty (the canonical set is
+  nine, not "eight"; the streamed-report import-edge caveat; DC needs `:record-id`).
 - `regesta.plugins.mapping/compile-mappings` now rejects a batch whose
   mapping rules derive the same compiled rule id (a cross-plugin
   `:mapping/id` name collision), instead of silently conflating their

@@ -14,6 +14,7 @@
    prefixed `f` (`:marc21/f245_a`): a keyword name may not start with a digit and
    an un-prefixed `:marc21/245_a` would not round-trip through EDN (ADR 0001)."
   (:require [clojure.data.xml :as xml]
+            [clojure.string :as str]
             [regesta.model :as model]))
 
 (defn local-name
@@ -77,6 +78,17 @@
 
       nil)))
 
+(defn- build-record
+  "Construct one IR Record from a record `elem` per the family `policies`
+   (`:ns :record-id :kind :source`)."
+  [{:keys [ns record-id kind source]} elem]
+  (let [rid (record-id elem)]
+    (model/record
+     {:id         rid
+      :kind       (kind elem)
+      :source     (when source (source elem))
+      :assertions (vec (mapcat #(field-assertions ns rid %) (:content elem)))})))
+
 (defn parse-records
   "Parse a MARCXML `xml-string` into a vector of IR Records. The caller supplies
    the family policies as fns of the record element:
@@ -85,15 +97,57 @@
      `:record-id` the Record id;
      `:kind`      the Record `:kind`;
      `:source`    (optional) the Record `:source`.
-   Each record's fields become native `:ns/f*` assertions via `field-assertions`."
-  [xml-string {:keys [ns record? record-id kind source]}]
+   Each record's fields become native `:ns/f*` assertions via `field-assertions`.
+   Eager (whole tree); `stream-records` is the bounded variant for large dumps."
+  [xml-string {:keys [record?] :as policies}]
   (->> (xml/parse-str xml-string)
        elements
        (filter record?)
-       (mapv (fn [elem]
-               (let [rid (record-id elem)]
-                 (model/record
-                  {:id         rid
-                   :kind       (kind elem)
-                   :source     (when source (source elem))
-                   :assertions (vec (mapcat #(field-assertions ns rid %) (:content elem)))}))))))
+       (mapv #(build-record policies %))))
+
+(defn stream-records
+  "Lazily parse a MARCXML `readable` (a `Reader`/`InputStream`) into a **lazy** seq
+   of IR Records — the root collection's **direct children** matching `:record?` —
+   in memory bounded by one record at a time (pull-parsed: each record is realised,
+   built and released as the seq is consumed). Same policies as `parse-records`.
+
+   The caller MUST keep `readable` open for the whole consumption (e.g. via
+   `with-open`) and must not retain the seq head (a `reduce`/`run!` is fine). For
+   the flat-collection *dump* shape, where records are direct children of the root;
+   SRU-nested pages are small and use `parse-records`. Measured bounded
+   (`docs/eval/scale.md`)."
+  [readable {:keys [record?] :as policies}]
+  (->> (:content (xml/parse readable))
+       (filter record?)
+       (map #(build-record policies %))))
+
+;; ---------------------------------------------------------------------------
+;; MARCXChange (BnF) family policies — shared by INTERMARC and UNIMARC, which
+;; differ only in their predicate/kind namespace. (MARC21slim has a different
+;; record shape and supplies its own policies.)
+;; ---------------------------------------------------------------------------
+
+(defn- mxc-record?
+  "True for an `<mxc:record>` — a `record` element carrying an `id` ARK — as opposed
+   to the SRU `<srw:record>` wrapper, which has none."
+  [elem]
+  (and (= "record" (local-name elem)) (some? (attr elem "id"))))
+
+(defn- record-id-from-ark
+  "`:bnf/<cb-number>` from an ARK like \"ark:/12148/cb304403926\"."
+  [ark]
+  (keyword "bnf" (last (str/split ark #"/"))))
+
+(defn mxc-policies
+  "The `parse-records`/`stream-records` policies for a BnF MARCXChange spoke under
+   predicate/kind namespace `ns` (a string): a record is an `<mxc:record>`, its id is
+   `:bnf/<cb-number>` from the ARK, its `:kind` is `(keyword ns (lower-case type))`
+   (or `opts`'s `:kind`), and its `:source` is the ARK. INTERMARC and UNIMARC differ
+   only in `ns`."
+  [ns opts]
+  {:ns        ns
+   :record?   mxc-record?
+   :record-id (fn [e] (record-id-from-ark (attr e "id")))
+   :kind      (fn [e] (or (:kind opts)
+                          (keyword ns (str/lower-case (or (attr e "type") "record")))))
+   :source    (fn [e] (attr e "id"))})

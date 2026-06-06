@@ -5,12 +5,15 @@
    on a concrete record plus corpus-level aggregates."
   (:require [clojure.test :refer [deftest is testing]]
             [regesta.plugins :as plug]
+            [regesta.plugins.lrmoo.project :as project]
+            [regesta.plugins.lrmoo.view :as view]
             [regesta.plugins.mapping :as mapping]
             [regesta.plugins.unimarc :as unimarc]
             [regesta.runtime :as runtime]))
 
 (def ^:private verne "test/fixtures/documentary/unimarc/sru/bnf-sru-verne-unimarc.xml")
 (def ^:private hugo  "test/fixtures/documentary/unimarc/sru/bnf-sru-hugo-unimarc.xml")
+(def ^:private flaubert "test/fixtures/documentary/unimarc/sru/bnf-sru-flaubert-unimarc.xml")
 
 (defn- normalized [path]
   (let [reg      (plug/register plug/empty-registry unimarc/plugin)
@@ -54,3 +57,16 @@
   (testing "every UNIMARC mapping id is namespaced :map/unimarc-* (composable spokes, ADR 0009)"
     (is (every? #(= "map" (namespace (:mapping/id %))) unimarc/mapping))
     (is (every? #(re-find #"^unimarc-" (name (:mapping/id %))) unimarc/mapping))))
+
+(deftest uniform-title-500-bridges-editions-and-a-translation-to-one-work
+  (testing "UNIMARC 500 (titre uniforme) maps to :canon/uniform-title and unifies variants"
+    (let [recs   (normalized flaubert)
+          idiot  (filter #(contains? (canon % :canon/uniform-title) "L'idiot de la famille") recs)]
+      (is (<= 10 (count idiot)))                                  ; 11 editions carry the uniform title
+      (testing "their transcribed 200 titles genuinely vary (incl. a German translation)"
+        (let [titles (all-canon idiot :canon/title)]
+          (is (contains? titles "L'Idiot de la famille"))
+          (is (some #(re-find #"(?i)idiot der familie" %) titles))))   ; the German translation
+      (testing "projected, those varying editions collapse to a single Work via the uniform title"
+        (let [works (distinct (keep #(:id (first (view/works (project/project %)))) idiot))]
+          (is (= 1 (count works))))))))

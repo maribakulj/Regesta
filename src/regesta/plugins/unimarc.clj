@@ -12,6 +12,7 @@
    | UNIMARC                                  | canonical               |
    |------------------------------------------|-------------------------|
    | `200 $a` (titre propre)                  | `:canon/title`          |
+   | `500 $a` (titre uniforme)                | `:canon/uniform-title`  |
    | `700/701/702 $a`, `710/711/712 $a`       | `:canon/agent`          |
    | `210 $d` (date de publication)           | `:canon/date`           |
    | `010 $a` ISBN, `011 $a` ISSN, `001`      | `:canon/identifier`     |
@@ -26,33 +27,26 @@
    (`1xx`), series (`4xx`) and physical description (`215`) have no floor home and
    are dropped — the MARC analogue of the other spokes' report-at-ingest loss,
    surfaced by the round-trip exporters."
-  (:require [clojure.string :as str]
-            [regesta.plugins.marcxml :as marcxml]))
+  (:require [regesta.plugins.marcxml :as marcxml]))
 
-(defn- mxc-record?
-  "True for an `<mxc:record>` (local name `record` carrying the `id` ARK), the BnF
-   SRU bibliographic/authority record, vs the `<srw:record>` wrapper (no `id`)."
-  [elem]
-  (and (= "record" (marcxml/local-name elem)) (some? (marcxml/attr elem "id"))))
-
-(defn- record-id-from-ark
-  "`:bnf/<cb-number>` from an ARK like \"ark:/12148/cb39508046q\"."
-  [ark]
-  (keyword "bnf" (last (str/split ark #"/"))))
+(defn- policies
+  "The MARCXChange family policies for the UNIMARC spoke (shared by `ingest`/`stream`);
+   UNIMARC and INTERMARC differ only in the `ns`."
+  [opts]
+  (marcxml/mxc-policies "unimarc" opts))
 
 (defn ingest
   "Parse a UNIMARC MARCXChange `xml-string` into a vector of Records with native
    `:unimarc/*` assertions. `opts` may carry `:kind` (else from the record `type`)."
   [xml-string opts]
-  (marcxml/parse-records
-   xml-string
-   {:ns        "unimarc"
-    :record?   mxc-record?
-    :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
-    :kind      (fn [e] (or (:kind opts)
-                           (keyword "unimarc"
-                                    (str/lower-case (or (marcxml/attr e "type") "record")))))
-    :source    (fn [e] (marcxml/attr e "id"))}))
+  (marcxml/parse-records xml-string (policies opts)))
+
+(defn stream
+  "Streaming importer (WP-7): a **lazy** record seq from a MARCXChange `readable`
+   (a flat `<mxc:collection>` dump; SRU pages are small and use `ingest`). The
+   caller manages the reader and consumes lazily — bounded (`docs/eval/scale.md`)."
+  [opts readable]
+  (marcxml/stream-records readable (policies opts)))
 
 (defn- source->string [source]
   (cond
@@ -76,6 +70,8 @@
    collapse onto one canonical predicate (the agents, the identifiers, the notes);
    the round-trip exporters report the collapse as loss (ADR 0015)."
   [{:mapping/id :map/unimarc-title :mapping/from :unimarc/f200_a :mapping/to :canon/title
+    :mapping/transform [:trim]}
+   {:mapping/id :map/unimarc-uniform-500 :mapping/from :unimarc/f500_a :mapping/to :canon/uniform-title
     :mapping/transform [:trim]}
    {:mapping/id :map/unimarc-author-700 :mapping/from :unimarc/f700_a :mapping/to :canon/agent
     :mapping/transform [:trim]}
@@ -111,4 +107,5 @@
    :input-format        :xml
    :mapping             mapping
    :importer            importer
+   :stream-importer     stream                          ; WP-7 lazy record seq from a Reader
    :doc                 "UNIMARC (BnF diffusion) importer — fields/subfields as :unimarc/* assertions; bibliographic subset mapped to the canonical floor."})

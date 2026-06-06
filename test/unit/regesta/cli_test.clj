@@ -8,6 +8,7 @@
 
 (def ^:private marc21 "test/fixtures/documentary/marc21/marcxml/loc_collection.xml")
 (def ^:private dc "test/fixtures/documentary/dublin-core/w3c_dc_example1.xml")
+(def ^:private iiif-manifest "test/fixtures/documentary/iiif/manifest_book_simple.json")
 
 (deftest converts-and-reports
   (testing "convert MARC21 -> Linked Art: output to :out, loss report to :err"
@@ -87,6 +88,9 @@
 (def ^:private intermarc
   "test/fixtures/documentary/intermarc/sru/intermarcXchange/bnf-sru-victor-hugo-50.xml")
 
+(def ^:private intermarc-bovary
+  "test/fixtures/documentary/intermarc/sru/intermarcXchange/bib-flaubert-madame-bovary-start1-max30.xml")
+
 (deftest report-emits-the-loss-report-only
   (testing "report MARC21 -> DC: the loss report to stdout, no converted document"
     (let [{:keys [exit out]} (cli/run ["report" marc21 "--from" "marc21" "--to" "dc"])]
@@ -127,3 +131,129 @@
   (testing "a missing file is an exit-2, not a crash"
     (is (= 2 (:exit (cli/run ["inspect" "/no/such/file.xml" "--from" "marc21"]))))
     (is (= 2 (:exit (cli/run ["reconcile" marc21]))))))         ; missing --from
+
+;; --- apply-repairs (curate the inferred :proposed claims, ADR 0005) ----------
+
+(deftest apply-repairs-curates-the-proposed-claims
+  (testing "DC --policy accept: the four string-key WEMI proposals are accepted"
+    (let [{:keys [exit out]} (cli/run ["apply-repairs" dc "--from" "dc" "--policy" "accept"])]
+      (is (= 0 exit))
+      (is (str/includes? out "4 proposals curated"))
+      (is (str/includes? out "4 accepted"))
+      (is (str/includes? out "proposed → accepted"))))
+  (testing "the default policy is the conservative flag (route to needs-review, none accepted)"
+    (let [{:keys [exit out]} (cli/run ["apply-repairs" dc "--from" "dc"])]
+      (is (= 0 exit))
+      (is (str/includes? out "(flag)"))
+      (is (str/includes? out "4 needs-review"))))
+  (testing "MARC21 (two records): eight proposals curated"
+    (let [{:keys [exit out]} (cli/run ["apply-repairs" marc21 "--from" "marc21" "--policy" "reject"])]
+      (is (= 0 exit))
+      (is (str/includes? out "8 proposals curated"))
+      (is (str/includes? out "8 rejected")))))
+
+(deftest apply-repairs-guards-its-inputs
+  (testing "an unknown --policy exits 2"
+    (let [{:keys [exit err]} (cli/run ["apply-repairs" dc "--from" "dc" "--policy" "bogus"])]
+      (is (= 2 exit))
+      (is (str/includes? err "unknown --policy"))))
+  (testing "a missing --from exits 2"
+    (is (= 2 (:exit (cli/run ["apply-repairs" dc]))))))
+
+;; --- conformance (institutional profile check, WP-6) ------------------------
+
+(deftest conformance-checks-against-a-profile
+  (testing "MARC21 vs Linked Art: conformant under errors-only (only richness warnings)"
+    (let [{:keys [exit err]} (cli/run ["conformance" marc21 "--from" "marc21" "--profile" "linked-art"])]
+      (is (= 0 exit))
+      (is (str/includes? err "CONFORMANT"))
+      (is (not (str/includes? err "NON-CONFORMANT")))
+      (is (str/includes? err "Linked Art (Louvre)"))
+      (is (str/includes? err "creator-identified"))))
+  (testing "raising the acceptance threshold makes the warnings non-conformant (exit 1)"
+    (let [{:keys [exit err]} (cli/run ["conformance" marc21 "--from" "marc21"
+                                       "--profile" "linked-art" "--policy" "errors-and-warnings"])]
+      (is (= 1 exit))
+      (is (str/includes? err "NON-CONFORMANT")))))
+
+(deftest conformance-fails-a-titleless-record-and-guards-its-inputs
+  (testing "a titleless DC record fails the name requirement (exit 1)"
+    (let [path (str (System/getProperty "java.io.tmpdir") "/regesta-conf-" (System/nanoTime) ".xml")]
+      (try
+        (spit path "<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:creator>Anon</dc:creator></metadata>")
+        (let [{:keys [exit err]} (cli/run ["conformance" path "--from" "dc" "--profile" "linked-art"])]
+          (is (= 1 exit))
+          (is (str/includes? err "NON-CONFORMANT"))
+          (is (str/includes? err "has-name")))
+        (finally (.delete (java.io.File. path))))))
+  (testing "a missing --profile exits 2 with the available set"
+    (let [{:keys [exit err]} (cli/run ["conformance" marc21 "--from" "marc21"])]
+      (is (= 2 exit))
+      (is (str/includes? err "needs --profile"))))
+  (testing "an unknown --profile exits 2"
+    (is (= 2 (:exit (cli/run ["conformance" marc21 "--from" "marc21" "--profile" "bogus"]))))))
+
+(deftest conformance-supports-the-intermarc-profile
+  (testing "INTERMARC Bovary showcase vs the BnF INTERMARC profile: conformant"
+    (let [{:keys [exit err]} (cli/run ["conformance" intermarc-bovary "--from" "intermarc" "--profile" "intermarc"])]
+      (is (= 0 exit))
+      (is (str/includes? err "CONFORMANT"))
+      (is (not (str/includes? err "NON-CONFORMANT")))
+      (is (str/includes? err "BnF INTERMARC"))
+      (is (str/includes? err "heading-authority-linked")))))
+
+(deftest conformance-supports-the-iiif-profile
+  (testing "a real IIIF manifest vs the IIIF Presentation 3.0 profile: fully conformant"
+    (let [{:keys [exit err]} (cli/run ["conformance" iiif-manifest "--from" "iiif" "--profile" "iiif"])]
+      (is (= 0 exit))
+      (is (str/includes? err "CONFORMANT"))
+      (is (not (str/includes? err "NON-CONFORMANT")))
+      (is (str/includes? err "IIIF Presentation 3.0")))))
+
+;; --- convert --stream (WP-7 bounded-memory streaming) -----------------------
+
+(deftest convert-stream-writes-bounded-output-to-out
+  (testing "convert --stream lazily parses and writes the document to --out"
+    (let [path (str (System/getProperty "java.io.tmpdir") "/regesta-stream-" (System/nanoTime) ".nt")]
+      (try
+        (let [{:keys [exit out err]} (cli/run ["convert" marc21 "--from" "marc21"
+                                               "--to" "ntriples" "--stream" "--out" path])
+              written (slurp path)]
+          (is (= 0 exit))
+          (is (= "" out))                                   ; document went to the file, not :out
+          (is (str/includes? err "streamed"))
+          (is (str/includes? err "Loss report"))
+          (is (str/includes? written "lrmoo/F3_Manifestation"))
+          (is (str/includes? written "The Great Ray Charles")))
+        (finally (.delete (java.io.File. path)))))))
+
+(deftest convert-stream-guards-its-inputs
+  (testing "--stream requires --out"
+    (let [{:keys [exit err]} (cli/run ["convert" marc21 "--from" "marc21" "--to" "ntriples" "--stream"])]
+      (is (= 2 exit))
+      (is (str/includes? err "requires --out"))))
+  (testing "--stream rejects a non-streamable spoke (Dublin Core is not a flat dump)"
+    (let [{:keys [exit err]} (cli/run ["convert" dc "--from" "dc" "--to" "ntriples"
+                                       "--stream" "--out" "/tmp/regesta-x.nt"])]
+      (is (= 2 exit))
+      (is (str/includes? err "not supported")))))
+
+(deftest convert-stream-fails-atomically-leaving-no-partial-out
+  (testing "a malformed input mid-stream: exit 2 and NO --out file is left (all-or-nothing, like batch)"
+    (let [bad (str (System/getProperty "java.io.tmpdir") "/regesta-bad-" (System/nanoTime) ".xml")
+          out (str (System/getProperty "java.io.tmpdir") "/regesta-out-" (System/nanoTime) ".nt")]
+      (try
+        ;; one good record, then a truncated/unclosed second record -> data.xml throws mid-stream
+        (spit bad (str "<marc:collection xmlns:marc=\"http://www.loc.gov/MARC21/slim\">"
+                       "<marc:record><marc:controlfield tag=\"001\">1</marc:controlfield>"
+                       "<marc:datafield tag=\"245\"><marc:subfield code=\"a\">First</marc:subfield></marc:datafield></marc:record>"
+                       "<marc:record><marc:controlfield tag=\"001\">2</marc:controlfield>UNCLOSED"))
+        (let [{:keys [exit]} (cli/run ["convert" bad "--from" "marc21" "--to" "ntriples" "--stream" "--out" out])]
+          (is (= 2 exit))
+          (is (not (.exists (java.io.File. out)))))      ; no partial file left behind
+        (finally (.delete (java.io.File. bad)) (.delete (java.io.File. out))))))
+  (testing "a bad --out directory fails cleanly (exit 2), not with an uncaught crash"
+    (let [{:keys [exit err]} (cli/run ["convert" marc21 "--from" "marc21" "--to" "ntriples"
+                                       "--stream" "--out" "/no/such/regesta-dir/out.nt"])]
+      (is (= 2 exit))
+      (is (str/includes? err "error:")))))

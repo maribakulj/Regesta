@@ -23,6 +23,7 @@
    | MARC21                                  | canonical            |
    |-----------------------------------------|----------------------|
    | `245 $a`                                | `:canon/title`       |
+   | `240 $a`                                | `:canon/uniform-title` |
    | `100/110/111 $a`, `700/710 $a`          | `:canon/agent`       |
    | `260/264 $c`                            | `:canon/date`        |
    | `010/020/022/035 $a`                    | `:canon/identifier`  |
@@ -71,6 +72,8 @@
    the identifier flavours); that under-specification is the floor's, surfaced as
    loss when the pivot is projected to a role-aware target."
   [{:mapping/id :map/marc21-title :mapping/from :marc21/f245_a :mapping/to :canon/title
+    :mapping/transform [:trim]}
+   {:mapping/id :map/marc21-uniform-240 :mapping/from :marc21/f240_a :mapping/to :canon/uniform-title
     :mapping/transform [:trim]}
    {:mapping/id :map/marc21-author-100 :mapping/from :marc21/f100_a :mapping/to :canon/agent
     :mapping/transform [:trim]}
@@ -122,18 +125,28 @@
     :else (throw (ex-info "MARC21 importer expects a string or tagged source"
                           {:source source}))))
 
+(defn- policies
+  "The MARCXML family policies for the MARC21 spoke (shared by `ingest`/`stream`)."
+  [opts]
+  {:ns        "marc21"
+   :record?   (fn [e] (= "record" (marcxml/local-name e)))
+   :record-id record-id
+   :kind      (fn [_] (or (:kind opts) :marc21/bibliographic))
+   :source    (fn [e] (marcxml/control-value e "001"))})
+
 (defn ingest
   "Parse a MARC21slim `xml-string` (a `<collection>` of `<record>`s, or a bare
    `<record>`) into a vector of Records carrying native `:marc21/*` assertions.
    `opts` may carry `:kind` (default `:marc21/bibliographic`)."
   [xml-string opts]
-  (marcxml/parse-records
-   xml-string
-   {:ns        "marc21"
-    :record?   (fn [e] (= "record" (marcxml/local-name e)))
-    :record-id record-id
-    :kind      (fn [_] (or (:kind opts) :marc21/bibliographic))
-    :source    (fn [e] (marcxml/control-value e "001"))}))
+  (marcxml/parse-records xml-string (policies opts)))
+
+(defn stream
+  "Streaming importer (WP-7): a **lazy** record seq from a MARCXML `readable`
+   (a flat `<collection>` dump). The caller manages the reader (`with-open`) and
+   consumes lazily — bounded memory (`docs/eval/scale.md`)."
+  [opts readable]
+  (marcxml/stream-records readable (policies opts)))
 
 (defn importer
   "ADR 0007 importer: `(fn [opts source] -> {:records [...] :diagnostics []})`.
@@ -151,4 +164,5 @@
    :input-format        :xml
    :mapping             mapping
    :importer            importer
+   :stream-importer     stream                          ; WP-7 lazy record seq from a Reader
    :doc                 "MARC21 (MARCXML) importer — fields/subfields as :marc21/* assertions; bibliographic subset mapped to the canonical floor."})

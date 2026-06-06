@@ -87,7 +87,7 @@
   (testing "MARC21 is a well-formed ADR 0007 plugin whose mapping compiles cleanly"
     (is (= :regesta/marc21 (:id marc21/plugin)))
     (is (fn? (:importer marc21/plugin)))
-    (is (= 17 (count (:mapping marc21/plugin))))
+    (is (= 18 (count (:mapping marc21/plugin))))           ; +240 uniform-title (bridging)
     (let [reg (plug/register plug/empty-registry marc21/plugin)]
       (is (some? (mapping/compile-mappings (plug/all-mappings reg)
                                            (plug/effective-transforms reg)))))))

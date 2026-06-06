@@ -11,7 +11,7 @@
 
    ## Mapping to the canonical floor
 
-   The canonical documentary vocabulary is a deliberately small eight (ADR 0003);
+   The canonical documentary vocabulary is a deliberately small set (ADR 0003);
    nine DCMES elements have a genuine home in it:
 
    | DC element                         | canonical        |
@@ -145,6 +145,11 @@
    XML once, walks it via the shape adapter onto native `:dc/*` (renamed to
    `:canon/*` at `:normalize`), and reports unmodelled DC elements as import loss."
   [{:keys [record-id kind source]} source-in]
+  (when-not (and (keyword? record-id) (namespace record-id))
+    (throw (ex-info (str "Dublin Core requires a namespaced-keyword :record-id in opts "
+                         "(a single-record spoke has no id of its own; the CLI derives one "
+                         "from the filename).")
+                    {:spoke :dc :record-id record-id})))
   (let [s      (source->string source-in)
         root   (-> (data-xml/parse-str s) (shape/rewrite-tags aliases))
         record (shape/ingest-xml root mapping

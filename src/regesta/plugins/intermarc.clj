@@ -27,23 +27,17 @@
    a record is an `<mxc:record>` (a `record` carrying the `id` ARK, vs the SRU
    `<srw:record>` wrapper that has none), its id is `:bnf/<cb-number>`, and its
    `:kind` comes from the `type` attribute."
-  (:require [clojure.string :as str]
-            [regesta.plugins.marcxml :as marcxml]))
-
-(defn- mxc-record?
-  "True for an `<mxc:record>` (local name `record` carrying the `id` ARK),
-   distinguishing it from the SRU `<srw:record>` wrapper, which has none."
-  [elem]
-  (and (= "record" (marcxml/local-name elem)) (some? (marcxml/attr elem "id"))))
-
-(defn- record-id-from-ark
-  "`:bnf/<cb-number>` from an ARK like \"ark:/12148/cb304403926\"."
-  [ark]
-  (keyword "bnf" (last (str/split ark #"/"))))
+  (:require [regesta.plugins.marcxml :as marcxml]))
 
 ;; ---------------------------------------------------------------------------
 ;; Public API + plugin
 ;; ---------------------------------------------------------------------------
+
+(defn- policies
+  "The MARCXChange family policies for the INTERMARC spoke (shared by
+   `ingest`/`stream`); INTERMARC and UNIMARC differ only in the `ns`."
+  [opts]
+  (marcxml/mxc-policies "intermarc" opts))
 
 (defn ingest
   "Parse an InterMARCXChange `xml-string` into a vector of Records carrying native
@@ -51,15 +45,14 @@
    record's `type`). The controlled author is recombined from the 100 subfields by
    the `:map/intermarc-agent` combine mapping, not by a pre-pass."
   [xml-string opts]
-  (marcxml/parse-records
-   xml-string
-   {:ns        "intermarc"
-    :record?   mxc-record?
-    :record-id (fn [e] (record-id-from-ark (marcxml/attr e "id")))
-    :kind      (fn [e] (or (:kind opts)
-                           (keyword "intermarc"
-                                    (str/lower-case (or (marcxml/attr e "type") "record")))))
-    :source    (fn [e] (marcxml/attr e "id"))}))
+  (marcxml/parse-records xml-string (policies opts)))
+
+(defn stream
+  "Streaming importer (WP-7): a **lazy** record seq from a MARCXChange `readable`
+   (a flat `<mxc:collection>` dump; SRU pages are small and use `ingest`). The
+   caller manages the reader and consumes lazily — bounded (`docs/eval/scale.md`)."
+  [opts readable]
+  (marcxml/stream-records readable (policies opts)))
 
 (defn- source->string
   "Accept either a raw string or an ADR 0007 tagged source map."
@@ -111,4 +104,5 @@
    :input-format        :xml
    :mapping             mapping
    :importer            importer
+   :stream-importer     stream                          ; WP-7 lazy record seq from a Reader
    :doc                 "INTERMARC-SRU (InterMARCXChange) importer — fields/subfields as :intermarc/* assertions; bibliographic core mapped to the canonical floor."})

@@ -23,6 +23,7 @@
    | MODS (direct child path)        | canonical            |
    |---------------------------------|----------------------|
    | `titleInfo/title` (+ nonSort)   | `:canon/title`       |
+   | `titleInfo[@type=uniform]/title`| `:canon/uniform-title` |
    | `name` (joined nameParts)       | `:canon/agent`       |
    | `originInfo/publisher`          | `:canon/agent`       |
    | `originInfo/dateIssued`         | `:canon/date`        |
@@ -81,6 +82,12 @@
         tt (some-> (text-of title-elem) str/trim)]
     (if (and (seq ns) tt) (str ns " " tt) tt)))
 
+(defn- uniform-title-info?
+  "True for a `<titleInfo type=\"uniform\">` — the work's controlled title, kept
+   apart from the transcribed title proper (MODS distinguishes them by `@type`)."
+  [title-info]
+  (= "uniform" (get-in title-info [:attrs :type])))
+
 ;; ---------------------------------------------------------------------------
 ;; Extraction to native :mods/* assertions
 ;; ---------------------------------------------------------------------------
@@ -98,10 +105,18 @@
 
 (defn- record-assertions [rid mods]
   (concat
+   ;; the transcribed title proper — every titleInfo EXCEPT the uniform one
    (for [ti (children-named mods "titleInfo")
+         :when (not (uniform-title-info? ti))
          t  (children-named ti "title")
          :let [v (title-string ti t)] :when v]
      (assertion rid "title" v))
+   ;; the work's controlled title — <titleInfo type="uniform"> (the FRBRisation key)
+   (for [ti (children-named mods "titleInfo")
+         :when (uniform-title-info? ti)
+         t  (children-named ti "title")
+         :let [v (title-string ti t)] :when v]
+     (assertion rid "uniform-title" v))
    (for [ti (children-named mods "titleInfo")
          st (children-named ti "subTitle")
          :let [v (text-of st)] :when v]
@@ -202,6 +217,8 @@
 (def mapping
   "Declarative MODS→canonical mapping for the bibliographic core."
   [{:mapping/id :map/mods-title :mapping/from :mods/title :mapping/to :canon/title
+    :mapping/transform [:trim]}
+   {:mapping/id :map/mods-uniform :mapping/from :mods/uniform-title :mapping/to :canon/uniform-title
     :mapping/transform [:trim]}
    {:mapping/id :map/mods-name :mapping/from :mods/name :mapping/to :canon/agent
     :mapping/transform [:trim]}

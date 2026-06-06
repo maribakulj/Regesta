@@ -5,24 +5,33 @@
    `validate` runs the canonical rules and exits non-zero on failure; `report`,
    `inspect` and `reconcile` are read-only verbs that write to **stdout**.
 
-     regesta convert   <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
-     regesta validate  <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
-     regesta report    <input-file> --from <fmt> --to <fmt> [--record-id <id>]
-     regesta inspect   <input-file> --from <fmt> [--record-id <id>]
-     regesta reconcile <input-file> --from <fmt> [--record-id <id>]
+     regesta convert       <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]
+     regesta validate      <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
+     regesta report        <input-file> --from <fmt> --to <fmt> [--record-id <id>]
+     regesta inspect       <input-file> --from <fmt> [--record-id <id>]
+     regesta reconcile     <input-file> --from <fmt> [--record-id <id>]
+     regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]
+     regesta conformance   <input-file> --from <fmt> --profile <p> [--policy <p>] [--record-id <id>]
      regesta formats
      regesta --help
 
-   - `report`    — the X→Y loss report alone (the auditor's view), no document.
-   - `inspect`   — what the source parses to: the canonical floor + minted WEMI/
-                   agent entities (the developer's view).
-   - `reconcile` — cross-record agent reconciliation by authority id (ADR 0018).
+   - `report`        — the X→Y loss report alone (the auditor's view), no document.
+   - `inspect`       — what the source parses to: the canonical floor + minted
+                       WEMI/agent entities (the developer's view).
+   - `reconcile`     — cross-record agent reconciliation by authority id (ADR 0018).
+   - `apply-repairs` — curate the `:proposed` claims a pipeline run emits (ADR 0005):
+                       accept / reject / flag-for-review the inferred WEMI proposals.
+   - `conformance`   — check the WEMI projection against an institutional profile
+                       (WP-6); exits non-zero under the acceptance-threshold policy.
 
    `run` is pure — it parses args, does the work and returns `{:exit :out :err}`
    without printing or exiting — so tests drive it directly; `-main` is the thin
    shell that prints the streams and calls `System/exit`."
-  (:require [clojure.string :as str]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
+            [regesta.conformance :as conformance]
             [regesta.convert :as convert]
+            [regesta.curate :as curate]
             [regesta.diagnostics :as dx]
             [regesta.loss-report :as lr]
             [regesta.reconcile :as reconcile]
@@ -34,25 +43,33 @@
    ["regesta — documentary-metadata conversion through the LRMoo pivot"
     ""
     "Usage:"
-    "  regesta convert   <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
-    "  regesta validate  <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
-    "  regesta report    <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
-    "  regesta inspect   <input-file> --from <fmt> [--record-id <id>]"
-    "  regesta reconcile <input-file> --from <fmt> [--record-id <id>]"
+    "  regesta convert       <input-file> --from <fmt> --to <fmt> [--record-id <id>] [--out <file>]"
+    "  regesta convert       <input-file> --from <marc-fmt> --to <fmt> --stream --out <file>"
+    "  regesta validate      <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
+    "  regesta report        <input-file> --from <fmt> --to <fmt> [--record-id <id>]"
+    "  regesta inspect       <input-file> --from <fmt> [--record-id <id>]"
+    "  regesta reconcile     <input-file> --from <fmt> [--record-id <id>]"
+    "  regesta apply-repairs <input-file> --from <fmt> [--policy <p>] [--record-id <id>]"
+    "  regesta conformance   <input-file> --from <fmt> --profile <p> [--policy <p>] [--record-id <id>]"
     "  regesta formats          list the supported source and target formats"
     "  regesta --help"
     ""
     "  --from        source format (a spoke)"
     "  --to          target serialisation (convert, report)"
-    "  --policy      validate failure policy: errors-only (default), errors-and-warnings, strict, never"
+    "  --profile     conformance profile: linked-art, intermarc, iiif"
+    "  --policy      validate / conformance: errors-only (default), errors-and-warnings, strict, never"
+    "                apply-repairs: flag (default), accept, reject"
     "  --record-id   record id for single-record spokes (Dublin Core; default: from the filename)"
     "  --out         write the output to a file instead of stdout (convert)"
+    "  --stream      convert in bounded memory, streaming a large flat MARC dump to --out (WP-7)"
     ""
     "convert writes the document to stdout, the loss report to stderr;"
     "validate writes the diagnostics report to stderr and exits non-zero on failure;"
     "report writes the X→Y loss report to stdout (no document);"
     "inspect writes what the source parses to (the canonical floor + minted entities) to stdout;"
-    "reconcile writes the cross-record agent reconciliation (by authority id) to stdout."]))
+    "reconcile writes the cross-record agent reconciliation (by authority id) to stdout;"
+    "apply-repairs curates the inferred :proposed claims (ADR 0005) and writes the outcome to stdout;"
+    "conformance reports profile diagnostics to stderr and exits non-zero under the acceptance policy."]))
 
 (defn- parse-args
   "Parse `args` into {:command :positional [..] :flags {str str} :help?}.
@@ -65,6 +82,7 @@
       (let [a (first as)]
         (cond
           (#{"--help" "-h"} a)      (recur (rest as) (assoc m :help? true))
+          (#{"--stream"} a)         (recur (rest as) (assoc-in m [:flags "stream"] true)) ; boolean
           (str/starts-with? a "--") (recur (drop 2 as) (assoc-in m [:flags (subs a 2)] (second as)))
           (:command m)              (recur (rest as) (update m :positional (fnil conj []) a))
           :else                     (recur (rest as) (assoc m :command a)))))))
@@ -170,6 +188,60 @@
        (catch Exception e
          {:exit 2 :out "" :err (str "error: " (.getMessage e))})))
 
+(defn- do-convert-stream
+  "Streaming convert (WP-7): lazily parse the input and write each rendered document
+   to `--out` incrementally, in bounded memory (the whole corpus is never
+   materialised). Requires a streamable spoke (the MARC family) and `--out` (the
+   document sink — like the batch `--out`, this writes a file). The loss report is
+   returned in `:err`."
+  [{:strs [from to record-id out]} input]
+  (cond
+    (not (and from to input))
+    {:exit 2 :out "" :err (str "convert --stream needs <input-file> --from <fmt> --to <fmt> --out <file>\n\n" usage)}
+
+    (not out)
+    {:exit 2 :out "" :err "convert --stream requires --out <file> (the streamed document sink)"}
+
+    (not (.exists (java.io.File. ^String input)))
+    {:exit 2 :out "" :err (str "input file not found: " input)}
+
+    (not (convert/streamable? (keyword from)))
+    {:exit 2 :out "" :err (str "--stream is not supported for " from
+                               " (streamable: " (str/join " " (map name (convert/streamable-sources))) ")")}
+
+    :else
+    ;; Stream to a sibling temp file and atomically rename on success, so a
+    ;; mid-stream failure (e.g. a malformed input) leaves NO partial --out — the
+    ;; same all-or-nothing guarantee the batch path gives (it spits only at the end).
+    ;; Everything that can throw — including creating the temp file (a bad --out
+    ;; directory) — is inside the try, so the verb always returns a clean exit, and
+    ;; the `finally` deletes the temp in every failure path (on success it was renamed away).
+    (let [fromk (keyword from)
+          opts  (cond-> {} record-id (assoc :record-id (->record-id record-id)))
+          outf  (.getAbsoluteFile (java.io.File. ^String out))
+          tmp   (atom nil)]
+      (try
+        (reset! tmp (java.io.File/createTempFile "regesta-stream-" ".part" (.getParentFile outf)))
+        (let [res (with-open [r (io/reader input)
+                              w (io/writer @tmp)]
+                    (convert/convert-stream
+                     {:from fromk :to (keyword to)
+                      :records (convert/stream-source fromk opts r)}
+                     (fn [doc] (.write w doc) (.write w "\n"))))]
+          (.delete outf)                                ; renameTo won't overwrite on every platform
+          (if (.renameTo @tmp outf)
+            {:exit 0 :out ""
+             :err  (str "wrote " out " — " (:records res) " record" (when (not= 1 (:records res)) "s")
+                        " streamed (bounded memory)\n"
+                        (lr/format-conversion-report (:loss res)))}
+            {:exit 2 :out "" :err (str "error: could not move streamed output to " out)}))
+        (catch clojure.lang.ExceptionInfo e
+          {:exit 2 :out "" :err (str "error: " (.getMessage e) " " (pr-str (ex-data e)))})
+        (catch Exception e
+          {:exit 2 :out "" :err (str "error: " (.getMessage e))})
+        (finally
+          (when-let [t @tmp] (when (.exists t) (.delete t))))))))
+
 (defn- do-report
   "The auditor's verb: the X→Y loss report to stdout, no converted document."
   [{:strs [from to record-id]} input]
@@ -233,6 +305,62 @@
                  :out  (reconcile/format-agent-reconciliation (reconcile/reconcile-agents records))
                  :err  ""})))))
 
+(def ^:private repair-policies
+  "apply-repairs --policy values → curation decision functions (ADR 0005). `flag`
+   is the conservative default: route every proposal to human review, none
+   auto-committed."
+  {"flag"   curate/flag-all
+   "accept" curate/accept-all
+   "reject" curate/reject-all})
+
+(defn- do-apply-repairs
+  "Curate the `:proposed` claims a pipeline run emits (ADR 0005): run the source to
+   WEMI, then accept / reject / flag every pending proposal per `--policy` (default
+   `flag`). Writes the curation outcome to stdout. Honest when a record carries no
+   proposals (e.g. an authority-linked Work): reports nothing to curate."
+  [{:strs [from record-id policy]} input]
+  (let [{:keys [err from source opts]} (read-source from input record-id "apply-repairs")
+        policy-label (or policy "flag")
+        decide       (repair-policies policy-label)]
+    (cond
+      err          {:exit 2 :out "" :err err}
+      (nil? decide) {:exit 2 :out ""
+                     :err (str "unknown --policy " policy-label " (use flag|accept|reject)\n\n" usage)}
+      :else
+      (guard #(let [{:keys [records]} (convert/to-wemi from opts source)
+                    result            (curate/curate records decide)]
+                {:exit 0 :out (curate/format-curation result policy-label) :err ""})))))
+
+(defn- profile-names []
+  (str/join " " (sort (map name (keys conformance/profiles)))))
+
+(defn- do-conformance
+  "Check the WEMI projection against an institutional `--profile` (WP-6). Writes the
+   profile diagnostics report + a CONFORMANT/NON-CONFORMANT verdict to stderr and
+   exits non-zero when the acceptance `--policy` is breached (mirrors validate)."
+  [{:strs [from record-id profile policy]} input]
+  (let [{:keys [err from source opts]} (read-source from input record-id "conformance")
+        prof (some-> profile keyword conformance/profiles)]
+    (cond
+      err           {:exit 2 :out "" :err err}
+      (not profile) {:exit 2 :out "" :err (str "conformance needs --profile <p> (have: "
+                                               (profile-names) ")\n\n" usage)}
+      (nil? prof)   {:exit 2 :out "" :err (str "unknown --profile " profile " (have: "
+                                               (profile-names) ")\n\n" usage)}
+      :else
+      (guard #(let [pol (if policy (keyword policy) :errors-only)
+                    {:keys [records diagnostics summary failed? label]}
+                    (conformance/conformance {:from from :source source :opts opts
+                                              :profile prof :policy pol})
+                    verdict (str (if failed? "NON-CONFORMANT" "CONFORMANT")
+                                 " — " label " — " records " record" (when (not= 1 records) "s") ", "
+                                 (get-in summary [:by-severity :error]) " error(s), "
+                                 (get-in summary [:by-severity :warning]) " warning(s) "
+                                 "[policy " (name pol) "]")]
+                {:exit (if failed? 1 0)
+                 :out  ""
+                 :err  (if (seq diagnostics) (str (dx/format-report diagnostics) "\n" verdict) verdict)})))))
+
 (defn run
   "Pure CLI core: parse `args`, run the command, return `{:exit :out :err}`.
    Never prints, never exits."
@@ -243,11 +371,15 @@
       (= command "formats")     {:exit 0 :out ""
                                  :err (str (fmt-line "from: " (convert/source-formats)) "\n"
                                            (fmt-line "to:   " (convert/target-formats)))}
-      (= command "convert")     (do-convert flags (first positional))
+      (= command "convert")     (if (get flags "stream")
+                                  (do-convert-stream flags (first positional))
+                                  (do-convert flags (first positional)))
       (= command "validate")    (do-validate flags (first positional))
       (= command "report")      (do-report flags (first positional))
       (= command "inspect")     (do-inspect flags (first positional))
       (= command "reconcile")   (do-reconcile flags (first positional))
+      (= command "apply-repairs") (do-apply-repairs flags (first positional))
+      (= command "conformance") (do-conformance flags (first positional))
       :else                     {:exit 2 :out "" :err (str "unknown command: " command "\n\n" usage)})))
 
 (defn -main [& args]

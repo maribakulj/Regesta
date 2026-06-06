@@ -14,6 +14,7 @@
             [regesta.plugins.mapping :as mapping]
             [regesta.plugins.marc21 :as marc21]
             [regesta.plugins.mods :as mods]
+            [regesta.plugins.mods.export :as mods-export]
             [regesta.runtime :as runtime]))
 
 (defn- fixture [name] (slurp (str "test/fixtures/documentary/mods/" name ".xml")))
@@ -84,7 +85,50 @@
 (deftest the-plugin-conforms-and-composes-with-the-other-spokes
   (testing "MODS is a well-formed plugin; its mapping ids don't collide with DC/MARC21"
     (is (= :regesta/mods (:id mods/plugin)))
-    (is (= 8 (count (:mapping mods/plugin))))
+    (is (= 9 (count (:mapping mods/plugin))))               ; +uniform-title (bridging)
     (let [reg (reduce plug/register plug/empty-registry [mods/plugin dc/plugin marc21/plugin])]
       (is (some? (mapping/compile-mappings (plug/all-mappings reg)
                                            (plug/effective-transforms reg)))))))
+
+;; ---------------------------------------------------------------------------
+;; Uniform-title bridging (titleInfo type="uniform" -> :canon/uniform-title)
+;; ---------------------------------------------------------------------------
+
+(defn- normalize-xml
+  "Ingest a raw MODS XML string (record id `rid`) and run :normalize to the floor."
+  ([xml] (normalize-xml xml :mods/x))
+  ([xml rid]
+   (let [reg      (plug/register plug/empty-registry mods/plugin)
+         compiled (mapping/compile-mappings (plug/all-mappings reg)
+                                            (plug/effective-transforms reg))
+         {:keys [records]} (mods/importer {:record-id rid} xml)]
+     (:record (runtime/run-phase (first records) compiled :normalize)))))
+
+(defn- mods-doc [transcribed]
+  (str "<mods xmlns=\"http://www.loc.gov/mods/v3\">"
+       "<titleInfo><title>" transcribed "</title></titleInfo>"
+       "<titleInfo type=\"uniform\"><title>Fables</title></titleInfo>"
+       "<name><namePart>La Fontaine, Jean de</namePart></name>"
+       "</mods>"))
+
+(deftest uniform-titleinfo-splits-from-the-transcribed-title
+  (testing "<titleInfo type=\"uniform\"> maps to :canon/uniform-title, not conflated with :canon/title"
+    (let [canon (normalize-xml (mods-doc "Fables choisies"))]
+      (is (= #{"Fables choisies"} (literals canon :canon/title)))       ; transcribed only
+      (is (= #{"Fables"} (literals canon :canon/uniform-title))))))     ; the uniform title kept apart
+
+(deftest uniform-title-bridges-mods-variants-to-one-work
+  (testing "two MODS editions, different transcribed titles, same uniform title -> one Work"
+    (let [a (project/project (normalize-xml (mods-doc "Fables choisies") :mods/a))
+          b (project/project (normalize-xml (mods-doc "Les plus belles fables") :mods/b))]
+      (is (= (:id (first (view/works a))) (:id (first (view/works b))))))))
+
+(deftest uniform-title-survives-the-mods-round-trip
+  (testing "export emits :canon/uniform-title as <titleInfo type=\"uniform\">, and it re-imports as uniform (not conflated)"
+    (let [xml (mods-export/->mods-xml (normalize-xml (mods-doc "Fables choisies")))]
+      (is (str/includes? xml "<titleInfo type=\"uniform\"><title>Fables</title>"))
+      (is (str/includes? xml "<titleInfo><title>Fables choisies</title>"))
+      (testing "a real round-trip: re-importing the exported XML keeps the split"
+        (let [re (normalize-xml xml)]
+          (is (= #{"Fables choisies"} (literals re :canon/title)))      ; transcribed stays transcribed
+          (is (= #{"Fables"} (literals re :canon/uniform-title))))))))   ; uniform stays uniform, not a 2nd title

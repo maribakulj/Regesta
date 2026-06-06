@@ -103,3 +103,11 @@
     (let [reg (plug/register plug/empty-registry dc/plugin)]
       (is (some? (mapping/compile-mappings (plug/all-mappings reg)
                                            (plug/effective-transforms reg)))))))
+
+(deftest importer-requires-a-namespaced-record-id
+  (testing "missing/bare :record-id throws a clear error, not the opaque mint-fragment-id crash"
+    (let [src "<metadata xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:title>X</dc:title></metadata>"]
+      (is (thrown-with-msg? clojure.lang.ExceptionInfo #"requires a namespaced-keyword :record-id"
+                            (dc/importer {} src)))                       ; nil record-id
+      (is (thrown-with-msg? clojure.lang.ExceptionInfo #"requires a namespaced-keyword :record-id"
+                            (dc/importer {:record-id :bare} src))))))    ; un-namespaced keyword
