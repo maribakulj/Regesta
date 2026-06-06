@@ -167,7 +167,8 @@ generic one's returns false. Documented as a deployment concern.
   a `regesta.plugins` namespace convention). Rejected for V1: the cost
   of silent registration (mystery rules firing because a transitive
   dep was pulled in) outweighs the convenience. Plugins are loaded by
-  explicit `require` + `register` calls in user code or in `app.clj`.
+  explicit `require` + `register` calls in user code or an assembly
+  namespace (e.g. `regesta.convert` / `regesta.validate`).
 - **Eager record materialization in the importer contract** (return a
   `[Record ...]` vector). Rejected: forces every importer to fit the
   full input in memory and silently locks the V1 API away from

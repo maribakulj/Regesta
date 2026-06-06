@@ -11,8 +11,10 @@ release is cut, that section is renamed to the version and date and a fresh
 
 ## [Unreleased]
 
-The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
-(Dublin Core plugin) is the next milestone.
+The pre-1.0 development line. The Sprint 0–6 substrate and the rich-pivot
+work packages WP-0…WP-8 are landed (seven spokes → the LRMoo pivot → ten
+targets, loss-aware; conformance; streaming; the full CLI). WP-9
+(hardening + release) is in progress; see `docs/roadmap-v1.md`.
 
 ### Added
 
