@@ -57,6 +57,15 @@
   (or (first-literal record :canon/title)
       (first (filter string? (:value/alternatives (uncertain-title record))))))
 
+(defn- work-title-of
+  "The title that keys the Work/Expression and so decides whether they are minted:
+   the *uniform* title (`:canon/uniform-title`) when present, else the transcribed
+   `title-of`. The single source of the 'an Expression is minted' condition — the
+   loss accounting (`language-losses`/`ambiguity-losses`) keys on this too, so it
+   stays consistent with what `wemi-productions` actually mints."
+  [record]
+  (or (first-literal record :canon/uniform-title) (title-of record)))
+
 (defn- entity-prod [id kind prov]
   {:kind :entity :value (model/entity {:id id :kind kind :provenance prov})})
 
@@ -86,7 +95,7 @@
         prov       (model/provenance {:pass :infer :derivation [rid]})
         manif      (model/mint-entity-id :lrmoo/F3_Manifestation (str rid))
         title      (title-of record)
-        work-title (or (first-literal record :canon/uniform-title) title)
+        work-title (work-title-of record)
         agent      (first-literal record :canon/agent)]
     (cond-> [(entity-prod manif :lrmoo/F3_Manifestation prov)]
       ;; the Manifestation's own *transcribed* title is transcription -> certified
@@ -154,7 +163,7 @@
   [record]
   (let [n (count (distinct-langs record))]
     (cond
-      (not (first-literal record :canon/title)) []
+      (not (work-title-of record)) []   ; no Expression minted -> no language loss to report
       (>= n 2) [{:kind  :diagnostic
                  :value (dx/loss {:category     :under-specified
                                   :subject      (:id record)
@@ -180,11 +189,15 @@
     {:mapped m :total t :pct (if (pos? t) (quot (* 100 m) t) 0)}))
 
 (defn- ambiguity-losses
-  "Ambiguity loss (ADR 0015): when the title was taken from an `uncertain` value
-   (no literal won), the projection forced one of N candidates → `:ambiguity-
-   collapsed`, tied to the assertion IR's multiplicity (ADR 0001)."
+  "Ambiguity loss (ADR 0015): when the Work/Expression title was taken from an
+   `uncertain` `:canon/title` (no literal won, and no uniform title pre-empted it),
+   the projection forced one of N candidates → `:ambiguity-collapsed`, tied to the
+   assertion IR's multiplicity (ADR 0001). A uniform title, when present, becomes the
+   chain's title instead — so the uncertain transcribed title is not collapsed and
+   no ambiguity loss is reported."
   [record]
-  (if (and (nil? (first-literal record :canon/title))
+  (if (and (nil? (first-literal record :canon/uniform-title))
+           (nil? (first-literal record :canon/title))
            (some string? (:value/alternatives (uncertain-title record))))
     [{:kind  :diagnostic
       :value (dx/loss {:category     :ambiguity-collapsed

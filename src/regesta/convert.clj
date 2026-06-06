@@ -166,11 +166,14 @@
    a store deduplicates by id).
 
    Edge scope: folds the per-record **projection** and **export** edges. Import-edge
-   (report-at-ingest) loss is the importer's separate output; a caller that wants it
-   in the same report folds the importer's `:diagnostics` too (the MARC-family
-   importers report none). The streamed report's per-edge / per-category / per-field
-   counts equal the batch report's; only `:distinct-losses` (O(N)) is batch-only.
-   Throws on an unknown `from`/`to`."
+   (report-at-ingest) loss is the importer's separate output, which a record stream
+   does not carry; so the streamed report's per-edge / per-category / per-field
+   counts equal the batch report's **iff the importer emits no ingest loss** — which
+   holds for every streamable spoke (the MARC family importers report none; pinned by
+   `convert-stream-test`). For a hypothetical streamable spoke with report-at-ingest
+   loss the streamed report would under-count the import edge — fold the importer's
+   `:diagnostics` into the same accumulator then. `:distinct-losses` (O(N)) is always
+   batch-only. Throws on an unknown `from`/`to`."
   [{:keys [from to records]} emit]
   (when-not (contains? spokes/plugins from)
     (throw (ex-info "Unknown source format" {:from from :supported (source-formats)})))

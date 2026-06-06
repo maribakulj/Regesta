@@ -238,9 +238,11 @@
      {:profile :linked-art :label \"…\" :records N
       :diagnostics [...] :summary {...} :failed? bool}
 
-   `opts` is threaded to the importer (e.g. `:record-id`); `policy` (∈
-   `dx/failure-policies`, default `:errors-only`) is the acceptance threshold that
-   decides `:failed?`. Throws on an unknown spoke (via `convert/to-wemi`)."
+   `opts` is threaded to the importer; single-record spokes (Dublin Core) require
+   `:record-id` in `opts` (as for `convert`/`validate` — the CLI derives one from the
+   filename). `policy` (∈ `dx/failure-policies`, default `:errors-only`) is the
+   acceptance threshold that decides `:failed?`. Throws on an unknown spoke, or on a
+   missing required `:record-id`, via `convert/to-wemi`."
   [{:keys [from source opts profile policy] :or {opts {} policy :errors-only}}]
   (let [{:keys [records]} (convert/to-wemi from opts source)
         diags (into [] (mapcat #(check-record profile %)) records)]

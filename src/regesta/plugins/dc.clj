@@ -11,7 +11,7 @@
 
    ## Mapping to the canonical floor
 
-   The canonical documentary vocabulary is a deliberately small eight (ADR 0003);
+   The canonical documentary vocabulary is a deliberately small set (ADR 0003);
    nine DCMES elements have a genuine home in it:
 
    | DC element                         | canonical        |

@@ -17,7 +17,7 @@
 
    ## What is and isn't a documentary predicate
 
-   The eight predicates describe *what* a resource is. They do not
+   The canonical predicates describe *what* a resource is. They do not
    describe *how* a value is qualified — language, script, certainty.
    Qualifiers ride on fragments (ADR 0011), not on new top-level
    predicates. `:canon/lang` is the first such case: it is a qualifier
@@ -74,13 +74,13 @@
     :canon/loss-marker})
 
 (defn documentary?
-  "True if `predicate` is one of the eight canonical documentary
+  "True if `predicate` is one of the canonical documentary
    predicates (ADR 0003 §Decision).
 
    The parallel of `regesta.model/structural?` for the documentary
    layer. Qualifier coords (`:canon/lang`, …), structural predicates
    (`:meta/*`) and native source predicates (`:dc/title`, …) are all
-   false: only the eight are documentary."
+   false: only the canonical set are documentary."
   [predicate]
   (contains? documentary-vocabulary predicate))
 

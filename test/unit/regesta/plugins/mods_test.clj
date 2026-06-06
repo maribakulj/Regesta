@@ -124,7 +124,11 @@
       (is (= (:id (first (view/works a))) (:id (first (view/works b))))))))
 
 (deftest uniform-title-survives-the-mods-round-trip
-  (testing "export emits :canon/uniform-title back as <titleInfo type=\"uniform\">"
+  (testing "export emits :canon/uniform-title as <titleInfo type=\"uniform\">, and it re-imports as uniform (not conflated)"
     (let [xml (mods-export/->mods-xml (normalize-xml (mods-doc "Fables choisies")))]
       (is (str/includes? xml "<titleInfo type=\"uniform\"><title>Fables</title>"))
-      (is (str/includes? xml "<titleInfo><title>Fables choisies</title>")))))
+      (is (str/includes? xml "<titleInfo><title>Fables choisies</title>"))
+      (testing "a real round-trip: re-importing the exported XML keeps the split"
+        (let [re (normalize-xml xml)]
+          (is (= #{"Fables choisies"} (literals re :canon/title)))      ; transcribed stays transcribed
+          (is (= #{"Fables"} (literals re :canon/uniform-title))))))))   ; uniform stays uniform, not a 2nd title

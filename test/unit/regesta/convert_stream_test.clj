@@ -76,3 +76,18 @@
   (is (not (convert/streamable? :dc)))                   ; flat-shape spokes do not stream
   (is (thrown? clojure.lang.ExceptionInfo
                (convert/stream-source :dc {} (java.io.StringReader. "<x/>")))))
+
+(deftest streamable-importers-emit-no-import-edge-loss
+  ;; convert-stream folds only projection+export edges, omitting the importer's
+  ;; ingest :diagnostics — sound ONLY because every streamable spoke's importer
+  ;; reports no import-edge loss. Pin that premise: if a future streamable spoke
+  ;; emits report-at-ingest loss, the streamed report would silently under-count,
+  ;; and this test fails (add a fixture / fold the importer diagnostics then).
+  (let [fixtures {:marc21    marc-src
+                  :intermarc (slurp "test/fixtures/documentary/intermarc/sru/intermarcXchange/bib-flaubert-madame-bovary-start1-max30.xml")
+                  :unimarc   (slurp "test/fixtures/documentary/unimarc/sru/bnf-sru-flaubert-unimarc.xml")}]
+    (testing "the streamable set is exactly the MARC family (add a fixture above if it grows)"
+      (is (= #{:marc21 :intermarc :unimarc} (set (convert/streamable-sources)))))
+    (doseq [spoke (convert/streamable-sources)]
+      (testing (str spoke " importer emits no import-edge loss")
+        (is (empty? (:diagnostics ((:importer (spokes/plugin spoke)) {} (fixtures spoke)))))))))

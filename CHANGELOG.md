@@ -145,6 +145,17 @@ The pre-1.0 development line. Sprints 0 through 6 are landed; Sprint 7
 
 ### Fixed
 
+- Self-review remediation of this line's WP-6/7 work: (1) the WEMI projection's
+  loss accounting (`lrmoo.project` `language-losses`/`ambiguity-losses`) now keys
+  on the same `work-title` condition that decides whether an Expression is minted
+  (a new `work-title-of`), so a uniform-title-only record no longer under-reports
+  language loss nor falsely reports `:ambiguity-collapsed` (latent — introduced by
+  uniform-title bridging; guarded by a test). (2) `regesta.convert/convert-stream`
+  via the CLI now writes `--out` atomically (temp file + rename), so a mid-stream
+  parse error leaves no partial output, matching the batch path. (3)
+  `curate/format-curation` tolerates a single-record `curate-record` result (no
+  `:summary`) instead of NPE-ing. Plus docstring honesty (the canonical set is
+  nine, not "eight"; the streamed-report import-edge caveat; DC needs `:record-id`).
 - `regesta.plugins.mapping/compile-mappings` now rejects a batch whose
   mapping rules derive the same compiled rule id (a cross-plugin
   `:mapping/id` name collision), instead of silently conflating their

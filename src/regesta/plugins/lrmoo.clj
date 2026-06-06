@@ -2,7 +2,7 @@
   "LRMoo rich-pivot vocabulary plugin (ADR 0013 / 0017).
 
    The *rich* sibling of `regesta.plugins.canonical`: where canonical is the
-   thin, domain-neutral floor (~8 flat `:canon/*` predicates), this plugin is
+   thin, domain-neutral floor (the flat `:canon/*` predicates), this plugin is
    the rich ceiling — the bibliographic WEMI structure from IFLA LRMoo v1.0
    (an extension of CIDOC-CRM). It is the vocabulary the rich pivot view is
    expressed in (ADR 0013); a source mapped only to canonical yields a valid

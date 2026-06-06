@@ -132,7 +132,11 @@
           out    (curate/format-curation result "accept")]
       (is (str/includes? out "1 proposal curated"))
       (is (str/includes? out "1 accepted"))
-      (is (str/includes? out "proposed → accepted")))))
+      (is (str/includes? out "proposed → accepted"))))
+  (testing "tolerates a single-record (curate-record) result, which carries :transitions but no :summary"
+    (let [single (curate/curate-record (rec [(prop :p/x "v")]) curate/accept-all)]
+      (is (not (contains? single :summary)))                ; the sharp edge: no :summary
+      (is (str/includes? (curate/format-curation single "accept") "1 accepted")))))
 
 ;; ---------------------------------------------------------------------------
 ;; On the real pipeline (DC string-key WEMI inference emits four :proposed claims)

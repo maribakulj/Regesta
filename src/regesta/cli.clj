@@ -210,19 +210,34 @@
                                " (streamable: " (str/join " " (map name (convert/streamable-sources))) ")")}
 
     :else
-    (guard
-     #(let [fromk (keyword from)
-            opts  (cond-> {} record-id (assoc :record-id (->record-id record-id)))
-            res   (with-open [r (io/reader input)
-                              w (io/writer out)]
+    ;; Stream to a sibling temp file and atomically rename on success, so a
+    ;; mid-stream failure (e.g. a malformed input) leaves NO partial --out — the
+    ;; same all-or-nothing guarantee the batch path gives (it spits only at the end).
+    (let [fromk (keyword from)
+          opts  (cond-> {} record-id (assoc :record-id (->record-id record-id)))
+          outf  (.getAbsoluteFile (java.io.File. ^String out))
+          tmp   (java.io.File/createTempFile "regesta-stream-" ".part" (.getParentFile outf))]
+      (try
+        (let [res (with-open [r (io/reader input)
+                              w (io/writer tmp)]
                     (convert/convert-stream
                      {:from fromk :to (keyword to)
                       :records (convert/stream-source fromk opts r)}
                      (fn [doc] (.write w doc) (.write w "\n"))))]
-        {:exit 0 :out ""
-         :err  (str "wrote " out " — " (:records res) " record" (when (not= 1 (:records res)) "s")
-                    " streamed (bounded memory)\n"
-                    (lr/format-conversion-report (:loss res)))}))))
+          (.delete outf)                                ; renameTo won't overwrite on every platform
+          (if (.renameTo tmp outf)
+            {:exit 0 :out ""
+             :err  (str "wrote " out " — " (:records res) " record" (when (not= 1 (:records res)) "s")
+                        " streamed (bounded memory)\n"
+                        (lr/format-conversion-report (:loss res)))}
+            (do (.delete tmp)
+                {:exit 2 :out "" :err (str "error: could not move streamed output to " out)})))
+        (catch clojure.lang.ExceptionInfo e
+          (.delete tmp)
+          {:exit 2 :out "" :err (str "error: " (.getMessage e) " " (pr-str (ex-data e)))})
+        (catch Exception e
+          (.delete tmp)
+          {:exit 2 :out "" :err (str "error: " (.getMessage e))})))))
 
 (defn- do-report
   "The auditor's verb: the X→Y loss report to stdout, no converted document."

@@ -237,3 +237,18 @@
                                        "--stream" "--out" "/tmp/regesta-x.nt"])]
       (is (= 2 exit))
       (is (str/includes? err "not supported")))))
+
+(deftest convert-stream-fails-atomically-leaving-no-partial-out
+  (testing "a malformed input mid-stream: exit 2 and NO --out file is left (all-or-nothing, like batch)"
+    (let [bad (str (System/getProperty "java.io.tmpdir") "/regesta-bad-" (System/nanoTime) ".xml")
+          out (str (System/getProperty "java.io.tmpdir") "/regesta-out-" (System/nanoTime) ".nt")]
+      (try
+        ;; one good record, then a truncated/unclosed second record -> data.xml throws mid-stream
+        (spit bad (str "<marc:collection xmlns:marc=\"http://www.loc.gov/MARC21/slim\">"
+                       "<marc:record><marc:controlfield tag=\"001\">1</marc:controlfield>"
+                       "<marc:datafield tag=\"245\"><marc:subfield code=\"a\">First</marc:subfield></marc:datafield></marc:record>"
+                       "<marc:record><marc:controlfield tag=\"001\">2</marc:controlfield>UNCLOSED"))
+        (let [{:keys [exit]} (cli/run ["convert" bad "--from" "marc21" "--to" "ntriples" "--stream" "--out" out])]
+          (is (= 2 exit))
+          (is (not (.exists (java.io.File. out)))))      ; no partial file left behind
+        (finally (.delete (java.io.File. bad)) (.delete (java.io.File. out)))))))

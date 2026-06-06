@@ -128,17 +128,21 @@
 ;; ---------------------------------------------------------------------------
 
 (defn format-curation
-  "Human-readable rendering of a `curate` result, for CLI / audit. `policy-label`
-   names the policy applied (e.g. \"accept\")."
+  "Human-readable rendering of a `curate` *or* `curate-record` result, for CLI /
+   audit. `policy-label` names the policy applied (e.g. \"accept\"). Tolerates a
+   single-record result (which carries `:transitions` but no `:summary`) by
+   deriving the summary from the transitions, so the two public entry points are
+   interchangeable here."
   [{:keys [transitions summary]} policy-label]
-  (if (zero? (:total summary))
-    "apply-repairs: no pending proposals to curate."
-    (str/join
-     "\n"
-     (cons (str "apply-repairs (" policy-label "): " (:total summary) " proposal"
-                (when (not= 1 (:total summary)) "s") " curated — "
-                (:accepted summary) " accepted, "
-                (:rejected summary) " rejected, "
-                (:needs-review summary) " needs-review")
-           (for [{:keys [subject predicate from to]} transitions]
-             (str "  " subject "  " predicate "  " (name from) " → " (name to)))))))
+  (let [summary (or summary (summarise transitions))]
+    (if (zero? (:total summary))
+      "apply-repairs: no pending proposals to curate."
+      (str/join
+       "\n"
+       (cons (str "apply-repairs (" policy-label "): " (:total summary) " proposal"
+                  (when (not= 1 (:total summary)) "s") " curated — "
+                  (:accepted summary) " accepted, "
+                  (:rejected summary) " rejected, "
+                  (:needs-review summary) " needs-review")
+             (for [{:keys [subject predicate from to]} transitions]
+               (str "  " subject "  " predicate "  " (name from) " → " (name to))))))))
