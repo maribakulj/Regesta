@@ -270,6 +270,8 @@ small declared number,** and escalate to scoped-fixpoint-with-cap *only if the
 WP-0 spike proves fixed passes can't express WEMI linking.* Decide empirically
 from the spike, not a priori. **Decision: accepted — bounded fixed passes (by recommendation, 2026-05-31); escalate to scoped-fixpoint-with-cap only if proven necessary. Spike (2026-06-01) — corrected: explicit `145 $3` Work links are sparse in bibliographic records (essentially only the Madame Bovary showcase; the first 7% figure wrongly mixed in authority records — withdrawn); the inference path was not exercised, so bounded passes remain the default but D8 is *unconfirmed* pending a Work-synthesis spike.**
 
+**Closed (2026-06-06, ADR 0020):** D8 is resolved in the *no-iteration* direction. With the inference cascade unexercised (Work links sparse — see the spike correction above), the runtime dropped `:cycles` (bounded multi-cycle execution) altogether and now runs a **single pass per phase**. Bounded iteration / scoped fixpoint is re-admissible only as an explicit phase mode, should a future Work-synthesis spike prove it necessary.
+
 ---
 
 ## D. Loss & institutional scope

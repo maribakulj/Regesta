@@ -4,7 +4,7 @@
 - Date: 2026-05-31
 - Supersedes: the twelve-sprint roadmap table in [`README.md`](../README.md) (§ Roadmap)
 - Builds on (kept): ADR 0001, 0002, 0003, 0005, 0007, 0009, 0010, 0012
-- Amends / reopens: ADR 0004 (fixpoint), ADR 0008 (idempotency), ADR 0011 (minting)
+- Amends / reopens: ADR 0004 (fixpoint — since resolved by D8, then ADR 0020), ADR 0008 (idempotency), ADR 0011 (minting)
 - Introduces (WP-0): a Pivot ADR, a Loss-model ADR, a FRBRisation ADR, a Conformance ADR
 
 > How to read this. Work packages are **dependency-ordered**; each carries an
@@ -65,7 +65,11 @@ rich pivot is the intended evolution path, not a detour.
 - **ADR 0004** — "fixed passes, no fixpoint" is under pressure: WEMI inference
   may require iterating until no new entities appear. WP-0 decides whether V1
   keeps fixed passes (with a bounded iteration count) or admits a scoped
-  fixpoint for the `infer` phase.
+  fixpoint for the `infer` phase. *Resolved:* WP-0 chose bounded fixed passes
+  (D8); the FRBRisation spike then found the inference cascade unexercised
+  (explicit Work links are sparse), so ADR 0020 simplified the runtime to a
+  **single pass per phase** — re-introduce bounded iteration only if a future
+  Work-synthesis spike forces it.
 - **`README.md`** — the roadmap table and the out-of-scope list are rewritten
   (task in WP-0).
 
@@ -127,8 +131,9 @@ Each WP lists its goal, key deliverables, dependencies, ADRs touched, and the
   identity (implements the 0011/0008 amendments, extends the 0012 identity
   scheme to synthesized entities); explicit **reference-typing** primitives in
   the substrate strong enough to derive a typed view; **loss as a first-class
-  diagnostic category**; bounded iteration (or scoped fixpoint) per the WP-0
-  ADR 0004 decision.
+  diagnostic category**; a **single pass per phase** (ADR 0020 — the
+  bounded-iteration/scoped-fixpoint option once planned per the WP-0 ADR 0004
+  decision was dropped, the inference cascade being unexercised).
 - **Depends on:** WP-0.
 - **Gate:** entities mint reproducibly (idempotent re-run = zero new entities);
   all existing 0008 idempotency property tests stay green.
@@ -293,7 +298,7 @@ an external dependency (§ 7) that no amount of engineering removes.
 |---|------|----------|-----------|
 | R1 | **FRBRisation fidelity** — cross-record Work clustering is the hardest single problem (and was explicitly out of V1 scope as "deduplication"). | High | De-risk with the WP-0 spike *before* committing; treat fidelity as a measured metric, not a binary. |
 | R2 | **Minting vs idempotency (0008)** — synthesized identity must be deterministic or merges duplicate/thrash. | High | Identity = pure function of source content; property tests in WP-1. |
-| R3 | **Fixpoint pressure (0004)** — WEMI inference may need iteration; V1 principle is "no fixpoint." | Medium | WP-0 decides: bounded passes vs scoped fixpoint for `infer`. |
+| R3 | **Fixpoint pressure (0004)** — WEMI inference may need iteration; V1 principle is "no fixpoint." | Medium | *Resolved:* WP-0 chose bounded passes (D8); ADR 0020 then settled on a single pass per phase — the spike showed the inference cascade unexercised. Re-add iteration only if a Work-synthesis spike forces it. |
 | R4 | **Real-data dependency** — "prod-ready" is unverifiable without institutional data + a conformance oracle. | High | Secure a data/conformance partnership early (§ 7); gates WP-3/4/6. |
 | R5 | **Scale** — millions of records vs global Work clustering vs streaming. | Medium | Stream where possible; isolate the stateful clustering stage; budget in WP-7. |
 | R6 | **LRMoo maturity/tooling** — recent standard, fewer reference implementations than Linked Art. | Medium | Lean on CRM tooling underneath; keep the view derived so we can adjust. |
@@ -332,7 +337,7 @@ V1 is done when, on **real institutional samples**:
 
 ## 9. Open questions for WP-0 to settle
 
-- Fixpoint vs bounded passes for `infer` (ADR 0004).
+- ~~Fixpoint vs bounded passes for `infer` (ADR 0004).~~ **Settled:** bounded passes (D8), then a single pass per phase (ADR 0020).
 - The exact synthesized-entity identity key (author + uniform-title? work-key
   hashing?) and its collision behaviour (ADR 0008/0012).
 - Loss-model categories and the coverage metric's precise definition.

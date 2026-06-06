@@ -4,7 +4,7 @@
 - Date: 2026-05-31
 - Builds on: ADR 0013 (rich pivot), ADR 0014 (runtime minting), ADR 0012
   (identity scheme — extended here), ADR 0008 (idempotency), ADR 0005 (status),
-  ADR 0015 (loss model), ADR 0004 (passes vs fixpoint — noted here)
+  ADR 0015 (loss model), ADR 0004 (passes vs fixpoint — noted here; superseded by ADR 0020, single pass)
 - Decision record: [`../wp0-decisions.md`](../wp0-decisions.md) (D5, D6, D7, D8,
   D11)
 - Empirical: several parameters below are decided *in principle* and **tuned by
@@ -119,6 +119,11 @@ inference cascade — so bounded passes **stand as the default but are not yet
 confirmed**; they must be re-tested on Work-synthesis. See
 `../wp0-spike-findings.md`.
 
+**Update (ADR 0020):** the runtime has since dropped multi-cycle execution
+entirely — a phase is now a **single pass**. With the inference cascade
+unexercised, bounded iteration earned no keep; if a Work-synthesis spike later
+proves it necessary, ADR 0020 re-admits it as an explicit phase mode.
+
 ## Alternatives considered
 
 (Weighed in full in `wp0-decisions.md` D5 / D6 / D7 / D8 / D11; in brief.)
@@ -155,8 +160,9 @@ confirmed**; they must be re-tested on Work-synthesis. See
 - Un-FRBRisable / ambiguous cases are accounted through the loss model
   (ADR 0015).
 - The hard parts — work-key composition, the confidence threshold, over/under-
-  merge rates, whether bounded passes suffice — are **measured on real data in
-  the WP-0 spike**. Fidelity is a reported metric, not a binary claim.
+  merge rates — are **measured on real data in the WP-0 spike**. Fidelity is a
+  reported metric, not a binary claim. (Convergence is no longer among them:
+  ADR 0020 settled the runtime on a single pass per phase.)
 - This formalises the reversal of the README's "deduplication out of scope"
   boundary (roadmap §1–2).
 
@@ -192,10 +198,11 @@ slice is built. Honest current state, so the design is not read as shipped:
 
 - The exact work-key ingredients, the confidence threshold, and the first
   authority snapshot to pin — **tuned by the WP-0 spike** (D5).
-- Whether `infer` ultimately needs a scoped fixpoint — **still open.** The
-  spikes hit the lookup path only (explicit Work links ~7% of fixtures); the
-  inference cascade was not exercised. Bounded passes remain the default, to be
-  confirmed on a Work-synthesis spike (D8).
+- Whether `infer` ultimately needs a scoped fixpoint — not decided here;
+  **settled later by ADR 0020: no.** The spikes hit the lookup path only
+  (explicit Work links sparse) and the inference cascade was not exercised, so
+  the runtime dropped multi-cycle execution and runs a **single pass per
+  phase**; bounded iteration returns only if a Work-synthesis spike forces it (D8).
 - Reconciliation of subjects / events (Tier 3 / 4) — additive, later, behind the
   seam (D11).
 - The RDF / authority loader implementation and serialisation library — WP-2 /
