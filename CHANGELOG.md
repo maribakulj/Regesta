@@ -202,6 +202,21 @@ targets, loss-aware; conformance; streaming; the full CLI). WP-9
   (provisional — no consumer yet, still callable). Tracked in
   `docs/cleanup/remediation-pass.md`.
 
+### Removed
+
+- **Substrate right-sizing (no behaviour change): dead code with no production
+  consumer.** Removed the `:requires` dependency-graph machinery from
+  `regesta.plugins` — `requires-graph`, `validate-requires!`, `topo-order` and
+  the private Kahn topological sort. It was documentary-only (it isolated
+  nothing — no stdlib visibility or rule pools depended on it) and the real
+  spoke dispatch is the `regesta.spokes` map; it was exercised only by its own
+  unit tests. This resolves the provisional `^:no-doc topo-order` note above by
+  removal rather than deprecation. Also removed `regesta.model/parse-fragment-id`,
+  the inverse fragment-id decoder: fragments are minted by the shape adapter and
+  never decoded back, so it had no caller — `mint-fragment-id` and its
+  injectivity guards are unchanged. Tests for the removed code were deleted with
+  it; `clj-kondo` and `cljfmt` stay clean.
+
 ### Security
 
 - **XML input hardening (WP-9).** All XML importers now parse through a single

@@ -171,13 +171,12 @@
         (str "Generator produced an invalid Diagnostic: " (pr-str d)))))
 
 ;; ---------------------------------------------------------------------------
-;; Fragment identity round-trip (ADR 0012)
+;; Fragment identity (ADR 0012)
 ;;
-;; mint-fragment-id and parse-fragment-id must be inverses on inputs that
-;; meet the scheme's stated preconditions: hyphen-free namespaces on both
-;; the record-id and every locator predicate. The generators below are
-;; constrained to that safe input space; outside it the parse is documented
-;; as best-effort.
+;; mint-fragment-id is injective on inputs that meet the scheme's stated
+;; preconditions: hyphen-free namespaces on both the record-id and every
+;; locator predicate. The generators below are constrained to that safe
+;; input space.
 ;; ---------------------------------------------------------------------------
 
 (def ^:private hyphen-free-name-gen
@@ -196,14 +195,6 @@
             (gen/vector (gen/tuple safe-namespaced-keyword-gen
                                    gen/nat)
                         1 4)))
-
-(defspec mint-parse-round-trip prop-runs
-  (prop/for-all [record-id safe-namespaced-keyword-gen
-                 locator   safe-locator-gen]
-                (let [frag-id (model/mint-fragment-id record-id locator)
-                      parsed  (model/parse-fragment-id frag-id)]
-                  (and (= record-id (:record-id parsed))
-                       (= locator   (:locator parsed))))))
 
 (defspec mint-fragment-id-always-returns-frag-keyword prop-runs
   (prop/for-all [record-id safe-namespaced-keyword-gen
